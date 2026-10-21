@@ -122,7 +122,7 @@ export const FACTORS: Factor[] = [
     nota: "Terreno muy llano (<1 %) penaliza levemente por drenaje. El MDE de 1 km subestima la pendiente local.",
   },
   {
-    id: "F08", nombre: "Peligro sísmico", grupo: "riesgo", peso: 0.08, unidad: "g",
+    id: "F08", nombre: "Peligro sísmico", grupo: "riesgo", peso: 0.06, unidad: "g",
     variable: "PGA con 10 % de excedencia en 50 años (T=475), roca", column: "pga475",
     fn: { kind: "decreasing", a: 0.1, b: 0.35 },
     disponible: true, evidencia: ["E", "N"], refs: ["Pagani et al. 2023 (GEM)", "INPRES-CIRSOC 103"],
@@ -135,9 +135,18 @@ export const FACTORS: Factor[] = [
     nota: "El mapa global omite cuencas <5.000 km² y anegamientos por napa (Salado); subestima el riesgo pampeano. Con 40 % o más de la celda inundable el valor es 0.",
   },
   {
-    id: "F10", nombre: "Deslizamientos", grupo: "riesgo", peso: 0.03, unidad: "clase",
-    variable: "susceptibilidad a remoción en masa", disponible: false, evidencia: ["E"],
-    refs: ["Stanley & Kirschbaum 2017"], nota: "Pendiente de incorporar (NASA LHASA / SEGEMAR).",
+    id: "F10", nombre: "Deslizamientos", grupo: "riesgo", peso: 0.03, unidad: "fracción",
+    variable: "fracción de la celda con susceptibilidad alta o muy alta a deslizamientos (NASA)", column: "frac_desliz_alto",
+    fn: { kind: "decreasing", a: 0, b: 0.5 },
+    disponible: true, evidencia: ["E"], refs: ["Stanley & Kirschbaum 2017"],
+    nota: "Mapa global de susceptibilidad (versión 2023) a 30″; no reemplaza los mapas de peligro de SEGEMAR.",
+  },
+  {
+    id: "F16", nombre: "Fallas activas", grupo: "riesgo", peso: 0.02, unidad: "km",
+    variable: "distancia a la falla cuaternaria con movimiento histórico u holoceno más cercana (SEGEMAR)", column: "d_falla",
+    fn: { kind: "increasing", a: 2, b: 20 },
+    disponible: true, evidencia: ["E", "N"], refs: ["SEGEMAR 1:250.000", "Bryant & Hart 2007 (Alquist-Priolo)"],
+    nota: "Penaliza la cercanía a trazas activas (ruptura en superficie y sacudida de campo cercano). El retiro de construcción a escala de lote (decenas de metros) se define en el proyecto.",
   },
   {
     id: "F11", nombre: "Acceso a red de alta tensión", grupo: "energia", peso: 0.05, unidad: "km",
@@ -157,10 +166,11 @@ export const FACTORS: Factor[] = [
     nota: "Potencia eólica estimada desde la velocidad media suponiendo Weibull k=2.",
   },
   {
-    id: "F13", nombre: "Costo de oportunidad agrícola", grupo: "agro", peso: 0.05, unidad: "clase",
-    variable: "clase de capacidad de uso del suelo (INTA)", disponible: false, evidencia: ["E"],
-    refs: ["Klingebiel & Montgomery 1961", "Bren d'Amour et al. 2017"],
-    nota: "Pendiente de incorporar el Atlas de Suelos INTA 1:500.000.",
+    id: "F13", nombre: "Costo de oportunidad agrícola", grupo: "agro", peso: 0.05, unidad: "índice",
+    variable: "índice de productividad del suelo (INTA, 0–100)", column: "ip_suelo",
+    fn: { kind: "decreasing", a: 40, b: 80 },
+    disponible: true, evidencia: ["E"], refs: ["Klingebiel & Montgomery 1961", "Bren d'Amour et al. 2017", "INTA Atlas de Suelos"],
+    nota: "Evita urbanizar los mejores suelos agrícolas. Se usa el índice de productividad porque la capacidad de uso (clases I–VIII) no está publicada a escala nacional.",
   },
   {
     id: "F14", nombre: "Acceso a servicios de salud", grupo: "acceso", peso: 0.04, unidad: "min",
@@ -350,6 +360,21 @@ export const RESTRICTIONS: Restriction[] = [
     id: "R11", nombre: "Ya urbanizada (ciudad nueva)", column: "pob", op: ">", umbral: 3600, activo: true,
     min: 0, max: 50000, step: 100, unidad: "hab/celda", evidencia: ["C", "J"], refs: ["Sejong 2004"],
     nota: "Para planificar ciudades nuevas, excluye celdas con más de ~100 hab/km² (3.600 hab por celda de 36 km²). Desactivar para evaluar la expansión de ciudades existentes.",
+  },
+  {
+    id: "R16", nombre: "Bosque nativo protegido (OTBN rojo y amarillo)", column: "frac_otbn_12", op: ">", umbral: 0.5, activo: true,
+    min: 0, max: 1, step: 0.05, unidad: "fracción", evidencia: ["N"], refs: ["Ley 26.331", "OTBN nacional 2023"],
+    nota: "Las categorías I (rojo) y II (amarillo) no admiten desmonte; la III (verde) sí, con autorización.",
+  },
+  {
+    id: "R17", nombre: "Glaciares y ambiente periglacial", column: "frac_glaciar", op: ">", umbral: 0.05, activo: true,
+    min: 0, max: 1, step: 0.05, unidad: "fracción", evidencia: ["N"], refs: ["Ley 26.639", "Inventario Nacional de Glaciares (IANIGLA)"],
+    nota: "La ley prohíbe construir sobre glaciares; casi siempre coincide con la exclusión por altura y pendiente.",
+  },
+  {
+    id: "R18", nombre: "Radio de peligro volcánico", column: "volcan_excl", op: ">", umbral: 0.5, activo: true,
+    min: 0, max: 1, step: 1, unidad: "sí/no", evidencia: ["E"], refs: ["SEGEMAR-OAVV, ranking de riesgo relativo 2024"],
+    nota: "Excluye 30 km alrededor de los volcanes de riesgo muy alto, 20 km de los altos y 10 km de los moderados.",
   },
   {
     id: "R15", nombre: "Lejos de pueblos existentes", column: "d_localidad", op: ">", umbral: 30, activo: false,

@@ -537,6 +537,42 @@ def main() -> None:
     C["d_amba"] = centers_m.distance(amba).values / 1000.0
     log("distancias")
 
+    # --- capas de restricción (data/interim/restricciones, docs/datos-restricciones.md); los
+    #     rasters ya vienen en la grilla común de 30″
+    rdir = RAW.parent / "interim" / "restricciones"
+
+    def grid(name: str) -> np.ndarray:
+        with rasterio.open(rdir / name) as src:
+            arr = src.read(1)
+        assert arr.shape == (HEIGHT, WIDTH), name
+        return arr
+
+    if rdir.exists():
+        otbn = grid("otbn_30s.tif")
+        C["frac_otbn_12"] = agg.frac((otbn == 1) | (otbn == 2))  # rojo y amarillo: no se desmonta
+        C["frac_otbn_3"] = agg.frac(otbn == 3)
+        C["frac_glaciar"] = agg.frac(grid("glaciares_30s.tif") == 1)
+        ip = grid("suelos_ip_30s.tif").astype("float32")
+        ip[ip > 100] = np.nan  # 254 agua, 255 sin dato
+        C["ip_suelo"] = agg.mean(ip)
+        dz = grid("deslizamientos_nasa_30s.tif").astype("float32")
+        dz[(dz == 0) | (dz > 5)] = np.nan
+        C["desliz"] = agg.mean(dz)
+        dzr = grid("deslizamientos_nasa_30s.tif")
+        C["frac_desliz_alto"] = agg.frac((dzr == 4) | (dzr == 5))
+        vol = gpd.read_file(rdir / "volcanes.gpkg", layer="segemar_riesgo_relativo_2024")
+        radio = {"Muy alto": 30.0, "Alto": 20.0, "Moderado": 10.0}
+        vol["radio"] = vol.nivel_de_riesgo.map(lambda x: next((r for k, r in radio.items() if str(x).strip().lower() == k.lower()), np.nan))
+        vr = vol.dropna(subset=["radio"])
+        C["d_volcan"] = distances_km(centers_m, vr)
+        vm = vr.to_crs(CRS_M)
+        dv = np.c_[[centers_m.distance(g).values / 1000.0 - r for g, r in zip(vm.geometry, vm.radio)]].T
+        C["volcan_excl"] = (dv.min(1) < 0).astype("float32") if len(vr) else np.zeros(len(uniq))
+        fa = gpd.read_file(rdir / "fallas_cuaternarias.gpkg", layer="segemar_250k")
+        fa = fa[pd.to_numeric(fa.edad_cod, errors="coerce").isin([1, 2])]  # histórica u holocena
+        C["d_falla"] = distances_km(centers_m, fa)
+        log(f"restricciones: OTBN I–II en {int((C['frac_otbn_12'] > 0.5).sum())} celdas, volcanes {len(vr)}, fallas {len(fa)}")
+
     C["frac_tierra"] = npx / np.nanmax(npx)
 
     # ------------------------------------------------------------ export celdas

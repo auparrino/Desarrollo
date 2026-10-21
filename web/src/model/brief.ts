@@ -5,7 +5,7 @@
 import { cellToLatLng } from "h3-js";
 import type { Dataset } from "../data/load";
 import { costBenefit, type CBAInput, type CBAResult } from "./benefits";
-import type { CostResult, Range } from "./costs";
+import type { Range } from "./costs";
 import type { PolicyId } from "./policies";
 import { isAMBA } from "./simulator";
 import proy from "./proyecciones.json";
@@ -17,43 +17,8 @@ import { BENEFIT_PARAMS } from "./benefitParamsData";
 const titulo = (s: string) =>
   s === s.toUpperCase() ? s.toLowerCase().replace(/(^|[\s(-])(\p{L})/gu, (_, a: string, b: string) => a + b.toUpperCase()) : s;
 
-// ---------------------------------------------------------------- quién paga
-export type Pagador = "Nación" | "Provincia" | "Municipio" | "Hogares y empresas";
-
-/** Responsable principal de cada rubro según las competencias habituales (a acordar en cada caso). */
-const PAGA: Record<string, { quien: Pagador; por: string }> = {
-  vivienda: { quien: "Hogares y empresas", por: "crédito hipotecario y desarrolladores, con programas nacionales y provinciales" },
-  rehab: { quien: "Hogares y empresas", por: "propietarios, con líneas de crédito para refacción" },
-  urbanizacion: { quien: "Municipio", por: "redes, calles y desagües (con fondos provinciales o nacionales)" },
-  suelo: { quien: "Provincia", por: "compra, expropiación (Ley 21.499) o aporte de tierra fiscal" },
-  escuelas: { quien: "Provincia", por: "educación y salud son provinciales desde la Ley 24.049 (1991)" },
-  hospital: { quien: "Provincia", por: "educación y salud son provinciales desde la Ley 24.049 (1991)" },
-  ruta: { quien: "Nación", por: "Vialidad Nacional (rutas nacionales) o provincial (accesos)" },
-  at: { quien: "Nación", por: "transporte eléctrico federal (o concesión a transportistas)" },
-  et: { quien: "Nación", por: "transporte eléctrico federal (o concesión a transportistas)" },
-  acueducto: { quien: "Provincia", por: "empresa provincial de agua, con financiamiento del ENOHSA" },
-  planta: { quien: "Provincia", por: "empresa provincial de agua, con financiamiento del ENOHSA" },
-  oficinas: { quien: "Nación", por: "edificios de la Administración Pública Nacional" },
-  congreso: { quien: "Nación", por: "Poder Legislativo y Poder Judicial de la Nación" },
-  mudanza_apn: { quien: "Nación", por: "traslado de agentes públicos nacionales" },
-  mudanza: { quien: "Hogares y empresas", por: "las familias, con incentivos a la radicación" },
-  parque: { quien: "Provincia", por: "provincia o municipio, con el Programa Nacional de Parques Industriales" },
-};
-
-export function quienPaga(c: CostResult): { quien: Pagador; usd: number; rubros: string[] }[] {
-  const m = new Map<Pagador, { usd: number; rubros: string[] }>();
-  for (const l of c.capital) {
-    const q = PAGA[l.id]?.quien ?? "Provincia";
-    const e = m.get(q) ?? { usd: 0, rubros: [] };
-    e.usd += l.usd[1];
-    e.rubros.push(l.rubro);
-    m.set(q, e);
-  }
-  return [...m.entries()].map(([quien, e]) => ({ quien, ...e })).sort((a, b) => b.usd - a.usd);
-}
-
-// ---------------------------------------------------------------- por mandato
-export interface Mandato {
+// ---------------------------------------------------------------- inversión en el tiempo
+export interface Etapa {
   nombre: string;
   desde: number;
   hasta: number;
@@ -62,14 +27,14 @@ export interface Mandato {
   poblacionAlFinal: number;
 }
 
-/** Inversión total por períodos de gobierno de 4 años (escenario "lo más probable"). */
-export function porMandato(r: CBAResult): Mandato[] {
+/** Inversión por etapas (escenario "lo más probable"). */
+export function porEtapa(r: CBAResult): Etapa[] {
   const cr = r.cronograma;
   const bloques: [string, number, number][] = [
-    ["1.er mandato", 0, 3],
-    ["2.º mandato", 4, 7],
-    ["3.er mandato", 8, 11],
-    ["Después (años 13 a 30)", 12, 29],
+    ["Años 1 a 5", 0, 4],
+    ["Años 6 a 10", 5, 9],
+    ["Años 11 a 20", 10, 19],
+    ["Años 21 a 30", 20, 29],
   ];
   return bloques.map(([nombre, a, b]) => {
     const xs = cr.filter((x) => x.anio >= a && x.anio <= b);
@@ -159,88 +124,6 @@ export function origen(ds: Dataset, i: number): { lugar: string; pct: number }[]
   return xs.map((x) => ({ lugar: x.lugar, pct: (100 * x.w) / tot })).sort((a, b) => b.pct - a.pct).slice(0, 5);
 }
 
-// ---------------------------------------------------------------- hoja de ruta
-export interface Paso {
-  que: string;
-  norma: string;
-  quien: string;
-  aplica: boolean;
-  nota?: string;
-}
-
-export function hojaDeRuta(ds: Dataset, i: number, policy: PolicyId, provincia: string): Paso[] {
-  const c = ds.col;
-  const fiscal = c.pct_fiscal_est?.[i];
-  const conoc = c.frac_fiscal_conocida?.[i];
-  const dCom = c.d_comunidad?.[i];
-  const ap = (c.frac_ap_uso_multiple?.[i] ?? 0) + (c.frac_ap_estricta?.[i] ?? 0);
-  const nueva = policy === "ciudad_nueva" || policy === "capital";
-  const pasos: Paso[] = [
-    {
-      que: "Ley del Congreso que declare la nueva Capital, con cesión previa del territorio por la Legislatura provincial",
-      norma: "Constitución Nacional, art. 3 (antecedente: Ley 23.512 de 1987, traslado a Viedma–Carmen de Patagones, abandonado en 1989)",
-      quien: `Congreso de la Nación y Legislatura de ${provincia}`,
-      aplica: policy === "capital",
-    },
-    {
-      que: "Crear el municipio o ampliar el ejido urbano",
-      norma: "Constitución y ley orgánica de municipios de la provincia",
-      quien: `Legislatura de ${provincia}`,
-      aplica: nueva,
-    },
-    {
-      que: "Conseguir la tierra",
-      norma: "Ley 21.499 de expropiaciones (requiere ley que declare la utilidad pública) o cesión de tierra fiscal",
-      quien: "Provincia y Nación (AABE si hay inmuebles nacionales)",
-      aplica: nueva || policy === "polos" || policy === "pueblos",
-      nota: !Number.isFinite(fiscal)
-        ? "No hay datos de titularidad: relevar el catastro provincial antes de anunciar."
-        : conoc !== undefined && conoc < 0.5
-          ? `No alcanza el dato para concluir: la estimación de tierra fiscal (${Math.round(fiscal)} % del departamento) cubre poco territorio. Relevar el catastro provincial antes de anunciar.`
-          : `Tierra fiscal estimada en el departamento: ${Math.round(fiscal)} %. ${fiscal < 20 ? "Lo más probable es que haya que comprar o expropiar." : "Hay margen para usar tierra pública."}`,
-    },
-    {
-      que: "Consulta previa, libre e informada a comunidades indígenas",
-      norma: "Convenio 169 de la OIT (Ley 24.071) y Constitución Nacional, art. 75 inc. 17",
-      quien: "Nación y provincia, con las comunidades",
-      aplica: Number.isFinite(dCom) && dCom < 30,
-      nota: Number.isFinite(dCom) ? `Comunidad registrada más cercana: a ${Math.round(dCom)} km.` : undefined,
-    },
-    {
-      que: "Evaluación de impacto ambiental y audiencia pública",
-      norma: "Ley General del Ambiente 25.675 (arts. 11 a 13 y 20) y normas provinciales",
-      quien: "Autoridad ambiental provincial",
-      aplica: true,
-    },
-    {
-      que: "Compatibilizar con áreas protegidas y bosques nativos",
-      norma: "Ley 26.331 de bosques nativos (ordenamiento provincial) y ley de cada área protegida",
-      quien: "Provincia y Administración de Parques Nacionales",
-      aplica: ap > 0.05,
-      nota: ap > 0.05 ? `El ${Math.round(ap * 100)} % de la zona está dentro de un área protegida de uso múltiple.` : undefined,
-    },
-    {
-      que: "Convenio Nación–provincia–municipio de financiamiento y obras",
-      norma: "Convenio marco y presupuesto plurianual (Ley 24.156 de Administración Financiera)",
-      quien: "Ministerios de Economía e Infraestructura, gobernación e intendencia",
-      aplica: true,
-    },
-    {
-      que: "Régimen de promoción para las empresas del polo",
-      norma: "Ley 27.742 (RIGI, inversiones de más de USD 200 millones) y regímenes provinciales de promoción industrial",
-      quien: "Ministerio de Economía y provincia",
-      aplica: policy === "polos",
-    },
-    {
-      que: "Traslado de organismos y agentes públicos",
-      norma: "Decreto del Poder Ejecutivo y acuerdos con los gremios estatales",
-      quien: "Jefatura de Gabinete",
-      aplica: policy === "capital",
-    },
-  ];
-  return pasos.filter((p) => p.aplica);
-}
-
 // ---------------------------------------------------------------- riesgos
 export interface Riesgo {
   nivel: "alto" | "medio";
@@ -287,6 +170,14 @@ export function riesgos(ds: Dataset, i: number, policy: PolicyId, poblacion: num
     out.push({ nivel: "medio", que: `Arsénico en el agua subterránea (probabilidad ${Math.round(c.as_prob[i] * 100)} %).`, mitigacion: "Abastecer con agua superficial o plantas de abatimiento de arsénico (Código Alimentario: 10 µg/L)." });
   if ((c.pga475?.[i] ?? 0) >= 0.15)
     out.push({ nivel: c.pga475[i] >= 0.3 ? "alto" : "medio", que: `Zona sísmica (aceleración ${c.pga475[i].toLocaleString("es-AR", { maximumFractionDigits: 2 })} g en 475 años).`, mitigacion: "Diseño sismorresistente obligatorio (INPRES-CIRSOC 103) y control de obra: encarece la estructura." });
+  if ((c.d_falla?.[i] ?? Infinity) < 10)
+    out.push({ nivel: c.d_falla[i] < 3 ? "alto" : "medio", que: `Falla geológica activa a ${Math.round(c.d_falla[i])} km.`, mitigacion: "Estudio de microzonificación sísmica y retiro de construcción sobre la traza de la falla." });
+  if ((c.d_volcan?.[i] ?? Infinity) < 80)
+    out.push({ nivel: "medio", que: `Volcán activo a ${Math.round(c.d_volcan[i])} km (caída de ceniza).`, mitigacion: "Plan de contingencia por ceniza volcánica (agua potable, techos, aeropuerto) con el Observatorio Argentino de Vigilancia Volcánica." });
+  if ((c.frac_desliz_alto?.[i] ?? 0) > 0.1)
+    out.push({ nivel: "medio", que: `Laderas con peligro de deslizamientos (${Math.round(c.frac_desliz_alto[i] * 100)} % de la zona).`, mitigacion: "No urbanizar laderas inestables; estudio geotécnico antes de lotear." });
+  if ((c.ip_suelo?.[i] ?? 0) >= 65)
+    out.push({ nivel: "medio", que: `Suelo agrícola de los mejores del país (índice de productividad ${Math.round(c.ip_suelo[i])}).`, mitigacion: "Crecer compacto y en altura media para ocupar poca tierra productiva." });
   if ((c.frac_inund100?.[i] ?? 0) > 0.02)
     out.push({ nivel: "medio", que: `Parte de la zona se inunda en una crecida de 100 años (${Math.round(c.frac_inund100[i] * 100)} %).`, mitigacion: "Dejar esas tierras como parques y prohibir allí la construcción en el código urbano." });
   if ((c.t_max_cal?.[i] ?? 0) >= 32 || (c.t_min_fri?.[i] ?? 0) <= -3)
@@ -372,45 +263,3 @@ export function equilibrio(inp: CBAInput, base: CBAResult): Equilibrio {
   return { conviene, ocupacion: k === null ? null : Math.min(1, k * esperada), esperada, salario, salarioActual: base.supuestos.relDest };
 }
 
-// ---------------------------------------------------------------- cronograma de hitos
-export interface Hito { que: string; desde: number; hasta: number; tipo: "norma" | "obra" | "gente" }
-
-export function hitos(policy: PolicyId): Hito[] {
-  const H: Hito[] = [];
-  if (policy === "capital") H.push({ que: "Ley de capital y cesión provincial", desde: 1, hasta: 2, tipo: "norma" });
-  if (policy === "ciudad_nueva" || policy === "capital") H.push({ que: "Ley provincial del nuevo municipio", desde: 1, hasta: 2, tipo: "norma" });
-  H.push({ que: "Reserva o compra de la tierra (antes del anuncio)", desde: 1, hasta: 1, tipo: "norma" });
-  H.push({ que: "Evaluación ambiental, consulta y audiencia", desde: 1, hasta: 2, tipo: "norma" });
-  H.push({ que: "Convenio de financiamiento y proyecto ejecutivo", desde: 1, hasta: 3, tipo: "norma" });
-  if (policy !== "intermedias" && policy !== "pueblos") H.push({ que: "Obras de conexión (ruta, energía, agua)", desde: 2, hasta: 5, tipo: "obra" });
-  if (policy === "polos") {
-    H.push({ que: "Primera etapa del parque y empresas ancla", desde: 3, hasta: 5, tipo: "obra" });
-    H.push({ que: "Empresas instalándose por etapas", desde: 5, hasta: 12, tipo: "gente" });
-  } else {
-    H.push({ que: policy === "intermedias" || policy === "pueblos" ? "Ampliación de redes, escuelas y salud" : "Primera etapa urbana (redes, escuelas, salud)", desde: 2, hasta: 6, tipo: "obra" });
-    if (policy === "capital") H.push({ que: "Traslado de organismos nacionales", desde: 4, hasta: 10, tipo: "gente" });
-    H.push({ que: "Llegada de habitantes, etapa por etapa", desde: 4, hasta: 12, tipo: "gente" });
-  }
-  return H;
-}
-
-// ---------------------------------------------------------------- efecto político
-export interface EfectoProvincia { lugar: string; delta: number }
-
-/** Quién gana y quién pierde población a 30 años (escenario base), según el origen probable. */
-export function efectoPolitico(ds: Dataset, i: number, provincia: string, llegan: number): EfectoProvincia[] {
-  const ori = origenCompleto(ds, i);
-  const m = new Map<string, number>();
-  // el destino nunca está en el AMBA: si es bonaerense, cuenta como "Resto de Buenos Aires"
-  m.set(provincia === "Buenos Aires" ? "Resto de Buenos Aires" : provincia, llegan);
-  for (const o of ori) m.set(o.lugar, (m.get(o.lugar) ?? 0) - (llegan * o.pct) / 100);
-  return [...m.entries()].map(([lugar, delta]) => ({ lugar, delta })).filter((x) => Math.abs(x.delta) >= 500).sort((a, b) => b.delta - a.delta);
-}
-
-function origenCompleto(ds: Dataset, i: number) {
-  const [lat, lng] = cellToLatLng(ds.h3[i]);
-  const here: [number, number] = [lng, lat];
-  const xs = provincias(ds).map((p) => ({ lugar: p.prov, w: p.pob / Math.max(km(here, p.c), 50) }));
-  const tot = xs.reduce((a, x) => a + x.w, 0);
-  return xs.map((x) => ({ lugar: x.lugar, pct: (100 * x.w) / tot }));
-}

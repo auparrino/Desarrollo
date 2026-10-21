@@ -43,7 +43,8 @@ function factorColumn(f: Factor, cols: Cols, n: number, fn: ValueFn | undefined,
   if (f.score) for (let i = 0; i < n; i++) s[i] = f.score(cols, i, fn, ctx);
   else {
     const x = cols[f.column!];
-    for (let i = 0; i < n; i++) s[i] = evaluate(fn!, x[i]);
+    // columna ausente (datos de una versión anterior del pipeline): sin dato
+    for (let i = 0; i < n; i++) s[i] = x ? evaluate(fn!, x[i]) : NaN;
   }
   return s;
 }
@@ -66,7 +67,7 @@ export function computeMask(
   water: WaterParams = DEFAULT_WATER,
 ): Uint8Array {
   const reason = new Uint8Array(n);
-  const active = restrictions.map((r, k) => ({ r, k, x: cols[r.column] })).filter((a) => a.r.activo);
+  const active = restrictions.map((r, k) => ({ r, k, x: cols[r.column] })).filter((a) => a.r.activo && a.x);
   const qReq = caudalRequerido(water);
   const waterCode = restrictions.length + 1;
   for (let i = 0; i < n; i++) {

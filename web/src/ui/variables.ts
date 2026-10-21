@@ -72,6 +72,13 @@ export const VARIABLES: VarInfo[] = [
   { id: "n_incent_municipales", nombre: "Programas municipales de radicación (depto.)", unidad: "", grupo: "Incentivos", fmt: f0 },
   { id: "n_incent_personas", nombre: "Incentivos vigentes para personas y hogares (depto.)", unidad: "", grupo: "Incentivos", fmt: f0 },
   { id: "frac_ap_estricta", nombre: "Área protegida estricta", unidad: "", grupo: "Ambiente", fmt: pct },
+  { id: "frac_otbn_12", nombre: "Bosque nativo protegido (OTBN rojo y amarillo)", unidad: "", grupo: "Ambiente", fmt: pct },
+  { id: "frac_otbn_3", nombre: "Bosque nativo transformable con permiso (OTBN verde)", unidad: "", grupo: "Ambiente", fmt: pct },
+  { id: "frac_glaciar", nombre: "Glaciares", unidad: "", grupo: "Ambiente", fmt: pct },
+  { id: "ip_suelo", nombre: "Índice de productividad del suelo (INTA)", unidad: "0–100", grupo: "Ambiente", fmt: f0 },
+  { id: "frac_desliz_alto", nombre: "Susceptibilidad alta a deslizamientos", unidad: "", grupo: "Riesgos", fmt: pct },
+  { id: "d_falla", nombre: "Distancia a falla activa (histórica u holocena)", unidad: "km", grupo: "Riesgos", fmt: f0 },
+  { id: "d_volcan", nombre: "Distancia a volcán de riesgo moderado o mayor", unidad: "km", grupo: "Riesgos", fmt: f0 },
   { id: "frac_ap_uso_multiple", nombre: "Área protegida de uso múltiple", unidad: "", grupo: "Ambiente", fmt: pct },
 ];
 

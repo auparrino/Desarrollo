@@ -37,7 +37,9 @@ describe("escenarios de pesos", () => {
   });
   it("pesos efectivos excluyen factores sin datos", () => {
     const e = effectiveWeights(SCENARIOS[0].weights());
-    expect(e.F10).toBeUndefined();
+    const sinDatos = FACTORS.filter((f) => !f.disponible).map((f) => f.id);
+    for (const id of sinDatos) expect(e[id]).toBeUndefined();
+    expect(e.F10).toBeGreaterThan(0); // deslizamientos ya tiene datos (NASA)
     expect(Object.values(e).reduce((a, b) => a + b, 0)).toBeCloseTo(1, 6);
   });
 });

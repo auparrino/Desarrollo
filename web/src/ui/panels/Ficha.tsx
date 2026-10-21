@@ -5,7 +5,7 @@ import { gridRing } from "h3-js";
 import type { Dataset } from "../../data/load";
 import { costBenefit, type CBAResult, type Escenario } from "../../model/benefits";
 import { BENEFIT_PARAMS } from "../../model/benefitParamsData";
-import { efectoPolitico, empleo, equilibrio, hitos, hojaDeRuta, musd, origen, porMandato, quienPaga, riesgos, sinPolitica } from "../../model/brief";
+import { empleo, equilibrio, musd, origen, porEtapa, riesgos, sinPolitica } from "../../model/brief";
 import { estimateCosts } from "../../model/costs";
 import { cbaInput } from "../../model/labor";
 import { POLICY_BY_ID, type Policy, type PolicyId } from "../../model/policies";
@@ -98,11 +98,9 @@ export default function Ficha(p: Props) {
   const polos = p.policy.id === "polos";
   const { costos, r } = useMemo(() => run(p.ds, p.policy.id, p.poblacion, i, p.site.provincia), [p.ds, p.policy.id, p.poblacion, i, p.site.provincia]);
   const b = r.base;
-  const mand = porMandato(b);
-  const pagan = quienPaga(costos);
+  const mand = porEtapa(b);
   const emp = empleo(p.ds, i, p.policy.id, b, p.geo.proyectos);
   const ori = polos ? [] : origen(p.ds, i);
-  const pasos = hojaDeRuta(p.ds, i, p.policy.id, p.site.provincia);
   const ries = riesgos(p.ds, i, p.policy.id, p.poblacion, r, emp);
   const otros = useMemo(
     () => (p.policy.id === "capital" ? [] : mismoPresupuesto(p.ds, i, p.site.provincia, PUBLICO(costos), p.policy.id)),
@@ -114,9 +112,6 @@ export default function Ficha(p: Props) {
   const inp = useMemo(() => cbaInput(p.ds, p.policy.id, p.poblacion, costos, i), [p.ds, p.policy.id, p.poblacion, costos, i]);
   const eq = useMemo(() => equilibrio(inp, b), [inp, b]);
   const reg = useMemo(() => (polos ? null : costBenefit({ ...inp, origen: "region" }, BENEFIT_PARAMS, "base")), [inp, polos]);
-  const hs = hitos(p.policy.id);
-  const pol = polos ? [] : efectoPolitico(p.ds, i, p.site.provincia, b.anual.poblacion);
-  const pbi = UNIT_COSTS.items.pbi_usd?.central ?? NaN;
   const frente = polos ? "frente a no tener el polo" : "frente a que esa población crezca en el AMBA";
   const pct = (x: number) => `${Math.round(x * 100)} %`;
   const rec =
@@ -166,26 +161,17 @@ export default function Ficha(p: Props) {
 
         <div className="ficha-cols">
           <section>
-            <h3>Plata por mandato</h3>
+            <h3>La inversión en el tiempo</h3>
             <table className="provs">
-              <thead><tr><th>Período</th><th className="num">Total</th><th className="num">Pública</th><th className="num">Pública por año</th><th className="num">{polos ? "Empleos" : "Habitantes"}</th></tr></thead>
+              <thead><tr><th>Período</th><th className="num">Total</th><th className="num">Pública</th><th className="num">{polos ? "Empleos" : "Habitantes"}</th></tr></thead>
               <tbody>
                 {mand.map((m) => (
-                  <tr key={m.nombre}><td>{m.nombre}</td><td className="num">{musd(m.inversion)}</td><td className="num">{musd(m.publica)}</td><td className="num">{((100 * m.publica) / (m.hasta - m.desde + 1) / pbi).toLocaleString("es-AR", { maximumFractionDigits: 2 })} % del PBI</td><td className="num">{n0(m.poblacionAlFinal)}</td></tr>
+                  <tr key={m.nombre}><td>{m.nombre}</td><td className="num">{musd(m.inversion)}</td><td className="num">{musd(m.publica)}</td><td className="num">{n0(m.poblacionAlFinal)}</td></tr>
                 ))}
-                <tr className="total"><td><b>Total a 30 años</b></td><td className="num"><b>{musd(mand.reduce((x, m) => x + m.inversion, 0))}</b></td><td className="num"><b>{musd(mand.reduce((x, m) => x + m.publica, 0))}</b></td><td /><td className="num"><b>{n0(mand[mand.length - 1].poblacionAlFinal)}</b></td></tr>
+                <tr className="total"><td><b>Total a 30 años</b></td><td className="num"><b>{musd(mand.reduce((x, m) => x + m.inversion, 0))}</b></td><td className="num"><b>{musd(mand.reduce((x, m) => x + m.publica, 0))}</b></td><td className="num"><b>{n0(mand[mand.length - 1].poblacionAlFinal)}</b></td></tr>
               </tbody>
             </table>
             <p className="small muted">Escenario "lo más probable": las obras de conexión en los primeros 5 años y el resto al ritmo en que llega la gente. "Pública" excluye las viviendas y las mudanzas, que pagan los hogares. Montos sin descontar, en dólares de hoy. Los {musd(costos.totalCapital[1])} se completan solo si llega toda la gente.</p>
-            <h3>Quién paga</h3>
-            <table className="provs">
-              <tbody>
-                {pagan.map((x) => (
-                  <tr key={x.quien}><td><b>{x.quien}</b> <span className="small muted">{x.rubros.join(", ")}</span></td><td className="num">{musd(x.usd)}</td><td className="num">{(100 * x.usd) / costos.totalCapital[1] < 1 ? "< 1" : Math.round((100 * x.usd) / costos.totalCapital[1])} %</td></tr>
-                ))}
-              </tbody>
-            </table>
-            <p className="small muted">Responsable principal según competencias habituales (educación y salud son provinciales, rutas y transporte eléctrico nacionales). El reparto real se acuerda en cada convenio.</p>
           </section>
 
           <section>
@@ -247,48 +233,6 @@ export default function Ficha(p: Props) {
             )}
           </section>
         </div>
-
-        <section>
-          <h3>Calendario</h3>
-          <div className="gantt" role="table" aria-label="Calendario de hitos">
-            <div className="g-row g-head" role="row">
-              <span role="columnheader">Año</span>
-              {Array.from({ length: 12 }, (_, k) => <span key={k} className={k % 4 === 0 ? "g-mandato" : ""} role="columnheader">{k + 1}</span>)}
-            </div>
-            {hs.map((h) => (
-              <div className="g-row" role="row" key={h.que}>
-                <span role="cell">{h.que}</span>
-                <span className={`g-bar ${h.tipo}`} style={{ gridColumn: `${h.desde + 1} / ${h.hasta + 2}` }} role="cell" aria-label={`años ${h.desde} a ${h.hasta}`} />
-              </div>
-            ))}
-          </div>
-          <p className="small muted">Plazos típicos de obras públicas de esta escala; las líneas marcan el inicio de cada mandato. Normas en azul, obras en celeste, llegada de {polos ? "empresas" : "gente"} en amarillo.</p>
-        </section>
-
-        {pol.length > 0 && (
-          <section>
-            <h3>Quién gana y quién pierde población</h3>
-            <p className="small">
-              <b>Ganan:</b> {pol.filter((x) => x.delta > 0).map((x) => `${x.lugar} +${n0(x.delta)}`).join(" · ")}.{" "}
-              <b>Pierden más:</b> {pol.filter((x) => x.delta < 0).reverse().slice(0, 4).map((x) => `${x.lugar} −${n0(-x.delta)}`).join(" · ")}
-              {pol.filter((x) => x.delta < 0).length > 4 && "; el resto, hasta " + n0(-pol.filter((x) => x.delta < 0).reverse()[4].delta) + " cada una"}.
-            </p>
-            <p className="small muted">
-              A 30 años, con la llegada más probable y el origen estimado arriba. Actores: gobernación de {p.site.provincia}, intendencias de los
-              municipios del departamento {p.site.departamento} y legisladores de las provincias de origen. La población no cambia sola las bancas: el reparto de
-              diputados sigue el Censo de 1980 (Ley 22.847) y la coparticipación usa coeficientes fijos (Ley 23.548).
-            </p>
-          </section>
-        )}
-
-        <section>
-          <h3>Qué hace falta para hacerlo</h3>
-          <ol className="pasos small">
-            {pasos.map((x) => (
-              <li key={x.que}><b>{x.que}.</b> {x.norma}. <span className="muted">Quién: {x.quien}.</span>{x.nota && <> {x.nota}</>}</li>
-            ))}
-          </ol>
-        </section>
 
         <section>
           <h3>Qué puede salir mal y cómo evitarlo</h3>
