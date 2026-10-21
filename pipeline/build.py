@@ -434,7 +434,14 @@ def main() -> None:
     at = gpd.read_file(raw("lineas_electricas"), columns=["ten", "fun"])
     at = at[at.ten == 6]
     puertos = gpd.read_file(raw("puertos"))
-    rios = gpd.read_file(raw("rios"), bbox=(WEST, SOUTH, EAST, NORTH), columns=["DIS_AV_CMS", "ORD_CLAS"])
+    # HydroRIVERS corregido con aforos de la BDHI (pipeline/hidro_correccion.py, docs/datos-hidrologia.md):
+    # DIS_AV_CMS pasa a ser el caudal medio corregido; Q95 donde no hay estimación por estación se
+    # aproxima con la mediana nacional de Q95/Qmedio de los tramos con estación
+    rios = gpd.read_parquet(RAW.parent / "interim" / "hydrorivers_corregido.parquet").cx[WEST:EAST, SOUTH:NORTH]
+    ratio = (rios.Q95_CORR_CMS / rios.DIS_CORR_CMS.where(rios.DIS_CORR_CMS > 0)).dropna()
+    q95_ratio = float(ratio[(ratio > 0) & (ratio <= 1)].median())
+    rios = rios.assign(DIS_AV_CMS=rios.DIS_CORR_CMS, Q95=rios.Q95_CORR_CMS.fillna(rios.DIS_CORR_CMS * q95_ratio))
+    log(f"ríos corregidos: Q95/Qmedio mediano = {q95_ratio:.2f}")
     rios10 = rios[rios.DIS_AV_CMS >= 10]
     rios100 = rios[rios.DIS_AV_CMS >= 100]
     locs = gpd.read_file(raw("localidades"))
@@ -452,6 +459,9 @@ def main() -> None:
     q = pd.Series(rios1.DIS_AV_CMS.values[ri]).groupby(pi).max()
     C["q_rio25"] = np.zeros(len(uniq))
     C["q_rio25"][q.index.values] = q.values
+    q95 = pd.Series(rios1.Q95.values[ri]).groupby(pi).max()
+    C["q95_rio25"] = np.zeros(len(uniq))
+    C["q95_rio25"][q95.index.values] = q95.values
     # centralidad para una capital: distancia media de la población del país a la celda
     # (ponderada por población, con las celdas H3 como origen) y distancia a la capital
     # provincial más lejana (equidad de acceso desde todas las provincias)

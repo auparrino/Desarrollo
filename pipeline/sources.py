@@ -212,4 +212,10 @@ SOURCES = {
         "cita": "REFES/SISA (Ministerio de Salud), establecimientos de salud georreferenciados, vía plataforma Poblaciones (CONICET/UCA), actualización 2025.",
         "licencia": "CC BY 4.0",
     },
+    "caudales_bdhi": {
+        "url": "https://snih.hidricosargentina.gob.ar (Base de Datos Hidrológica Integrada; ver pipeline/hidro_bdhi.py)",
+        "file": "hidro/estaciones_caudal.csv",
+        "cita": "Secretaría de Infraestructura y Política Hídrica, Base de Datos Hidrológica Integrada (BDHI): caudales medios diarios/mensuales de 387 estaciones; usados para corregir HydroRIVERS (docs/datos-hidrologia.md).",
+        "licencia": "Información pública oficial",
+    },
 }

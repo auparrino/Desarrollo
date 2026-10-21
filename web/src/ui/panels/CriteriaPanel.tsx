@@ -170,13 +170,13 @@ export default function CriteriaPanel(p: Props) {
               <input type="number" step={0.1} value={p.water.margen} onChange={(e) => p.setWater({ margen: Number(e.target.value) })} />
             </label>
             <label>
-              Fracción asignable del caudal
+              Fracción asignable del Q95
               <input type="number" step={0.05} min={0.01} max={1} value={p.water.fraccionAsignable} onChange={(e) => p.setWater({ fraccionAsignable: Number(e.target.value) })} />
             </label>
           </div>
           <p className="muted small">
             Demanda con margen: <b>{n2(caudalRequerido(p.water))} m³/s</b>. Es apta si un río a ≤25 km aporta esa demanda con
-            la fracción asignable de su caudal medio, o si el clima es subhúmedo/húmedo (P/ET0 ≥ {p.water.aridezHumeda}), donde
+            la fracción asignable de su caudal confiable (Q95, corregido con aforos de la BDHI), o si el clima es subhúmedo/húmedo (P/ET0 ≥ {p.water.aridezHumeda}), donde
             se supone oferta local. La dotación de 200 L/hab/día y el margen de 1,5 provienen de la revisión (§R13).
           </p>
         </div>

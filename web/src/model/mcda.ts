@@ -8,7 +8,7 @@ export interface WaterParams {
   poblacion: number; // población objetivo P
   dotacion: number; // q, L/hab/día
   margen: number; // oferta/demanda mínima (1,5 en la literatura)
-  fraccionAsignable: number; // α: fracción del caudal medio asignable a uso urbano
+  fraccionAsignable: number; // α: fracción del caudal confiable (Q95) asignable a uso urbano
   aridezHumeda: number; // con P/ET0 ≥ este valor se asume oferta local suficiente
 }
 
@@ -17,7 +17,7 @@ export const DEFAULT_WATER: WaterParams = {
   poblacion: 500_000,
   dotacion: 200,
   margen: 1.5,
-  fraccionAsignable: 0.2,
+  fraccionAsignable: 0.5,
   aridezHumeda: 0.5,
 };
 
@@ -77,7 +77,8 @@ export function computeMask(
       }
     }
     if (reason[i] === 0 && water.activo) {
-      const qOk = cols.q_rio25[i] * water.fraccionAsignable >= qReq;
+      // caudal confiable: Q95 corregido con aforos de la BDHI (docs/datos-hidrologia.md)
+      const qOk = cols.q95_rio25[i] * water.fraccionAsignable >= qReq;
       const humid = cols.aridez[i] >= water.aridezHumeda;
       if (!qOk && !humid) reason[i] = waterCode;
     }

@@ -28,7 +28,7 @@ RANGES = {
     "pob": (0, 2e6), "pob_50km": (0, 2e7), "crec_dep": (-10, 15), "frac_ap_estricta": (0, 1),
     "frac_ap_uso_multiple": (0, 1), "d_ruta": (0, 600), "d_ffcc": (0, 1500), "d_alta_tension": (0, 1000),
     "d_puerto": (0, 2000), "d_rio10": (0, 1000), "d_rio100": (0, 1500), "d_localidad": (0, 300),
-    "q_rio25": (0, 30000), "d_amba": (0, 3500), "frac_tierra": (0, 1), "d_media_pob": (0, 3000),
+    "q_rio25": (0, 30000), "q95_rio25": (0, 30000), "d_amba": (0, 3500), "frac_tierra": (0, 1), "d_media_pob": (0, 3000),
     "d_max_capital": (0, 4000), "d_metro": (0, 3000), "as_prob": (0, 1), "f_prob": (0, 1),
     "pct_fiscal_eap": (0, 100), "pct_dep_en_eap": (0, 100), "pct_extranjero": (0, 100), "d_comunidad": (0, 1000),
     "empleo_50km": (0, 5e6), "emp_crec": (-30, 30), "salario_rel": (0.2, 5), "n_proyectos_100km": (0, 500),
@@ -71,7 +71,7 @@ def load():
 
 def restriction_masks(df: pd.DataFrame) -> dict[str, pd.Series]:
     """Restricciones por defecto de la app (web/src/model/criteria.ts, mcda.ts)."""
-    q_req = 500_000 * 200 * 1.5 / 1000 / 86400
+    q_req = 500_000 * 200 * 1.5 / 1000 / 86400  # R13 con Q95 corregido y α = 0,5
     return {
         "R01 Área protegida estricta": df.frac_ap_estricta > 0.5,
         "R03 Inundación T100": df.frac_inund100 > 0.5,
@@ -79,7 +79,7 @@ def restriction_masks(df: pd.DataFrame) -> dict[str, pd.Series]:
         "R06 Sismicidad": df.pga475 >= 0.35,
         "R09 Altitud": df.elev > 2500,
         "R10 Costa baja": df.elev < 5,
-        "R13 Agua": ~((df.q_rio25 * 0.2 >= q_req) | (df.aridez >= 0.5)),
+        "R13 Agua": ~((df.q95_rio25 * 0.5 >= q_req) | (df.aridez >= 0.5)),
     }
 
 
@@ -188,7 +188,8 @@ def main() -> None:
         "Santa Fe; a la vez subestima el anegamiento pampeano.",
         "La pendiente calculada sobre un MDE de 1 km es baja aun en la sierra: el 95 % de las celdas tiene una pendiente media "
         f"de {df.pend_media.quantile(0.95):.0f} % o menos. Por eso R04 usa la fracción de la celda con pendiente ≤15 %.",
-        "HydroRIVERS es un caudal modelado: se valida contra aforos en docs/datos-hidrologia.md.",
+        "Los caudales de HydroRIVERS se corrigieron con 387 estaciones de aforo de la BDHI (docs/datos-hidrologia.md); "
+        "sin estación aguas arriba o abajo el factor de corrección queda en 1.",
     ]
     lines += [f"- {o}" for o in obs]
     (ROOT / "docs" / "auditoria-datos.md").write_text("\n".join(lines) + "\n")

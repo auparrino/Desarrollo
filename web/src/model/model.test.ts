@@ -72,7 +72,7 @@ describe("restricciones", () => {
     const cols: Record<string, Float32Array> = {
       frac_ap_estricta: col([0, 1, 0]), frac_ap_uso_multiple: col([0, 0, 0]), frac_inund100: col([0, 0, 0]),
       frac_pend_ok: col([1, 1, 1]), pga475: col([0, 0, 0]), elev: col([100, 100, 100]), pob: col([0, 0, 0]),
-      q_rio25: col([100, 100, 0]), aridez: col([0.1, 0.1, 0.1]),
+      q_rio25: col([100, 100, 0]), q95_rio25: col([100, 100, 0]), aridez: col([0.1, 0.1, 0.1]),
     };
     const m = computeMask(cols, n, RESTRICTIONS, DEFAULT_WATER);
     expect(m[0]).toBe(0);
