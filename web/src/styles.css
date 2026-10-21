@@ -437,3 +437,10 @@ button.primary { background: var(--rojo); color: #f2ead7; border: 2px solid var(
   .mapstyle select { display: none; }
 }
 .mapstyle select { width: calc(100% - 16px); }
+.acciones { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 12px 0; }
+.acciones button { border: 2px solid var(--line); background: var(--surface); color: var(--ink); padding: 6px 10px; font: inherit; font-size: 0.82rem; cursor: pointer; box-shadow: 2px 2px 0 var(--line); }
+.acciones button:hover { background: var(--sol); color: #1d1b18; }
+.comparar { border: 2px solid var(--line); padding: 8px 10px; margin: 8px 0; background: var(--paper-2); }
+.cmp-grid { display: grid; gap: 8px; }
+.cmp-grid ol { padding-left: 18px; margin: 4px 0; }
+.cmp-grid li.comun { font-weight: 700; color: var(--rojo); }

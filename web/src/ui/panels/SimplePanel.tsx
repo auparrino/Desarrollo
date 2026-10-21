@@ -10,6 +10,8 @@ import { nearestPlace } from "../plainFacts";
 import { estimateCosts } from "../../model/costs";
 import { Scene } from "../art/Poster";
 import { PlainVerdict, runAll } from "./CostBenefit";
+import { downloadCSV } from "../../model/share";
+import { useState } from "react";
 import { UNIT_COSTS } from "../../model/unitCostsData";
 
 interface Props {
@@ -33,6 +35,10 @@ interface Props {
   selected: Site | null;
   aptasPct: number;
   onExpert: () => void;
+  shareLink: () => string;
+  saved: { nombre: string; sitios: { nombre: string; best: number }[] }[];
+  onSave: (sitios: { nombre: string; best: number }[]) => void;
+  onClearSaved: () => void;
 }
 
 // ejemplos: población 2022 del departamento (Censo INDEC)
@@ -84,6 +90,66 @@ function Reasons({ fs, i, w }: { fs: Record<string, Float32Array>; i: number; w:
         </li>
       ))}
     </ul>
+  );
+}
+
+function Acciones({ p }: { p: Props }) {
+  const [msg, setMsg] = useState("");
+  const top = uniqueByPlace(p.sites, p.localidades).slice(0, 10);
+  const rows = () =>
+    top.map((s) => {
+      const c = estimateCosts(p.policy.id, p.ds.col, s.best, s.provincia, { poblacion: p.poblacion, densidad: 75 }, UNIT_COSTS);
+      const cba = runAll({ policy: p.policy.id, poblacion: p.poblacion, costos: c, c: p.ds.col, i: s.best,
+        codProv: p.ds.meta.departamentos[p.ds.dep[s.best]]?.cod.slice(0, 2) ?? "" });
+      return {
+        puesto: s.rank, lugar: siteName(s, p.localidades), departamento: s.departamento, provincia: s.provincia,
+        lon: s.center[0].toFixed(3), lat: s.center[1].toFixed(3), aptitud: s.score.toFixed(3), superficie_km2: Math.round(s.areaKm2),
+        costo_central_usd: Math.round(c.totalCapital[1]), costo_bajo_usd: Math.round(c.totalCapital[0]), costo_alto_usd: Math.round(c.totalCapital[2]),
+        van_social_base_usd: Math.round(cba.base.social.van), van_fiscal_base_usd: Math.round(cba.base.fiscal.van),
+        politica: p.policy.nombre, poblacion_objetivo: p.poblacion,
+      };
+    });
+  return (
+    <div className="acciones">
+      <button onClick={() => navigator.clipboard?.writeText(p.shareLink()).then(() => setMsg("Enlace copiado"), () => setMsg(p.shareLink()))}>
+        🔗 Compartir este escenario
+      </button>
+      <button onClick={() => downloadCSV(`atlas-${p.policy.id}-${p.poblacion}.csv`, rows())}>⬇ Descargar resultados</button>
+      <button onClick={() => { p.onSave(top.slice(0, 5).map((s) => ({ nombre: siteName(s, p.localidades), best: s.best }))); setMsg("Escenario guardado para comparar"); }}>
+        ★ Guardar para comparar
+      </button>
+      {msg && <span className="small muted">{msg}</span>}
+    </div>
+  );
+}
+
+function Comparar({ saved, onClear }: { saved: Props["saved"]; onClear: () => void }) {
+  const all = saved.map((x) => new Set(x.sitios.map((s) => s.nombre)));
+  const common = [...all[0]].filter((n) => all.every((s) => s.has(n)));
+  return (
+    <div className="comparar">
+      <h4>Comparación de escenarios</h4>
+      <div className="cmp-grid" style={{ gridTemplateColumns: `repeat(${saved.length}, 1fr)` }}>
+        {saved.map((x, k) => (
+          <div key={k}>
+            <b className="small">{x.nombre}</b>
+            <ol className="small">
+              {x.sitios.map((s) => (
+                <li key={s.nombre} className={common.includes(s.nombre) ? "comun" : ""}>{s.nombre}</li>
+              ))}
+            </ol>
+          </div>
+        ))}
+      </div>
+      {saved.length > 1 && (
+        <p className="small">
+          {common.length
+            ? `Aparecen en todos los escenarios: ${common.join(", ")}. Son las apuestas más sólidas.`
+            : "Ningún lugar se repite entre los escenarios: la elección depende mucho de las prioridades."}
+        </p>
+      )}
+      <button className="link" onClick={onClear}>Borrar comparación</button>
+    </div>
   );
 }
 
@@ -254,6 +320,8 @@ export default function SimplePanel(p: Props) {
             );
           })}
         </ol>
+        <Acciones p={p} />
+        {p.saved.length > 0 && <Comparar saved={p.saved} onClear={p.onClearSaved} />}
         <label className="check small">
           <input type="checkbox" checked={p.showDhi} onChange={(e) => p.setShowDhi(e.target.checked)} />
           Mostrar en el mapa las zonas y obras que propone el Plan DHI

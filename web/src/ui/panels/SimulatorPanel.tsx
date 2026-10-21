@@ -68,6 +68,20 @@ export default function SimulatorPanel(p: Props) {
     [p.deps, chosen.join(","), pob, s.origenAMBA, p.sites],
   );
   const total = res.reduce((a, r) => a + r.poblacion, 0);
+  // horizonte 2035: estimación INDEC por departamento (escenario tendencial)
+  const conc35 = useMemo(() => {
+    if (!p.deps.some((d) => d.pob2035)) return null;
+    return concentracion(
+      p.deps.map((d) => ({ cod: d.cod_dep, provincia: d.provincia, pob: d.pob2035 ?? d.pob2022 ?? 0 })),
+      res.map((r) => ({ provincia: r.provincia, poblacion: r.poblacion })),
+      s.origenAMBA,
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [p.deps, chosen.join(","), pob, s.origenAMBA, p.sites]);
+  const crec35 = useMemo(
+    () => p.deps.reduce((a, d) => a + (d.pob2035 ?? 0), 0) - p.deps.reduce((a, d) => a + (d.pob2022 ?? 0), 0),
+    [p.deps],
+  );
   const crecPorAnio = useMemo(() => {
     const t10 = p.deps.reduce((a, d) => a + (d.pob2010 ?? 0), 0);
     const t22 = p.deps.reduce((a, d) => a + (d.pob2022 ?? 0), 0);
@@ -95,6 +109,11 @@ export default function SimulatorPanel(p: Props) {
           ))}
           {!p.sites.length && <p className="muted">Primero calculá la aptitud y las regiones candidatas.</p>}
         </div>
+        {crec35 > 0 && chosen.length > 0 && (
+          <button className="link" onClick={() => setPob(Math.round(crec35 / chosen.length / 1000) * 1000)}>
+            Dirigir a estos destinos todo el crecimiento proyectado 2022–2035 ({n0(crec35)} hab., INDEC) →
+          </button>
+        )}
         <div className="grid2">
           <label>
             Habitantes por destino
@@ -225,6 +244,13 @@ export default function SimulatorPanel(p: Props) {
               <b>{n1(100 * conc.despues.participacionAMBA)} %</b>
               <span className="muted small">hoy {n1(100 * conc.antes.participacionAMBA)} %</span>
             </div>
+            {conc35 && (
+              <div className="tile">
+                <span className="muted small">AMBA en 2035</span>
+                <b>{n1(100 * conc35.despues.participacionAMBA)} %</b>
+                <span className="muted small">tendencial {n1(100 * conc35.antes.participacionAMBA)} %</span>
+              </div>
+            )}
             <div className="tile">
               <span className="muted small">HHI provincial</span>
               <b>{n2(conc.despues.hhiProvincial)}</b>

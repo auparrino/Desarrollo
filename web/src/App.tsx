@@ -14,6 +14,7 @@ import MethodPanel from "./ui/panels/MethodPanel";
 import SimplePanel from "./ui/panels/SimplePanel";
 import SimpleCellCard from "./ui/panels/SimpleCellCard";
 import { POLICY_BY_ID, type PolicyId } from "./model/policies";
+import { decodeState, encodeState } from "./model/share";
 import { CLASSES, PRESETS, classify, defaultPoints, presetPoints, weightsFromPoints, type Points } from "./model/plain";
 import { DIV_RED_BLUE, EXCLUDED, PALETTES, SEQ_BLUE, SEQ_ORANGE, css, gradientCss, ramp, type PaletteId, type RGB } from "./ui/colors";
 import { VARIABLES, VAR_BY_ID, fmtVar } from "./ui/variables";
@@ -144,6 +145,25 @@ export default function App() {
     setSelCell(null);
   };
   const setPreset = (id: string) => setPoints(presetPoints(id, policy.weights()));
+  // escenario compartido por URL: se aplica una vez cargados los datos
+  const sharedApplied = useRef(false);
+  useEffect(() => {
+    if (sharedApplied.current || !ds) return;
+    sharedApplied.current = true;
+    const st = decodeState(window.location.hash);
+    if (!st || !POLICY_BY_ID[st.policy]) return;
+    choosePolicy(st.policy);
+    setPoints(st.points, POLICY_BY_ID[st.policy]);
+    setPoblacion(st.poblacion);
+    if (st.escala === "hex" || st.escala === "dep" || st.escala === "prov") setEscala(st.escala);
+    if (st.paleta && st.paleta in PALETTES) setPaleta(st.paleta as PaletteId);
+    setMode("simple");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ds]);
+  const shareLink = () =>
+    `${window.location.origin}${window.location.pathname}${encodeState({ policy: policyId, points, poblacion: siteParams.poblacion, escala, paleta })}`;
+  const [saved, setSaved] = useState<{ nombre: string; policy: PolicyId; poblacion: number; sitios: { nombre: string; best: number }[] }[]>([]);
+
   const setPoblacion = (n: number) => {
     setWaterState((w) => ({ ...w, poblacion: n }));
     setSiteParamsState((x) => ({ ...x, poblacion: n }));
@@ -426,6 +446,12 @@ export default function App() {
                 selected={selSite}
                 aptasPct={(100 * stats.aptas) / stats.total}
                 onExpert={() => setMode("experto")}
+                shareLink={shareLink}
+                saved={saved}
+                onSave={(sitios) =>
+                  setSaved((x) => [...x.slice(-2), { nombre: `${policy.nombre} · ${siteParams.poblacion.toLocaleString("es-AR")} · ${preset ?? "a medida"}`, policy: policyId, poblacion: siteParams.poblacion, sitios }])
+                }
+                onClearSaved={() => setSaved([])}
               />
             </div>
           )}

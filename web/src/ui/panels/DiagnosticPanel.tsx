@@ -10,6 +10,7 @@ export interface DepProps {
   provincia: string;
   pob2010: number | null;
   pob2022: number | null;
+  pob2035?: number | null;
   area_km2: number;
   densidad: number | null;
   crec_anual: number | null;
@@ -34,12 +35,12 @@ export const METRICS: Record<DepMetric, { nombre: string; legend: string; stops:
 
 export default function DiagnosticPanel(p: Props) {
   const s = useMemo(() => {
-    let t10 = 0, t22 = 0, a10 = 0, a22 = 0;
+    let t10 = 0, t22 = 0, a10 = 0, a22 = 0, t35 = 0, a35 = 0;
     const prov = new Map<string, { p10: number; p22: number; area: number }>();
     for (const d of p.deps) {
       const x10 = d.pob2010 ?? 0, x22 = d.pob2022 ?? 0;
-      t10 += x10; t22 += x22;
-      if (isAMBA(d.cod_dep)) { a10 += x10; a22 += x22; }
+      t10 += x10; t22 += x22; t35 += d.pob2035 ?? 0;
+      if (isAMBA(d.cod_dep)) { a10 += x10; a22 += x22; a35 += d.pob2035 ?? 0; }
       const q = prov.get(d.provincia) ?? { p10: 0, p22: 0, area: 0 };
       q.p10 += x10; q.p22 += x22; q.area += d.area_km2;
       prov.set(d.provincia, q);
@@ -50,7 +51,7 @@ export default function DiagnosticPanel(p: Props) {
     const growth = p.deps
       .filter((d) => (d.pob2022 ?? 0) >= 20000 && d.crec_anual !== null)
       .sort((a, b) => b.crec_anual! - a.crec_anual!);
-    return { t10, t22, a10, a22, provs, growth };
+    return { t10, t22, a10, a22, t35, a35, provs, growth };
   }, [p.deps]);
   const m = METRICS[p.metric];
   const maxP = Math.max(...s.provs.map((x) => x.p22));
@@ -67,7 +68,7 @@ export default function DiagnosticPanel(p: Props) {
           <div className="tile">
             <span className="muted small">AMBA (CABA + 24 partidos)</span>
             <b>{n1((100 * s.a22) / s.t22)} %</b>
-            <span className="muted small">2010: {n1((100 * s.a10) / s.t10)} %</span>
+            <span className="muted small">2010: {n1((100 * s.a10) / s.t10)} %{s.t35 > 0 && ` · 2035 (INDEC): ${n1((100 * s.a35) / s.t35)} %`}</span>
           </div>
           <div className="tile">
             <span className="muted small">Crec. anual país</span>
