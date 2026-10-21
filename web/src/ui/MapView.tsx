@@ -65,7 +65,7 @@ function baseStyle(dark: boolean, kind: Basemap = "lito"): maplibregl.StyleSpeci
         },
       },
       layers: [
-        { id: "bg", type: "background", paint: { "background-color": lito ? (dark ? "#0e1a30" : "#b9cfe0") : dark ? "#142038" : "#e9dfc6" } },
+        { id: "bg", type: "background", paint: { "background-color": lito ? (dark ? "#0e1a30" : "#a9cbe8") : dark ? "#142038" : "#e9dfc6" } },
         ...(lito
           ? []
           : [{ id: "ign", type: "raster" as const, source: "ign" }]),
@@ -76,8 +76,8 @@ function baseStyle(dark: boolean, kind: Basemap = "lito"): maplibregl.StyleSpeci
           paint: {
             "hillshade-exaggeration": lito ? 0.55 : 0.35,
             "hillshade-shadow-color": dark ? "#05080f" : "#1e3d6b",
-            "hillshade-highlight-color": dark ? "#2f5d8f" : "#f7f1e3",
-            "hillshade-accent-color": "#c98b2b",
+            "hillshade-highlight-color": dark ? "#2f5d8f" : "#ffffff",
+            "hillshade-accent-color": "#74acdf",
           },
         },
       ],
@@ -157,7 +157,7 @@ export default function MapView(p: MapProps) {
           data: p.geo.provincias,
           filled: true,
           stroked: false,
-          getFillColor: p.dark ? [27, 42, 71, 200] : [246, 239, 222, 215],
+          getFillColor: p.dark ? [27, 42, 71, 200] : [255, 255, 255, 205],
         }),
       );
     }
@@ -270,7 +270,7 @@ export default function MapView(p: MapProps) {
           data: p.geo.provincias,
           filled: false,
           stroked: true,
-          getLineColor: p.dark ? [240, 239, 236, 150] : [11, 11, 11, 130],
+          getLineColor: p.dark ? [240, 239, 236, 150] : [27, 63, 107, 110],
           lineWidthMinPixels: 1,
         }),
       );

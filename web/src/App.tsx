@@ -17,9 +17,9 @@ import SimpleCellCard from "./ui/panels/SimpleCellCard";
 import { POLICY_BY_ID, type PolicyId } from "./model/policies";
 import { decodeState, encodeState } from "./model/share";
 import { CLASSES, PRESETS, classify, defaultPoints, presetPoints, weightsFromPoints, type Points } from "./model/plain";
-import { DIV_RED_BLUE, EXCLUDED, PALETTES, SEQ_BLUE, SEQ_ORANGE, css, gradientCss, ramp, type PaletteId, type RGB } from "./ui/colors";
+import { DIV_RED_BLUE, EXCLUDED, SEQ_BLUE, SEQ_ORANGE, VIRIDIS, css, gradientCss, ramp, type RGB } from "./ui/colors";
 import { VARIABLES, VAR_BY_ID, fmtVar } from "./ui/variables";
-import { SunBurst } from "./ui/art/Poster";
+import { SolDeMayo } from "./ui/art/Icons";
 
 type Tab = "aptitud" | "sitios" | "diagnostico" | "simulador" | "casos" | "metodo";
 type View = "aptitud" | "robustez" | "exclusion" | "variable";
@@ -53,8 +53,18 @@ const GEO_FILES = {
   incentivos_municipales: "capas/incentivos_municipales.geojson",
 };
 
-// Clases del modo simple: cuatro pasos de la paleta elegida (sin el más claro, que no contrasta).
+// Clases del modo simple: cuatro pasos de viridis (sin el más claro, que no contrasta).
 const classColors = (pal: RGB[]): RGB[] => [0.4, 0.6, 0.8, 1].map((t) => ramp(pal, t));
+
+type Fuente = "jost" | "spartan" | "josefin";
+function initialFuente(): Fuente {
+  try {
+    const f = new URLSearchParams(window.location.search).get("fuente") ?? localStorage.getItem("fuente");
+    return f === "spartan" || f === "josefin" ? f : "jost";
+  } catch {
+    return "jost";
+  }
+}
 
 function initialMode(): "simple" | "experto" {
   try {
@@ -109,9 +119,20 @@ export default function App() {
   const [sheet, setSheet] = useState(true);
   const [basemap, setBasemap] = useState<Basemap>("lito");
   const [escala, setEscala] = useState<"hex" | "dep" | "prov">("hex");
-  const [paleta, setPaleta] = useState<PaletteId>("mako");
-  const pal = PALETTES[paleta];
+  const pal = VIRIDIS;
   const CLASS_COLORS = useMemo(() => classColors(pal), [pal]);
+  const [fuente, setFuenteState] = useState<Fuente>(initialFuente);
+  const setFuente = (f: Fuente) => {
+    setFuenteState(f);
+    try {
+      localStorage.setItem("fuente", f);
+    } catch {
+      /* sin almacenamiento */
+    }
+  };
+  useEffect(() => {
+    document.documentElement.dataset.font = fuente;
+  }, [fuente]);
   const [policyId, setPolicyId] = useState<PolicyId>("ciudad_nueva");
   const policy = POLICY_BY_ID[policyId];
   const [mode, setModeState] = useState<"simple" | "experto">(initialMode);
@@ -158,12 +179,11 @@ export default function App() {
     setPoints(st.points, POLICY_BY_ID[st.policy]);
     setPoblacion(st.poblacion);
     if (st.escala === "hex" || st.escala === "dep" || st.escala === "prov") setEscala(st.escala);
-    if (st.paleta && st.paleta in PALETTES) setPaleta(st.paleta as PaletteId);
     setMode("simple");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ds]);
   const shareLink = () =>
-    `${window.location.origin}${window.location.pathname}${encodeState({ policy: policyId, points, poblacion: siteParams.poblacion, escala, paleta })}`;
+    `${window.location.origin}${window.location.pathname}${encodeState({ policy: policyId, points, poblacion: siteParams.poblacion, escala })}`;
   const [saved, setSaved] = useState<{ nombre: string; policy: PolicyId; poblacion: number; sitios: { nombre: string; best: number }[] }[]>([]);
 
   const setPoblacion = (n: number) => {
@@ -339,8 +359,8 @@ export default function App() {
       const p = f.properties as DepProps;
       let c: RGB;
       if (depMetric === "crec_anual") c = ramp(DIV_RED_BLUE, ((p.crec_anual ?? NaN) + 3) / 6);
-      else if (depMetric === "densidad") c = ramp(SEQ_BLUE, (Math.log10(Math.max(p.densidad ?? NaN, 0.1)) + 1) / 4);
-      else c = ramp(SEQ_BLUE, (Math.log10(Math.max(p.pob2022 ?? NaN, 1000)) - 3) / 3);
+      else if (depMetric === "densidad") c = ramp(VIRIDIS, (Math.log10(Math.max(p.densidad ?? NaN, 0.1)) + 1) / 4);
+      else c = ramp(VIRIDIS, (Math.log10(Math.max(p.pob2022 ?? NaN, 1000)) - 3) / 3);
       const sel = selDep?.cod_dep === p.cod_dep;
       return [c[0], c[1], c[2], sel ? 255 : 215];
     };
@@ -379,8 +399,8 @@ export default function App() {
       const c = ramp(pal, (m! - regionAgg.lo) / (regionAgg.hi - regionAgg.lo));
       return [c[0], c[1], c[2], 225];
     };
-    return { colorOf, key: `${escala}|${paleta}|${regionAgg.lo}|${regionAgg.hi}|${score.length}|${Math.random()}`, layer: escala === "dep" ? ("departamentos" as const) : ("provincias" as const) };
-  }, [regionAgg, mode, tab, view, escala, pal, paleta, score]);
+    return { colorOf, key: `${escala}|${regionAgg.lo}|${regionAgg.hi}|${score.length}|${Math.random()}`, layer: escala === "dep" ? ("departamentos" as const) : ("provincias" as const) };
+  }, [regionAgg, mode, tab, view, escala, pal, score]);
 
   const selectSite = (s: Site) => {
     if (window.matchMedia("(max-width: 760px)").matches) setSheet(false);
@@ -408,12 +428,20 @@ export default function App() {
     <div className="app">
       <header className="top">
         <div className="brand">
-          <SunBurst />
+          <SolDeMayo size={46} />
           <div>
             <h1>Atlas del Desarrollo Argentino</h1>
             <p className="small">Dónde crecer · cómo poblar · cuánto cuesta</p>
           </div>
         </div>
+        <label className="fuente">
+          <span>Letra</span>
+          <select value={fuente} onChange={(e) => setFuente(e.target.value as Fuente)} aria-label="Tipografía">
+            <option value="jost">Jost</option>
+            <option value="spartan">League Spartan</option>
+            <option value="josefin">Josefin Sans</option>
+          </select>
+        </label>
         <div className="mode" role="group" aria-label="Modo de uso">
           <button className={!expert ? "on" : ""} onClick={() => setMode("simple")}>Simple</button>
           <button className={expert ? "on" : ""} onClick={() => setMode("experto")}>Experto</button>
@@ -534,13 +562,6 @@ export default function App() {
             <div className="seg-mini" role="group" aria-label="Escala del mapa">
               {([["hex", "Zonas"], ["dep", "Departamentos"], ["prov", "Provincias"]] as const).map(([k, n]) => (
                 <button key={k} className={escala === k ? "on" : ""} onClick={() => setEscala(k)}>{n}</button>
-              ))}
-            </div>
-            <div className="seg-mini" role="group" aria-label="Paleta">
-              {(Object.keys(PALETTES) as PaletteId[]).map((k) => (
-                <button key={k} className={paleta === k ? "on" : ""} onClick={() => setPaleta(k)} title={`Paleta ${k}`} aria-label={`Paleta ${k}`}>
-                  <span className="pal" style={{ background: gradientCss(PALETTES[k]) }} />
-                </button>
               ))}
             </div>
             <select value={basemap} onChange={(e) => setBasemap(e.target.value as Basemap)} aria-label="Fondo del mapa">

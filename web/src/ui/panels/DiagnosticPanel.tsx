@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { isAMBA } from "../../model/simulator";
-import { DIV_RED_BLUE, SEQ_BLUE, gradientCss } from "../colors";
+import { DIV_RED_BLUE, SEQ_BLUE, VIRIDIS, gradientCss } from "../colors";
 
 export type DepMetric = "densidad" | "crec_anual" | "pob2022";
 
@@ -28,9 +28,9 @@ const n1 = (v: number) => v.toLocaleString("es-AR", { maximumFractionDigits: 1 }
 const n2 = (v: number) => v.toLocaleString("es-AR", { maximumFractionDigits: 2 });
 
 export const METRICS: Record<DepMetric, { nombre: string; legend: string; stops: typeof SEQ_BLUE; ticks: string[] }> = {
-  densidad: { nombre: "Densidad 2022 (hab/km², escala log)", legend: "", stops: SEQ_BLUE, ticks: ["≤0,1", "10", "≥1.000"] },
+  densidad: { nombre: "Densidad 2022 (hab/km², escala log)", legend: "", stops: VIRIDIS, ticks: ["≤0,1", "10", "≥1.000"] },
   crec_anual: { nombre: "Crecimiento anual 2010–2022 (%)", legend: "", stops: DIV_RED_BLUE, ticks: ["≤−3 %", "0", "≥+3 %"] },
-  pob2022: { nombre: "Población 2022 (escala log)", legend: "", stops: SEQ_BLUE, ticks: ["≤1.000", "30.000", "≥1 M"] },
+  pob2022: { nombre: "Población 2022 (escala log)", legend: "", stops: VIRIDIS, ticks: ["≤1.000", "30.000", "≥1 M"] },
 };
 
 export default function DiagnosticPanel(p: Props) {
