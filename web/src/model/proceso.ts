@@ -36,6 +36,8 @@ export interface Estrategia {
   radicacion: number;
   /** fracción de los empleos del motor que se cubre con gente de afuera (traslados, reclutamiento) */
   externos: number;
+  /** empleos del motor año por año (1 = primer año); si está, reemplaza la rampa lineal */
+  motorSerie?: number[];
 }
 
 export interface Contexto {
@@ -48,6 +50,10 @@ export interface Contexto {
   beneficioHab: number; // beneficio neto anual por habitante radicado (USD, del costo-beneficio)
   /** año en que pueden llegar los primeros (obras previas) */
   retardo: number;
+  /** población y viviendas que ya existen en el lugar al empezar (casos que parten de un pueblo) */
+  pob0?: number;
+  /** techo de llegadas espontáneas por año (por defecto, 1,5 veces el mayor saldo observado en la Argentina) */
+  techo?: number;
 }
 
 export interface Inciertos {
@@ -84,7 +90,8 @@ const ATRAIDOS_POR_EMPLEO = 0.6;
 
 export function simular(ctx: Contexto, e: Estrategia, u: Inciertos = INCIERTOS_CENTRAL, H = 30): Resultado {
   const pph = 2.86;
-  let pob = 0, viv = 0, ocupadosNuevos = 0;
+  let pob = ctx.pob0 ?? 0, viv = (ctx.pob0 ?? 0) / 2.86, ocupadosNuevos = 0;
+  const pobBase = ctx.pob0 ?? 0;
   let inversion = 0, van = 0, vaciasMax = 0, desocSum = 0, desocN = 0;
   let anioMeta50: number | null = null;
   const serie: Anio[] = [];
@@ -95,17 +102,18 @@ export function simular(ctx: Contexto, e: Estrategia, u: Inciertos = INCIERTOS_C
     let inv = t <= Math.min(3, ctx.retardo + 1) ? ctx.costoTroncal / Math.min(3, ctx.retardo + 1) : 0;
     // --- motor de empleo (organismos o empresas ancla)
     const frac = (x: number) => (e.motorEmpleos > 0 ? Math.min(1, Math.max(0, (x - e.motorInicio + 1) / e.motorDuracion)) : 0);
-    const motor = e.motorEmpleos * frac(t);
-    const dMotor = motor - e.motorEmpleos * frac(t - 1);
-    inv += dMotor * e.motorCostoEmpleo;
+    const motorEn = (x: number) => (e.motorSerie ? (x >= 1 ? e.motorSerie[Math.min(x, e.motorSerie.length) - 1] ?? 0 : 0) : e.motorEmpleos * frac(x));
+    const motor = motorEn(t);
+    const dMotor = motor - motorEn(t - 1);
+    inv += Math.max(0, dMotor) * e.motorCostoEmpleo;
     const fiscal = t >= e.motorInicio && t < e.motorInicio + e.motorFiscalAnios ? motor * e.motorFiscalAnual : 0;
     const radicados = motor * e.radicacion; // empleados del motor que viven en el lugar
     // llegadas "traídas" por el motor: agentes trasladados o personal reclutado afuera, con su hogar
     const persEmp = t - ctx.retardo < 8 ? PERS_EMPLEO_INICIO : PERS_EMPLEO_LUEGO;
-    const traidos = t < ctx.retardo ? 0 : dMotor * e.radicacion * e.externos * persEmp;
+    const traidos = t < ctx.retardo ? 0 : Math.max(0, dMotor) * e.radicacion * e.externos * persEmp;
     // --- demanda espontánea esperada: vacantes del año anterior, limitada por quiénes se mudan a la provincia
     // ningún lugar argentino atrajo más de ~2.900 personas netas por año (Pilar 2005–2010): techo de 1,5 veces eso
-    const topeNormal = Math.min(ctx.poolAnual * u.captacion, TECHO_ESPONTANEO) * e.captacionExtra;
+    const topeNormal = Math.min(ctx.poolAnual * u.captacion, ctx.techo ?? TECHO_ESPONTANEO) * e.captacionExtra;
     // el empleo local que crea el motor atrae migrantes por encima del flujo habitual: cerca del 60 %
     // del empleo nuevo de una región lo terminan ocupando quienes llegan (Blanchard y Katz 1992)
     const dMult = Math.max(0, dMotor) * u.multiplicador;
@@ -127,29 +135,30 @@ export function simular(ctx: Contexto, e: Estrategia, u: Inciertos = INCIERTOS_C
     const organico = ctx.puestosZona * ((1 + g) ** t - 1) * 0.5; // la mitad del crecimiento lo toman los que ya viven
     // los empleados del motor que se radican ocupan vacantes; los que viajan no suman población,
     // pero sus gastos sí generan empleo local (multiplicador sobre todo el motor)
-    const empleos = organico + radicados + motor * u.multiplicador + nuevas * EMPLEO_CONSTRUCCION + pob * EMPLEO_PUBLICO_LOCAL;
+    const empleos = organico + radicados + motor * u.multiplicador + nuevas * EMPLEO_CONSTRUCCION + Math.max(0, pob - pobBase) * EMPLEO_PUBLICO_LOCAL;
     empleosPrev = empleos;
     // --- llegadas y salidas
     const vacantes = Math.max(0, empleos - ocupadosNuevos);
     const espontaneos = t < ctx.retardo ? 0 : Math.min(Math.max(0, vacantes * persEmp - traidos), tope);
     const llegan = Math.min(traidos + espontaneos, lugar);
     const ocupNuevos = Math.min(empleos, ocupadosNuevos + llegan / persEmp);
-    const desocupados = Math.max(0, pob / PERS_EMPLEO_LUEGO - ocupNuevos);
-    const seVan = desocupados * u.salidaDesocupados * PERS_EMPLEO_INICIO + pob * 0.01;
+    const nuevosPob = Math.max(0, pob - pobBase);
+    const desocupados = Math.max(0, nuevosPob / PERS_EMPLEO_LUEGO - ocupNuevos);
+    const seVan = desocupados * u.salidaDesocupados * PERS_EMPLEO_INICIO + nuevosPob * 0.01;
     pob = Math.max(0, pob + llegan - seVan) * (1 + u.vegetativo);
-    ocupadosNuevos = Math.min(ocupNuevos, pob / persEmp);
+    ocupadosNuevos = Math.min(ocupNuevos, Math.max(0, pob - pobBase) / persEmp);
     inv += (llegan / pph) * e.ayudaHogar;
     // --- indicadores
     const ocupadas = Math.min(viv, pob / pph);
     if (viv > 0 && t >= ctx.retardo + 1) vaciasMax = Math.max(vaciasMax, 1 - ocupadas / viv);
-    if (pob > 0) { desocSum += Math.max(0, 1 - ocupadosNuevos / (pob / PERS_EMPLEO_LUEGO)); desocN++; }
+    if (pob > pobBase) { desocSum += Math.max(0, 1 - ocupadosNuevos / ((pob - pobBase) / PERS_EMPLEO_LUEGO)); desocN++; }
     if (anioMeta50 === null && pob >= ctx.meta / 2) anioMeta50 = t;
     inversion += inv;
     const d = (1 + TASA) ** -t;
     // la vivienda ocupada se necesitaría igual en otro lugar (no es costo adicional); la vacía sí:
     // se cobra su costo de oportunidad cada año que queda sin usar
     const vacias = Math.max(0, viv - pob / pph);
-    van += (pob * ctx.beneficioHab - (inv - invVivienda) - fiscal - vacias * ctx.costoVivienda * TASA) * d;
+    van += (Math.max(0, pob - pobBase) * ctx.beneficioHab - (inv - invVivienda) - fiscal - vacias * ctx.costoVivienda * TASA) * d;
     serie.push({ t, pob, viviendas: viv, ocupadas, empleos, ocupados: ocupadosNuevos, llegan, seVan, inversion: inv + fiscal });
   }
   return {
