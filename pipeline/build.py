@@ -558,6 +558,13 @@ def main() -> None:
 
     # ------------------------------------------------------------ export vectores
     d = deps.merge(cen, left_on="cod_dep", right_index=True, how="left")
+    # estimación INDEC 2035 (escenario tendencial), si está el relevamiento de servicios
+    sv_path = RAW.parent / "interim" / "censo_servicios" / "servicios_departamento.csv"
+    if sv_path.exists():
+        sv35 = pd.read_csv(sv_path, dtype={"cod_dep": str}).set_index("cod_dep")
+        d["pob2035"] = d.cod_dep.map(sv35.pob_est_2035).round()
+    else:
+        d["pob2035"] = np.nan
     d["provincia"] = d.cod_dep.str[:2].map(prov_names)
     d["area_km2"] = d.to_crs(CRS_M).area / 1e6
     d["densidad"] = d.pob2022 / d.area_km2
@@ -567,7 +574,7 @@ def main() -> None:
     for c in ("area_km2", "densidad", "crec_anual"):
         d[c] = d[c].round(3)
     simplify_out(d, 0.01, OUT / "departamentos.geojson",
-                 ["cod_dep", "departamento", "provincia", "pob2010", "pob2022", "area_km2", "densidad", "crec_anual"])
+                 ["cod_dep", "departamento", "provincia", "pob2010", "pob2022", "pob2035", "area_km2", "densidad", "crec_anual"])
     simplify_out(prov_all, 0.01, OUT / "provincias.geojson", ["cod_prov", "provincia"])
     capas = OUT / "capas"
     simplify_out(rutas_pav.assign(ruta=rutas_pav.rtn), 0.005, capas / "rutas.geojson", ["ruta"])

@@ -98,8 +98,11 @@ export default function SimplePanel(p: Props) {
   return (
     <div className="panel simple">
       <section className="intro">
-        <Scene />
-        <p className="lema">Gobernar es poblar</p>
+        <div className="hero">
+          <Scene />
+          <div className="hero-banner">¡La Argentina crece en todo su territorio!</div>
+        </div>
+        <p className="lema"><span>Gobernar es poblar</span></p>
         <h2>¿Dónde puede crecer la Argentina?</h2>
         <p>
           Esta herramienta divide el país en <b>95.000 zonas</b> y las compara según agua, seguridad, clima y conexión,

@@ -374,3 +374,66 @@ button.primary { background: var(--rojo); color: #f2ead7; border: 2px solid var(
 .cba table { margin-bottom: 6px; }
 .card-site.active .reasons .good, .card-site.active .reasons .bad, .card-site.active .pos, .card-site.active .neg { color: var(--paper); }
 .card-site.active .trust { color: var(--ink); }
+
+/* ---------------- propaganda: cartel, cintas, bandas ---------------- */
+:root { --cartel: "Anton", "Oswald", "Arial Narrow", sans-serif; }
+.top h1 { font-family: var(--cartel); font-weight: 400; font-size: 1.75rem; letter-spacing: 0.05em; }
+.ribbon {
+  font-family: var(--cartel); text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.85rem;
+  background: #b8322a; color: #f2ead7; padding: 6px 28px; margin: 0 auto;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 50%, 100% 100%, 0 100%, 14px 50%);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+}
+.hero { position: relative; }
+.hero .scene { margin-bottom: 0; }
+.hero::after { /* trama de puntos de imprenta */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(rgba(29, 27, 24, 0.18) 0.8px, transparent 1px);
+  background-size: 4px 4px; mix-blend-mode: multiply;
+}
+.hero-banner {
+  position: absolute; left: -6px; right: -6px; bottom: 18px; transform: rotate(-3deg);
+  background: #b8322a; color: #f2ead7; font-family: var(--cartel); text-transform: uppercase;
+  font-size: 1.1rem; letter-spacing: 0.04em; text-align: center; padding: 6px 8px;
+  border-top: 3px solid #f2ead7; border-bottom: 3px solid #f2ead7; box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4); z-index: 1;
+}
+.lema { margin: 14px 0 6px; }
+.lema span {
+  display: inline-block; background: var(--azul); color: var(--paper); font-family: var(--cartel); font-size: 1rem;
+  letter-spacing: 0.14em; padding: 4px 18px; text-transform: uppercase;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 50%, 100% 100%, 0 100%, 10px 50%);
+}
+.simple h2 { font-family: var(--cartel); font-weight: 400; font-size: 2.1rem; color: var(--rojo); letter-spacing: 0.01em; }
+.simple h3 {
+  font-family: var(--cartel); font-weight: 400; font-size: 1.15rem; letter-spacing: 0.06em;
+  background: var(--azul); color: var(--paper); margin: -4px -16px 12px; padding: 8px 16px; gap: 10px;
+}
+.simple h3 .step { background: var(--sol); color: #1d1b18; font-size: 1rem; width: 30px; height: 30px; box-shadow: 2px 2px 0 #1d1b18; }
+.site-rank { font-family: var(--cartel); font-size: 1.3rem; width: 38px; height: 38px; background: var(--sol); color: #1d1b18; border: 2px solid var(--line); transform: rotate(-3deg); }
+.card-site b { font-family: var(--display); font-size: 1.05rem; letter-spacing: 0.01em; }
+.tile b { font-family: var(--cartel); font-weight: 400; letter-spacing: 0.02em; }
+.cartouche {
+  font-family: var(--cartel); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem;
+  background: var(--azul); color: var(--paper); padding: 4px 12px; text-align: center;
+}
+.mapstyle {
+  position: absolute; z-index: 2; top: 10px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; gap: 6px; align-items: stretch; width: min(420px, calc(100% - 120px));
+  background: var(--surface); border: 2px solid var(--line); box-shadow: var(--shadow); padding: 0 0 8px;
+}
+.mapstyle > *:not(.cartouche) { margin: 0 8px; }
+.mapstyle.with-ctl { left: auto; right: 52px; top: auto; bottom: 34px; transform: none; width: 300px; }
+.seg-mini { display: flex; border: 2px solid var(--line); }
+.seg-mini button { flex: 1; background: var(--surface); border: 0; border-left: 2px solid var(--line); padding: 4px 6px; font: inherit; font-size: 0.78rem; color: var(--ink); cursor: pointer; text-transform: uppercase; letter-spacing: 0.03em; }
+.seg-mini button:first-child { border-left: 0; }
+.seg-mini button.on { background: var(--sol); color: #1d1b18; font-weight: 700; }
+.pal { display: block; height: 12px; border: 1px solid var(--line); }
+.mapstyle select { font-size: 0.8rem; }
+@media (max-width: 760px) {
+  .ribbon { display: none; }
+  .simple h2 { font-size: 1.6rem; }
+  .mapstyle, .mapstyle.with-ctl { left: 8px; right: 52px; transform: none; width: auto; top: 8px; }
+  .mapstyle .seg-mini button { font-size: 0.7rem; padding: 3px; }
+  .mapstyle select { display: none; }
+}
+.mapstyle select { width: calc(100% - 16px); }

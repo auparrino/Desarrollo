@@ -8,7 +8,13 @@ const hex = (h: string): RGB => [1, 3, 5].map((k) => parseInt(h.slice(k, k + 2),
 export const SEQ_BLUE = ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"].map(hex);
 export const SEQ_ORANGE = ["#fde0cf", "#f8b896", "#f2905e", "#eb6834", "#c4501f", "#933a14", "#64270c"].map(hex);
 export const DIV_RED_BLUE = ["#8a1f1f", "#b8302f", "#e34948", "#ec8f87", "#f0efec", "#86b6ef", "#3987e5", "#1c5cab", "#0d366b"].map(hex);
+export const SEQ_OCRE = ["#f7e9c4", "#f0cf85", "#e2a531", "#c98b2b", "#9a6514", "#6b440b", "#3f2806"].map(hex);
+export const SEQ_ROJO = ["#f7d9d3", "#eda89c", "#de6e5d", "#b8322a", "#8f241e", "#651813", "#3d0e0b"].map(hex);
 export const EXCLUDED: RGB = [137, 135, 129];
+
+/** Paletas secuenciales de un solo matiz, de claro a oscuro. */
+export const PALETTES = { azul: SEQ_BLUE, ocre: SEQ_OCRE, rojo: SEQ_ROJO } as const;
+export type PaletteId = keyof typeof PALETTES;
 
 export function ramp(stops: RGB[], t: number): RGB {
   if (!Number.isFinite(t)) return EXCLUDED;

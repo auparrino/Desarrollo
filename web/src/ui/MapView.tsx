@@ -27,7 +27,8 @@ export interface MapProps {
   colorKey: string;
   geo: Record<string, GeoJSON.FeatureCollection | undefined>;
   overlays: Overlays;
-  depFill?: { colorOf: (f: GeoJSON.Feature) => [number, number, number, number]; key: string } | null;
+  depFill?: { colorOf: (f: GeoJSON.Feature) => [number, number, number, number]; key: string; layer?: "departamentos" | "provincias" } | null;
+  basemap: Basemap;
   highlight: number[];
   selected: number | null;
   flyTo: { center: [number, number]; zoom: number; key: number } | null;
@@ -39,7 +40,63 @@ export interface MapProps {
 const IGN_TMS = (layer: string) =>
   `https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/${layer}@EPSG%3A3857@png/{z}/{x}/{y}.png`;
 
-function baseStyle(dark: boolean): maplibregl.StyleSpecification {
+export type Basemap = "lito" | "topo" | "gris";
+
+function baseStyle(dark: boolean, kind: Basemap = "lito"): maplibregl.StyleSpecification {
+  if (kind === "lito" || kind === "topo") {
+    const lito = kind === "lito";
+    return {
+      version: 8,
+      sources: {
+        ign: {
+          type: "raster",
+          tiles: [IGN_TMS("mapabase_topo")],
+          scheme: "tms",
+          tileSize: 256,
+          attribution: '<a href="https://www.ign.gob.ar/" target="_blank" rel="noopener">Instituto Geográfico Nacional</a>',
+        },
+        dem: {
+          type: "raster-dem",
+          tiles: ["https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"],
+          encoding: "terrarium",
+          tileSize: 256,
+          maxzoom: 12,
+          attribution: '<a href="https://www.ign.gob.ar/" target="_blank" rel="noopener">IGN</a> · Relieve: <a href="https://registry.opendata.aws/terrain-tiles/" target="_blank" rel="noopener">Terrain Tiles (Mapzen/AWS)</a>',
+        },
+      },
+      layers: [
+        { id: "bg", type: "background", paint: { "background-color": lito ? (dark ? "#0e1a30" : "#b9cfe0") : dark ? "#142038" : "#e9dfc6" } },
+        {
+          id: "ign",
+          type: "raster",
+          source: "ign",
+          // en litografía el detalle del IGN aparece al acercarse; de lejos, el territorio en papel (capa de deck.gl)
+          minzoom: lito ? 6 : 0,
+          paint: lito
+            ? {
+                // entonado de litografía: poco color, tono de papel
+                "raster-saturation": -0.85,
+                "raster-contrast": dark ? 0.2 : -0.1,
+                "raster-brightness-min": dark ? 0 : 0.18,
+                "raster-brightness-max": dark ? 0.45 : 1,
+                "raster-opacity": 0.9,
+              }
+            : {},
+        },
+        {
+          id: "relieve",
+          type: "hillshade",
+          source: "dem",
+          paint: {
+            "hillshade-exaggeration": lito ? 0.55 : 0.35,
+            "hillshade-shadow-color": dark ? "#05080f" : "#1e3d6b",
+            "hillshade-highlight-color": dark ? "#2f5d8f" : "#f7f1e3",
+            "hillshade-accent-color": "#c98b2b",
+          },
+        },
+      ],
+    };
+  }
   return {
     version: 8,
     sources: {
@@ -77,7 +134,7 @@ export default function MapView(p: MapProps) {
   useEffect(() => {
     const map = new maplibregl.Map({
       container: ref.current!,
-      style: baseStyle(p.dark),
+      style: baseStyle(p.dark, p.basemap),
       center: [-64.5, -38.5],
       zoom: 3.6,
       minZoom: 2.5,
@@ -95,8 +152,8 @@ export default function MapView(p: MapProps) {
   }, []);
 
   useEffect(() => {
-    mapRef.current?.setStyle(baseStyle(p.dark));
-  }, [p.dark]);
+    mapRef.current?.setStyle(baseStyle(p.dark, p.basemap));
+  }, [p.dark, p.basemap]);
 
   useEffect(() => {
     if (p.flyTo) mapRef.current?.flyTo({ center: p.flyTo.center, zoom: p.flyTo.zoom, speed: 1.6 });
@@ -107,12 +164,24 @@ export default function MapView(p: MapProps) {
     const idx: number[] = [];
     for (let i = 0; i < ds.n; i++) if (p.colors[i * 4 + 3] > 0) idx.push(i);
     const layers: Layer[] = [];
+    if (p.basemap === "lito" && p.geo.provincias) {
+      layers.push(
+        new GeoJsonLayer({
+          id: "tierra",
+          data: p.geo.provincias,
+          filled: true,
+          stroked: false,
+          getFillColor: p.dark ? [27, 42, 71, 175] : [242, 234, 215, 170],
+        }),
+      );
+    }
 
-    if (p.depFill && p.geo.departamentos) {
+    const fillGeo = p.depFill ? p.geo[p.depFill.layer ?? "departamentos"] : undefined;
+    if (p.depFill && fillGeo) {
       layers.push(
         new GeoJsonLayer({
           id: "deps",
-          data: p.geo.departamentos,
+          data: fillGeo,
           filled: true,
           stroked: true,
           getFillColor: p.depFill.colorOf as never,
@@ -252,7 +321,9 @@ export default function MapView(p: MapProps) {
       layers,
       getCursor: ({ isHovering }) => (isHovering ? "pointer" : "grab"),
     });
-  }, [p.ds, p.colors, p.colorKey, p.geo, p.overlays, p.depFill, p.highlight, p.selected, p.dark]);
+  }, [p.ds, p.colors, p.colorKey, p.geo, p.overlays, p.depFill, p.highlight, p.selected, p.dark, p.basemap]);
+
+  // reconstruir la capa base no toca las capas de deck.gl (overlay independiente)
 
   return <div ref={ref} className="map" role="region" aria-label="Mapa de Argentina" />;
 }

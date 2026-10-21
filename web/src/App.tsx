@@ -4,7 +4,7 @@ import { RESTRICTIONS, SCENARIOS, effectiveWeights, type Restriction, type Weigh
 import { DEFAULT_WATER, aggregate, computeMask, factorScores, quantile, type Aggregation, type WaterParams } from "./model/mcda";
 import { findSites, type Site, type SiteParams } from "./model/sites";
 import type { ValueFn } from "./model/valueFunctions";
-import MapView, { type Overlays } from "./ui/MapView";
+import MapView, { type Basemap, type Overlays } from "./ui/MapView";
 import CriteriaPanel from "./ui/panels/CriteriaPanel";
 import SitesPanel from "./ui/panels/SitesPanel";
 import CellDetail from "./ui/panels/CellDetail";
@@ -15,7 +15,7 @@ import SimplePanel from "./ui/panels/SimplePanel";
 import SimpleCellCard from "./ui/panels/SimpleCellCard";
 import { POLICY_BY_ID, type PolicyId } from "./model/policies";
 import { CLASSES, PRESETS, classify, defaultPoints, presetPoints, weightsFromPoints, type Points } from "./model/plain";
-import { DIV_RED_BLUE, EXCLUDED, SEQ_BLUE, SEQ_ORANGE, css, gradientCss, ramp, type RGB } from "./ui/colors";
+import { DIV_RED_BLUE, EXCLUDED, PALETTES, SEQ_BLUE, SEQ_ORANGE, css, gradientCss, ramp, type PaletteId, type RGB } from "./ui/colors";
 import { VARIABLES, VAR_BY_ID, fmtVar } from "./ui/variables";
 import { SunBurst } from "./ui/art/Poster";
 
@@ -50,10 +50,8 @@ const GEO_FILES = {
   incentivos_municipales: "capas/incentivos_municipales.geojson",
 };
 
-// Rampa ordinal para las clases del modo simple (sin el paso más claro, que no contrasta).
-const CLASS_COLORS: RGB[] = ["#86b6ef", "#3987e5", "#1c5cab", "#0d366b"].map(
-  (h) => [1, 3, 5].map((k) => parseInt(h.slice(k, k + 2), 16)) as RGB,
-);
+// Clases del modo simple: cuatro pasos de la paleta elegida (sin el más claro, que no contrasta).
+const classColors = (pal: RGB[]): RGB[] => [0.4, 0.6, 0.8, 1].map((t) => ramp(pal, t));
 
 function initialMode(): "simple" | "experto" {
   try {
@@ -106,6 +104,11 @@ export default function App() {
   const [depMetric, setDepMetric] = useState<DepMetric>("crec_anual");
   const [selDep, setSelDep] = useState<DepProps | null>(null);
   const [sheet, setSheet] = useState(true);
+  const [basemap, setBasemap] = useState<Basemap>("lito");
+  const [escala, setEscala] = useState<"hex" | "dep" | "prov">("hex");
+  const [paleta, setPaleta] = useState<PaletteId>("azul");
+  const pal = PALETTES[paleta];
+  const CLASS_COLORS = useMemo(() => classColors(pal), [pal]);
   const [policyId, setPolicyId] = useState<PolicyId>("ciudad_nueva");
   const policy = POLICY_BY_ID[policyId];
   const [mode, setModeState] = useState<"simple" | "experto">(initialMode);
@@ -254,10 +257,10 @@ export default function App() {
       const hi = quantile(score, 0.995);
       for (let i = 0; i < ds.n; i++) {
         if (reason[i]) put(i, EXCLUDED, 70);
-        else put(i, ramp(SEQ_BLUE, (score[i] - lo) / (hi - lo)), hl.size && !hl.has(i) ? 150 : 225);
+        else put(i, ramp(pal, (score[i] - lo) / (hi - lo)), hl.size && !hl.has(i) ? 150 : 225);
       }
       legend.current = {
-        title: "Aptitud (0–1)", stops: SEQ_BLUE,
+        title: "Aptitud (0–1)", stops: pal,
         ticks: [lo.toFixed(2), ((lo + hi) / 2).toFixed(2), hi.toFixed(2)],
         cats: [{ c: EXCLUDED, n: "Excluida por restricción" }],
       };
@@ -291,17 +294,17 @@ export default function App() {
       const diverging = variable === "crec_dep";
       for (let i = 0; i < ds.n; i++) {
         const x = diverging ? (v[i] + 3) / 6 : (t[i] - lo) / (hi - lo);
-        put(i, ramp(diverging ? DIV_RED_BLUE : SEQ_BLUE, x), Number.isFinite(v[i]) ? 220 : 0);
+        put(i, ramp(diverging ? DIV_RED_BLUE : pal, x), Number.isFinite(v[i]) ? 220 : 0);
       }
       const back = info?.log ? (x: number) => 10 ** x : (x: number) => x;
       legend.current = {
         title: info?.nombre ?? variable,
-        stops: diverging ? DIV_RED_BLUE : SEQ_BLUE,
+        stops: diverging ? DIV_RED_BLUE : pal,
         ticks: diverging ? ["≤−3 %", "0", "≥+3 %"] : [lo, (lo + hi) / 2, hi].map((x) => fmtVar(variable, back(x))),
       };
     }
     return out;
-  }, [ds, view, score, reason, mcProb, variable, selSite, stats, reasonNames, mcParams.topFrac, mode, classes]);
+  }, [ds, view, score, reason, mcProb, variable, selSite, stats, reasonNames, mcParams.topFrac, mode, classes, pal, CLASS_COLORS]);
   const colorKey = useMemo(() => `${mode}|${view}|${variable}|${Math.random()}`, [colors]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const depsProps = useMemo(
@@ -322,6 +325,41 @@ export default function App() {
     return { colorOf, key: `${depMetric}|${selDep?.cod_dep}` };
   }, [tab, depMetric, selDep]);
 
+  // coropleta: aptitud media de las zonas aptas y % de zonas excelentes por departamento o provincia
+  const regionAgg = useMemo(() => {
+    if (!ds || escala === "hex") return null;
+    const key = (i: number) => {
+      const c = ds.meta.departamentos[ds.dep[i]]?.cod ?? "";
+      return escala === "dep" ? c : c.slice(0, 2);
+    };
+    const sum = new Map<string, { s: number; n: number; exc: number; tot: number }>();
+    for (let i = 0; i < ds.n; i++) {
+      const k = key(i);
+      const a = sum.get(k) ?? { s: 0, n: 0, exc: 0, tot: 0 };
+      a.tot++;
+      if (Number.isFinite(score[i])) {
+        a.s += score[i]; a.n++;
+        if (classes[i] >= 3) a.exc++;
+      }
+      sum.set(k, a);
+    }
+    const mean = new Map([...sum].map(([k, a]) => [k, a.n ? a.s / a.n : NaN]));
+    const vals = [...mean.values()].filter(Number.isFinite).sort((a, b) => a - b);
+    const lo = vals[Math.floor(vals.length * 0.05)] ?? 0, hi = vals[Math.floor(vals.length * 0.98)] ?? 1;
+    return { sum, mean, lo, hi };
+  }, [ds, escala, score, classes]);
+  const aggFill = useMemo(() => {
+    if (!regionAgg || (mode === "experto" && (tab === "diagnostico" || view !== "aptitud"))) return null;
+    const prop = escala === "dep" ? "cod_dep" : "cod_prov";
+    const colorOf = (f: GeoJSON.Feature): [number, number, number, number] => {
+      const m = regionAgg.mean.get(String(f.properties?.[prop] ?? ""));
+      if (!Number.isFinite(m)) return [EXCLUDED[0], EXCLUDED[1], EXCLUDED[2], 110];
+      const c = ramp(pal, (m! - regionAgg.lo) / (regionAgg.hi - regionAgg.lo));
+      return [c[0], c[1], c[2], 225];
+    };
+    return { colorOf, key: `${escala}|${paleta}|${regionAgg.lo}|${regionAgg.hi}|${score.length}|${Math.random()}`, layer: escala === "dep" ? ("departamentos" as const) : ("provincias" as const) };
+  }, [regionAgg, mode, tab, view, escala, pal, paleta, score]);
+
   const selectSite = (s: Site) => {
     if (window.matchMedia("(max-width: 760px)").matches) setSheet(false);
     setSelSite(s);
@@ -333,9 +371,16 @@ export default function App() {
   if (!ds) return <div className="loading">Cargando grilla territorial…</div>;
 
   const expert = mode === "experto";
-  const L = expert && tab === "diagnostico"
+  const L0 = expert && tab === "diagnostico"
     ? { title: METRICS[depMetric].nombre, stops: METRICS[depMetric].stops, ticks: METRICS[depMetric].ticks, cats: undefined }
     : legend.current;
+  const L = aggFill && regionAgg
+    ? {
+        title: `Aptitud media de las zonas aptas por ${escala === "dep" ? "departamento" : "provincia"}`,
+        stops: pal, ticks: [regionAgg.lo.toFixed(2), ((regionAgg.lo + regionAgg.hi) / 2).toFixed(2), regionAgg.hi.toFixed(2)],
+        cats: [{ c: EXCLUDED, n: "Sin zonas aptas" }],
+      }
+    : L0;
 
   return (
     <div className="app">
@@ -347,6 +392,7 @@ export default function App() {
             <p className="small">Dónde crecer · cómo poblar · cuánto cuesta</p>
           </div>
         </div>
+        <div className="ribbon" aria-hidden>Plan de desarrollo territorial · Argentina en marcha</div>
         <div className="mode" role="group" aria-label="Modo de uso">
           <button className={!expert ? "on" : ""} onClick={() => setMode("simple")}>Simple</button>
           <button className={expert ? "on" : ""} onClick={() => setMode("experto")}>Experto</button>
@@ -446,7 +492,8 @@ export default function App() {
             colorKey={colorKey}
             geo={geo}
             overlays={overlays}
-            depFill={expert ? depFill : null}
+            depFill={expert && tab === "diagnostico" ? depFill : aggFill}
+            basemap={basemap}
             highlight={expert && tab === "diagnostico" ? [] : selSite?.cells ?? []}
             selected={expert && tab === "diagnostico" ? null : selCell}
             flyTo={flyTo}
@@ -454,6 +501,26 @@ export default function App() {
             onDepClick={(f) => setSelDep((f?.properties as DepProps) ?? null)}
             dark={dark}
           />
+          <div className={`mapstyle ${expert && tab !== "diagnostico" ? "with-ctl" : ""}`}>
+            <span className="cartouche">Mapa de aptitud del territorio nacional</span>
+            <div className="seg-mini" role="group" aria-label="Escala del mapa">
+              {([["hex", "Zonas"], ["dep", "Departamentos"], ["prov", "Provincias"]] as const).map(([k, n]) => (
+                <button key={k} className={escala === k ? "on" : ""} onClick={() => setEscala(k)}>{n}</button>
+              ))}
+            </div>
+            <div className="seg-mini" role="group" aria-label="Paleta">
+              {(Object.keys(PALETTES) as PaletteId[]).map((k) => (
+                <button key={k} className={paleta === k ? "on" : ""} onClick={() => setPaleta(k)} title={`Paleta ${k}`}>
+                  <span className="pal" style={{ background: gradientCss(PALETTES[k]) }} />
+                </button>
+              ))}
+            </div>
+            <select value={basemap} onChange={(e) => setBasemap(e.target.value as Basemap)} aria-label="Fondo del mapa">
+              <option value="lito">Fondo: litografía con relieve</option>
+              <option value="topo">Fondo: topográfico IGN</option>
+              <option value="gris">Fondo: gris IGN</option>
+            </select>
+          </div>
           {expert && tab !== "diagnostico" && (
             <div className="mapctl">
               <label>
