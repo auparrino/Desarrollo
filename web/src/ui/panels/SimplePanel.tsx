@@ -4,6 +4,8 @@ import type { Site } from "../../model/sites";
 import { LEVEL_LABELS, PRESETS, PRIORITIES, groupScores, groupsUsed, verdict, type Level } from "../../model/plain";
 import { POLICIES, type Policy, type PolicyId } from "../../model/policies";
 import { nearestPlace } from "../plainFacts";
+import { estimateCosts } from "../../model/costs";
+import { UNIT_COSTS } from "../../model/unitCostsData";
 
 interface Props {
   ds: Dataset;
@@ -189,6 +191,20 @@ export default function SimplePanel(p: Props) {
                       {s.departamento}, {s.provincia}
                     </span>
                     <Reasons fs={p.fScores} i={s.best} w={p.weights} />
+                    {(() => {
+                      const c = estimateCosts(p.policy.id, p.ds.col, s.best, s.provincia,
+                        { poblacion: p.poblacion, densidad: 75 }, UNIT_COSTS);
+                      const f = (v: number) => (v / 1e9).toLocaleString("es-AR", { maximumFractionDigits: 1 });
+                      return (
+                        <span className="small">
+                          💰 Costo estimado: <b>USD {f(c.totalCapital[1])} mil millones</b>{" "}
+                          <span className="muted">
+                            ({f(c.totalCapital[0])}–{f(c.totalCapital[2])})
+                            {c.pctPBI && ` · ${c.pctPBI[1].toLocaleString("es-AR", { maximumFractionDigits: 2 })} % del PBI`}
+                          </span>
+                        </span>
+                      );
+                    })()}
                     <span className={`trust t${a.n >= a.total - 1 ? "hi" : a.n >= 2 ? "mid" : "lo"}`}>
                       {a.n === a.total
                         ? "Muy confiable: aparece entre los mejores con todos los enfoques"

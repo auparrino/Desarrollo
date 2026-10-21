@@ -136,3 +136,20 @@ describe("instrumentos de política", () => {
     }
   });
 });
+
+describe("costos", () => {
+  it("ciudad nueva de 500.000 hab. cuesta del orden de casos documentados (USD 10–60 mil por hab.)", async () => {
+    const { estimateCosts } = await import("./costs");
+    const { UNIT_COSTS } = await import("./unitCostsData");
+    const one = (v: number) => Float32Array.from([v]);
+    const cols = {
+      q_rio25: one(100), q95_rio25: one(30), aridez: one(0.2), prec: one(400), d_ruta: one(20), d_alta_tension: one(20),
+      d_rio10: one(5), viv_ociosas_50km: one(0),
+    };
+    const r = estimateCosts("ciudad_nueva", cols, 0, "Río Negro", { poblacion: 500_000, densidad: 75 }, UNIT_COSTS);
+    expect(r.porHabitante[1]).toBeGreaterThan(10_000);
+    expect(r.porHabitante[1]).toBeLessThan(60_000);
+    expect(r.totalCapital[0]).toBeLessThanOrEqual(r.totalCapital[1]);
+    expect(r.totalCapital[1]).toBeLessThanOrEqual(r.totalCapital[2]);
+  });
+});

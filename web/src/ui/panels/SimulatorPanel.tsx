@@ -4,6 +4,9 @@ import type { Site } from "../../model/sites";
 import { concentracion, requerimientos, type SimParams } from "../../model/simulator";
 import type { DepProps } from "./DiagnosticPanel";
 import type { Policy } from "../../model/policies";
+import { estimateCosts } from "../../model/costs";
+import { UNIT_COSTS } from "../../model/unitCostsData";
+import CostBreakdown from "./CostBreakdown";
 
 interface Props {
   ds: Dataset;
@@ -22,7 +25,7 @@ export default function SimulatorPanel(p: Props) {
   const [s, setS] = useState<Omit<SimParams, "poblacionPorDestino">>({
     densidad: 75,
     dotacion: 200,
-    personasPorVivienda: 2.8,
+    personasPorVivienda: UNIT_COSTS.items.personas_por_hogar?.central ?? 2.86,
     consumoElectrico: 3000,
     origenAMBA: true,
   });
@@ -159,7 +162,23 @@ export default function SimulatorPanel(p: Props) {
 
       {res.length > 0 && (
         <section>
-          <h3>Costo de referencia · {p.policy.nombre}</h3>
+          <h3>Costo estimado · {p.policy.nombre}</h3>
+          {sel.map((site) => (
+            <details key={site.rank} open={sel.length === 1}>
+              <summary>
+                <b>
+                  {site.rank}. {site.departamento}, {site.provincia}
+                </b>
+              </summary>
+              <CostBreakdown
+                r={estimateCosts(p.policy.id, p.ds.col, site.best, site.provincia,
+                  { poblacion: pob, densidad: s.densidad, personasPorHogar: s.personasPorVivienda }, UNIT_COSTS)}
+                poblacionLabel={p.policy.id === "polos" ? "empleo" : "habitante"}
+                fecha={UNIT_COSTS.fecha_base}
+              />
+            </details>
+          ))}
+          <h4>Comparación con casos documentados</h4>
           <table className="provs">
             <thead>
               <tr><th>Referencia</th><th>Valor</th><th>Total estimado</th></tr>
