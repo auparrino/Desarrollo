@@ -415,6 +415,15 @@
       "alto": 20000000000,
       "fuente": "No se hallaron documentos originales del ENTECAP ni un presupuesto oficial. Prensa: el gobierno hablaba de USD 1.500-2.000 M y la oposición de USD 15.000-20.000 M; TN, vía Contexto Tucumán: USD 2.300 M",
       "evidencia": "A"
+    },
+    "congreso_corte_m2": {
+      "nombre": "Superficie para el Congreso, la Corte Suprema y los tribunales federales superiores en una nueva capital",
+      "unidad": "m2",
+      "bajo": 120000,
+      "central": 200000,
+      "alto": 300000,
+      "fuente": "Estimación de orden de magnitud a partir de la superficie construida del Palacio del Congreso con sus anexos y del Palacio de Justicia de la Nación; sin fuente oficial consolidada. Verificar con el relevamiento de la AABE.",
+      "evidencia": "A"
     }
   }
 }

@@ -49,6 +49,10 @@ export interface CBAInput {
   relDest?: number;
   /** salario relativo del AMBA */
   relAmba?: number;
+  /** de dónde viene la gente: del AMBA (por defecto) o de la misma región */
+  origen?: "amba" | "region";
+  /** multiplica la curva de ocupación (para buscar el punto de equilibrio) */
+  escalaOcupacion?: number;
 }
 
 export interface CBAComponent {
@@ -76,7 +80,7 @@ export interface CBAResult {
   fiscal: CBASide & { recupero: number | null };
   poblacionFinal: number;
   /** inversión (USD corrientes, sin descontar) y población por año */
-  cronograma: { anio: number; inversion: number; poblacion: number }[];
+  cronograma: { anio: number; inversion: number; publica: number; poblacion: number }[];
   /** parámetros clave usados, para mostrarlos */
   supuestos: { relDest: number; relAmba: number; brecha: number; adicionalidad: number };
 }
@@ -119,9 +123,9 @@ function irr(flows: number[]): number | null {
 
 // Rubros de costo que se pagan al principio (conexión, edificios, tierra); el parque
 // industrial se urbaniza por etapas, a medida que se instalan las empresas
-const TRONCAL = new Set(["ruta", "at", "et", "acueducto", "planta", "oficinas", "suelo"]);
+const TRONCAL = new Set(["ruta", "at", "et", "acueducto", "planta", "oficinas", "congreso", "suelo"]);
 // Rubros que el instrumento agrega frente a crecer en el AMBA (pregunta social)
-const INCREMENTAL = new Set(["ruta", "at", "et", "acueducto", "planta", "oficinas", "parque", "mudanza", "mudanza_apn", "rehab"]);
+const INCREMENTAL = new Set(["ruta", "at", "et", "acueducto", "planta", "oficinas", "congreso", "parque", "mudanza", "mudanza_apn", "rehab"]);
 // Rubros que paga el Estado (pregunta fiscal): todo salvo la vivienda
 const PUBLICO = (id: string) => id !== "vivienda";
 
@@ -146,13 +150,17 @@ export function costBenefit(inp: CBAInput, p: BenefitParams, esc: Escenario): CB
   const lote = val(p, "valor_lote_urbano_m2_intermedia", 0);
   const captura = val(p, "captura_plusvalia_frac", 0.1);
   const pph = 2.86;
-  const desdeAMBA = inp.policy !== "polos";
+  const desdeAMBA = inp.policy !== "polos" && inp.origen !== "region";
+  const desdeRegion = inp.policy !== "polos" && inp.origen === "region";
+  const kOc = inp.escalaOcupacion ?? 1;
 
   const lines = inp.costos.capital;
   const sum = (f: (id: string) => boolean, troncal: boolean) =>
     lines.filter((l) => f(l.id) && TRONCAL.has(l.id) === troncal).reduce((a, l) => a + l.usd[1], 0);
   const socT = sum((id) => INCREMENTAL.has(id), true), socV = sum((id) => INCREMENTAL.has(id), false);
   const totT = sum(() => true, true), totV = sum(() => true, false);
+  const PRIVADO = new Set(["vivienda", "mudanza", "rehab"]);
+  const pubT = sum((id) => !PRIVADO.has(id), true), pubV = sum((id) => !PRIVADO.has(id), false);
   const fisT = sum((id) => INCREMENTAL.has(id) && PUBLICO(id), true), fisV = sum((id) => INCREMENTAL.has(id) && PUBLICO(id), false);
 
   // productividad por habitante: salario relativo × PIB per cápita nacional (evita el sesgo
@@ -162,6 +170,9 @@ export function costBenefit(inp: CBAInput, p: BenefitParams, esc: Escenario): CB
   const yA = (1 + brecha * (relAmba - 1)) * pibNac;
   const B = Math.max(inp.c.pob_50km[inp.i], 1);
   const gainDest = (n: number) => yD * B * (((B + n) / B) ** (1 + elast) - 1);
+  // si la gente viene de la misma región, la región de origen (≈ 5 veces el entorno de 50 km) pierde algo de escala
+  const BR = Math.max(5 * B, 2 * P);
+  const lossRegion = (n: number) => yD * BR * (1 - (Math.max(BR - n, 1) / BR) ** (1 + elast));
   const lossAmba = (n: number) => yA * AMBA_POB * (1 - (Math.max(AMBA_POB - n, 1) / AMBA_POB) ** (1 + elast));
 
   const S = { costo: 0, productividad: 0, aglomeracion: 0, congest: 0, polo: 0 };
@@ -175,7 +186,7 @@ export function costBenefit(inp: CBAInput, p: BenefitParams, esc: Escenario): CB
   const flowsF: number[] = [];
   let prev = 0;
   for (let t = 0; t <= H; t++) {
-    const N = P * curveAt(cv, t);
+    const N = P * Math.min(1, kOc * curveAt(cv, t));
     const dN = Math.max(0, N - prev);
     prev = N;
     const d = (1 + r) ** -t;
@@ -195,7 +206,7 @@ export function costBenefit(inp: CBAInput, p: BenefitParams, esc: Escenario): CB
       const prod = N * (yD - yO);
       // 2) aglomeración neta: lo que suben los demás en el destino menos lo que bajan en el origen
       const agD = gainDest(N) - N * yD;
-      const agO = desdeAMBA ? lossAmba(N) - N * yA : 0;
+      const agO = desdeAMBA ? lossAmba(N) - N * yA : desdeRegion ? lossRegion(N) - N * yD : 0;
       const aglo = agD - agO;
       const cg = desdeAMBA ? N * congest : 0;
       S.productividad += prod * d; S.aglomeracion += aglo * d; S.congest += cg * d;
@@ -211,7 +222,7 @@ export function costBenefit(inp: CBAInput, p: BenefitParams, esc: Escenario): CB
     const cInc = polos && t <= incAnios ? incPorEmpleo * N : 0;
     F.costo += cF * d; F.impuestos += imp * d; F.plusvalia += plus * d; F.incentivo += cInc * d;
     flowsF.push(imp + plus - cF - cInc);
-    cron.push({ anio: t, inversion: (t < 5 ? totT / 5 : 0) + totV * share, poblacion: N });
+    cron.push({ anio: t, inversion: (t < 5 ? totT / 5 : 0) + totV * share, publica: (t < 5 ? pubT / 5 : 0) + pubV * share, poblacion: N });
   }
   const C = (id: string, nombre: string, vp: number, nota: string) => ({ id, nombre, vp, nota });
   const sB = [
@@ -249,7 +260,7 @@ export function costBenefit(inp: CBAInput, p: BenefitParams, esc: Escenario): CB
     inversionTotal: inp.costos.totalCapital[1],
     inversionExtra: socT + socV,
     fiscal: { ...side(fB, fC), recupero: rec },
-    poblacionFinal: P * curveAt(cv, H),
+    poblacionFinal: P * Math.min(1, kOc * curveAt(cv, H)),
     cronograma: cron,
     supuestos: { relDest, relAmba, brecha, adicionalidad: adic },
   };

@@ -12,7 +12,11 @@ import { PolicyIcon } from "../art/Icons";
 import { CasosPolitica } from "./Casos";
 import { PlainVerdict, runAll } from "./CostBenefit";
 import { downloadCSV } from "../../model/share";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { empleo, musd, riesgos } from "../../model/brief";
+import type { CBAResult, Escenario } from "../../model/benefits";
+import type { CostResult } from "../../model/costs";
+import { plazo } from "./CostBenefit";
 import { UNIT_COSTS } from "../../model/unitCostsData";
 import { cbaInput } from "../../model/labor";
 
@@ -59,9 +63,6 @@ const label = (n: number) => (n >= 1_000_000 ? `${n / 1_000_000} millón` : `${(
 
 const GROUP_NAME: Record<string, string> = Object.fromEntries(PRIORITIES.map((p) => [p.grupo, p.titulo]));
 
-const musd = (v: number) =>
-  v >= 1e9 ? `USD ${(v / 1e9).toLocaleString("es-AR", { maximumFractionDigits: 1 })} mil millones` : `USD ${Math.round(v / 1e6).toLocaleString("es-AR")} millones`;
-
 export function siteName(s: Site, loc?: GeoJSON.FeatureCollection) {
   const near = nearestPlace(loc, s.center[0], s.center[1]);
   return near ? `Cerca de ${near.nombre}` : s.departamento;
@@ -96,6 +97,161 @@ function Reasons({ fs, i, w }: { fs: Record<string, Float32Array>; i: number; w:
         </li>
       ))}
     </ul>
+  );
+}
+
+type Orden = "aptitud" | "economia" | "ambos";
+
+interface Evaluado {
+  s: Site;
+  nombre: string;
+  aptitud: number; // puesto por aptitud (1 = mejor)
+  c: CostResult;
+  cba: Record<Escenario, CBAResult>;
+  anual: number;
+}
+
+const anualDe = (b: CBAResult) => b.anual.productividad + b.anual.aglomeracion + b.anual.congestion + b.anual.polo;
+
+/** Los mejores lugares por aptitud, con su costo y su costo-beneficio, ordenables. */
+function useEvaluados(p: Props): Evaluado[] {
+  return useMemo(
+    () =>
+      uniqueByPlace(p.sites, p.localidades).slice(0, 12).map((s, k) => {
+        const c = estimateCosts(p.policy.id, p.ds.col, s.best, s.provincia, { poblacion: p.poblacion, densidad: 75 }, UNIT_COSTS);
+        const cba = runAll(cbaInput(p.ds, p.policy.id, p.poblacion, c, s.best));
+        return { s, nombre: siteName(s, p.localidades), aptitud: k + 1, c, cba, anual: anualDe(cba.base) };
+      }),
+    [p.sites, p.localidades, p.policy.id, p.ds, p.poblacion],
+  );
+}
+
+function ordenar(xs: Evaluado[], o: Orden): Evaluado[] {
+  if (o === "aptitud") return xs;
+  const porPlata = [...xs].sort((a, b) => b.cba.base.social.van - a.cba.base.social.van);
+  if (o === "economia") return porPlata;
+  const rk = new Map(porPlata.map((x, k) => [x.s.rank, k + 1]));
+  return [...xs].sort((a, b) => a.aptitud + rk.get(a.s.rank)! - (b.aptitud + rk.get(b.s.rank)!) || a.aptitud - b.aptitud);
+}
+
+function Mejores({ p }: { p: Props }) {
+  const [orden, setOrden] = useState<Orden>("ambos");
+  const [tabla, setTabla] = useState(false);
+  const evs = useEvaluados(p);
+  const lista = ordenar(evs, orden).slice(0, 6);
+  const f = (v: number) => (v / 1e9).toLocaleString("es-AR", { maximumFractionDigits: 1 });
+  return (
+    <>
+      <div className="orden">
+        <span className="small">Ordenar por</span>
+        <div className="seg-mini" role="group" aria-label="Ordenar lugares">
+          {([["ambos", "Combinado"], ["aptitud", "Aptitud"], ["economia", "Economía"]] as const).map(([k, n]) => (
+            <button key={k} className={orden === k ? "on" : ""} onClick={() => setOrden(k)}>{n}</button>
+          ))}
+        </div>
+      </div>
+      <p className="small muted">
+        {orden === "aptitud" && "Primero los lugares con mejor agua, seguridad, clima y lo que priorizaste, sin mirar la plata."}
+        {orden === "economia" && "Primero los lugares donde el país gana más (o pierde menos), sin mirar la aptitud del lugar."}
+        {orden === "ambos" && "Combina las dos miradas: un lugar arriba es bueno para vivir y además conviene económicamente."}
+      </p>
+      <ol className="cards">
+        {lista.map((e, k) => {
+          const { s, c, cba } = e;
+          const a = p.agreement(s.best);
+          return (
+            <li key={s.rank}>
+              <button className={`card-site ${p.selected?.rank === s.rank ? "active" : ""}`} onClick={() => p.onSelect(s)}>
+                <span className="site-rank">{k + 1}</span>
+                <span className="site-body">
+                  <b>{e.nombre}</b>
+                  <span className="muted small">
+                    {s.departamento}, {s.provincia}
+                    {orden !== "aptitud" && ` · ${e.aptitud}.º por aptitud`}
+                  </span>
+                  <Reasons fs={p.fScores} i={s.best} w={p.weights} />
+                  <PlainVerdict r={cba} />
+                  <span className="small">
+                    Costo estimado: <b>USD {f(c.totalCapital[1])} mil millones</b>{" "}
+                    <span className="muted">
+                      ({f(c.totalCapital[0])}–{f(c.totalCapital[2])})
+                      {c.pctPBI && ` · ${c.pctPBI[1].toLocaleString("es-AR", { maximumFractionDigits: 2 })} % del PBI`}
+                    </span>
+                  </span>
+                  <span className="small muted">
+                    De eso, {musd(c.propio[1])} dependen de este lugar (rutas, energía, agua, tierra y el sobrecosto regional de construir); el resto
+                    (viviendas, escuelas, hospitales) cuesta parecido en cualquier sitio.
+                  </span>
+                  <span className={`trust t${a.n >= a.total - 1 ? "hi" : a.n >= 2 ? "mid" : "lo"}`}>
+                    {a.n === a.total
+                      ? `Muy confiable: sale entre los mejores con cualquiera de las ${a.total} formas de repartir prioridades que probamos`
+                      : `Sale entre los mejores con ${a.n} de las ${a.total} formas de repartir prioridades que probamos`}
+                  </span>
+                </span>
+              </button>
+              <button className="ficha-btn" onClick={() => p.onFicha(s, e.nombre)}>
+                Ficha para gabinete (imprimible) →
+              </button>
+            </li>
+          );
+        })}
+      </ol>
+      {lista.length > 1 && (
+        <button className="primary comparar-btn" onClick={() => setTabla(true)}>Comparar estos lugares lado a lado</button>
+      )}
+      {tabla && <TablaComparativa p={p} evs={lista} onClose={() => setTabla(false)} />}
+    </>
+  );
+}
+
+function TablaComparativa({ p, evs, onClose }: { p: Props; evs: Evaluado[]; onClose: () => void }) {
+  const polos = p.policy.id === "polos";
+  const filas = evs.map((e) => {
+    const b = e.cba.base;
+    const emp = empleo(p.ds, e.s.best, p.policy.id, b);
+    const rs = riesgos(p.ds, e.s.best, p.policy.id, p.poblacion, e.cba, emp);
+    const fiscal = p.ds.col.pct_fiscal_est?.[e.s.best];
+    const conoc = p.ds.col.frac_fiscal_conocida?.[e.s.best];
+    return { e, b, rs, fiscal, conoc, emp };
+  });
+  const cell = (v: number, pos?: boolean) => <span className={pos === undefined ? "" : pos ? "pos" : "neg"}>{musd(v)}</span>;
+  return (
+    <div className="ficha-wrap" role="dialog" aria-label="Comparación de lugares">
+      <article className="ficha">
+        <div className="ficha-bar no-print">
+          <button className="primary" onClick={() => window.print()}>Imprimir o guardar PDF</button>
+          <button onClick={onClose}>Cerrar</button>
+        </div>
+        <p className="lema">Comparación para gabinete</p>
+        <h2>{p.policy.nombre}: {p.poblacion.toLocaleString("es-AR")} {polos ? "empleos" : "habitantes"}</h2>
+        <div className="tabla-scroll">
+          <table className="provs comparativa">
+            <thead>
+              <tr>
+                <th />
+                {filas.map((x, k) => <th key={x.e.s.rank}>{k + 1}. {x.e.nombre}<br /><span className="muted small">{x.e.s.provincia}</span></th>)}
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Puesto por aptitud</td>{filas.map((x) => <td key={x.e.s.rank}>{x.e.aptitud}.º</td>)}</tr>
+              <tr><td>Inversión total</td>{filas.map((x) => <td key={x.e.s.rank}>{musd(x.e.c.totalCapital[1])}</td>)}</tr>
+              <tr><td>Depende del lugar</td>{filas.map((x) => <td key={x.e.s.rank}>{musd(x.e.c.propio[1])}</td>)}</tr>
+              <tr><td>Resultado anual para el país (año 30)</td>{filas.map((x) => <td key={x.e.s.rank}>{cell(x.e.anual, x.e.anual >= 0)}</td>)}</tr>
+              <tr><td>Saldo para el país (valor presente)</td>{filas.map((x) => <td key={x.e.s.rank}>{cell(x.b.social.van, x.b.social.van >= 0)}</td>)}</tr>
+              <tr><td>Recupero de la inversión extra</td>{filas.map((x) => <td key={x.e.s.rank}>{x.b.social.recupero !== null ? plazo(x.b.social.recupero) : "no se recupera"}</td>)}</tr>
+              <tr><td>Saldo para el Tesoro</td>{filas.map((x) => <td key={x.e.s.rank}>{cell(x.b.fiscal.van, x.b.fiscal.van >= 0)}</td>)}</tr>
+              <tr><td>Si llega poca gente</td>{filas.map((x) => <td key={x.e.s.rank}>{cell(x.e.cba.pesimista.social.van, x.e.cba.pesimista.social.van >= 0)}</td>)}</tr>
+              <tr><td>Empleos necesarios / existentes a 50 km</td>{filas.map((x) => <td key={x.e.s.rank}>{Math.round(x.emp.necesarios).toLocaleString("es-AR")} / {Math.round(x.emp.existentes).toLocaleString("es-AR")}</td>)}</tr>
+              <tr><td>Tierra fiscal estimada</td>{filas.map((x) => <td key={x.e.s.rank}>{Number.isFinite(x.fiscal) ? `${Math.round(x.fiscal!)} %${x.conoc !== undefined && x.conoc < 0.5 ? " (dato flojo)" : ""}` : "s/d"}</td>)}</tr>
+              <tr><td>Riesgos altos</td>{filas.map((x) => <td key={x.e.s.rank}>{x.rs.filter((r) => r.nivel === "alto").map((r) => r.que.split(":")[0]).join("; ") || "ninguno"}</td>)}</tr>
+              <tr><td>Otros riesgos</td>{filas.map((x) => <td key={x.e.s.rank}>{x.rs.filter((r) => r.nivel === "medio" && !r.que.startsWith("Especulación")).map((r) => r.que.split(/[:(]/)[0].trim()).join("; ") || "ninguno"}</td>)}</tr>
+              <tr><td>Confianza en el lugar</td>{filas.map((x) => { const a = p.agreement(x.e.s.best); return <td key={x.e.s.rank}>{a.n} de {a.total} formas de priorizar</td>; })}</tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="small muted ficha-pie">Escenario "lo más probable" salvo donde se indica. Valor presente al 12 % anual en 40 años. Estimación de orden de magnitud.</p>
+      </article>
+    </div>
   );
 }
 
@@ -279,55 +435,7 @@ export default function SimplePanel(p: Props) {
           {p.policy.unidad}. Después de aplicar los descartes queda apto el {p.aptasPct.toLocaleString("es-AR", { maximumFractionDigits: 1 })} % del territorio.
           {p.policy.requiereSuperficie && ` Estas zonas además tienen espacio para ${p.poblacion.toLocaleString("es-AR")} personas.`}
         </p>
-        <ol className="cards">
-          {uniqueByPlace(p.sites, p.localidades).slice(0, 6).map((s, k) => {
-            const a = p.agreement(s.best);
-            return (
-              <li key={s.rank}>
-                <button className={`card-site ${p.selected?.rank === s.rank ? "active" : ""}`} onClick={() => p.onSelect(s)}>
-                  <span className="site-rank">{k + 1}</span>
-                  <span className="site-body">
-                    <b>{siteName(s, p.localidades)}</b>
-                    <span className="muted small">
-                      {s.departamento}, {s.provincia}
-                    </span>
-                    <Reasons fs={p.fScores} i={s.best} w={p.weights} />
-                    {(() => {
-                      const c = estimateCosts(p.policy.id, p.ds.col, s.best, s.provincia,
-                        { poblacion: p.poblacion, densidad: 75 }, UNIT_COSTS);
-                      const cba = runAll(cbaInput(p.ds, p.policy.id, p.poblacion, c, s.best));
-                      const f = (v: number) => (v / 1e9).toLocaleString("es-AR", { maximumFractionDigits: 1 });
-                      return (
-                        <>
-                        <PlainVerdict r={cba} />
-                        <span className="small">
-                          Costo estimado: <b>USD {f(c.totalCapital[1])} mil millones</b>{" "}
-                          <span className="muted">
-                            ({f(c.totalCapital[0])}–{f(c.totalCapital[2])})
-                            {c.pctPBI && ` · ${c.pctPBI[1].toLocaleString("es-AR", { maximumFractionDigits: 2 })} % del PBI`}
-                          </span>
-                        </span>
-                        <span className="small muted">
-                          De eso, {musd(c.propio[1])} dependen de este lugar (rutas, energía, agua, tierra y el sobrecosto regional de construir); el resto
-                          (viviendas, escuelas, hospitales) cuesta parecido en cualquier sitio.
-                        </span>
-                        </>
-                      );
-                    })()}
-                    <span className={`trust t${a.n >= a.total - 1 ? "hi" : a.n >= 2 ? "mid" : "lo"}`}>
-                      {a.n === a.total
-                        ? `Muy confiable: sale entre los mejores con cualquiera de las ${a.total} formas de repartir prioridades que probamos`
-                        : `Sale entre los mejores con ${a.n} de las ${a.total} formas de repartir prioridades que probamos`}
-                    </span>
-                  </span>
-                </button>
-                <button className="ficha-btn" onClick={() => p.onFicha(s, siteName(s, p.localidades))}>
-                  Ficha para gabinete (imprimible) →
-                </button>
-              </li>
-            );
-          })}
-        </ol>
+        <Mejores p={p} />
         <Acciones p={p} />
         {p.saved.length > 0 && <Comparar saved={p.saved} onClear={p.onClearSaved} />}
         <label className="check small">

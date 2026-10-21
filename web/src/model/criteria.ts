@@ -130,9 +130,9 @@ export const FACTORS: Factor[] = [
   {
     id: "F09", nombre: "Peligro de inundación", grupo: "riesgo", peso: 0.07, unidad: "fracción",
     variable: "fracción de la celda en planicie T=100 años (JRC)", column: "frac_inund100",
-    fn: { kind: "decreasing", a: 0, b: 1 },
+    fn: { kind: "decreasing", a: 0, b: 0.4 },
     disponible: true, evidencia: ["E"], refs: ["Dottori et al. 2016"],
-    nota: "El mapa global omite cuencas <5.000 km² y anegamientos por napa (Salado); subestima el riesgo pampeano.",
+    nota: "El mapa global omite cuencas <5.000 km² y anegamientos por napa (Salado); subestima el riesgo pampeano. Con 40 % o más de la celda inundable el valor es 0.",
   },
   {
     id: "F10", nombre: "Deslizamientos", grupo: "riesgo", peso: 0.03, unidad: "clase",
@@ -324,7 +324,7 @@ export const RESTRICTIONS: Restriction[] = [
     nota: "Reservas de biosfera, sitios Ramsar y reservas de uso múltiple admiten asentamientos.",
   },
   {
-    id: "R03", nombre: "Planicie de inundación T=100", column: "frac_inund100", op: ">", umbral: 0.5, activo: true,
+    id: "R03", nombre: "Planicie de inundación T=100", column: "frac_inund100", op: ">", umbral: 0.4, activo: true,
     min: 0, max: 1, step: 0.05, unidad: "fracción", evidencia: ["E", "N"], refs: ["Dottori et al. 2016", "PNUD-SSPTIP 2010"],
     nota: "A nivel de sitio se excluye toda la planicie; a escala de celda de 36 km² se excluye si supera el umbral.",
   },

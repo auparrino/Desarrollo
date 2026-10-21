@@ -4,12 +4,18 @@
 
 import { cellToLatLng } from "h3-js";
 import type { Dataset } from "../data/load";
-import type { CBAResult } from "./benefits";
+import { costBenefit, type CBAInput, type CBAResult } from "./benefits";
 import type { CostResult, Range } from "./costs";
 import type { PolicyId } from "./policies";
 import { isAMBA } from "./simulator";
 import proy from "./proyecciones.json";
 import { mercadoLaboral } from "./labor";
+import { UNIT_COSTS } from "./unitCostsData";
+import { BENEFIT_PARAMS } from "./benefitParamsData";
+
+/** "CENTENARIO CENTRO" → "Centenario Centro" (solo si viene todo en mayúsculas). */
+const titulo = (s: string) =>
+  s === s.toUpperCase() ? s.toLowerCase().replace(/(^|[\s(-])(\p{L})/gu, (_, a: string, b: string) => a + b.toUpperCase()) : s;
 
 // ---------------------------------------------------------------- quién paga
 export type Pagador = "Nación" | "Provincia" | "Municipio" | "Hogares y empresas";
@@ -28,6 +34,7 @@ const PAGA: Record<string, { quien: Pagador; por: string }> = {
   acueducto: { quien: "Provincia", por: "empresa provincial de agua, con financiamiento del ENOHSA" },
   planta: { quien: "Provincia", por: "empresa provincial de agua, con financiamiento del ENOHSA" },
   oficinas: { quien: "Nación", por: "edificios de la Administración Pública Nacional" },
+  congreso: { quien: "Nación", por: "Poder Legislativo y Poder Judicial de la Nación" },
   mudanza_apn: { quien: "Nación", por: "traslado de agentes públicos nacionales" },
   mudanza: { quien: "Hogares y empresas", por: "las familias, con incentivos a la radicación" },
   parque: { quien: "Provincia", por: "provincia o municipio, con el Programa Nacional de Parques Industriales" },
@@ -51,6 +58,7 @@ export interface Mandato {
   desde: number;
   hasta: number;
   inversion: number;
+  publica: number;
   poblacionAlFinal: number;
 }
 
@@ -68,6 +76,7 @@ export function porMandato(r: CBAResult): Mandato[] {
     return {
       nombre, desde: a + 1, hasta: b + 1,
       inversion: xs.reduce((s, x) => s + x.inversion, 0),
+      publica: xs.reduce((s, x) => s + x.publica, 0),
       poblacionAlFinal: xs.length ? xs[xs.length - 1].poblacion : 0,
     };
   });
@@ -78,6 +87,7 @@ export interface Empleo {
   necesarios: number; // ocupados que necesita la población que llega (año 30, escenario base)
   existentes: number; // puestos privados registrados en los departamentos a ≤ 50 km (CEP XXI 2022)
   sectores: string[]; // actividad principal de la zona
+  publicos: number; // capital: agentes nacionales que se trasladan con su puesto
   crecimiento: number; // % anual 2014–2022
   proyectos: { nombre: string; tipo: string; km: number }[];
 }
@@ -98,7 +108,7 @@ export function empleo(ds: Dataset, i: number, policy: PolicyId, r: CBAResult, p
     .filter((f) => f.geometry?.type === "Point")
     .map((f) => {
       const p = f.properties ?? {};
-      return { nombre: String(p.nombre ?? p.name ?? "Proyecto"), tipo: String(p.tipo ?? "").replace(/_/g, " "), km: km(here, (f.geometry as GeoJSON.Point).coordinates as [number, number]) };
+      return { nombre: titulo(String(p.nombre ?? p.name ?? "Proyecto")), tipo: String(p.tipo ?? "").replace(/_/g, " "), km: km(here, (f.geometry as GeoJSON.Point).coordinates as [number, number]) };
     })
     .filter((x) => x.km <= 100)
     .sort((a, b) => a.km - b.km)
@@ -107,6 +117,7 @@ export function empleo(ds: Dataset, i: number, policy: PolicyId, r: CBAResult, p
     necesarios: policy === "polos" ? r.anual.poblacion : r.anual.poblacion * TASA_EMPLEO,
     existentes: mercadoLaboral(ds, i).puestos,
     sectores: mercadoLaboral(ds, i).sectores,
+    publicos: policy === "capital" ? (UNIT_COSTS.items.empleados_apn_caba?.central ?? 0) : 0,
     crecimiento: ds.col.emp_crec?.[i] ?? NaN,
     proyectos: near,
   };
@@ -182,9 +193,11 @@ export function hojaDeRuta(ds: Dataset, i: number, policy: PolicyId, provincia: 
       norma: "Ley 21.499 de expropiaciones (requiere ley que declare la utilidad pública) o cesión de tierra fiscal",
       quien: "Provincia y Nación (AABE si hay inmuebles nacionales)",
       aplica: nueva || policy === "polos" || policy === "pueblos",
-      nota: Number.isFinite(fiscal)
-        ? `Tierra fiscal estimada en el departamento: ${Math.round(fiscal)} %${conoc !== undefined && conoc < 0.5 ? " (dato con poca cobertura)" : ""}. ${fiscal < 20 ? "Lo más probable es que haya que comprar o expropiar." : "Hay margen para usar tierra pública."}`
-        : undefined,
+      nota: !Number.isFinite(fiscal)
+        ? "No hay datos de titularidad: relevar el catastro provincial antes de anunciar."
+        : conoc !== undefined && conoc < 0.5
+          ? `No alcanza el dato para concluir: la estimación de tierra fiscal (${Math.round(fiscal)} % del departamento) cubre poco territorio. Relevar el catastro provincial antes de anunciar.`
+          : `Tierra fiscal estimada en el departamento: ${Math.round(fiscal)} %. ${fiscal < 20 ? "Lo más probable es que haya que comprar o expropiar." : "Hay margen para usar tierra pública."}`,
     },
     {
       que: "Consulta previa, libre e informada a comunidades indígenas",
@@ -238,19 +251,33 @@ export interface Riesgo {
 export function riesgos(ds: Dataset, i: number, policy: PolicyId, poblacion: number, r: Record<string, CBAResult>, emp: Empleo): Riesgo[] {
   const c = ds.col;
   const out: Riesgo[] = [];
-  const ratio = emp.necesarios / Math.max(emp.existentes, 1);
-  if (policy !== "polos" && (ratio > 0.3 || emp.crecimiento < 0))
+  // los agentes públicos trasladados llegan con su puesto, y cada uno sostiene otro empleo local (multiplicador público)
+  const multPub = (BENEFIT_PARAMS.items.multiplicador_publico as { central?: number } | undefined)?.central ?? 1;
+  const cubiertos = emp.publicos * (1 + multPub);
+  const faltan = Math.max(0, emp.necesarios - cubiertos);
+  const ratio = faltan / Math.max(emp.existentes, 1);
+  if (policy !== "polos" && faltan > 0 && (ratio > 0.3 || emp.crecimiento < 0))
     out.push({
       nivel: ratio > 1 ? "alto" : "medio",
-      que: `Falta de trabajo: harían falta unos ${fmt(emp.necesarios)} empleos y hoy hay ${fmt(emp.existentes)} puestos privados en 50 km${emp.crecimiento < 0 ? ", con empleo en baja" : ""}.`,
+      que: `Falta de trabajo: harían falta unos ${fmt(faltan)} empleos${cubiertos > 0 ? ` además de los ${fmt(cubiertos)} que traen el traslado de organismos y sus servicios` : ""}, y hoy hay ${fmt(emp.existentes)} puestos privados en 50 km${emp.crecimiento < 0 ? ", con empleo en baja" : ""}.`,
       mitigacion: "Asegurar antes de construir una empresa ancla, un organismo público o un polo productivo; liberar cada etapa de viviendas solo si hay empleo para la anterior.",
     });
+  if (policy === "polos") {
+    const f = UNIT_COSTS.items.costo_fiscal_empleo_anio;
+    out.push({
+      nivel: "alto",
+      que: `Que no se instalen empresas, o que cada empleo cueste demasiado: los regímenes de promoción cuestan al fisco unos USD ${fmt(f?.central ?? NaN)} por empleo por año (rango ${fmt(f?.bajo ?? NaN)} a ${fmt(f?.alto ?? NaN)}).`,
+      mitigacion: "Firmar compromisos de inversión antes de urbanizar; atar los incentivos al empleo efectivo, con fecha de vencimiento; no competir en incentivos con otras provincias por las mismas empresas.",
+    });
+  }
   const pes = r.pesimista;
   if (pes && pes.social.van < 0)
     out.push({
       nivel: "alto",
-      que: `Que llegue poca gente: si se ocupa como las ciudades nuevas egipcias (~12 %), el saldo para el país es de ${musd(pes.social.van)}.`,
-      mitigacion: "Construir por etapas de 20.000 a 50.000 habitantes, empezando por la conexión y el empleo; no adelantar viviendas a la demanda.",
+      que: policy === "polos"
+        ? `Que se instalen pocas empresas: si se ocupa solo el 12 % del parque, el saldo para el país es de ${musd(pes.social.van)}.`
+        : `Que llegue poca gente: si se ocupa como las ciudades nuevas egipcias (~12 %), el saldo para el país es de ${musd(pes.social.van)}.`,
+      mitigacion: `Construir por etapas de unos ${fmt(etapa(poblacion))} ${policy === "polos" ? "empleos" : "habitantes"}, empezando por la conexión y el empleo; no adelantar ${policy === "polos" ? "lotes industriales" : "viviendas"} a la demanda.`,
     });
   const necesitaM3s = (poblacion * 200) / 1000 / 86400;
   const q95 = c.q95_rio25?.[i] ?? 0;
@@ -295,6 +322,12 @@ export function sinPolitica(costoComunPorHab: number): SinPolitica {
 }
 
 // ---------------------------------------------------------------- utilidades
+/** Tamaño de etapa "redondo": alrededor de un quinto de la meta. */
+const etapa = (p: number) => {
+  const x = p / 5;
+  const m = 10 ** Math.floor(Math.log10(Math.max(x, 1)));
+  return Math.max(500, Math.round(x / m) * m);
+};
 const fmt = (n: number) => (Number.isFinite(n) ? Math.round(n).toLocaleString("es-AR") : "s/d");
 export const musd = (v: number) => {
   const a = Math.abs(v);
@@ -302,3 +335,82 @@ export const musd = (v: number) => {
   return `${v < 0 ? "−" : ""}USD ${s}`;
 };
 export const central = (r: Range) => r[1];
+
+// ---------------------------------------------------------------- punto de equilibrio
+export interface Equilibrio {
+  conviene: boolean;
+  /** fracción de la meta que tiene que llegar en 30 años para que el saldo sea cero (null si no alcanza con más gente) */
+  ocupacion: number | null;
+  /** ocupación esperada en 30 años (escenario base) */
+  esperada: number;
+  /** salario relativo de la zona que haría falta (si no alcanza con más gente) */
+  salario: number | null;
+  salarioActual: number;
+}
+
+function biseccion(f: (x: number) => number, lo: number, hi: number): number | null {
+  let flo = f(lo);
+  const fhi = f(hi);
+  if (flo * fhi > 0) return null;
+  for (let k = 0; k < 40; k++) {
+    const m = (lo + hi) / 2, fm = f(m);
+    if (flo * fm <= 0) hi = m;
+    else { lo = m; flo = fm; }
+  }
+  return (lo + hi) / 2;
+}
+
+/** Qué tendría que pasar para que el saldo para el país sea cero. */
+export function equilibrio(inp: CBAInput, base: CBAResult): Equilibrio {
+  const esperada = base.anual.poblacion / Math.max(inp.poblacion, 1);
+  const van = (k: number, rel?: number) => costBenefit({ ...inp, escalaOcupacion: k, relDest: rel ?? inp.relDest }, BENEFIT_PARAMS, "base").social.van;
+  const conviene = base.social.van >= 0;
+  const kMax = 1 / Math.max(esperada, 0.01); // toda la meta en 30 años
+  const k = biseccion((x) => van(x), 0.02, kMax);
+  let salario: number | null = null;
+  if (k === null && !conviene) salario = biseccion((x) => van(1, x), base.supuestos.relDest, 4);
+  return { conviene, ocupacion: k === null ? null : Math.min(1, k * esperada), esperada, salario, salarioActual: base.supuestos.relDest };
+}
+
+// ---------------------------------------------------------------- cronograma de hitos
+export interface Hito { que: string; desde: number; hasta: number; tipo: "norma" | "obra" | "gente" }
+
+export function hitos(policy: PolicyId): Hito[] {
+  const H: Hito[] = [];
+  if (policy === "capital") H.push({ que: "Ley de capital y cesión provincial", desde: 1, hasta: 2, tipo: "norma" });
+  if (policy === "ciudad_nueva" || policy === "capital") H.push({ que: "Ley provincial del nuevo municipio", desde: 1, hasta: 2, tipo: "norma" });
+  H.push({ que: "Reserva o compra de la tierra (antes del anuncio)", desde: 1, hasta: 1, tipo: "norma" });
+  H.push({ que: "Evaluación ambiental, consulta y audiencia", desde: 1, hasta: 2, tipo: "norma" });
+  H.push({ que: "Convenio de financiamiento y proyecto ejecutivo", desde: 1, hasta: 3, tipo: "norma" });
+  if (policy !== "intermedias" && policy !== "pueblos") H.push({ que: "Obras de conexión (ruta, energía, agua)", desde: 2, hasta: 5, tipo: "obra" });
+  if (policy === "polos") {
+    H.push({ que: "Primera etapa del parque y empresas ancla", desde: 3, hasta: 5, tipo: "obra" });
+    H.push({ que: "Empresas instalándose por etapas", desde: 5, hasta: 12, tipo: "gente" });
+  } else {
+    H.push({ que: policy === "intermedias" || policy === "pueblos" ? "Ampliación de redes, escuelas y salud" : "Primera etapa urbana (redes, escuelas, salud)", desde: 2, hasta: 6, tipo: "obra" });
+    if (policy === "capital") H.push({ que: "Traslado de organismos nacionales", desde: 4, hasta: 10, tipo: "gente" });
+    H.push({ que: "Llegada de habitantes, etapa por etapa", desde: 4, hasta: 12, tipo: "gente" });
+  }
+  return H;
+}
+
+// ---------------------------------------------------------------- efecto político
+export interface EfectoProvincia { lugar: string; delta: number }
+
+/** Quién gana y quién pierde población a 30 años (escenario base), según el origen probable. */
+export function efectoPolitico(ds: Dataset, i: number, provincia: string, llegan: number): EfectoProvincia[] {
+  const ori = origenCompleto(ds, i);
+  const m = new Map<string, number>();
+  // el destino nunca está en el AMBA: si es bonaerense, cuenta como "Resto de Buenos Aires"
+  m.set(provincia === "Buenos Aires" ? "Resto de Buenos Aires" : provincia, llegan);
+  for (const o of ori) m.set(o.lugar, (m.get(o.lugar) ?? 0) - (llegan * o.pct) / 100);
+  return [...m.entries()].map(([lugar, delta]) => ({ lugar, delta })).filter((x) => Math.abs(x.delta) >= 500).sort((a, b) => b.delta - a.delta);
+}
+
+function origenCompleto(ds: Dataset, i: number) {
+  const [lat, lng] = cellToLatLng(ds.h3[i]);
+  const here: [number, number] = [lng, lat];
+  const xs = provincias(ds).map((p) => ({ lugar: p.prov, w: p.pob / Math.max(km(here, p.c), 50) }));
+  const tot = xs.reduce((a, x) => a + x.w, 0);
+  return xs.map((x) => ({ lugar: x.lugar, pct: (100 * x.w) / tot }));
+}

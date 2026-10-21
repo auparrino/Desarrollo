@@ -274,3 +274,15 @@ Cada sitio del modo simple tiene una ficha imprimible (`web/src/ui/panels/Ficha.
 - **Riesgos con su mitigación.**
 
 El botón **Presentar** deja el mapa y una lámina con los cinco mejores lugares, para proyectar en una reunión.
+
+### Segunda pasada (octubre de 2026)
+
+- **Orden de los lugares:** se puede ordenar por aptitud, por economía (saldo para el país) o combinado, que es la opción predeterminada y suma los dos puestos. También hay una tabla comparativa imprimible de los seis primeros.
+- **Tesoro:** la ficha muestra lo que el Estado pone y lo que recupera en valor presente. La plata por mandato separa la inversión pública de la que pagan los hogares y la expresa como porcentaje del PBI por año.
+- **Punto de equilibrio:** la ficha calcula qué fracción de la meta tiene que llegar en 30 años para que el saldo dé cero, escalando la curva de ocupación (`escalaOcupacion`). Si con más gente no alcanza, calcula qué salario relativo haría falta en la zona.
+- **Origen regional:** con `origen: "region"` el resultado se calcula suponiendo que la gente viene de la misma región. La región de origen se aproxima como 5 veces el entorno de 50 km. En ese caso no hay diferencia de productividad ni congestión evitada.
+- **Capital:**
+  - Los empleos públicos trasladados (74.000 agentes, con un multiplicador público de 1) se descuentan del riesgo de falta de trabajo.
+  - Se suma el Congreso, la Corte y los tribunales federales: 200.000 m², orden de magnitud a verificar.
+- **Inundación:** el umbral de exclusión R03 baja de 50 % a 40 % de la celda. La función F09 llega a 0 con 40 % inundable en lugar de 100 %.
+- **Calendario de hitos** por instrumento y **efecto político:** quién gana y quién pierde población, con la aclaración de que ni las bancas ni la coparticipación cambian solas.

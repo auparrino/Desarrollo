@@ -74,7 +74,7 @@ def restriction_masks(df: pd.DataFrame) -> dict[str, pd.Series]:
     q_req = 500_000 * 200 * 1.5 / 1000 / 86400  # R13 con Q95 corregido y α = 0,5
     return {
         "R01 Área protegida estricta": df.frac_ap_estricta > 0.5,
-        "R03 Inundación T100": df.frac_inund100 > 0.5,
+        "R03 Inundación T100": df.frac_inund100 > 0.4,
         "R04 Pendiente": df.frac_pend_ok < 0.5,
         "R06 Sismicidad": df.pga475 >= 0.35,
         "R09 Altitud": df.elev > 2500,

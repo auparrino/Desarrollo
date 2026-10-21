@@ -21,7 +21,7 @@ export function coefRegional(provincia: string): number {
   return VALORES[cod]?.coef ?? 1;
 }
 /** Rubros de edificación a los que se aplica el coeficiente regional. */
-const EDIFICACION = new Set(["vivienda", "rehab", "urbanizacion", "escuelas", "hospital", "oficinas", "planta", "parque"]);
+const EDIFICACION = new Set(["vivienda", "rehab", "urbanizacion", "escuelas", "hospital", "oficinas", "congreso", "planta", "parque"]);
 
 export interface UnitItem {
   nombre: string;
@@ -172,6 +172,8 @@ export function estimateCosts(
       const m2emp = U.m2_por_empleado?.central ?? 0;
       line(cap, "oficinas", "Edificios de gobierno", emp * m2emp, "oficina_m2", `${fmt(emp)} empleados × ${fmt(m2emp)} m²`);
       line(cap, "mudanza_apn", "Mudanza de hogares de empleados públicos", emp, "mudanza_hogar", `${fmt(emp)} hogares`);
+      const m2cc = U.congreso_corte_m2?.central ?? 0;
+      line(cap, "congreso", "Congreso, Corte Suprema y tribunales federales", m2cc, "oficina_m2", `${fmt(m2cc)} m² (orden de magnitud)`);
     }
     if (policy !== "ciudad_nueva") line(cap, "mudanza", "Mudanza de hogares", hogares, "mudanza_hogar", `${fmt(hogares)} hogares`);
     line(op, "municipal", "Servicios municipales (anual)", P, "servicios_municipales_hab_anio", `${fmt(P)} habitantes`);
