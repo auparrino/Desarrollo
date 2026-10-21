@@ -54,7 +54,7 @@ python pipeline/download.py && python pipeline/build.py
 
 ## Publicación
 
-`.github/workflows/pages.yml` compila y publica la app en GitHub Pages en cada push a `main`. Para activarlo, en el repositorio elegí **Settings → Pages → Source: GitHub Actions**.
+`.github/workflows/pages.yml` compila la app en cada push y la publica en la rama `gh-pages`. La app queda en https://auparrino.github.io/Desarrollo/ (si no aparece, en el repositorio elegí **Settings → Pages → Deploy from a branch → gh-pages / root**).
 
 ## Fuentes principales
 

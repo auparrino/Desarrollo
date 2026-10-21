@@ -3,7 +3,7 @@ import { loadJSON } from "../../data/load";
 
 type Fuente = { cita: string; licencia: string; url: string };
 
-const REPO = "https://github.com/auparrino/Desarrollo/blob/main/docs/";
+const REPO = "https://github.com/auparrino/Desarrollo/blob/HEAD/docs/";
 
 export default function MethodPanel({ generado }: { generado: string }) {
   const [fuentes, setFuentes] = useState<Record<string, Fuente>>({});
