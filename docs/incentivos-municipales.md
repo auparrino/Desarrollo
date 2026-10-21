@@ -33,9 +33,9 @@ Fecha de elaboración: 21 de octubre de 2026.
   - lotes de parques industriales a precio de fomento o cedidos gratis con cargo (Tres Arroyos, Balcarce, Valle María, Neuquén).
   - En Buenos Aires casi todos se apoyan en la adhesión a la Ley provincial 13.656.
 - **Cobertura obligatoria (39 municipios).**
-  - **14 tienen algún incentivo documentado:** Trelew, Rawson, Neuquén, Cipolletti, General Roca, Allen, Malagueño, Balcarce, Necochea, Tres Arroyos, Zárate, General Alvarado, Casilda y Posadas.
+  - **13 tienen algún incentivo documentado:** Trelew, Rawson, Neuquén, Cipolletti, General Roca, Allen, Malagueño, Balcarce, Necochea, Tres Arroyos, Zárate, Casilda y Posadas.
   - **1 no lo tiene,** según su Ordenanza Fiscal: San Nicolás.
-  - **24 quedan `sin_info`:** no se halló nada en la web, lo que **no prueba** que no exista.
+  - **25 quedan `sin_info`:** no se halló nada en la web, lo que **no prueba** que no exista.
 
 ---
 
@@ -54,6 +54,7 @@ Fecha de elaboración: 21 de octubre de 2026.
 4. **Lectura completa.** Cada fila se basa en una página o PDF **abierto y leído** con WebFetch o curl y pdftotext. No se usó el resumen del buscador.
    - **El resumen del buscador falló varias veces.** Atribuyó a la Ordenanza 13977 de Trelew un contenido que en realidad era de la 13976, y mezcló municipios en otras consultas.
    - Por eso hay casos de la prensa que se descartaron porque no se pudo abrir la fuente: Claromecó (Tres Arroyos), Freyre, Catriel, Colonia San José y "Tierra Pampa".
+   - En `municipales_cobertura.csv`, algunos enlaces de contexto de las filas `sin_info` (Navarro, Ituzaingó, Salta, Comodoro, Puerto Madryn, Plottier, Centenario, San Carlos Centro) provienen del resultado del buscador y no se leyeron completos. Solo sirven para orientar una consulta posterior.
 
 ### 1.2 Criterios de inclusión y codificación
 
@@ -166,8 +167,8 @@ Las tablas resumen los CSV: requisitos y cupo están completos en `municipales.c
 | Tres Arroyos | 06833 | si | Ord. 6405/12: exención de todas las tasas por 10 años a industrias del Parque Industrial y tierra a precio de fomento (U$S 4,97/m² en 2017). Programa Un lote para mi familia en Claromecó, para residentes. | [enlace](http://hcd.tresarroyos.gov.ar/digesto/ordenanza/parque-industrial-de-tres-arroyos) |
 | San Nicolás | 06763 | no | La Ordenanza Fiscal y Tarifaria 2025 no tiene régimen general de promoción ni exenciones por radicación. Solo fija un tope a la TSH para generadoras eléctricas en delegaciones (art. 192). | [enlace](https://sannicolasciudad.gob.ar/system/procedure_attachments/files/000/000/585/original/Fiscal_y_Tarifaria_2025.pdf) |
 | Zárate | 06882 | si | Ord. 3971 (adhesión a Ley 13.656): exención de tasas de hasta 100% por hasta 10 años; Dto. 275/2024 orientado a la industria automotriz y autopartista. | [enlace](https://zarate.gob.ar/wp-content/uploads/2024/04/dto-275-Regimen-Promocion-Industrial.pdf) |
-| Mar Chiquita (Santa Clara del Mar) | 06518 | sin_info | No se halló régimen de promoción ni programa de lotes. Hay radicaciones puntuales en Vivoratá y la venta por licitación de un lote municipal en Santa Clara (Ord. 100/2025), que no es un incentivo. | — |
-| General Alvarado | 06280 | si | Sector Industrial Planificado de iniciativa municipal en Miramar (18 ha, más de 20 empresas, aprobado en 2018). No se hallaron exenciones municipales. Sorteo de lotes sociales en Otamendi (2019), para residentes. | [enlace](https://www.gba.gob.ar/produccion/noticias/miramar_se_firm%C3%B3_la_aprobaci%C3%B3n_del_sector_industrial_planificado_de_general) |
+| Mar Chiquita (Santa Clara del Mar) | 06518 | sin_info | No se halló régimen de promoción industrial ni programa municipal de lotes para radicación. Solo hay radicaciones puntuales de empresas cerca de Vivoratá. | — |
+| General Alvarado | 06280 | sin_info | Sector Industrial Planificado público en Miramar (18 ha, más de 20 empresas), gestionado entre Provincia y municipio y aprobado en 2018. La fuente no describe beneficios municipales. Hubo sorteo de lotes sociales para residentes en Otamendi (2019). | [enlace](https://www.gba.gob.ar/produccion/noticias/miramar_se_firm%C3%B3_la_aprobaci%C3%B3n_del_sector_industrial_planificado_de_general) |
 | Carcarañá | 82119 | sin_info | Área Industrial con aporte nacional (2016) y loteos industriales privados; no se halló incentivo municipal. | — |
 | Casilda | 82014 | si | Venta de lotes del Área Industrial municipal por ordenanza (Ord. 3521/2025); no se publican precio ni exenciones. | [enlace](https://www.casilda.gob.ar/web/licitaciones-casilda/) |
 | San Jerónimo Norte | 82070 | sin_info | No se hallaron programas comunales de lotes ni de radicación de empresas. | — |
@@ -246,7 +247,7 @@ Hay muy pocos, y ninguno tiene seguimiento independiente:
   - Tres Arroyos: U$S 4,97/m² en 2017;
   - Balcarce: $230/m² en 2021;
   - Valle María: cesión gratuita con cargo;
-  - Malagueño: lotes a U$S 50-70/m², que es precio de mercado periurbano y no subsidio.
+  - Malagueño: lotes a U$S 50-70/m², sin evidencia de que sea un precio subsidiado.
 - **Tendencia 2025-2026.** Aparecen "RIGI municipales" (Tres de Febrero, el proyecto de Viedma) y exenciones a **comercios nuevos** por 6 a 12 meses (Neuquén, Cipolletti). Cuesta poco al fisco y sirve para atraer comercio de servicios, más que industria.
 
 ---
@@ -258,7 +259,7 @@ Hay muy pocos, y ninguno tiene seguimiento independiente:
    - SIBOM cubre los 135 partidos bonaerenses, pero el buscador web solo indexa una parte.
    - Las 1.300 comunas y municipios chicos de Santa Fe, Córdoba y Entre Ríos rara vez publican su digesto.
    - Muchos programas de lotes no tienen ordenanza: son decisiones del jefe comunal.
-3. **Cobertura.** Se relevaron 36 de los unos 2.300 gobiernos locales: menos del 2%. En los 24 municipios prioritarios marcados `sin_info`, la ausencia no prueba que no haya incentivo. Para confirmarlo hay que consultar el digesto o pedirlo por acceso a la información pública.
+3. **Cobertura.** Se relevaron 36 de los unos 2.300 gobiernos locales: menos del 2%. En los 25 municipios prioritarios marcados `sin_info`, la ausencia no prueba que no haya incentivo. Para confirmarlo hay que consultar el digesto o pedirlo por acceso a la información pública.
 4. **Vigencia.** Casi la mitad de las filas (18) son `incierto`. Los anuncios de prensa no tienen seguimiento, y las ordenanzas fiscales se renuevan cada año.
 5. **Montos en pesos.** No son comparables entre años por la inflación. Para comparar conviene usar los valores en U$S o en múltiplos del salario mínimo cuando la fuente los da.
 6. **No se evaluó la efectividad.** Salvo Colonia Belgrano, no hay datos de cuántas personas o empresas llegaron ni de cuántas se quedaron.
