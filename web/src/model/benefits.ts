@@ -65,7 +65,10 @@ export interface CBAResult {
   escenario: Escenario;
   horizonte: number;
   tasa: number;
-  social: CBASide & { tir: number | null };
+  social: CBASide & { tir: number | null; recupero: number | null };
+  anual: { anio: number; poblacion: number; productividad: number; aglomeracion: number; congestion: number; polo: number };
+  inversionTotal: number;
+  inversionExtra: number;
   fiscal: CBASide & { recupero: number | null };
   poblacionFinal: number;
 }
@@ -136,7 +139,10 @@ export function costBenefit(inp: CBAInput, p: BenefitParams, esc: Escenario): CB
   const gainDest = (n: number) => yD * B * (((B + n) / B) ** (1 + elast) - 1);
   const lossAmba = (n: number) => yA * AMBA_POB * (1 - (Math.max(AMBA_POB - n, 1) / AMBA_POB) ** (1 + elast));
 
-  const S = { costo: 0, destino: 0, amba: 0, congest: 0, polo: 0 };
+  const S = { costo: 0, productividad: 0, aglomeracion: 0, congest: 0, polo: 0 };
+  let anual = { anio: 0, poblacion: 0, productividad: 0, aglomeracion: 0, congestion: 0, polo: 0 };
+  let recSocial: number | null = null;
+  let accS = 0;
   const F = { costo: 0, impuestos: 0, plusvalia: 0 };
   const flowsS: number[] = [];
   const flowsF: number[] = [];
@@ -154,17 +160,24 @@ export function costBenefit(inp: CBAInput, p: BenefitParams, esc: Escenario): CB
       // empleos del polo + indirectos; la mitad se considera actividad nueva para el país
       const v = N * mult * (yD / Math.max(empleo, 0.01)) * 0.5;
       S.polo += v * d; bS += v; netY += v;
+      if (t === Math.min(30, H)) anual = { anio: t, poblacion: N, productividad: 0, aglomeracion: 0, congestion: 0, polo: v };
     } else {
-      const g = gainDest(N);
-      const l = desdeAMBA ? -lossAmba(N) : -N * yD; // sin origen AMBA: la persona produciría lo mismo en otro lado
-      S.destino += g * d; S.amba += l * d; bS += g + l; netY += g + l;
-      if (desdeAMBA) {
-        const cg = N * congest;
-        S.congest += cg * d; bS += cg;
-      }
+      // 1) diferencia de productividad: cada persona produce según el nivel del destino y no del AMBA
+      const yO = desdeAMBA ? yA : yD;
+      const prod = N * (yD - yO);
+      // 2) aglomeración neta: lo que suben los demás en el destino menos lo que bajan en el origen
+      const agD = gainDest(N) - N * yD;
+      const agO = desdeAMBA ? lossAmba(N) - N * yA : 0;
+      const aglo = agD - agO;
+      const cg = desdeAMBA ? N * congest : 0;
+      S.productividad += prod * d; S.aglomeracion += aglo * d; S.congest += cg * d;
+      bS += prod + aglo + cg; netY += prod + aglo;
+      if (t === Math.min(30, H)) anual = { anio: t, poblacion: N, productividad: prod, aglomeracion: aglo, congestion: cg, polo: 0 };
     }
     S.costo += cS * d;
     flowsS.push(bS - cS);
+    accS += (bS - cS) * d;
+    if (recSocial === null && t > 0 && accS >= 0 && S.costo > 0) recSocial = t;
     // fiscal (incremental): costos públicos adicionales frente a crecer en el AMBA
     const cF = (t < 5 ? fisT / 5 : 0) + fisV * share;
     const imp = presion * Math.max(0, netY);
@@ -174,9 +187,11 @@ export function costBenefit(inp: CBAInput, p: BenefitParams, esc: Escenario): CB
   }
   const C = (id: string, nombre: string, vp: number, nota: string) => ({ id, nombre, vp, nota });
   const sB = [
-    !polos && C("destino", "Más producción en la región que crece", S.destino, `productividad según salarios relativos; aglomeración ε = ${elast}`),
-    !polos && C("amba", desdeAMBA ? "Producción que deja de hacerse en el AMBA" : "Producción en el lugar de origen", S.amba, "lo que esas personas habrían producido donde vivían"),
-    desdeAMBA && C("congest", "Congestión evitada en el AMBA", S.congest, "costo marginal de congestión por habitante (juicio sobre BID 2021)"),
+    !polos && C("productividad", desdeAMBA ? "Diferencia de productividad con el AMBA" : "Diferencia de productividad", S.productividad,
+      "cada persona produce según el nivel de salarios del destino en vez del AMBA (puede restar)"),
+    !polos && C("aglomeracion", "Efecto de concentración (neto)", S.aglomeracion,
+      `la región que crece se vuelve algo más productiva y el AMBA algo menos (ε = ${elast})`),
+    desdeAMBA && C("congest", "Congestión evitada en el AMBA", S.congest, "menos viajes y tiempo perdido en el AMBA"),
     polos && C("polo", "Producción nueva del polo", S.polo, `multiplicador ${mult}; 50 % se considera actividad nueva para el país`),
   ].filter(Boolean) as CBAComponent[];
   const sC = [C("costos", "Infraestructura de conexión, mudanzas y edificios", S.costo, "lo que se agrega frente a crecer en el AMBA")];
@@ -203,7 +218,10 @@ export function costBenefit(inp: CBAInput, p: BenefitParams, esc: Escenario): CB
     escenario: esc,
     horizonte: H,
     tasa: r,
-    social: { ...side(sB, sC), tir: irr(flowsS) },
+    social: { ...side(sB, sC), tir: irr(flowsS), recupero: recSocial },
+    anual,
+    inversionTotal: inp.costos.totalCapital[1],
+    inversionExtra: socT + socV,
     fiscal: { ...side(fB, fC), recupero: rec },
     poblacionFinal: P * curveAt(cv, H),
   };

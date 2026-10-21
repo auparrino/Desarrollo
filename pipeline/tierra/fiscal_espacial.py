@@ -124,13 +124,7 @@ rnd["detalle"] = rnd["fna"] + " | " + rnd["sdp"].astype(str) + " | ara declarada
 rnd["fuente"] = "https://geo.ambiente.gob.ar/geoserver/ows areas_protegidas:reserva_natural_defensa"
 polys.append(rnd[["origen", "titular", "provincia", "detalle", "fuente", "geometry"]])
 
-# Nación: predios de aeropuertos del SNA (ORSNA)
-ap = load(T / "nacion/orsna_predios_aeropuertos_sna.geojson")
-ap["origen"] = "nacion_predio_aeropuerto_sna"
-ap["titular"] = "Estado Nacional (" + ap["concesiona"].fillna("").astype(str) + ")"
-ap["detalle"] = ap["nombre2"].astype(str) + " | " + ap["oaci"].astype(str) + " | explotador " + ap["explotador"].astype(str)
-ap["fuente"] = "https://ide.transporte.gob.ar/geoserver/orsna/ows orsna:_3.4.4.5_SNA_jun17.view (datos.gob.ar predios-aeropuertos)"
-polys.append(ap[["origen", "titular", "provincia", "detalle", "fuente", "geometry"]])
+# (La capa ORSNA "predios aeropuertos" publica puntos, no polígonos: va a inmuebles_estado.geojson)
 
 P = gpd.GeoDataFrame(pd.concat(polys, ignore_index=True), crs=4326)
 P["superficie_ha"] = area_ha(P).round(2)
@@ -143,11 +137,19 @@ P.to_file(OUT / "fiscal_poligonos.gpkg", layer="fiscal_poligonos", driver="GPKG"
 print(P.groupby("origen")["superficie_ha"].agg(["count", "sum"]).round(0).to_string(), flush=True)
 
 # ---------- métricas por departamento ----------
-cat = P[P.origen.str.startswith(("catastro_neuquen", "catastro_tdf"))]
-m = m.join(per_dep(dissolve_parts(cat), deps, "sup_fiscal_catastro_ha"))
+# cada catastro se mide solo dentro de su provincia (evita bordes que cruzan el límite IGN)
+cat_parts, catfm_parts = [], []
+for pref, prov in (("catastro_neuquen", "Neuquén"), ("catastro_tdf", "Tierra del Fuego, Antártida e Islas del Atlántico Sur")):
+    dp = deps[deps.provincia == prov]
+    cd = dissolve_parts(P[P.origen.str.startswith(pref)])
+    cat_parts.append(per_dep(cd, dp, "sup_fiscal_catastro_ha"))
+    # parte del catastro fiscal que queda fuera de las máscaras (para calibrar el complemento)
+    cfm = gpd.overlay(cd, mask_all, how="difference")
+    catfm_parts.append(per_dep(cfm, dp, "sup_fiscal_catastro_fuera_mascara_ha"))
+m = m.join(pd.concat(cat_parts)).join(pd.concat(catfm_parts))
 nac_cat = P[P.origen.str.startswith("catastro_neuquen") & (P.titular == "Estado Nacional")]
 m = m.join(per_dep(dissolve_parts(nac_cat), deps, "sup_catastro_fisco_nacional_ha"))
-for o, col in (("nacion_reserva_natural_defensa", "sup_rnd_ha"), ("nacion_predio_aeropuerto_sna", "sup_aeropuertos_ha"),
+for o, col in (("nacion_reserva_natural_defensa", "sup_rnd_ha"),
                ("catastro_salta_nombre_finca_fiscal", "sup_salta_finca_fiscal_ha")):
     m = m.join(per_dep(dissolve_parts(P[P.origen == o]), deps, col))
 

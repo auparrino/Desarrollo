@@ -444,3 +444,66 @@ button.primary { background: var(--rojo); color: #f2ead7; border: 2px solid var(
 .cmp-grid { display: grid; gap: 8px; }
 .cmp-grid ol { padding-left: 18px; margin: 4px 0; }
 .cmp-grid li.comun { font-weight: 700; color: var(--rojo); }
+.cuenta { padding-left: 20px; margin: 6px 0 10px; }
+.cuenta > li { margin-bottom: 8px; line-height: 1.4; font-size: 0.88rem; }
+.cuenta ul { margin: 4px 0; padding-left: 18px; }
+
+/* ======== paleta y tipografía de los afiches de referencia (amarillo, bermellón, cobalto, negro) ======== */
+:root {
+  --amarillo: #efe337;
+  --bermellon: #e5522b;
+  --cobalto: #2a62b8;
+  --celeste: #79c0e6;
+  --negro: #121212;
+  --teal: #1fa2b5;
+  --azul: #2a62b8;
+  --rojo: #e5522b;
+  --sol: #efe337;
+  --paper: #f4eedf;
+  --surface: #f8f3e6;
+  --line: #121212;
+  --ink: #121212;
+  --accent: #2a62b8;
+  --cartel: "Archivo Black", "Anton", sans-serif;
+  --display: "Anton", "Oswald", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --azul: #79c0e6; --accent: #efe337; --line: #f4eedf; --ink: #f4eedf; --paper: #121a2b; --surface: #1a2438; }
+}
+.top { background: var(--negro); }
+.top::after { background: linear-gradient(#79c0e6 0 33%, #ffffff 33% 66%, #79c0e6 66%); }
+.top h1 { font-family: "Archivo Black", sans-serif; font-size: 1.5rem; letter-spacing: 0.01em; }
+.top p, .top .muted { color: #e8e2cf; }
+.ribbon { background: var(--amarillo); color: var(--negro); font-family: "Archivo Black", sans-serif; letter-spacing: 0.03em; }
+.mode button.on { background: var(--amarillo); color: var(--negro); }
+.marco { border: 4px solid var(--teal); padding: 4px; outline: 2px solid var(--teal); outline-offset: 4px; margin: 6px 6px 12px; background: #fff; }
+.cartel { display: block; width: 100%; height: auto; }
+.cartel-t1 { font-family: "Archivo Black", sans-serif; font-size: 25px; fill: #ffffff; letter-spacing: 0.5px; }
+.cartel-t2 { font-family: "Archivo Black", sans-serif; font-size: 17px; fill: #121212; }
+.cartel-t3 { font-family: "Archivo Black", sans-serif; font-size: 22px; fill: #121212; }
+.cartel-plan { font-family: "Archivo Black", sans-serif; font-size: 9px; fill: #121212; }
+.transf-wrap { padding-top: 6px !important; }
+.transf { display: block; width: 100%; height: auto; border: 3px solid var(--negro); }
+.transf-s { font-family: "Archivo Black", sans-serif; font-size: 8px; fill: #efe337; }
+.transf-b { font-family: "Archivo Black", sans-serif; font-size: 11px; fill: #ffffff; }
+.transf-s.dark, .transf-b.dark { fill: #121212; }
+.flameo { display: block; width: 100%; height: 26px; margin-top: 8px; }
+.simple h2 { font-family: "Archivo Black", sans-serif; color: var(--negro); font-size: 1.7rem; text-transform: uppercase; }
+.simple h3 { background: var(--negro); color: #ffffff; font-family: "Archivo Black", sans-serif; font-size: 1rem; letter-spacing: 0.01em; }
+.simple h3 .step { background: var(--amarillo); color: var(--negro); transform: none; }
+.lema span { background: var(--bermellon); color: #fff; font-family: "Archivo Black", sans-serif; letter-spacing: 0.06em; }
+.site-rank { background: var(--amarillo); color: var(--negro); font-family: "Archivo Black", sans-serif; }
+.chip.on, .policy.on, .card-site.active { background: var(--cobalto); color: #fff; }
+.preset.on, .seg-mini button.on, .dots span.on { background: var(--amarillo); }
+.evidence { background: #fbf3b8; border-color: var(--negro); }
+.cartouche { background: var(--negro); color: #fff; font-family: "Archivo Black", sans-serif; letter-spacing: 0.04em; }
+.mapstyle { border: 3px solid var(--teal); outline: 2px solid var(--teal); outline-offset: 2px; }
+.legend { border-color: var(--negro); }
+button.primary { background: var(--bermellon); }
+.tile b { color: var(--cobalto); font-family: "Archivo Black", sans-serif; }
+.cuenta b.pos, .pos { color: #2f7a2a; }
+.cuenta b.neg, .neg { color: var(--bermellon); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .simple h2 { color: var(--amarillo); }
+  :root:not([data-theme="light"]) .pos { color: #8fd07a; }
+}

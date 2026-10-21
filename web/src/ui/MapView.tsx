@@ -66,23 +66,9 @@ function baseStyle(dark: boolean, kind: Basemap = "lito"): maplibregl.StyleSpeci
       },
       layers: [
         { id: "bg", type: "background", paint: { "background-color": lito ? (dark ? "#0e1a30" : "#b9cfe0") : dark ? "#142038" : "#e9dfc6" } },
-        {
-          id: "ign",
-          type: "raster",
-          source: "ign",
-          // en litografía el detalle del IGN aparece al acercarse; de lejos, el territorio en papel (capa de deck.gl)
-          minzoom: lito ? 6 : 0,
-          paint: lito
-            ? {
-                // entonado de litografía: poco color, tono de papel
-                "raster-saturation": -0.85,
-                "raster-contrast": dark ? 0.2 : -0.1,
-                "raster-brightness-min": dark ? 0 : 0.18,
-                "raster-brightness-max": dark ? 0.45 : 1,
-                "raster-opacity": 0.9,
-              }
-            : {},
-        },
+        ...(lito
+          ? []
+          : [{ id: "ign", type: "raster" as const, source: "ign" }]),
         {
           id: "relieve",
           type: "hillshade",
@@ -171,7 +157,7 @@ export default function MapView(p: MapProps) {
           data: p.geo.provincias,
           filled: true,
           stroked: false,
-          getFillColor: p.dark ? [27, 42, 71, 175] : [242, 234, 215, 170],
+          getFillColor: p.dark ? [27, 42, 71, 200] : [246, 239, 222, 215],
         }),
       );
     }

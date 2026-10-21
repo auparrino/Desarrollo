@@ -1,31 +1,32 @@
-import { costBenefit, type CBAResult, type Escenario } from "../../model/benefits";
+import { costBenefit, type CBAInput, type CBAResult, type Escenario } from "../../model/benefits";
 import { BENEFIT_PARAMS } from "../../model/benefitParamsData";
-import type { CBAInput } from "../../model/benefits";
 
-const musd = (v: number) => {
+const musd = (v: number, signed = true) => {
   const a = Math.abs(v);
-  const s = a >= 1e9 ? `${(a / 1e9).toLocaleString("es-AR", { maximumFractionDigits: 1 })} mil M` : `${Math.round(a / 1e6).toLocaleString("es-AR")} M`;
-  return `${v < 0 ? "−" : ""}USD ${s}`;
+  const s = a >= 1e9 ? `${(a / 1e9).toLocaleString("es-AR", { maximumFractionDigits: 1 })} mil millones` : `${Math.round(a / 1e6).toLocaleString("es-AR")} millones`;
+  return `${signed && v < 0 ? "−" : signed && v > 0 ? "+" : ""}USD ${s}`;
 };
+const n0 = (v: number) => Math.round(v).toLocaleString("es-AR");
+
 const ESC: { id: Escenario; nombre: string; desc: string }[] = [
-  { id: "optimista", nombre: "Optimista", desc: "se llena en ~20 años (Harlow, Brasília)" },
-  { id: "base", nombre: "Base", desc: "55 % de la meta a los 30 años (Putrajaya, Sejong, Milton Keynes)" },
-  { id: "pesimista", nombre: "Pesimista", desc: "≈12 % a los 30 años (ciudades nuevas egipcias)" },
+  { id: "optimista", nombre: "Si llega toda la gente", desc: "se llena en ~20 años, como Harlow o Brasília" },
+  { id: "base", nombre: "Lo más probable", desc: "llega algo más de la mitad en 30 años, como Putrajaya o Sejong" },
+  { id: "pesimista", nombre: "Si casi nadie llega", desc: "~12 % en 30 años, como las ciudades nuevas egipcias" },
 ];
 
 export function runAll(inp: CBAInput): Record<Escenario, CBAResult> {
   return Object.fromEntries(ESC.map((e) => [e.id, costBenefit(inp, BENEFIT_PARAMS, e.id)])) as Record<Escenario, CBAResult>;
 }
 
-/** Resumen en lenguaje llano del escenario base. */
+/** Una frase para la tarjeta del modo simple. */
 export function PlainVerdict({ r }: { r: Record<Escenario, CBAResult> }) {
   const b = r.base;
-  const gana = b.social.van >= 0;
+  const anual = b.anual.productividad + b.anual.aglomeracion + b.anual.congestion + b.anual.polo;
   return (
     <span className="small">
-      {gana ? "📈" : "📉"} En el escenario más probable, al país {gana ? "le conviene" : "no le conviene"} ({musd(b.social.van)}
-      {" "}frente a crecer en el AMBA)
-      {b.fiscal.recupero !== null ? `; el Estado recupera lo que invierte en ~${b.fiscal.recupero} años.` : "; el Estado no recupera lo que invierte."}
+      {anual >= 0 ? "📈" : "📉"} Con la gente que probablemente llegue, el país {anual >= 0 ? "gana" : "pierde"}{" "}
+      <b>{musd(Math.abs(anual), false)} por año</b> frente a que esa gente viva en el AMBA
+      {b.social.recupero !== null ? ` y la inversión extra se paga en ~${b.social.recupero} años.` : "; la inversión extra no se recupera."}
     </span>
   );
 }
@@ -33,14 +34,55 @@ export function PlainVerdict({ r }: { r: Record<Escenario, CBAResult> }) {
 export default function CostBenefit({ inp }: { inp: CBAInput }) {
   const r = runAll(inp);
   const b = r.base;
+  const a = b.anual;
+  const anual = a.productividad + a.aglomeracion + a.congestion + a.polo;
+  const polos = inp.policy === "polos";
   return (
     <div className="cba">
+      <ol className="cuenta">
+        <li>
+          <b>Se invierten {musd(b.inversionTotal, false)}.</b> La mayor parte (viviendas, escuelas, hospitales, redes) haría
+          falta igual si esas personas vivieran en el AMBA. Lo que se agrega por hacerlo acá —rutas, líneas eléctricas,
+          acueducto, edificios, mudanzas— es <b>{musd(b.inversionExtra, false)}</b>.
+        </li>
+        <li>
+          <b>Cuando la ciudad funciona</b> (año {a.anio}, con {n0(a.poblacion)} {polos ? "empleos" : "habitantes"}), cada año el país:
+          <ul>
+            {!polos && (
+              <li className={a.productividad >= 0 ? "pos" : "neg"}>
+                {a.productividad >= 0 ? "gana" : "pierde"} {musd(Math.abs(a.productividad), false)} porque los salarios y la
+                productividad del destino son {a.productividad >= 0 ? "más altos" : "más bajos"} que en el AMBA;
+              </li>
+            )}
+            {!polos && (
+              <li className={a.aglomeracion >= 0 ? "pos" : "neg"}>
+                {a.aglomeracion >= 0 ? "gana" : "pierde"} {musd(Math.abs(a.aglomeracion), false)} por el efecto de concentración
+                (la región que crece se vuelve más productiva; el AMBA, un poco menos);
+              </li>
+            )}
+            {a.congestion > 0 && <li className="pos">ahorra {musd(a.congestion, false)} de congestión en el AMBA;</li>}
+            {polos && <li className="pos">suma {musd(a.polo, false)} de producción nueva (la mitad del polo se considera actividad nueva).</li>}
+          </ul>
+          <b className={anual >= 0 ? "pos" : "neg"}>
+            Resultado: {anual >= 0 ? "gana" : "pierde"} {musd(Math.abs(anual), false)} por año.
+          </b>
+        </li>
+        <li>
+          <b>
+            {b.social.recupero !== null
+              ? `La inversión extra se paga en ~${b.social.recupero} años.`
+              : "La inversión extra no se paga en el horizonte de evaluación."}
+          </b>{" "}
+          Sumando todos los años (valor presente al {Math.round(b.tasa * 100)} % anual, {b.horizonte} años), el saldo es{" "}
+          <b className={b.social.van >= 0 ? "pos" : "neg"}>{musd(b.social.van)}</b>.
+        </li>
+      </ol>
       <table className="provs">
         <thead>
           <tr>
-            <th>Escenario de llegada de población</th>
-            <th className="num">¿Le conviene al país?</th>
-            <th className="num">¿Lo recupera el Estado?</th>
+            <th>¿Y si llega más o menos gente?</th>
+            <th className="num">Saldo para el país</th>
+            <th className="num">Se paga en</th>
           </tr>
         </thead>
         <tbody>
@@ -49,46 +91,21 @@ export default function CostBenefit({ inp }: { inp: CBAInput }) {
               <td>
                 <b>{e.nombre}</b> <span className="small muted">{e.desc}</span>
               </td>
-              <td className={`num ${r[e.id].social.van >= 0 ? "pos" : "neg"}`}>
-                {musd(r[e.id].social.van)}
-                <div className="small muted">B/C {Number.isFinite(r[e.id].social.bc) ? r[e.id].social.bc.toFixed(2) : "—"}</div>
-              </td>
-              <td className={`num ${r[e.id].fiscal.van >= 0 ? "pos" : "neg"}`}>
-                {r[e.id].fiscal.recupero !== null ? `en ~${r[e.id].fiscal.recupero} años` : "no recupera"}
-                <div className="small muted">{musd(r[e.id].fiscal.van)}</div>
-              </td>
+              <td className={`num ${r[e.id].social.van >= 0 ? "pos" : "neg"}`}>{musd(r[e.id].social.van)}</td>
+              <td className="num">{r[e.id].social.recupero !== null ? `~${r[e.id].social.recupero} años` : "no se paga"}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <details>
-        <summary className="small">Detalle del escenario base (valor presente a {Math.round(b.tasa * 100)} % en {b.horizonte} años)</summary>
-        <table className="provs">
-          <tbody>
-            {[...b.social.beneficios, ...b.social.costos.map((c) => ({ ...c, vp: -c.vp }))].map((x) => (
-              <tr key={x.id} title={x.nota}>
-                <td>{x.nombre} <span className="small muted">· {x.nota}</span></td>
-                <td className={`num ${x.vp >= 0 ? "pos" : "neg"}`}>{musd(x.vp)}</td>
-              </tr>
-            ))}
-            <tr className="total"><td><b>Resultado para el país</b></td><td className="num"><b>{musd(b.social.van)}</b></td></tr>
-            {[...b.fiscal.beneficios, ...b.fiscal.costos.map((c) => ({ ...c, vp: -c.vp }))].map((x) => (
-              <tr key={"f" + x.id} title={x.nota}>
-                <td>{x.nombre} <span className="small muted">· {x.nota}</span></td>
-                <td className={`num ${x.vp >= 0 ? "pos" : "neg"}`}>{musd(x.vp)}</td>
-              </tr>
-            ))}
-            <tr className="total"><td><b>Resultado para el Estado</b></td><td className="num"><b>{musd(b.fiscal.van)}</b></td></tr>
-          </tbody>
-        </table>
-      </details>
+      <p className="small">
+        <b>Para el Estado:</b> pone {musd(b.fiscal.vpCostos, false)} extra (en valor presente) y recupera{" "}
+        {musd(b.fiscal.vpBeneficios, false)} en impuestos y captura de plusvalía:{" "}
+        {b.fiscal.recupero !== null ? `se recupera en ~${b.fiscal.recupero} años.` : "no lo recupera."}
+      </p>
       <p className="muted small">
-        La pregunta es si conviene que esta población viva y trabaje acá <b>en lugar de en el AMBA</b>: vivienda, escuelas y
-        hospitales se necesitarían igual, así que solo cuentan la infraestructura de conexión, las mudanzas y los edificios
-        nuevos. El resultado depende sobre todo de la productividad relativa del destino (medida por salarios) y de cuánta
-        gente llegue de verdad: en la experiencia internacional, la mayoría de las ciudades nuevas no alcanza su meta. No
-        incluye beneficios difíciles de medir (soberanía, integración territorial, calidad de vida). Parámetros y fuentes en
-        docs/beneficios-parametros.md.
+        Lo que más mueve la cuenta: cuánto más (o menos) productivo es el destino que el AMBA y cuánta gente llega de verdad.
+        No incluye beneficios difíciles de medir, como la soberanía, la integración territorial o la calidad de vida.
+        Parámetros y fuentes: docs/beneficios-parametros.md.
       </p>
     </div>
   );

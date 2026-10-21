@@ -412,7 +412,7 @@ export default function App() {
             <p className="small">Dónde crecer · cómo poblar · cuánto cuesta</p>
           </div>
         </div>
-        <div className="ribbon" aria-hidden>Plan de desarrollo territorial · Argentina en marcha</div>
+        <div className="ribbon" aria-hidden>¡La Argentina crece en todo su territorio!</div>
         <div className="mode" role="group" aria-label="Modo de uso">
           <button className={!expert ? "on" : ""} onClick={() => setMode("simple")}>Simple</button>
           <button className={expert ? "on" : ""} onClick={() => setMode("experto")}>Experto</button>

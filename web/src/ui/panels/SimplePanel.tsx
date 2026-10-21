@@ -8,7 +8,7 @@ import { FACTORS } from "../../model/criteria";
 const FACTOR_GROUP: Record<string, string> = Object.fromEntries(FACTORS.map((f) => [f.id, f.grupo]));
 import { nearestPlace } from "../plainFacts";
 import { estimateCosts } from "../../model/costs";
-import { Scene } from "../art/Poster";
+import { Cartel, Flameo, Transformacion } from "../art/Cartel";
 import { PlainVerdict, runAll } from "./CostBenefit";
 import { downloadCSV } from "../../model/share";
 import { useState } from "react";
@@ -164,9 +164,8 @@ export default function SimplePanel(p: Props) {
   return (
     <div className="panel simple">
       <section className="intro">
-        <div className="hero">
-          <Scene />
-          <div className="hero-banner">¡La Argentina crece en todo su territorio!</div>
+        <div className="marco">
+          <Cartel />
         </div>
         <p className="lema"><span>Gobernar es poblar</span></p>
         <h2>¿Dónde puede crecer la Argentina?</h2>
@@ -175,6 +174,11 @@ export default function SimplePanel(p: Props) {
           para encontrar los mejores lugares donde crear una <b>ciudad nueva</b> o recibir población. Vos decidís qué es más
           importante.
         </p>
+      </section>
+
+      <section className="transf-wrap">
+        <Transformacion />
+        <Flameo />
       </section>
 
       <section>
