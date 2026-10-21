@@ -1,252 +1,193 @@
 # Casos concretos: uno por instrumento
 
-Generado con `web/scripts/casos.ts`, con los mismos cálculos que la app (modo simple, reparto de
-prioridades "lo que recomiendan los expertos", orden combinado de aptitud y economía, tamaño
+Generado con `web/scripts/casos.ts`, con los mismos cálculos que la app (modo simple con la
+mejor combinación posible de prioridades, orden combinado de aptitud y economía, tamaño
 predeterminado de cada instrumento). La app aplica el mismo razonamiento a cualquier lugar en la
 sección "Qué se haría, paso a paso" de la ficha.
+
+El plan de cada caso sigue el proceso recomendado por las simulaciones (`docs/simulaciones-procesos.md`), con los flujos migratorios argentinos.
 
 Cada caso responde, en este orden: qué se haría y dónde; qué se construye en cada etapa y con qué
 condición se pasa a la siguiente; quiénes llegan, desde dónde y a qué ritmo; qué significaría para
 la región, el trabajo, el agua y el país; y, al final, la cuenta económica y los riesgos.
 
-## Crear una ciudad nueva: Allen (El Cuy, Río Negro)
+## Crear una ciudad nueva: Sarmiento (Deseado, Santa Cruz)
 
-Una ciudad nueva cerca de Allen, con una meta de 500.000 habitantes. Con el ritmo más probable se alcanzarían 252.500 en 30 años, construyendo por etapas y solo cuando la anterior se ocupa.
+Una ciudad nueva cerca de Sarmiento, con una meta de 500.000 habitantes. Con el proceso recomendado (organismos públicos primero, luego viviendas a demanda) y los flujos migratorios argentinos se llegaría a unos 33.000 en 30 años.
 
-Primer puesto en el orden combinado (1.º por aptitud, 1.º por economía, entre los 12 mejores lugares por aptitud).
+Primer puesto en el orden combinado (3.º por aptitud, 1.º por economía, entre los 12 mejores lugares por aptitud).
 
 ### Qué se haría, paso a paso
 
-**Etapa 1 · obras y primeros habitantes (años 1 a 5)**: llegan unas 20.000 personas (4.000 por año); total acumulado 20.000.
+**Etapa 1 · obras y primeros habitantes (años 1 a 5)**: llegan unas 8.289 personas (1.658 por año); total acumulado 8.289.
 
-- Ruta de acceso pavimentada: 7 km hasta la ruta nacional.
-- Línea de alta tensión de 132 kV: 12 km y estación transformadora.
-- Viviendas nuevas: 7.000.
-- Suelo urbanizado (redes, calles, desagües): 270 ha.
-- Lugares en escuelas: 2.200 alumnos (los primeros en llegar traen pocos chicos).
-- Camas de internación: 67.
+- Ruta de acceso pavimentada: 48 km hasta la ruta nacional.
+- Línea de alta tensión de 132 kV: 19 km y estación transformadora.
+- Viviendas nuevas: 2.900.
+- Suelo urbanizado (redes, calles, desagües): 110 ha.
+- Lugares en escuelas: 920 alumnos (los primeros en llegar traen pocos chicos).
+- Camas de internación: 28.
 - Planta potabilizadora (dimensionada para la meta, ampliable): 25.000 m³/día en la primera etapa.
 - Para pasar a la etapa siguiente: Que la primera etapa esté habitada en un 80 % y haya empleo para quienes llegaron.
 
-**Etapa 2 · consolidación (años 6 a 10)**: llegan unas 50.000 personas (10.000 por año); total acumulado 70.000.
+**Etapa 2 · consolidación (años 6 a 10)**: llegan unas 18.778 personas (3.756 por año); total acumulado 27.067.
 
-- Viviendas nuevas: 17.000.
-- Suelo urbanizado (redes, calles, desagües): 670 ha.
-- Lugares en escuelas: 9.500 alumnos.
-- Camas de internación: 170.
+- Viviendas nuevas: 6.600.
+- Suelo urbanizado (redes, calles, desagües): 250 ha.
+- Lugares en escuelas: 3.600 alumnos.
+- Camas de internación: 63.
 - Para pasar a la etapa siguiente: Que la etapa anterior esté ocupada en un 80 %: no se construye por adelantado.
 
-**Etapa 3 · crecimiento (años 11 a 20)**: llegan unas 100.000 personas (10.000 por año); total acumulado 170.000.
+**Etapa 3 · crecimiento (años 11 a 20)**: llegan unas 3.800 personas (380 por año); total acumulado 30.867.
 
-- Viviendas nuevas: 35.000.
-- Suelo urbanizado (redes, calles, desagües): 1.300 ha.
-- Lugares en escuelas: 19.000 alumnos.
-- Camas de internación: 340.
+- Viviendas nuevas: 1.300.
+- Suelo urbanizado (redes, calles, desagües): 51 ha.
+- Lugares en escuelas: 720 alumnos.
+- Camas de internación: 13.
 - Para pasar a la etapa siguiente: Que la etapa anterior esté ocupada en un 80 %: no se construye por adelantado.
 
-**Etapa 4 · madurez (años 21 a 30)**: llegan unas 82.500 personas (8.250 por año); total acumulado 252.500.
+**Etapa 4 · madurez (años 21 a 30)**: llegan unas 2.292 personas (229 por año); total acumulado 33.158.
 
-- Viviendas nuevas: 29.000.
-- Suelo urbanizado (redes, calles, desagües): 1.100 ha.
-- Lugares en escuelas: 16.000 alumnos.
-- Camas de internación: 280.
+- Viviendas nuevas: 800.
+- Suelo urbanizado (redes, calles, desagües): 31 ha.
+- Lugares en escuelas: 440 alumnos.
+- Camas de internación: 8.
 - Para pasar a la etapa siguiente: Que la etapa anterior esté ocupada en un 80 %: no se construye por adelantado.
 
 ### Quiénes llegarían y desde dónde
 
 - Primero llegan adultos jóvenes que consiguen trabajo: entre quienes cambian de provincia, el 47 % tiene de 15 a 34 años (contra 33 % del resto) y estudió más (13,5 años contra 11,6). La construcción de la propia ciudad es el primer empleo.
 - Traen pocos chicos (0,31 por adulto joven, contra 0,54): al principio hacen falta más viviendas chicas y menos escuelas; las familias y los nacimientos llegan después.
-- La mayoría viene de cerca o por corredores que ya existen: cerca de 34 % de la misma provincia y, de afuera, sobre todo de AMBA y Resto de Buenos Aires. La gente se muda donde ya fueron parientes y conocidos; la distancia pesa poco.
+- La mayoría viene de cerca o por corredores que ya existen: cerca de 33 % de la misma provincia y, de afuera, sobre todo de AMBA y Resto de Buenos Aires. La gente se muda donde ya fueron parientes y conocidos; la distancia pesa poco.
 - Uno de cada tres migrantes recientes (31 %) vuelve a su provincia de nacimiento: atraer a quienes nacieron en la región y se fueron es una vía concreta para poblar.
 
-De dónde vendrían (corredores observados, Censo 2022 y RENAPER): Río Negro (otros departamentos) 34 % (86.543) · AMBA 14 % (35.982) · Resto de Buenos Aires 12 % (29.770) · Neuquén 10 % (26.210) · Córdoba 4 % (9.967) · Chubut 4 % (9.879) · Mendoza 2 % (6.245).
+De dónde vendrían (corredores observados, Censo 2022 y RENAPER): Santa Cruz (otros departamentos) 33 % (10.808) · AMBA 13 % (4.176) · Resto de Buenos Aires 7 % (2.369) · Córdoba 6 % (2.035) · Chubut 5 % (1.561) · Salta 4 % (1.455) · Formosa 4 % (1.260).
 
 ### Qué significaría
 
-- **Para la región.** Hoy viven 655.118 personas a 50 km. En 30 años se sumarían unas 252.500 (39 % más). Es un salto grande: los servicios de las ciudades vecinas también van a recibir más demanda.
-- **Para el trabajo.** Esa población necesita unos 113.625 empleos nuevos: los 143.732 puestos privados que hay hoy en la zona (sobre todo actividades de apoyo al petróleo y la minería y agricultura, ganadería, caza y servicios relacionados) ya los ocupa quien vive ahí. Si la zona sigue creciendo como entre 2014 y 2022, para los recién llegados quedarían unos 25.027. Faltan 88.598: hay que crearlos con una actividad nueva. Si no, el trabajo pone el techo: llegarían unas 56.000 personas en 30 años y no 250.000.
-- **Para el agua.** Se usarían 0,58 m³/s, el 1 % del caudal del río cercano en sequía (242,2 m³/s).
-- **Para el país.** En la etapa de más crecimiento llegarían unas 10.000 personas por año: el 6,7 % de todos los que cambian de provincia en un año en la Argentina (150.081, Censo 2022). La región crecería un 1,5 % por año. Es 3,5 veces el mayor saldo migratorio observado en un lugar argentino (Pilar (partido, Buenos Aires): 2.883 personas netas por año en 2005-2010); incluso Confluencia (depto., Neuquén), sumando nacimientos, creció 9.183 por año en 2010-2022. No hay antecedente en el país: haría falta un motor de empleo excepcional. El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual.
+- **Para la región.** Hoy viven 6.081 personas a 50 km. En 30 años se sumarían unas 33.158 (545 % más). La región cambiaría de escala: más que duplicarse obliga a rehacer transporte, agua y servicios de toda la zona, no solo del lugar nuevo.
+- **Para el trabajo.** Esa población necesita unos 14.921 empleos nuevos: los 27.130 puestos privados que hay hoy en la zona (sobre todo actividades de apoyo al petróleo y la minería y extracción de minerales metálicos) ya los ocupa quien vive ahí. Si la zona sigue creciendo como entre 2014 y 2022, para los recién llegados quedarían unos 0. Faltan 14.921: por eso el proceso recomendado empieza por 23.000 empleos nuevos (organismos o empresas ancla), que con los servicios que generan sostienen a quienes llegan. Sin ese motor, llegarían unas 0 personas en 30 años.
+- **Para el agua.** Se usarían 0,08 m³/s, el 1 % del caudal del río cercano en sequía (7,1 m³/s).
+- **Para el país.** En la etapa de más crecimiento llegarían unas 3.756 personas por año: el 2,5 % de todos los que cambian de provincia en un año en la Argentina (150.081, Censo 2022). La región crecería un 61,8 % por año. Está en el límite de lo observado: el lugar que más gente atrajo, Pilar (partido, Buenos Aires), sumó 2.883 personas netas por año en 2005-2010. El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual.
 
 ### La cuenta y los riesgos
 
-- Inversión total USD 15,2 mil millones; de eso, USD 708 millones dependen del lugar.
-- Resultado anual al año 30: +USD 580 millones; saldo para el país USD 1 mil millones; para el Tesoro USD 217 millones.
-- Sigue conviniendo aunque llegue solo el 4 % de la meta (se espera el 51 %).
-- Riesgo alto: Falta de trabajo: de los 113.625 empleos que necesita la gente que llega, el crecimiento normal de la zona unos 25.027; faltan 88.598. Asegurar antes de construir una empresa ancla, un organismo público o un polo productivo; liberar cada etapa de viviendas solo si hay empleo para la anterior.
+- Inversión total USD 20,1 mil millones; de eso, USD 5,6 mil millones dependen del lugar.
+- Resultado anual al año 30: +USD 2 mil millones; saldo para el país USD 3,6 mil millones; para el Tesoro USD 878 millones.
+- Sigue conviniendo aunque llegue solo el 2 % de la meta (se espera el 51 %).
+- Riesgo alto: Falta de trabajo: de los 113.625 empleos que necesita la gente que llega, el crecimiento normal de la zona unos 0; faltan 113.625, con empleo en baja. Asegurar antes de construir una empresa ancla, un organismo público o un polo productivo; liberar cada etapa de viviendas solo si hay empleo para la anterior.
+- Riesgo medio: Arsénico en el agua subterránea (probabilidad 41 %). Abastecer con agua superficial o plantas de abatimiento de arsénico (Código Alimentario: 10 µg/L).
+- Riesgo medio: Aislamiento: a 74 minutos de la ciudad más cercana. Garantizar desde el inicio salud, educación y transporte; sin eso las familias no se quedan.
 
-## Trasladar la capital: 11 de Octubre (Confluencia, Neuquén)
+## Trasladar la capital: Senillosa (El Cuy, Río Negro)
 
-La nueva capital cerca de 11 de Octubre, con una meta de 500.000 habitantes. Con el ritmo más probable se alcanzarían 252.500 en 30 años, construyendo por etapas y solo cuando la anterior se ocupa.
+La nueva capital cerca de Senillosa, con una meta de 500.000 habitantes. Con el proceso recomendado (traslado gradual con radicación de las familias) y los flujos migratorios argentinos se llegaría a unos 120.000 en 30 años.
 
-Primer puesto en el orden combinado (2.º por aptitud, 2.º por economía, entre los 12 mejores lugares por aptitud).
+Primer puesto en el orden combinado (1.º por aptitud, 1.º por economía, entre los 12 mejores lugares por aptitud).
 
 ### Qué se haría, paso a paso
 
-**Etapa 1 · obras y primeros habitantes (años 1 a 5)**: llegan unas 20.000 personas (4.000 por año); total acumulado 20.000.
+**Etapa 1 · obras y primeros habitantes (años 1 a 5)**: llegan unas 18.325 personas (3.665 por año); total acumulado 18.325.
 
-- Ruta de acceso pavimentada: 3 km hasta la ruta nacional.
-- Línea de alta tensión de 132 kV: 2 km y estación transformadora.
-- Viviendas nuevas: 7.000.
-- Suelo urbanizado (redes, calles, desagües): 270 ha.
-- Lugares en escuelas: 2.200 alumnos (los primeros en llegar traen pocos chicos).
-- Camas de internación: 67.
+- Ruta de acceso pavimentada: 15 km hasta la ruta nacional.
+- Línea de alta tensión de 132 kV: 17 km y estación transformadora.
+- Viviendas nuevas: 6.400.
+- Suelo urbanizado (redes, calles, desagües): 240 ha.
+- Lugares en escuelas: 2.000 alumnos (los primeros en llegar traen pocos chicos).
+- Camas de internación: 62.
 - Planta potabilizadora (dimensionada para la meta, ampliable): 25.000 m³/día en la primera etapa.
-- Organismos nacionales trasladados: 3.500 agentes (acumulado 3.500 de 74.000).
+- Organismos nacionales trasladados: 3.200 agentes (acumulado 3.200 de 74.000).
 - Para pasar a la etapa siguiente: Que los primeros organismos funcionen en el lugar y los agentes se hayan mudado con sus familias.
 
-**Etapa 2 · consolidación (años 6 a 10)**: llegan unas 50.000 personas (10.000 por año); total acumulado 70.000.
+**Etapa 2 · consolidación (años 6 a 10)**: llegan unas 44.230 personas (8.846 por año); total acumulado 62.555.
 
-- Viviendas nuevas: 17.000.
-- Suelo urbanizado (redes, calles, desagües): 670 ha.
-- Lugares en escuelas: 9.500 alumnos.
-- Camas de internación: 170.
-- Organismos nacionales trasladados: 8.700 agentes (acumulado 12.000 de 74.000).
+- Viviendas nuevas: 15.000.
+- Suelo urbanizado (redes, calles, desagües): 590 ha.
+- Lugares en escuelas: 8.400 alumnos.
+- Camas de internación: 150.
+- Organismos nacionales trasladados: 7.700 agentes (acumulado 11.000 de 74.000).
 - Congreso, Corte y tribunales federales: edificios definitivos.
 - Para pasar a la etapa siguiente: Que la etapa anterior esté ocupada en un 80 %: no se construye por adelantado.
 
-**Etapa 3 · crecimiento (años 11 a 20)**: llegan unas 100.000 personas (10.000 por año); total acumulado 170.000.
+**Etapa 3 · crecimiento (años 11 a 20)**: llegan unas 50.909 personas (5.091 por año); total acumulado 113.464.
 
-- Viviendas nuevas: 35.000.
-- Suelo urbanizado (redes, calles, desagües): 1.300 ha.
-- Lugares en escuelas: 19.000 alumnos.
-- Camas de internación: 340.
-- Organismos nacionales trasladados: 17.000 agentes (acumulado 30.000 de 74.000).
+- Viviendas nuevas: 18.000.
+- Suelo urbanizado (redes, calles, desagües): 680 ha.
+- Lugares en escuelas: 9.700 alumnos.
+- Camas de internación: 170.
+- Organismos nacionales trasladados: 8.900 agentes (acumulado 20.000 de 74.000).
 - Para pasar a la etapa siguiente: Que la etapa anterior esté ocupada en un 80 %: no se construye por adelantado.
 
-**Etapa 4 · madurez (años 21 a 30)**: llegan unas 82.500 personas (8.250 por año); total acumulado 252.500.
+**Etapa 4 · madurez (años 21 a 30)**: llegan unas 4.883 personas (488 por año); total acumulado 118.347.
 
-- Viviendas nuevas: 29.000.
-- Suelo urbanizado (redes, calles, desagües): 1.100 ha.
-- Lugares en escuelas: 16.000 alumnos.
-- Camas de internación: 280.
-- Organismos nacionales trasladados: 14.000 agentes (acumulado 44.000 de 74.000).
+- Viviendas nuevas: 1.700.
+- Suelo urbanizado (redes, calles, desagües): 65 ha.
+- Lugares en escuelas: 930 alumnos.
+- Camas de internación: 16.
+- Organismos nacionales trasladados: 850 agentes (acumulado 21.000 de 74.000).
 - Para pasar a la etapa siguiente: Que la etapa anterior esté ocupada en un 80 %: no se construye por adelantado.
 
 ### Quiénes llegarían y desde dónde
 
 - Primero llegan los agentes públicos trasladados con sus familias, y con ellos quienes atienden a esa demanda: comercio, salud, educación, construcción. Si se mudaran los 74.000 agentes con sus hogares, la ciudad pasaría las 420.000 personas; el escenario probable supone que muchos no se mudan y viajan, como pasó en Brasilia y en Putrajaya.
 - Traen pocos chicos (0,31 por adulto joven, contra 0,54): al principio hacen falta más viviendas chicas y menos escuelas; las familias y los nacimientos llegan después.
-- La mayoría viene de cerca o por corredores que ya existen: cerca de 35 % de la misma provincia y, de afuera, sobre todo de AMBA y Río Negro. La gente se muda donde ya fueron parientes y conocidos; la distancia pesa poco.
+- La mayoría viene de cerca o por corredores que ya existen: cerca de 34 % de la misma provincia y, de afuera, sobre todo de AMBA y Resto de Buenos Aires. La gente se muda donde ya fueron parientes y conocidos; la distancia pesa poco.
 - Uno de cada tres migrantes recientes (31 %) vuelve a su provincia de nacimiento: atraer a quienes nacieron en la región y se fueron es una vía concreta para poblar.
 
-De dónde vendrían (corredores observados, Censo 2022 y RENAPER): Neuquén (otros departamentos) 35 % (88.112) · AMBA 14 % (35.268) · Río Negro 9 % (21.802) · Resto de Buenos Aires 9 % (21.520) · Mendoza 5 % (12.165) · Córdoba 4 % (10.965) · Salta 3 % (7.651).
+De dónde vendrían (corredores observados, Censo 2022 y RENAPER): Río Negro (otros departamentos) 34 % (40.563) · AMBA 14 % (16.865) · Resto de Buenos Aires 12 % (13.953) · Neuquén 10 % (12.285) · Córdoba 4 % (4.671) · Chubut 4 % (4.630) · Mendoza 2 % (2.927).
 
 ### Qué significaría
 
-- **Para la región.** Hoy viven 624.242 personas a 50 km. En 30 años se sumarían unas 252.500 (40 % más). Es un salto grande: los servicios de las ciudades vecinas también van a recibir más demanda.
-- **Para el trabajo.** Esa población necesita unos 113.625 empleos nuevos: los 144.894 puestos privados que hay hoy en la zona (sobre todo actividades de apoyo al petróleo y la minería y agricultura, ganadería, caza y servicios relacionados) ya los ocupa quien vive ahí. El traslado de organismos aporta unos 148.000 con los servicios que genera. Si la zona sigue creciendo como entre 2014 y 2022, para los recién llegados quedarían unos 26.514. Alcanza con el crecimiento esperado.
-- **Para el agua.** Se usarían 0,58 m³/s, el 1 % del caudal del río cercano en sequía (242,2 m³/s).
-- **Para el país.** En la etapa de más crecimiento llegarían unas 10.000 personas por año: el 6,7 % de todos los que cambian de provincia en un año en la Argentina (150.081, Censo 2022). La región crecería un 1,6 % por año. Es 3,5 veces el mayor saldo migratorio observado en un lugar argentino (Pilar (partido, Buenos Aires): 2.883 personas netas por año en 2005-2010); incluso Confluencia (depto., Neuquén), sumando nacimientos, creció 9.183 por año en 2010-2022. No hay antecedente en el país: haría falta un motor de empleo excepcional. El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual.
+- **Para la región.** Hoy viven 496.883 personas a 50 km. En 30 años se sumarían unas 118.347 (24 % más). La región lo absorbe sin cambiar de escala.
+- **Para el trabajo.** Esa población necesita unos 53.256 empleos nuevos: los 76.122 puestos privados que hay hoy en la zona (sobre todo actividades de apoyo al petróleo y la minería y agricultura, ganadería, caza y servicios relacionados) ya los ocupa quien vive ahí. El traslado de organismos aporta unos 148.000 con los servicios que genera. Si la zona sigue creciendo como entre 2014 y 2022, para los recién llegados quedarían unos 13.255. Alcanza con el crecimiento esperado.
+- **Para el agua.** Se usarían 0,27 m³/s, el 1 % del caudal del río cercano en sequía (204,8 m³/s).
+- **Para el país.** En la etapa de más crecimiento llegarían unas 8.846 personas por año: el 5,9 % de todos los que cambian de provincia en un año en la Argentina (150.081, Censo 2022). La región crecería un 1,8 % por año. Es 3,1 veces el mayor saldo migratorio observado en un lugar argentino (Pilar (partido, Buenos Aires): 2.883 personas netas por año en 2005-2010); incluso Confluencia (depto., Neuquén), sumando nacimientos, creció 9.183 por año en 2010-2022. No hay antecedente en el país: haría falta un motor de empleo excepcional. El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual.
 
 ### La cuenta y los riesgos
 
-- Inversión total USD 17,5 mil millones; de eso, USD 787 millones dependen del lugar.
-- Resultado anual al año 30: +USD 582 millones; saldo para el país −USD 641 millones; para el Tesoro −USD 1,5 mil millones.
-- Para que convenga tendría que llegar el 79 % de la meta (se espera el 51 %).
-- Riesgo alto: Que llegue poca gente: si se ocupa como las ciudades nuevas egipcias (~12 %), el saldo para el país es de −USD 1,6 mil millones. Construir por etapas de unos 100.000 habitantes, empezando por la conexión y el empleo; no adelantar viviendas a la demanda.
+- Inversión total USD 17,5 mil millones; de eso, USD 815 millones dependen del lugar.
+- Resultado anual al año 30: +USD 909 millones; saldo para el país −USD 17 millones; para el Tesoro −USD 1,3 mil millones.
+- Para que convenga tendría que llegar el 51 % de la meta (se espera el 51 %).
+- Riesgo alto: Que llegue poca gente: si se ocupa como las ciudades nuevas egipcias (~12 %), el saldo para el país es de −USD 1,5 mil millones. Construir por etapas de unos 100.000 habitantes, empezando por la conexión y el empleo; no adelantar viviendas a la demanda.
 
-## Fortalecer ciudades intermedias: Neuquén - Plottier - Cipolletti (Confluencia, Neuquén)
+## Fortalecer ciudades intermedias: Gran San Nicolás de los Arroyos (San Nicolás, Buenos Aires)
 
-El crecimiento de la ciudad en Neuquén - Plottier - Cipolletti, con una meta de 100.000 habitantes. Con el ritmo más probable se alcanzarían 53.500 en 30 años, construyendo por etapas y solo cuando la anterior se ocupa.
+El crecimiento de la ciudad en Gran San Nicolás de los Arroyos, con una meta de 100.000 habitantes. Con el proceso recomendado (organismos públicos primero, luego viviendas a demanda) y los flujos migratorios argentinos se llegaría a unos 72.000 en 30 años.
 
-Primer puesto en el orden combinado (1.º por aptitud, 1.º por economía, entre los 12 mejores lugares por aptitud).
-
-### Qué se haría, paso a paso
-
-**Etapa 1 · obras y primeros habitantes (años 1 a 5)**: llegan unas 8.000 personas (1.600 por año); total acumulado 8.000.
-
-- Viviendas desocupadas recuperadas: 64.
-- Viviendas nuevas en el ejido actual: 2.700.
-- Lugares en escuelas: 1.500 alumnos.
-- Camas de internación: 27.
-- Para pasar a la etapa siguiente: Que la primera etapa esté habitada en un 80 % y haya empleo para quienes llegaron.
-
-**Etapa 2 · consolidación (años 6 a 10)**: llegan unas 10.000 personas (2.000 por año); total acumulado 18.000.
-
-- Viviendas desocupadas recuperadas: 81.
-- Viviendas nuevas en el ejido actual: 3.400.
-- Lugares en escuelas: 1.900 alumnos.
-- Camas de internación: 34.
-- Para pasar a la etapa siguiente: Que la etapa anterior esté ocupada en un 80 %: no se construye por adelantado.
-
-**Etapa 3 · crecimiento (años 11 a 20)**: llegan unas 20.000 personas (2.000 por año); total acumulado 38.000.
-
-- Viviendas desocupadas recuperadas: 160.
-- Viviendas nuevas en el ejido actual: 6.800.
-- Lugares en escuelas: 3.800 alumnos.
-- Camas de internación: 67.
-- Para pasar a la etapa siguiente: Que la etapa anterior esté ocupada en un 80 %: no se construye por adelantado.
-
-**Etapa 4 · madurez (años 21 a 30)**: llegan unas 15.500 personas (1.550 por año); total acumulado 53.500.
-
-- Viviendas desocupadas recuperadas: 120.
-- Viviendas nuevas en el ejido actual: 5.300.
-- Lugares en escuelas: 2.900 alumnos.
-- Camas de internación: 52.
-- Para pasar a la etapa siguiente: Que la etapa anterior esté ocupada en un 80 %: no se construye por adelantado.
-
-### Quiénes llegarían y desde dónde
-
-- Primero llegan adultos jóvenes que consiguen trabajo: entre quienes cambian de provincia, el 47 % tiene de 15 a 34 años (contra 33 % del resto) y estudió más (13,5 años contra 11,6). La construcción de la propia ciudad es el primer empleo.
-- Traen pocos chicos (0,31 por adulto joven, contra 0,54): al principio hacen falta más viviendas chicas y menos escuelas; las familias y los nacimientos llegan después.
-- La mayoría viene de cerca o por corredores que ya existen: cerca de 35 % de la misma provincia y, de afuera, sobre todo de AMBA y Río Negro. La gente se muda donde ya fueron parientes y conocidos; la distancia pesa poco.
-- Uno de cada tres migrantes recientes (31 %) vuelve a su provincia de nacimiento: atraer a quienes nacieron en la región y se fueron es una vía concreta para poblar.
-
-De dónde vendrían (corredores observados, Censo 2022 y RENAPER): Neuquén (otros departamentos) 35 % (18.669) · AMBA 14 % (7.473) · Río Negro 9 % (4.619) · Resto de Buenos Aires 9 % (4.560) · Mendoza 5 % (2.578) · Córdoba 4 % (2.323) · Salta 3 % (1.621).
-
-### Qué significaría
-
-- **Para la región.** Hoy viven 659.417 personas a 50 km. En 30 años se sumarían unas 53.500 (8 % más). La región lo absorbe sin cambiar de escala.
-- **Para el trabajo.** Esa población necesita unos 24.075 empleos nuevos: los 144.894 puestos privados que hay hoy en la zona (sobre todo actividades de apoyo al petróleo y la minería y agricultura, ganadería, caza y servicios relacionados) ya los ocupa quien vive ahí. Si la zona sigue creciendo como entre 2014 y 2022, para los recién llegados quedarían unos 26.514. Alcanza con el crecimiento esperado.
-- **Para el agua.** Se usarían 0,12 m³/s, el 1 % del caudal del río cercano en sequía (242,2 m³/s).
-- **Para el país.** En la etapa de más crecimiento llegarían unas 2.000 personas por año: el 1,3 % de todos los que cambian de provincia en un año en la Argentina (150.081, Censo 2022). La región crecería un 0,3 % por año. Está dentro de lo que ya pasó en el país (Pilar (partido, Buenos Aires) sumó 2.883 personas netas por año en 2005-2010). El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual.
-
-### La cuenta y los riesgos
-
-- Inversión total USD 3 mil millones; de eso, USD 148 millones dependen del lugar.
-- Resultado anual al año 30: +USD 119 millones; saldo para el país USD 275 millones; para el Tesoro USD 68 millones.
-- Conviene con la llegada esperada.
-- Riesgo medio: Parte de la zona se inunda en una crecida de 100 años (17 %). Dejar esas tierras como parques y prohibir allí la construcción en el código urbano.
-
-## Repoblar pueblos: Punta Alta (Coronel de Marina Leonardo Rosales, Buenos Aires)
-
-El repoblamiento de un pueblo cerca de Punta Alta, con una meta de 20.000 habitantes. Con el ritmo más probable se alcanzarían 10.700 en 30 años, construyendo por etapas y solo cuando la anterior se ocupa.
-
-Primer puesto en el orden combinado (4.º por aptitud, 1.º por economía, entre los 12 mejores lugares por aptitud).
+Primer puesto en el orden combinado (2.º por aptitud, 2.º por economía, entre los 12 mejores lugares por aptitud).
 
 ### Qué se haría, paso a paso
 
-**Etapa 1 · obras y primeros habitantes (años 1 a 5)**: llegan unas 1.600 personas (320 por año); total acumulado 1.600.
+**Etapa 1 · obras y primeros habitantes (años 1 a 5)**: llegan unas 12.025 personas (2.405 por año); total acumulado 12.025.
 
-- Viviendas desocupadas recuperadas: 97.
-- Viviendas nuevas en el ejido actual: 460.
-- Lugares en escuelas: 300 alumnos.
-- Camas de internación: 5.
+- Viviendas desocupadas recuperadas: 220.
+- Viviendas nuevas en el ejido actual: 4.000.
+- Lugares en escuelas: 2.300 alumnos.
+- Camas de internación: 40.
 - Para pasar a la etapa siguiente: Que la primera etapa esté habitada en un 80 % y haya empleo para quienes llegaron.
 
-**Etapa 2 · consolidación (años 6 a 10)**: llegan unas 2.000 personas (400 por año); total acumulado 3.600.
+**Etapa 2 · consolidación (años 6 a 10)**: llegan unas 12.885 personas (2.577 por año); total acumulado 24.910.
 
-- Viviendas desocupadas recuperadas: 120.
-- Viviendas nuevas en el ejido actual: 580.
-- Lugares en escuelas: 380 alumnos.
-- Camas de internación: 7.
+- Viviendas desocupadas recuperadas: 230.
+- Viviendas nuevas en el ejido actual: 4.300.
+- Lugares en escuelas: 2.500 alumnos.
+- Camas de internación: 43.
 - Para pasar a la etapa siguiente: Que la etapa anterior esté ocupada en un 80 %: no se construye por adelantado.
 
-**Etapa 3 · crecimiento (años 11 a 20)**: llegan unas 4.000 personas (400 por año); total acumulado 7.600.
+**Etapa 3 · crecimiento (años 11 a 20)**: llegan unas 23.786 personas (2.379 por año); total acumulado 48.696.
 
-- Viviendas desocupadas recuperadas: 240.
-- Viviendas nuevas en el ejido actual: 1.200.
-- Lugares en escuelas: 760 alumnos.
-- Camas de internación: 13.
+- Viviendas desocupadas recuperadas: 430.
+- Viviendas nuevas en el ejido actual: 7.900.
+- Lugares en escuelas: 4.500 alumnos.
+- Camas de internación: 80.
 - Para pasar a la etapa siguiente: Que la etapa anterior esté ocupada en un 80 %: no se construye por adelantado.
 
-**Etapa 4 · madurez (años 21 a 30)**: llegan unas 3.100 personas (310 por año); total acumulado 10.700.
+**Etapa 4 · madurez (años 21 a 30)**: llegan unas 23.773 personas (2.377 por año); total acumulado 72.469.
 
-- Viviendas desocupadas recuperadas: 190.
-- Viviendas nuevas en el ejido actual: 900.
-- Lugares en escuelas: 590 alumnos.
-- Camas de internación: 10.
+- Viviendas desocupadas recuperadas: 430.
+- Viviendas nuevas en el ejido actual: 7.900.
+- Lugares en escuelas: 4.500 alumnos.
+- Camas de internación: 80.
 - Para pasar a la etapa siguiente: Que la etapa anterior esté ocupada en un 80 %: no se construye por adelantado.
 
 ### Quiénes llegarían y desde dónde
@@ -256,14 +197,78 @@ Primer puesto en el orden combinado (4.º por aptitud, 1.º por economía, entre
 - La mayoría viene de cerca o por corredores que ya existen: cerca de 69 % de la misma provincia y, de afuera, sobre todo de AMBA y Córdoba. La gente se muda donde ya fueron parientes y conocidos; la distancia pesa poco.
 - Uno de cada tres migrantes recientes (31 %) vuelve a su provincia de nacimiento: atraer a quienes nacieron en la región y se fueron es una vía concreta para poblar.
 
-De dónde vendrían (corredores observados, Censo 2022 y RENAPER): Resto de Buenos Aires (otros partidos) 69 % (7.368) · AMBA 19 % (2.081).
+De dónde vendrían (corredores observados, Censo 2022 y RENAPER): Resto de Buenos Aires (otros partidos) 69 % (49.905) · AMBA 19 % (14.096).
 
 ### Qué significaría
 
-- **Para la región.** Hoy viven 401.119 personas a 50 km. En 30 años se sumarían unas 10.700 (3 % más). La región lo absorbe sin cambiar de escala.
-- **Para el trabajo.** Esa población necesita unos 4.815 empleos nuevos: los 71.063 puestos privados que hay hoy en la zona (sobre todo comercio al por menor excepto autos y motos y agricultura, ganadería, caza y servicios relacionados) ya los ocupa quien vive ahí. Si la zona sigue creciendo como entre 2014 y 2022, para los recién llegados quedarían unos 19.663. Alcanza con el crecimiento esperado.
-- **Para el agua.** Se usarían 0,02 m³/s, el 1 % del caudal del río cercano en sequía (2 m³/s).
-- **Para el país.** En la etapa de más crecimiento llegarían unas 400 personas por año: el 0,3 % de todos los que cambian de provincia en un año en la Argentina (150.081, Censo 2022). La región crecería un 0,1 % por año. Está dentro de lo que ya pasó en el país (Pilar (partido, Buenos Aires) sumó 2.883 personas netas por año en 2005-2010). El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual.
+- **Para la región.** Hoy viven 692.452 personas a 50 km. En 30 años se sumarían unas 72.469 (10 % más). La región lo absorbe sin cambiar de escala.
+- **Para el trabajo.** Esa población necesita unos 32.611 empleos nuevos: los 311.579 puestos privados que hay hoy en la zona (sobre todo comercio al por menor excepto autos y motos y fabricación de metales comunes) ya los ocupa quien vive ahí. Si la zona sigue creciendo como entre 2014 y 2022, para los recién llegados quedarían unos 27.810. Alcanza con el crecimiento esperado.
+- **Para el agua.** Se usarían 0,17 m³/s, el 1 % del caudal del río cercano en sequía (7.940,8 m³/s).
+- **Para el país.** En la etapa de más crecimiento llegarían unas 2.577 personas por año: el 1,7 % de todos los que cambian de provincia en un año en la Argentina (150.081, Censo 2022). La región crecería un 0,4 % por año. Está en el límite de lo observado: el lugar que más gente atrajo, Pilar (partido, Buenos Aires), sumó 2.883 personas netas por año en 2005-2010. El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual.
+
+### La cuenta y los riesgos
+
+- Inversión total USD 2,8 mil millones; de eso, USD 52 millones dependen del lugar.
+- Resultado anual al año 30: −USD 50 millones; saldo para el país −USD 134 millones; para el Tesoro −USD 6 millones.
+- No alcanza con más gente: harían falta salarios de 1.10 veces el promedio nacional en la zona (hoy 0.97).
+- Riesgo alto: Que llegue poca gente: si se ocupa como las ciudades nuevas egipcias (~12 %), el saldo para el país es de −USD 24 millones. Construir por etapas de unos 20.000 habitantes, empezando por la conexión y el empleo; no adelantar viviendas a la demanda.
+- Riesgo medio: Arsénico en el agua subterránea (probabilidad 69 %). Abastecer con agua superficial o plantas de abatimiento de arsénico (Código Alimentario: 10 µg/L).
+- Riesgo medio: Parte de la zona se inunda en una crecida de 100 años (33 %). Dejar esas tierras como parques y prohibir allí la construcción en el código urbano.
+
+## Repoblar pueblos: Punta Alta (Coronel de Marina Leonardo Rosales, Buenos Aires)
+
+El repoblamiento de un pueblo cerca de Punta Alta, con una meta de 20.000 habitantes. Con el proceso recomendado (a demanda, sin motor de empleo) y los flujos migratorios argentinos se llegaría a unos 20.000 en 30 años.
+
+Primer puesto en el orden combinado (4.º por aptitud, 1.º por economía, entre los 12 mejores lugares por aptitud).
+
+### Qué se haría, paso a paso
+
+**Etapa 1 · obras y primeros habitantes (años 1 a 5)**: llegan unas 3.988 personas (798 por año); total acumulado 3.988.
+
+- Viviendas desocupadas recuperadas: 240.
+- Viviendas nuevas en el ejido actual: 1.200.
+- Lugares en escuelas: 760 alumnos.
+- Camas de internación: 13.
+- Para pasar a la etapa siguiente: Que la primera etapa esté habitada en un 80 % y haya empleo para quienes llegaron.
+
+**Etapa 2 · consolidación (años 6 a 10)**: llegan unas 5.612 personas (1.122 por año); total acumulado 9.600.
+
+- Viviendas desocupadas recuperadas: 340.
+- Viviendas nuevas en el ejido actual: 1.600.
+- Lugares en escuelas: 1.100 alumnos.
+- Camas de internación: 19.
+- Para pasar a la etapa siguiente: Que la etapa anterior esté ocupada en un 80 %: no se construye por adelantado.
+
+**Etapa 3 · crecimiento (años 11 a 20)**: llegan unas 10.390 personas (1.039 por año); total acumulado 19.990.
+
+- Viviendas desocupadas recuperadas: 630.
+- Viviendas nuevas en el ejido actual: 3.000.
+- Lugares en escuelas: 2.000 alumnos.
+- Camas de internación: 35.
+- Para pasar a la etapa siguiente: Que la etapa anterior esté ocupada en un 80 %: no se construye por adelantado.
+
+**Etapa 4 · madurez (años 21 a 30)**: llegan unas 8 personas (1 por año); total acumulado 19.998.
+
+- Viviendas nuevas en el ejido actual: 2.
+- Lugares en escuelas: 1 alumnos.
+- Camas de internación: 0.
+- Para pasar a la etapa siguiente: Que la etapa anterior esté ocupada en un 80 %: no se construye por adelantado.
+
+### Quiénes llegarían y desde dónde
+
+- Primero llegan adultos jóvenes que consiguen trabajo: entre quienes cambian de provincia, el 47 % tiene de 15 a 34 años (contra 33 % del resto) y estudió más (13,5 años contra 11,6). La construcción de la propia ciudad es el primer empleo.
+- Traen pocos chicos (0,31 por adulto joven, contra 0,54): al principio hacen falta más viviendas chicas y menos escuelas; las familias y los nacimientos llegan después.
+- La mayoría viene de cerca o por corredores que ya existen: cerca de 69 % de la misma provincia y, de afuera, sobre todo de AMBA y Córdoba. La gente se muda donde ya fueron parientes y conocidos; la distancia pesa poco.
+- Uno de cada tres migrantes recientes (31 %) vuelve a su provincia de nacimiento: atraer a quienes nacieron en la región y se fueron es una vía concreta para poblar.
+
+De dónde vendrían (corredores observados, Censo 2022 y RENAPER): Resto de Buenos Aires (otros partidos) 69 % (13.771) · AMBA 19 % (3.890).
+
+### Qué significaría
+
+- **Para la región.** Hoy viven 401.119 personas a 50 km. En 30 años se sumarían unas 19.998 (5 % más). La región lo absorbe sin cambiar de escala.
+- **Para el trabajo.** Esa población necesita unos 8.999 empleos nuevos: los 71.063 puestos privados que hay hoy en la zona (sobre todo comercio al por menor excepto autos y motos y agricultura, ganadería, caza y servicios relacionados) ya los ocupa quien vive ahí. Si la zona sigue creciendo como entre 2014 y 2022, para los recién llegados quedarían unos 19.663. Alcanza con el crecimiento esperado.
+- **Para el agua.** Se usarían 0,05 m³/s, el 2 % del caudal del río cercano en sequía (2 m³/s).
+- **Para el país.** En la etapa de más crecimiento llegarían unas 1.122 personas por año: el 0,7 % de todos los que cambian de provincia en un año en la Argentina (150.081, Censo 2022). La región crecería un 0,3 % por año. Está dentro de lo que ya pasó en el país (Pilar (partido, Buenos Aires) sumó 2.883 personas netas por año en 2005-2010). El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual.
 
 ### La cuenta y los riesgos
 
@@ -273,35 +278,34 @@ De dónde vendrían (corredores observados, Censo 2022 y RENAPER): Resto de Buen
 - Riesgo alto: Que llegue poca gente: si se ocupa como las ciudades nuevas egipcias (~12 %), el saldo para el país es de −USD 1 millones. Construir por etapas de unos 4.000 habitantes, empezando por la conexión y el empleo; no adelantar viviendas a la demanda.
 - Riesgo medio: Arsénico en el agua subterránea (probabilidad 54 %). Abastecer con agua superficial o plantas de abatimiento de arsénico (Código Alimentario: 10 µg/L).
 
-## Crear polos productivos: General Lagos (Rosario, Santa Fe)
+## Crear polos productivos: Laguna Brava (Capital, Corrientes)
 
-Un polo productivo junto a General Lagos, con una meta de 50.000 empleos. Con el ritmo más probable se alcanzarían 26.000 en 30 años, construyendo por etapas y solo cuando la anterior se ocupa.
+Un polo productivo junto a Laguna Brava, con una meta de 50.000 empleos. Con el proceso recomendado (parque por etapas sin incentivos fiscales) y los flujos migratorios argentinos se llegaría a unos 42.000 en 30 años.
 
-Primer puesto en el orden combinado (1.º por aptitud, 4.º por economía, entre los 12 mejores lugares por aptitud).
+Primer puesto en el orden combinado (2.º por aptitud, 4.º por economía, entre los 12 mejores lugares por aptitud).
 
 ### Qué se haría, paso a paso
 
-**Etapa 1 · obras y primeros habitantes (años 1 a 5)**: se crean unos 3.000 empleos (600 por año); total acumulado 3.000.
+**Etapa 1 · obras y primeros habitantes (años 1 a 5)**: se crean unos 5.494 empleos (1.099 por año); total acumulado 5.494.
 
-- Ruta de acceso pavimentada: 4 km hasta la ruta nacional.
 - Estación transformadora: conexión a la línea existente.
-- Lotes industriales urbanizados: 370 ha (para 3.000 empleos).
+- Lotes industriales urbanizados: 670 ha (para 5.500 empleos).
 - Empresas ancla: 2 o 3 con compromiso firmado antes de urbanizar.
 - Para pasar a la etapa siguiente: Que las empresas ancla estén produciendo y haya pedidos de lotes por al menos la mitad de la etapa siguiente.
 
-**Etapa 2 · consolidación (años 6 a 10)**: se crean unos 5.000 empleos (1.000 por año); total acumulado 8.000.
+**Etapa 2 · consolidación (años 6 a 10)**: se crean unos 8.443 empleos (1.689 por año); total acumulado 13.937.
 
-- Lotes industriales urbanizados: 610 ha (para 5.000 empleos).
+- Lotes industriales urbanizados: 1.000 ha (para 8.400 empleos).
 - Para pasar a la etapa siguiente: Que los lotes de la etapa anterior estén ocupados en un 80 %.
 
-**Etapa 3 · crecimiento (años 11 a 20)**: se crean unos 10.000 empleos (1.000 por año); total acumulado 18.000.
+**Etapa 3 · crecimiento (años 11 a 20)**: se crean unos 22.363 empleos (2.236 por año); total acumulado 36.300.
 
-- Lotes industriales urbanizados: 1.200 ha (para 10.000 empleos).
+- Lotes industriales urbanizados: 2.700 ha (para 22.000 empleos).
 - Para pasar a la etapa siguiente: Que los lotes de la etapa anterior estén ocupados en un 80 %.
 
-**Etapa 4 · madurez (años 21 a 30)**: se crean unos 8.000 empleos (800 por año); total acumulado 26.000.
+**Etapa 4 · madurez (años 21 a 30)**: se crean unos 5.491 empleos (549 por año); total acumulado 41.791.
 
-- Lotes industriales urbanizados: 980 ha (para 8.000 empleos).
+- Lotes industriales urbanizados: 670 ha (para 5.500 empleos).
 - Para pasar a la etapa siguiente: Que los lotes de la etapa anterior estén ocupados en un 80 %.
 
 ### Quiénes llegarían y desde dónde
@@ -311,17 +315,16 @@ Primer puesto en el orden combinado (1.º por aptitud, 4.º por economía, entre
 
 ### Qué significaría
 
-- **Para la región.** El polo sumaría unos 26.000 empleos en 30 años a los 324.032 puestos privados que hay hoy en la zona (8 % más). Con sus familias y los servicios que atraen, la región crecería en unas 57.200 personas.
-- **Para el país.** En la etapa de más crecimiento llegarían unas 1.000 contrataciones por año: el 0,7 % de todos los que cambian de provincia en un año en la Argentina (150.081, Censo 2022). La región crecería un 0,1 % por año. Está dentro de lo que ya pasó en el país (Pilar (partido, Buenos Aires) sumó 2.883 personas netas por año en 2005-2010). 
+- **Para la región.** El polo sumaría unos 41.791 empleos en 30 años a los 90.833 puestos privados que hay hoy en la zona (46 % más). Con sus familias y los servicios que atraen, la región crecería en unas 91.940 personas.
+- **Para el país.** En la etapa de más crecimiento llegarían unas 2.236 contrataciones por año: el 1,5 % de todos los que cambian de provincia en un año en la Argentina (150.081, Censo 2022). La región crecería un 0,2 % por año. Está en el límite de lo observado: el lugar que más gente atrajo, Pilar (partido, Buenos Aires), sumó 2.883 personas netas por año en 2005-2010. 
 
 ### La cuenta y los riesgos
 
-- Inversión total USD 1,4 mil millones; de eso, USD 114 millones dependen del lugar.
-- Resultado anual al año 30: +USD 214 millones; saldo para el país USD 283 millones; para el Tesoro −USD 846 millones.
+- Inversión total USD 1,3 mil millones; de eso, USD 57 millones dependen del lugar.
+- Resultado anual al año 30: +USD 195 millones; saldo para el país USD 241 millones; para el Tesoro −USD 857 millones.
 - Sigue conviniendo aunque llegue solo el 4 % de la meta (se espera el 52 %).
 - Riesgo alto: Que no se instalen empresas, o que cada empleo cueste demasiado: los regímenes de promoción cuestan al fisco unos USD 51.000 por empleo por año (rango 17.000 a 126.000). Firmar compromisos de inversión antes de urbanizar; atar los incentivos al empleo efectivo, con fecha de vencimiento; no competir en incentivos con otras provincias por las mismas empresas.
-- Riesgo medio: Arsénico en el agua subterránea (probabilidad 70 %). Abastecer con agua superficial o plantas de abatimiento de arsénico (Código Alimentario: 10 µg/L).
-- Riesgo medio: Parte de la zona se inunda en una crecida de 100 años (37 %). Dejar esas tierras como parques y prohibir allí la construcción en el código urbano.
+- Riesgo medio: Calor fuerte en verano (máximas medias de 33 °C). Normas de eficiencia energética en la construcción (IRAM 11900/11605) y arbolado; prever el costo de calefacción o refrigeración.
 
 ## Cómo se replica
 

@@ -1,7 +1,7 @@
 import type { Dataset } from "../../data/load";
 import { GROUPS } from "../../model/criteria";
 import type { Site } from "../../model/sites";
-import { BUDGET, FIXED_GROUPS, PRESETS, PRIORITIES, groupScores, prefGroups, verdict, type Points } from "../../model/plain";
+import { FIXED_GROUPS, PRIORITIES, groupScores, prefGroups, verdict, type Points } from "../../model/plain";
 import { POLICIES, type Policy, type PolicyId } from "../../model/policies";
 import { FACTORS } from "../../model/criteria";
 
@@ -60,6 +60,8 @@ const EJEMPLOS: Record<number, string> = {
   1_000_000: "entre La Plata y Rosario",
 };
 const label = (n: number) => (n >= 1_000_000 ? `${n / 1_000_000} millón` : `${(n / 1000).toLocaleString("es-AR")} mil`);
+
+const COMB_MUESTRAS = 300;
 
 const GROUP_NAME: Record<string, string> = Object.fromEntries(PRIORITIES.map((p) => [p.grupo, p.titulo]));
 
@@ -182,10 +184,10 @@ function Mejores({ p }: { p: Props }) {
                     De eso, {musd(c.propio[1])} dependen de este lugar (rutas, energía, agua, tierra y el sobrecosto regional de construir); el resto
                     (viviendas, escuelas, hospitales) cuesta parecido en cualquier sitio.
                   </span>
-                  <span className={`trust t${a.n >= a.total - 1 ? "hi" : a.n >= 2 ? "mid" : "lo"}`}>
+                  <span className={`trust t${a.n >= 0.8 * a.total ? "hi" : a.n >= 0.4 * a.total ? "mid" : "lo"}`}>
                     {a.n === a.total
-                      ? `Muy confiable: sale entre los mejores con cualquiera de las ${a.total} formas de repartir prioridades que probamos`
-                      : `Sale entre los mejores con ${a.n} de las ${a.total} formas de repartir prioridades que probamos`}
+                      ? "Sale entre los mejores con cualquier combinación de prioridades"
+                      : `Sale entre los mejores en el ${a.n} % de las combinaciones de prioridades`}
                   </span>
                 </span>
               </button>
@@ -245,7 +247,7 @@ function TablaComparativa({ p, evs, onClose }: { p: Props; evs: Evaluado[]; onCl
               <tr><td>Tierra fiscal estimada</td>{filas.map((x) => <td key={x.e.s.rank}>{Number.isFinite(x.fiscal) ? `${Math.round(x.fiscal!)} %${x.conoc !== undefined && x.conoc < 0.5 ? " (dato flojo)" : ""}` : "s/d"}</td>)}</tr>
               <tr><td>Riesgos altos</td>{filas.map((x) => <td key={x.e.s.rank}>{x.rs.filter((r) => r.nivel === "alto").map((r) => r.que.split(":")[0]).join("; ") || "ninguno"}</td>)}</tr>
               <tr><td>Otros riesgos</td>{filas.map((x) => <td key={x.e.s.rank}>{x.rs.filter((r) => r.nivel === "medio" && !r.que.startsWith("Especulación")).map((r) => r.que.split(/[:(]/)[0].trim()).join("; ") || "ninguno"}</td>)}</tr>
-              <tr><td>Confianza en el lugar</td>{filas.map((x) => { const a = p.agreement(x.e.s.best); return <td key={x.e.s.rank}>{a.n} de {a.total} formas de priorizar</td>; })}</tr>
+              <tr><td>Sale entre los mejores</td>{filas.map((x) => { const a = p.agreement(x.e.s.best); return <td key={x.e.s.rank}>en el {Math.round((100 * a.n) / a.total)} % de las combinaciones</td>; })}</tr>
             </tbody>
           </table>
         </div>
@@ -316,8 +318,6 @@ function Comparar({ saved, onClear }: { saved: Props["saved"]; onClear: () => vo
 
 export default function SimplePanel(p: Props) {
   const prefs = prefGroups(p.policy.weights());
-  const spent = prefs.reduce((a, g) => a + (p.points[g] ?? 0), 0);
-  const left = BUDGET - spent;
   const base = p.policy.weights();
   const fixed = PRIORITIES.filter(
     (x) => FIXED_GROUPS.includes(x.grupo) && Object.entries(base).some(([id, w]) => w > 0 && FACTOR_GROUP[id] === x.grupo),
@@ -377,7 +377,7 @@ export default function SimplePanel(p: Props) {
 
       <section>
         <h3>
-          <span className="step">3</span> ¿Qué es más importante?
+          <span className="step">3</span> ¿Qué se tiene en cuenta?
         </h3>
         <div className="fixed">
           <b className="small">Siempre se exige (no se negocia)</b>
@@ -393,38 +393,15 @@ export default function SimplePanel(p: Props) {
             </li>
           </ul>
         </div>
-        <p className="small">
-          <b>Repartí {BUDGET} puntos</b> entre el resto de los temas. Lo que le das a uno se lo sacás a otro: así se ve qué
-          resignás. {left > 0 ? <span className="left">Te quedan {left} puntos.</span> : <span className="muted">Usaste todos los puntos.</span>}
-        </p>
-        <div className="presets">
-          {PRESETS.map((x) => (
-            <button key={x.id} className={`preset ${p.preset === x.id ? "on" : ""}`} onClick={() => p.setPreset(x.id)} title={x.desc}>
-              {x.nombre}
-            </button>
-          ))}
+        <div className="combinacion">
+          <b className="small">El resto se combina solo, de la mejor manera posible</b>
+          <p className="small">
+            No hace falta elegir qué resignar. Probamos {COMB_MUESTRAS} combinaciones distintas de importancia entre{" "}
+            {PRIORITIES.filter((pr) => prefs.includes(pr.grupo)).map((pr) => pr.titulo.toLowerCase()).join(", ")}, desde darle todo a
+            un tema hasta repartir por igual. Arriba quedan los lugares que salen entre los mejores con la mayor cantidad de
+            combinaciones: los que convienen con cualquier prioridad razonable.
+          </p>
         </div>
-        {PRIORITIES.filter((pr) => prefs.includes(pr.grupo)).map((pr) => {
-          const v = p.points[pr.grupo] ?? 0;
-          return (
-            <div key={pr.grupo} className="prio">
-              <div className="prio-h">
-                <b>{pr.titulo}</b>
-                <span className="muted small"> · {pr.pregunta}</span>
-              </div>
-              <div className="budget" role="group" aria-label={`Puntos para ${pr.titulo}`}>
-                <button aria-label={`Quitar un punto a ${pr.titulo}`} disabled={v <= 0} onClick={() => p.setPoints({ ...p.points, [pr.grupo]: v - 1 })}>−</button>
-                <span className="dots" aria-hidden>
-                  {Array.from({ length: BUDGET }, (_, k) => (
-                    <span key={k} className={k < v ? "on" : ""} />
-                  ))}
-                </span>
-                <b className="pts">{v}</b>
-                <button aria-label={`Sumar un punto a ${pr.titulo}`} disabled={left <= 0} onClick={() => p.setPoints({ ...p.points, [pr.grupo]: v + 1 })}>+</button>
-              </div>
-            </div>
-          );
-        })}
       </section>
 
       <section>
@@ -458,10 +435,10 @@ export default function SimplePanel(p: Props) {
               Cada zona recibe una nota de 0 a 10 en cada tema ({GROUPS.filter((g) => GROUP_NAME[g.id]).map((g) => GROUP_NAME[g.id]).join(", ")}),
               con criterios tomados de estudios especializados.
             </li>
-            <li>Las notas se combinan según la importancia que elegiste y se buscan áreas con espacio suficiente.</li>
+            <li>Las notas se combinan de cientos de maneras (agua, seguridad y clima siempre pesan) y se buscan áreas con espacio suficiente.</li>
             <li>
-              Para saber si el resultado es confiable, se repite el cálculo con distintas formas de repartir las prioridades: un lugar que gana con
-              todos es una apuesta más sólida.
+              Agua, seguridad y clima se exigen siempre. El resto de los temas se combina de {COMB_MUESTRAS} maneras distintas, y se ordenan
+              los lugares según en cuántas combinaciones salen entre los mejores: un lugar que gana con casi todas es la apuesta más sólida.
             </li>
           </ol>
           <p className="small muted">

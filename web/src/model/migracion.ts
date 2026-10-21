@@ -147,3 +147,11 @@ export function ritmo(porAnio: number, poblacionRegion: number): Ritmo2 {
 }
 
 export const MIGRANTES_ANIO = CENSO_INTERPROV;
+
+/** Mudanzas por año hacia la provincia: desde otras provincias (ajustado al RENAPER) y entre sus departamentos. */
+export function poolAnual(prov: string): number {
+  const R = D.regiones, m = D.matriz;
+  const dest = R.includes(prov) ? prov : R.find((r) => r.startsWith("Tierra del Fuego"))!;
+  const entran = (R.filter((o) => o !== dest).reduce((a, o) => a + (m[o]?.[dest] ?? 0), 0) / 5) * (RENAPER_INTERPROV / CENSO_INTERPROV);
+  return entran + INTRA * (poblacion(dest) / PAIS);
+}

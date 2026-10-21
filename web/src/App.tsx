@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { loadDataset, loadJSON, type Dataset, type Incentivos } from "./data/load";
 import { RESTRICTIONS, SCENARIOS, effectiveWeights, type Restriction, type Weights } from "./model/criteria";
+import { mejorCombinacion } from "./model/combinacion";
 import { DEFAULT_WATER, aggregate, computeMask, factorScores, quantile, type Aggregation, type WaterParams } from "./model/mcda";
 import { findSites, type Site, type SiteParams } from "./model/sites";
 import type { ValueFn } from "./model/valueFunctions";
@@ -210,7 +211,14 @@ export default function App() {
   );
   const reason = useMemo(() => (ds ? computeMask(ds.col, ds.n, restrictions, water) : new Uint8Array()), [ds, restrictions, water]);
   const effW = useMemo(() => effectiveWeights(weights), [weights]);
-  const score = useMemo(() => aggregate(fScores, effW, reason, agg), [fScores, effW, reason, agg]);
+  const scoreExperto = useMemo(() => aggregate(fScores, effW, reason, agg), [fScores, effW, reason, agg]);
+  // modo simple: la mejor combinación posible de prioridades (robusta a cualquier reparto)
+  const comb = useMemo(
+    () => (mode === "simple" && Object.keys(fScores).length ? mejorCombinacion(fScores, reason, policy.weights()) : null),
+    [mode, fScores, reason, policy],
+  );
+  const score = comb ? comb.score : scoreExperto;
+  const wSimple = useMemo(() => (comb ? effectiveWeights(comb.centro) : effW), [comb, effW]);
   // los resultados Monte Carlo quedan desactualizados si cambia el modelo
   useEffect(() => setMcProb(null), [fScores, effW, reason]);
 
@@ -239,8 +247,11 @@ export default function App() {
     [fScores, reason, agg, policy],
   );
   const agreement = useCallback(
-    (i: number) => ({ n: presetClasses.reduce((a, c) => a + (c[i] >= 3 ? 1 : 0), 0), total: presetClasses.length }),
-    [presetClasses],
+    (i: number) =>
+      comb
+        ? { n: Math.round(100 * (comb.prob[i] || 0)), total: 100 }
+        : { n: presetClasses.reduce((a, c) => a + (c[i] >= 3 ? 1 : 0), 0), total: presetClasses.length },
+    [presetClasses, comb],
   );
   const classes = useMemo(() => classify(score), [score]);
   const reasonIds = useMemo(() => [...restrictions.map((r) => r.id), "R13"], [restrictions]);
@@ -476,7 +487,7 @@ export default function App() {
                 sites={sites}
                 agreement={agreement}
                 fScores={fScores}
-                weights={effW}
+                weights={wSimple}
                 localidades={geo.localidades}
                 onSelect={selectSite}
                 onFicha={(st, nombre) => setFicha({ site: st, nombre })}

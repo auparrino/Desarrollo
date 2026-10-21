@@ -9,6 +9,7 @@ import { empleo, equilibrio, musd, porEtapa, riesgos, sinPolitica } from "../../
 import { estimateCosts } from "../../model/costs";
 import { cbaInput } from "../../model/labor";
 import { planConcreto } from "../../model/plan";
+import { compararEstrategias } from "../../model/estrategias";
 import { POLICY_BY_ID, type Policy, type PolicyId } from "../../model/policies";
 import type { Site } from "../../model/sites";
 import { UNIT_COSTS } from "../../model/unitCostsData";
@@ -127,7 +128,15 @@ export default function Ficha(p: Props) {
   const b = r.base;
   const mand = porEtapa(b);
   const emp = empleo(p.ds, i, p.policy.id, b, p.geo.proyectos);
-  const plan = useMemo(() => planConcreto(p.ds, i, p.policy.id, p.poblacion, p.nombre.replace(/^Cerca de /, ""), r), [p.ds, i, p.policy.id, p.poblacion, p.nombre, r]);
+  const cmp = useMemo(() => compararEstrategias(p.ds, i, p.policy.id, p.poblacion, costos, r, 250), [p.ds, i, p.policy.id, p.poblacion, costos, r]);
+  // proceso recomendado: el que suma gente más barato; si ninguno suma frente a la referencia, el de mejor saldo
+  const elegido = cmp.poblar && cmp.marginal(cmp.poblar) < 50_000 ? cmp.poblar : cmp.mejor;
+  const tray = elegido.central.serie.map((x) => (polos ? x.pob / 2.2 : x.pob));
+  const plan = useMemo(
+    () => planConcreto(p.ds, i, p.policy.id, p.poblacion, p.nombre.replace(/^Cerca de /, ""), r, tray, elegido.estrategia.nombre, elegido.estrategia.motorEmpleos),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [p.ds, i, p.policy.id, p.poblacion, p.nombre, r, elegido],
+  );
   const ries = riesgos(p.ds, i, p.policy.id, p.poblacion, r, emp);
   const otros = useMemo(
     () => (p.policy.id === "capital" ? [] : mismoPresupuesto(p.ds, i, p.site.provincia, PUBLICO(costos), p.policy.id)),
@@ -203,6 +212,40 @@ export default function Ficha(p: Props) {
               </li>
             ))}
           </ol>
+        </section>
+
+        <section>
+          <h3>Cómo conviene hacerlo: {cmp.rs.length} procesos simulados</h3>
+          <p className="small">
+            Cada proceso se simuló {250} veces año por año (empleo, vivienda, migración y nacimientos), variando lo que no se sabe con
+            certeza. La cuenta de arriba supone que en 30 años llega el {Math.round((100 * b.anual.poblacion) / Math.max(p.poblacion, 1))} % de la meta, como en la
+            experiencia internacional; con los flujos migratorios argentinos, el proceso recomendado llega a{" "}
+            <b>{n0(polos ? elegido.pob30[1] / 2.2 : elegido.pob30[1])} {polos ? "empleos" : "habitantes"}</b>.
+          </p>
+          <div className="tabla-scroll">
+            <table className="provs">
+              <thead><tr><th>Proceso</th><th className="num">{polos ? "Población" : "Habitantes"} al año 30</th><th className="num">Viviendas vacías</th><th className="num">Saldo para el país</th><th className="num">Prob. saldo +</th><th className="num">Costo por habitante extra</th></tr></thead>
+              <tbody>
+                {cmp.rs.map((x) => {
+                  const m = cmp.marginal(x);
+                  return (
+                    <tr key={x.estrategia.id} className={x === elegido ? "actual" : ""} title={x.estrategia.descripcion}>
+                      <td>{x.estrategia.nombre}{x === elegido && " (recomendado)"}{x === cmp.mejor && x !== elegido && " (mejor saldo)"}</td>
+                      <td className="num">{n0(x.pob30[1])} <span className="muted small">({n0(x.pob30[0])}–{n0(x.pob30[2])})</span></td>
+                      <td className="num">{Math.round(x.vaciasMax * 100)} %</td>
+                      <td className={`num ${x.van[1] >= 0 ? "pos" : "neg"}`}>{musd(x.van[1])}</td>
+                      <td className="num">{Math.round(x.pVanPositivo * 100)} %</td>
+                      <td className="num">{x === cmp.ref ? "referencia" : Number.isFinite(m) ? (m <= 0 ? "gana" : `USD ${n0(m)}`) : "no suma"}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <p className="small muted">
+            Recomendado: {elegido.estrategia.descripcion} El plan paso a paso de arriba sigue este proceso. Detalle del modelo y de los supuestos
+            en docs/simulaciones-procesos.md.
+          </p>
         </section>
 
         <div className="ficha-cols">

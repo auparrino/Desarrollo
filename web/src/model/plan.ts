@@ -45,7 +45,8 @@ const red = (v: number) => {
 };
 
 /** Población acumulada al final de cada año según el escenario base (desde el cronograma del costo-beneficio). */
-const acumuladoAl = (r: CBAResult, anio: number) => r.cronograma.find((x) => x.anio === anio)?.poblacion ?? 0;
+const acumuladoAl = (r: CBAResult, anio: number, tray?: number[]) =>
+  tray ? (anio <= 0 ? 0 : tray[Math.min(anio, tray.length) - 1] ?? 0) : r.cronograma.find((x) => x.anio === anio)?.poblacion ?? 0;
 
 const NOMBRE: Record<PolicyId, string> = {
   ciudad_nueva: "una ciudad nueva",
@@ -62,6 +63,11 @@ export function planConcreto(
   meta: number,
   lugar: string,
   r: Record<Escenario, CBAResult>,
+  /** población por año (1 a 30) del proceso simulado; si falta, se usa la curva de ocupación del costo-beneficio */
+  tray?: number[],
+  proceso?: string,
+  /** empleos del motor del proceso recomendado (organismos, empresas ancla) */
+  motorEmpleos = 0,
 ): Plan {
   const c = ds.col;
   const b = r.base;
@@ -84,8 +90,8 @@ export function planConcreto(
   ];
   let agentesPrevios = 0;
   const etapas: EtapaPlan[] = cortes.map(([nombre, desde, hasta], k) => {
-    const a0 = acumuladoAl(b, desde - 1);
-    const a1 = acumuladoAl(b, hasta);
+    const a0 = acumuladoAl(b, desde - 1, tray);
+    const a1 = acumuladoAl(b, hasta, tray);
     const d = Math.max(0, a1 - a0);
     const obras: Obra[] = [];
     if (k === 0 && (nueva || polos)) {
@@ -129,7 +135,7 @@ export function planConcreto(
 
   // ------------------------------------------------ quiénes y de dónde
   const prov = ds.meta.departamentos[ds.dep[i]]?.provincia ?? "";
-  const llegan = b.anual.poblacion;
+  const llegan = tray ? tray[tray.length - 1] : b.anual.poblacion;
   const deDonde = polos ? [] : origenObservado(prov, llegan);
   const misma = deDonde.find((o) => o.tipo === "misma");
   const top = deDonde.filter((o) => o.tipo === "corredor").slice(0, 2).map((o) => o.lugar);
@@ -166,7 +172,9 @@ export function planConcreto(
         ef.traslado > 0 ? `El traslado de organismos aporta unos ${n0(ef.traslado)} con los servicios que genera. ` : ""
       }Si la zona sigue creciendo como entre 2014 y 2022, para los recién llegados quedarían unos ${n0(ef.organico)}. ${
         ef.faltan > 0.2 * empleos
-          ? `Faltan ${n0(ef.faltan)}: hay que crearlos con una actividad nueva. Si no, el trabajo pone el techo: llegarían unas ${n0(red((ef.organico + ef.traslado) / 0.45))} personas en 30 años y no ${n0(red(llegan))}.`
+          ? motorEmpleos > 0 && policy !== "capital"
+            ? `Faltan ${n0(ef.faltan)}: por eso el proceso recomendado empieza por ${n0(red(motorEmpleos))} empleos nuevos (organismos o empresas ancla), que con los servicios que generan sostienen a quienes llegan. Sin ese motor, llegarían unas ${n0(red((ef.organico + ef.traslado) / 0.45))} personas en 30 años.`
+            : `Faltan ${n0(ef.faltan)}: hay que crearlos con una actividad nueva. Si no, el trabajo pone el techo: llegarían unas ${n0(red((ef.organico + ef.traslado) / 0.45))} personas en 30 años y no ${n0(red(llegan))}.`
           : "Alcanza con el crecimiento esperado."
       }`,
     });
@@ -196,6 +204,10 @@ export function planConcreto(
   });
 
   const lugarTxt = nueva || policy === "pueblos" ? `cerca de ${lugar}` : polos ? `junto a ${lugar}` : `en ${lugar}`;
-  const resumen = `${NOMBRE[policy][0].toUpperCase()}${NOMBRE[policy].slice(1)} ${lugarTxt}, con una meta de ${n0(meta)} ${polos ? "empleos" : "habitantes"}. Con el ritmo más probable se alcanzarían ${n0(llegan)} en 30 años, construyendo por etapas y solo cuando la anterior se ocupa.`;
+  const resumen = `${NOMBRE[policy][0].toUpperCase()}${NOMBRE[policy].slice(1)} ${lugarTxt}, con una meta de ${n0(meta)} ${polos ? "empleos" : "habitantes"}. ${
+    proceso
+      ? `Con el proceso recomendado (${proceso.toLowerCase()}) y los flujos migratorios argentinos se llegaría a unos ${n0(red(llegan))} en 30 años.`
+      : `Con el ritmo más probable se alcanzarían ${n0(llegan)} en 30 años, construyendo por etapas y solo cuando la anterior se ocupa.`
+  }`;
   return { resumen, etapas, quienes, deDonde, ritmo: polos ? null : rt, significa };
 }
