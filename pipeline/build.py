@@ -439,6 +439,19 @@ def main() -> None:
             "por_dep": rel.groupby("cod_dep").incentivo_id.apply(list).to_dict(),
         }, ensure_ascii=False))
         log(f"incentivos: {len(vig)} vigentes de {len(inc)}")
+    if (inc_dir / "municipales.csv").exists():
+        mun = pd.read_csv(inc_dir / "municipales.csv", dtype=str).fillna("")
+        mun = mun[mun.vigencia_estado.str.lower() != "vencido"]
+        C["n_incent_municipales"] = dep_s.map(mun.groupby("cod_dep").size()).fillna(0).values
+        prev = json.loads((OUT / "incentivos.json").read_text()) if (OUT / "incentivos.json").exists() else {"incentivos": [], "por_dep": {}}
+        prev["municipales"] = mun.to_dict(orient="records")
+        (OUT / "incentivos.json").write_text(json.dumps(prev, ensure_ascii=False))
+        pts = mun[(mun.lat != "") & (mun.lon != "")]
+        if len(pts):
+            g = gpd.GeoDataFrame(pts, geometry=gpd.points_from_xy(pts.lon.astype(float), pts.lat.astype(float)), crs=4326)
+            simplify_out(g.assign(nombre=g.municipio + ": " + g.nombre_programa), 0, OUT / "capas" / "incentivos_municipales.geojson",
+                         ["nombre", "tipo", "beneficiario"])
+        log(f"incentivos municipales: {len(mun)} programas")
     log(f"empleo: {emp.puestos_priv_2022.sum():,.0f} puestos; {len(motores)} proyectos motores")
     log(f"tenencia: CNA {cna.shape[0]} deptos, RNTR {rntr.shape[0]}, {len(ci_pts)} comunidades con coordenadas")
     log("población 50 km")

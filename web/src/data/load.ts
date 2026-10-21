@@ -64,9 +64,24 @@ export interface Incentivo {
   intensidad: string;
   fuente_url: string;
 }
+export interface IncentivoMunicipal {
+  id: string;
+  municipio: string;
+  provincia: string;
+  cod_dep: string;
+  nombre_programa: string;
+  tipo: string;
+  beneficiario: string;
+  requisitos: string;
+  intensidad: string;
+  vigencia_estado: string;
+  fuente_url: string;
+  verificado: string;
+}
 export interface Incentivos {
   incentivos: Incentivo[];
   por_dep: Record<string, string[]>;
+  municipales?: IncentivoMunicipal[];
 }
 
 export async function loadJSON<T = unknown>(path: string): Promise<T> {

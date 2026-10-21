@@ -1,0 +1,420 @@
+{
+  "fecha_base": "2026-10",
+  "tipo_cambio": "ARS/USD oficial BNA billete venta, promedio mensual (api.argentinadatos.com/v1/cotizaciones/dolares/oficial). Cada valor en pesos se convirtió con el promedio del mes de su fecha de precios (p. ej. 2025-03: 1.088,4; 2025-11: 1.453,7; 2026-06: 1.469,6; 2026-10: 1.537,9). Valores ya publicados en USD se toman tal cual, en USD corrientes de su año. Antes de dic-2023 el oficial estaba sobrevaluado (brecha ~100%): los USD de 2022-2023 sobrestiman el costo real. Detalle: docs/costos-unitarios.md",
+  "items": {
+    "vivienda_m2": {
+      "nombre": "Construcción vivienda unifamiliar económica / social (sin terreno ni infraestructura)",
+      "unidad": "USD/m2 cubierto",
+      "bajo": 950,
+      "central": 1100,
+      "alto": 1500,
+      "fuente": "Bajo: IPV Mendoza, 56 viv. ex playa San Agustín, $3.200 M (feb-2025) / 55,9 m2 = 948 USD/m2 (Los Andes 24/2/2025). Central: CIM Mendoza vivienda económica 61 m2 may-2026 = 1.025 USD/m2 (dólar comprador BNA 1.370) y UTN FRVT 2 dorm. 85 m2 jun-2026 $1.764.030/m2 con IVA y beneficio = 1.200 USD/m2. Alto: APYMECO jun-2026 1.503 USD/m2 costo directo sin IVA (edificio multifamiliar de referencia)",
+      "evidencia": "O"
+    },
+    "vivienda_social_unidad": {
+      "nombre": "Vivienda social terminada, por unidad (licitaciones provinciales 2025, sin terreno)",
+      "unidad": "USD/vivienda",
+      "bajo": 53000,
+      "central": 66000,
+      "alto": 73000,
+      "fuente": "IPV Mendoza feb-2025 ($3.200 M/56 viv.); DPVyU Santa Fe Lic. 02/25 Zenón Pereyra ($933,3 M/13 viv., base mar-2025) y Lic. 05/25 Carlos Pellegrini ($950,0 M/12 viv.) — montos de Santa Fe tomados de resultados de búsqueda del pliego (PDF no descargable)",
+      "evidencia": "O"
+    },
+    "vivienda_social_m2_sup": {
+      "nombre": "Superficie típica de vivienda social (2 dormitorios)",
+      "unidad": "m2",
+      "bajo": 53,
+      "central": 60,
+      "alto": 64,
+      "fuente": "IPV Mendoza prototipo CEPA 52,9 m2 cubiertos / 55,9 total (2025) y tipo Andina 53,1/59,5 m2 (2025); Casa Propia-Construir Futuro 63 m2 (Entre Ríos 2022) y 64 m2 de referencia del monto financiable (Santa Fe)",
+      "evidencia": "O"
+    },
+    "rehab_vivienda": {
+      "nombre": "Rehabilitación de vivienda desocupada (60 m2)",
+      "unidad": "USD/vivienda",
+      "bajo": 14400,
+      "central": 28800,
+      "alto": 46800,
+      "fuente": "Derivado: 20% / 40% / 65% del costo de obra nueva UTN FRVT jun-2026 (1.200 USD/m2 x 60 m2), según peso de rubros reponibles (revoques 19%, aberturas 13%, cubiertas 11%, instalaciones 20%, pintura 6%). Contraste: OneEstimate 2026, refacciones 740-950 USD/m2 [A]. No se halló programa público argentino con costo de rehabilitación",
+      "evidencia": "J"
+    },
+    "urbanizacion_lote": {
+      "nombre": "Obras de urbanización por lote (redes; tierra excluida)",
+      "unidad": "USD/lote",
+      "bajo": 2500,
+      "central": 7200,
+      "alto": 19500,
+      "fuente": "Bajo: Río Negro Suelo Urbano, Cinco Saltos 130 lotes agua+energía+alumbrado $436,2 M (ago-2025) = 2.503; Cipolletti 181 lotes $744,2 M (ene-2026) = 2.792. Central: Plan DHI p. 40 (USD 7.200 de obras por lote, 2023); Ronconi-Casazza-Reese 2018 (EURE 44(133)) agua+cloaca+pavimento+electricidad+gas = 20,8 USD/m2 de lote 2013 = 5.200 por lote de 250 m2. Alto: Cuenca Intermedia Neuquén $17.000 M para 569 lotes (sep-2026; si cubre 1.700 lotes serían 6.500) [A]",
+      "evidencia": "O"
+    },
+    "urbanizacion_ha": {
+      "nombre": "Urbanización por hectárea bruta (~17 lotes/ha bruta: 60% vendible, lotes 350 m2)",
+      "unidad": "USD/ha",
+      "bajo": 42000,
+      "central": 122000,
+      "alto": 330000,
+      "fuente": "Derivado de urbanizacion_lote x 17 lotes/ha bruta. Contraste: Ronconi et al. 2018 = 20,8 USD/m2 de lote x 6.000 m2 vendibles = 125.000 USD/ha (USD 2013, sin pluviales)",
+      "evidencia": "J"
+    },
+    "tierra_ha_nucleo": {
+      "nombre": "Tierra agrícola zona núcleo (Pergamino-Rojas-Colón)",
+      "unidad": "USD/ha",
+      "bajo": 14000,
+      "central": 17900,
+      "alto": 20000,
+      "fuente": "BCR Informativo Semanal 2257 (21/8/2026), con datos de Márgenes Agropecuarios: promedio ene-jul 2026 USD 17.900; piso 2021 USD 13.950; campos premium hasta USD 20.000 (CAIR nov-2025 / Bichos de Campo mar-2026)",
+      "evidencia": "E"
+    },
+    "tierra_ha_oeste_bonaerense": {
+      "nombre": "Tierra agrícola oeste bonaerense - norte de La Pampa",
+      "unidad": "USD/ha",
+      "bajo": 9800,
+      "central": 13800,
+      "alto": 15800,
+      "fuente": "Derivado: arrendamiento MAGyP dic-2025 (14 qq soja = 442 USD/ha) capitalizado al 4,5% / 3,2% (rentabilidad BCR 2026 zona núcleo) / 2,8%",
+      "evidencia": "J"
+    },
+    "tierra_ha_extrapampeana": {
+      "nombre": "Tierra agrícola extrapampeana (norte de Córdoba, Santiago del Estero, Chaco)",
+      "unidad": "USD/ha",
+      "bajo": 4250,
+      "central": 5000,
+      "alto": 6300,
+      "fuente": "AgroLatam 20/4/2023 (H. Ramos, corredor rural): USD 5.000 +-15%. Alto: arrendamiento MAGyP dic-2025 NEA Oeste-Santiago 253 USD/ha / 4%",
+      "evidencia": "A"
+    },
+    "tierra_ha_nea": {
+      "nombre": "Tierra rural NEA",
+      "unidad": "USD/ha",
+      "bajo": 700,
+      "central": 5000,
+      "alto": 6500,
+      "fuente": "Bajo: monte sin desmontar 700-2.000 USD/ha (AgroLatam 2023). Central: campo agrícola Chaco USD 5.000 (AgroLatam 2023). Alto: Plan DHI p. 157 Misiones USD 6.500 (chacras periurbanas, 2023). Corrientes periurbano DHI USD 40.000 se excluye por atípico",
+      "evidencia": "A"
+    },
+    "tierra_ha_noa": {
+      "nombre": "Tierra rural NOA",
+      "unidad": "USD/ha",
+      "bajo": 700,
+      "central": 5000,
+      "alto": 10000,
+      "fuente": "Bajo: monte (AgroLatam 2023). Central: agrícola Santiago del Estero USD 5.000 (AgroLatam 2023). Alto: Plan DHI p. 157 Salta/Valle de Lerma USD 10.000 (Jujuy periurbano DHI: 15.250)",
+      "evidencia": "A"
+    },
+    "tierra_ha_patagonia_valle": {
+      "nombre": "Tierra en valles irrigados patagónicos",
+      "unidad": "USD/ha",
+      "bajo": 5000,
+      "central": 8500,
+      "alto": 30000,
+      "fuente": "Bajo: Valle Medio del río Negro, tierra sistematizada para riego 5.000-6.000 USD/ha (Diario Río Negro 22/4/2026). Central: Plan DHI p. 157 Alto Valle Río Negro 8.500 (Valle Inferior RN 6.425). Alto: DHI VIRCh 30.000 (Alto Valle Neuquén periurbano 57.500, atípico)",
+      "evidencia": "O"
+    },
+    "tierra_ha_patagonia_meseta": {
+      "nombre": "Tierra en meseta / estepa patagónica (ganadería ovina extensiva)",
+      "unidad": "USD/ha",
+      "bajo": 4,
+      "central": 30,
+      "alto": 56,
+      "fuente": "Avisos de venta sin fecha: estancias Río Negro 4-5 USD/ha; estancia ovina Esquel 21.500 ha por USD 1,2 M = 56 USD/ha. Central = punto medio [J]. Sin relevamiento oficial",
+      "evidencia": "A"
+    },
+    "tierra_ha_cuyo_oasis": {
+      "nombre": "Tierra en oasis irrigados de Cuyo",
+      "unidad": "USD/ha",
+      "bajo": 8000,
+      "central": 20000,
+      "alto": 24000,
+      "fuente": "Bajo: finca 150 ha con viñedo y derecho de riego en Palmira, San Martín, USD 1,2 M (aviso sin fecha). Central: Plan DHI p. 157 Mendoza 20.000 (2023). Alto: viñedo 101 ha en San Carlos, Valle de Uco, USD 2,4 M = 24.000 (aviso; incluye plantación)",
+      "evidencia": "A"
+    },
+    "tierra_ha_cuyo_secano": {
+      "nombre": "Tierra de secano en Cuyo (ganadería extensiva)",
+      "unidad": "USD/ha",
+      "bajo": 100,
+      "central": 775,
+      "alto": 6000,
+      "fuente": "CAIR y Sociedad Rural de San Luis vía nota Nordheimer: 100 a 6.000 USD/ha según ubicación. Central = media geométrica [J]. El alto corresponde a tierra agrícola de San Luis, no a secano estricto",
+      "evidencia": "A"
+    },
+    "ruta_km": {
+      "nombre": "Ruta nueva pavimentada de 2 carriles (obra básica + pavimento)",
+      "unidad": "USD/km",
+      "bajo": 800000,
+      "central": 1100000,
+      "alto": 1550000,
+      "fuente": "Neuquén RP62 paso Carirriñe, 10 km $1.675,1 M (mar-2023) = 0,80 M/km; RP62 a Lolog, más de 5 km $7.434,5 M (base ago-2024) = hasta 1,55 M/km (cordillera). Central [J]. En llanura debería ser menor: no se halló licitación pampeana con km",
+      "evidencia": "O"
+    },
+    "ruta_duplicacion_km": {
+      "nombre": "Duplicación de calzada / autovía",
+      "unidad": "USD/km",
+      "bajo": 900000,
+      "central": 2100000,
+      "alto": 2400000,
+      "fuente": "Neuquén RP67 19 km $24.772,6 M (adj. nov-2025) = 0,90 M/km; RN34 Jujuy 27 km $65.000 M (abr-2025, Panedile) = 2,1 M/km; RN38 Monteros-Famaillá 21,2 km $18.412,7 M (DNV, oct-2023, 9 puentes y 2 distribuidores) = 2,36 M/km",
+      "evidencia": "O"
+    },
+    "ruta_repavimentacion_km": {
+      "nombre": "Repavimentación de ruta existente",
+      "unidad": "USD/km",
+      "bajo": 200000,
+      "central": 200000,
+      "alto": 200000,
+      "fuente": "Neuquén RP6 Rincón de los Sauces-Crucero Catriel, 54 km, $11.682 M (base mar-2025)",
+      "evidencia": "O"
+    },
+    "linea_132kv_km": {
+      "nombre": "Línea de alta tensión 132 kV",
+      "unidad": "USD/km",
+      "bajo": 230000,
+      "central": 330000,
+      "alto": 540000,
+      "fuente": "Secretaría de Energía, Plan Nacional de Expansión del Transporte Eléctrico 2035 (dic-2022): LAT San Luis-Realicó 90 km USD 21 M (0,23); Arrecifes 31 km USD 7,75 M (0,25); Esquel-Los Perales 481 km con ET USD 160,25 M (0,33); Formosa 189 km USD 85,4 M (0,45); Pto San Julián 120 km con ET USD 65,2 M (0,54)",
+      "evidencia": "O"
+    },
+    "linea_500kv_km": {
+      "nombre": "Línea de extra alta tensión 500 kV (incluye estaciones transformadoras asociadas)",
+      "unidad": "USD/km",
+      "bajo": 500000,
+      "central": 1180000,
+      "alto": 2960000,
+      "fuente": "Central: Plan de ampliación 2025, 16 obras, USD 6.600 M / 5.610 km (incluye ET). Alto: AMBA I, 270 km + ET Plomer, USD 800 M (Res. SE 202/2026). Bajo: LEAT Bahía Blanca-Choele Choel USD 174 M (Plan 2035) / ~345 km de traza [longitud J]",
+      "evidencia": "O"
+    },
+    "estacion_transformadora": {
+      "nombre": "Estación transformadora nueva 132 kV",
+      "unidad": "USD/estación",
+      "bajo": 17200000,
+      "central": 24200000,
+      "alto": 32300000,
+      "fuente": "Plan 2035 (SE, dic-2022): ET General Pico Sur 17,16; ET Catamarca (Santa Fe) 22,0; ET Mendoza Norte 26,4; ET Santa Ana (Córdoba) 32,33 M USD",
+      "evidencia": "O"
+    },
+    "estacion_transformadora_500": {
+      "nombre": "Estación transformadora nueva 500/132 kV",
+      "unidad": "USD/estación",
+      "bajo": 80000000,
+      "central": 86000000,
+      "alto": 92300000,
+      "fuente": "Plan 2035 (SE, dic-2022): Nueva ET Espinillo (Tucumán) USD 80 M; Nueva ET Comodoro Rivadavia Oeste 500/132 kV 450 MVA USD 92,3 M",
+      "evidencia": "O"
+    },
+    "acueducto_km": {
+      "nombre": "Acueducto troncal de agua potable regional (con ramales, bombeo y toma prorrateados)",
+      "unidad": "USD/km",
+      "bajo": 900000,
+      "central": 1040000,
+      "alto": 2690000,
+      "fuente": "Acueducto Santa Fe-Córdoba: USD 441 M (Plan DHI) / 489 km (144 troncal + 345 ramales) = 0,90; bloques B y C $165.723 M / ~110 km (nov-2025) = 1,04. Acueducto Formoseño: USD 1.217 M (SSRH) / 452 km troncal de 1,70 m con estaciones de bombeo de 6, 3 y 1,5 m3/s = 2,69 (2023). Ganadero de bajo caudal: Monte Comán-La Horqueta $2.102,7 M / 291 km (dic-2022) = 0,04 M/km",
+      "evidencia": "O"
+    },
+    "planta_potabilizadora_m3dia": {
+      "nombre": "Planta potabilizadora por capacidad instalada",
+      "unidad": "USD por m3/día",
+      "bajo": 224,
+      "central": 443,
+      "alto": 1850,
+      "fuente": "Santa Fe ampliación +6.000 m3/h, $11.900 M (PROARSA, nov-2023) = 224; ficha Plan Nacional del Agua nueva planta Santa Fe 6.250 m3/h USD 66,5 M = 443; Gral. Alvear (BA) 100 m3/h $496,1 M (feb-2022) = 1.846; Vedia 150 m3/h $309,3 M (dic-2021) = 799. Fuerte economía de escala",
+      "evidencia": "O"
+    },
+    "ferrocarril_km": {
+      "nombre": "Vía férrea de carga nueva",
+      "unidad": "USD/km",
+      "bajo": 2400000,
+      "central": 2600000,
+      "alto": 2900000,
+      "fuente": "Tren Norpatagónico, tramos nuevos (ADI-NQN, dic-2020): Cordero-Añelo 68 km USD 200 M (2,9); Cutral Co-Añelo 90 km USD 230 M (2,6); LM Neuquén: 90 km USD 220 M (2,4). Datos 2019-2020, fuera de la ventana 2023-2026",
+      "evidencia": "A"
+    },
+    "ferrocarril_renovacion_km": {
+      "nombre": "Renovación de vía férrea existente",
+      "unidad": "USD/km",
+      "bajo": 800000,
+      "central": 900000,
+      "alto": 1400000,
+      "fuente": "Norpatagónico, USD 570 M / 700 km (Presidencia, 2019); Belgrano Cargas, CMEC USD 816 M / 911 km; San Martín, CRCC USD 2.603 M / 1.813 km (Bichos de Campo, dic-2020)",
+      "evidencia": "A"
+    },
+    "escuela_por_alumno": {
+      "nombre": "Escuela nueva, costo de edificio por alumno",
+      "unidad": "USD/alumno",
+      "bajo": 9600,
+      "central": 11500,
+      "alto": 48500,
+      "fuente": "ProA Villa del Totoral (Córdoba): $2.500 M, 180 alumnos, 1.596 m2 (La Voz; fecha 2024-26 no verificada; a 1.450 ARS/USD). Escuela 4-209 San Martín (Mendoza): $310 M, 1.300 m2, más de 200 alumnos (jul-2022). Escuela 77 El Alamito (Neuquén): $2.200 M, 770 m2, 32 alumnos (mar-2026, rural)",
+      "evidencia": "O"
+    },
+    "escuela_m2": {
+      "nombre": "Escuela nueva, costo por m2",
+      "unidad": "USD/m2",
+      "bajo": 1080,
+      "central": 1760,
+      "alto": 2020,
+      "fuente": "Mismas obras que escuela_por_alumno: ProA Totoral 1.080; Mendoza 2022 1.764; El Alamito 2026 2.017",
+      "evidencia": "O"
+    },
+    "hospital_por_cama": {
+      "nombre": "Hospital general nuevo, costo por cama",
+      "unidad": "USD/cama",
+      "bajo": 144000,
+      "central": 301000,
+      "alto": 371000,
+      "fuente": "Hospital San Roque, Jáchal: $5.500 M, 82 camas (abr-2023) = 301.000; Hospital Ramón Carrillo, San Martín de los Andes: USD 26 M, 70 camas, 11.391 m2 (oct-2022) = 371.000; Hospital Nacional de Itauguá, Paraguay: USD 150 M, 1.039 camas (2025) = 144.000 [referencia regional]",
+      "evidencia": "O"
+    },
+    "camas_por_1000": {
+      "nombre": "Camas hospitalarias por 1.000 habitantes, Argentina",
+      "unidad": "camas/1000 hab",
+      "bajo": 3.19,
+      "central": 3.36,
+      "alto": 4.99,
+      "fuente": "Banco Mundial WDI SH.MED.BEDS.ZS: 3,36 (2022), 3,19 (2020), 4,99 (2017; quiebre de serie)",
+      "evidencia": "O"
+    },
+    "oficina_m2": {
+      "nombre": "Construcción de edificio de oficinas públicas",
+      "unidad": "USD/m2",
+      "bajo": 1350,
+      "central": 1820,
+      "alto": 2270,
+      "fuente": "Bajo: APYMECO oct-2025 1.358 USD/m2 costo directo. Central: APYMECO jun-2026 1.503 x 1,21 (IVA) [J]; CAMARCO ago-2025: no menos de 1.500 USD/m2 en CABA [A]. Alto: 1.503 x 1,21 x 1,25 (gastos generales, beneficio y honorarios) [J]. No se halló licitación de oficinas públicas",
+      "evidencia": "J"
+    },
+    "m2_por_empleado": {
+      "nombre": "Superficie de oficina por empleado",
+      "unidad": "m2/empleado",
+      "bajo": 8,
+      "central": 12,
+      "alto": 16,
+      "fuente": "AABE, Manual de Estándares de Espacios de Trabajo del Estado Nacional (2017): 8 m2 de superficie de piso por persona (Código de Edificación CABA, art. 4.7.2.1). Central y alto: superficie bruta con núcleos, circulaciones y servicios (eficiencia de planta 0,67 y 0,5) [J]",
+      "evidencia": "O"
+    },
+    "empleados_apn_total": {
+      "nombre": "Dotación de la Administración Pública Nacional (Poder Ejecutivo; sin empresas)",
+      "unidad": "personas",
+      "bajo": 184202,
+      "central": 184202,
+      "alto": 271696,
+      "fuente": "INDEC, Dotación de personal de la APN, empresas y sociedades, jun-2026: APN 184.202; con empresas y sociedades 271.696 (alto)",
+      "evidencia": "O"
+    },
+    "empleados_apn_caba": {
+      "nombre": "Empleados nacionales que trabajan en CABA",
+      "unidad": "personas",
+      "bajo": 65000,
+      "central": 74000,
+      "alto": 136558,
+      "fuente": "ITEP-INAP vol. 3 n° 2 (mar-2021, datos BIEP dic-2020): CABA 136.558 puestos = 35,3% del empleo nacional, incluidas FF. AA. y de seguridad. Bajo: 35,3% x APN jun-2026 [J]. Central: 40%, porque el personal civil se concentra más en CABA [J]",
+      "evidencia": "J"
+    },
+    "mudanza_hogar": {
+      "nombre": "Mudanza de un hogar (2-3 ambientes) a unos 1.000 km",
+      "unidad": "USD/hogar",
+      "bajo": 400,
+      "central": 1000,
+      "alto": 1660,
+      "fuente": "Roomix, abr-2026: CABA-Mendoza (1.000 km) $1,0-1,8 M; la carga y la descarga se cotizan aparte. Bajo: cuantomecuesta.com abr-2026, CABA-Córdoba $300-500 mil escalado a 1.000 km. Alto: $1,8 M x 1,3 (carga, descarga y seguro) [J]. A 1.406 ARS/USD",
+      "evidencia": "A"
+    },
+    "subsidio_zona_fria_hogar_anio": {
+      "nombre": "Subsidio del Régimen de Zona Fría por usuario de gas",
+      "unidad": "USD/hogar/año",
+      "bajo": 56,
+      "central": 129,
+      "alto": null,
+      "fuente": "Bajo: Secretaría de Energía, Informe Régimen Zona Fría (feb-2024): pagos 2023 $74.416 MM / 4,3 M usuarios, al oficial promedio 2023 (308). Central: ahorro de USD 400 M/año de la Ley 27.828 (Palabras del Derecho, oct-2026) / ~3,1 M hogares que pierden el beneficio (iProfesional) [J]. Alto: sin dato del subsidio de 50% en Patagonia",
+      "evidencia": "O"
+    },
+    "parque_industrial_ha": {
+      "nombre": "Urbanización de parque industrial (redes internas, sin tierra)",
+      "unidad": "USD/ha",
+      "bajo": 120000,
+      "central": 206000,
+      "alto": 1000000,
+      "fuente": "No se halló licitación con costo por ha. Bajo: urbanizacion_ha central. Central: Plan DHI 7.200 USD por lote de 350 m2 = 20,6 USD/m2 x 10.000 [J]. Alto: precio de venta de lotes en Parque Industrial Pilar, 70-100 USD/m2 (avisos argenprop sin fecha; incluye tierra y margen) [A]",
+      "evidencia": "J"
+    },
+    "empleos_por_ha_industrial": {
+      "nombre": "Densidad de empleo en parques industriales (sobre superficie total)",
+      "unidad": "empleos/ha",
+      "bajo": 1.5,
+      "central": 8.2,
+      "alto": 9.6,
+      "fuente": "RENPI 2016 (Informes N° 1 por provincia, jun-2020): PBA 56.074 empleos / (90 parques x 64,9 ha) = 9,6 (11,7 sobre superficie ocupada); Córdoba 5.221 / (17 x 37,4) = 8,2 (10,7); NEA 1.910 / (23 x 54,8) = 1,5 (2,9) [derivación propia]",
+      "evidencia": "J"
+    },
+    "costo_fiscal_empleo_anio": {
+      "nombre": "Costo fiscal anual por empleo de regímenes de promoción",
+      "unidad": "USD/empleo/año",
+      "bajo": 17000,
+      "central": 51000,
+      "alto": 126000,
+      "fuente": "Bajo: promoción LR-CAT-SL-SJ, USD 461.000 acumulado por puesto (Dagnino Pastore/CEM 1999) / 27 años (1983-2010) [J]. Central: estimación oficial de USD 1.620 M/año (1993) / 31.700 empleos netos [J]. Alto: Tierra del Fuego, USD 1.070 M/año (Fundar 2023) / 8.500 empleos electrónicos (cota superior). Ver docs/politicas-territoriales.md §3.3",
+      "evidencia": "J"
+    },
+    "servicios_municipales_hab_anio": {
+      "nombre": "Gasto municipal per cápita en servicios (agua, saneamiento, residuos, electricidad, áreas verdes) según densidad urbana",
+      "unidad": "USD 2025/hab/año",
+      "bajo": 65,
+      "central": 75,
+      "alto": 81,
+      "fuente": "Datos de replicación de Libertun de Duren y Guerrero Compeán 2016 (BID, doi:10.60966/kyqvaojp), municipios de Brasil 2010, medianas: 43,8 USD a 9.000-12.000 hab/km2 urbanos; 51,3 a 5.000-7.000; 54,9 a 1.000-2.000. Llevados a USD 2025 con IPC EE. UU. x1,48 [J]. Brasil únicamente, porque las unidades de Chile y México no son interpretables",
+      "evidencia": "E"
+    },
+    "mantenimiento_infra_pct_anual": {
+      "nombre": "Mantenimiento anual de infraestructura",
+      "unidad": "% del costo de inversión por año",
+      "bajo": 1,
+      "central": 2,
+      "alto": 3,
+      "fuente": "Rozenberg y Fay 2019, Beyond the Gap (Banco Mundial): electricidad, en promedio 3% del costo de inversión por año (rango 1-6%); defensas costeras 1%; en transporte, el mantenimiento a 15 años iguala la inversión nueva. Central [J]",
+      "evidencia": "E"
+    },
+    "pbi_usd": {
+      "nombre": "PBI de Argentina, USD corrientes",
+      "unidad": "USD",
+      "bajo": 683097891619,
+      "central": 683097891619,
+      "alto": 683097891619,
+      "fuente": "Banco Mundial WDI NY.GDP.MKTP.CD, 2025 (2024: 638.365 M)",
+      "evidencia": "O"
+    },
+    "share_edad_escolar": {
+      "nombre": "Proporción de población de 6 a 17 años",
+      "unidad": "fracción",
+      "bajo": 0.1884,
+      "central": 0.1902,
+      "alto": 0.1902,
+      "fuente": "Censo 2022, data/interim/censo_servicios/servicios_departamento.csv: pob_6a12 5.103.071 + pob_13a17 3.573.238 = 8.676.309 / 45.618.784 (población en viviendas particulares) = 0,1902; sobre la población total censada de 46,04 M = 0,1884",
+      "evidencia": "O"
+    },
+    "personas_por_hogar": {
+      "nombre": "Personas por hogar",
+      "unidad": "personas/hogar",
+      "bajo": 2.86,
+      "central": 2.86,
+      "alto": 2.86,
+      "fuente": "Censo 2022, verificado en servicios_departamento.csv: población en viviendas particulares 45.618.784 / hogares 15.932.302 = 2,863. Ojo: politicas-territoriales.md usa 2,56, que divide por viviendas (17,8 M) y no por hogares",
+      "evidencia": "O"
+    },
+    "congreso_corte_costo": {
+      "nombre": "Costo de construir el Congreso y la Corte Suprema en una nueva capital",
+      "unidad": "USD",
+      "bajo": null,
+      "central": null,
+      "alto": null,
+      "fuente": "No se halló ninguna estimación. Se puede derivar con oficina_m2 y una superficie que hay que definir",
+      "evidencia": "J"
+    },
+    "traslado_viedma_1987": {
+      "nombre": "Costo estimado del traslado de la capital a Viedma (1987)",
+      "unidad": "USD",
+      "bajo": 1500000000,
+      "central": 2300000000,
+      "alto": 20000000000,
+      "fuente": "No se hallaron documentos originales del ENTECAP ni un presupuesto oficial. Prensa: el gobierno hablaba de USD 1.500-2.000 M y la oposición de USD 15.000-20.000 M; TN, vía Contexto Tucumán: USD 2.300 M",
+      "evidencia": "A"
+    }
+  }
+}

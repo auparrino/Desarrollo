@@ -66,6 +66,7 @@ export const VARIABLES: VarInfo[] = [
   { id: "d_max_capital", nombre: "Distancia a la capital provincial más lejana", unidad: "km", grupo: "Accesibilidad", fmt: f0 },
   { id: "d_metro", nombre: "Distancia a una metrópoli (≥1 M hab.)", unidad: "km", grupo: "Accesibilidad", fmt: f0 },
   { id: "n_incent_empresas", nombre: "Incentivos vigentes para empresas (depto.)", unidad: "", grupo: "Incentivos", fmt: f0 },
+  { id: "n_incent_municipales", nombre: "Programas municipales de radicación (depto.)", unidad: "", grupo: "Incentivos", fmt: f0 },
   { id: "n_incent_personas", nombre: "Incentivos vigentes para personas y hogares (depto.)", unidad: "", grupo: "Incentivos", fmt: f0 },
   { id: "frac_ap_estricta", nombre: "Área protegida estricta", unidad: "", grupo: "Ambiente", fmt: pct },
   { id: "frac_ap_uso_multiple", nombre: "Área protegida de uso múltiple", unidad: "", grupo: "Ambiente", fmt: pct },

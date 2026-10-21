@@ -17,6 +17,7 @@ export interface Overlays {
   plan_dhi: boolean;
   proyectos: boolean;
   comunidades_indigenas: boolean;
+  incentivos_municipales: boolean;
 }
 
 export interface MapProps {
@@ -171,6 +172,7 @@ export default function MapView(p: MapProps) {
     const POINTS: [keyof Overlays, [number, number, number, number]][] = [
       ["proyectos", [237, 161, 0, 230]],
       ["comunidades_indigenas", [232, 123, 164, 230]],
+      ["incentivos_municipales", [27, 175, 122, 240]],
     ];
     for (const [k, color] of POINTS) {
       if (p.overlays[k] && p.geo[k]) {

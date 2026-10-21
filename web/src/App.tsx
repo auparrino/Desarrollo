@@ -46,6 +46,7 @@ const GEO_FILES = {
   plan_dhi: "capas/plan_dhi.geojson",
   proyectos: "capas/proyectos.geojson",
   comunidades_indigenas: "capas/comunidades_indigenas.geojson",
+  incentivos_municipales: "capas/incentivos_municipales.geojson",
 };
 
 // Rampa ordinal para las clases del modo simple (sin el paso más claro, que no contrasta).
@@ -83,7 +84,7 @@ export default function App() {
   const [view, setView] = useState<View>("aptitud");
   const [variable, setVariable] = useState("pob");
   const [overlays, setOverlays] = useState<Overlays>({
-    provincias: true, rutas: false, ferrocarril: false, alta_tension: false, rios: false, areas_protegidas: false, plan_dhi: false, proyectos: false, comunidades_indigenas: false,
+    provincias: true, rutas: false, ferrocarril: false, alta_tension: false, rios: false, areas_protegidas: false, plan_dhi: false, proyectos: false, comunidades_indigenas: false, incentivos_municipales: false,
   });
 
   const [scenario, setScenario] = useState("E1");
@@ -488,6 +489,7 @@ export default function App() {
                     ["plan_dhi", "Propuestas del Plan DHI"],
                     ["proyectos", "Proyectos productivos (minería, Vaca Muerta, energía)"],
                     ["comunidades_indigenas", "Comunidades indígenas registradas"],
+                    ["incentivos_municipales", "Municipios con incentivos a la radicación"],
                   ] as [keyof Overlays, string][]
                 ).map(([k, n]) => (
                   <label key={k} className="check">

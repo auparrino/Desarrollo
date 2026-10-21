@@ -79,11 +79,26 @@ export default function SimpleCellCard(p: Props) {
       {(() => {
         const ids = p.incentivos?.por_dep[d?.cod ?? ""] ?? [];
         const list = (p.incentivos?.incentivos ?? []).filter((x) => ids.includes(x.id));
+        const mun = (p.incentivos?.municipales ?? []).filter((x) => x.cod_dep === d?.cod);
         if (!p.incentivos) return null;
         return (
           <>
             <h4>Incentivos para radicarse aquí</h4>
-            {list.length === 0 ? (
+            {mun.length > 0 && (
+              <ul className="incent">
+                {mun.map((x) => (
+                  <li key={x.id}>
+                    <span className={`tag ${x.beneficiario === "empresas" ? "emp" : "pers"}`}>municipal · {x.beneficiario}</span>{" "}
+                    <a href={x.fuente_url} target="_blank" rel="noopener">
+                      {x.municipio}: {x.nombre_programa}
+                    </a>
+                    {x.intensidad && <span className="small muted"> · {x.intensidad}</span>}
+                    {x.verificado !== "si" && <span className="small muted"> · fuente periodística</span>}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {list.length === 0 && mun.length === 0 ? (
               <p className="small muted">No se registran incentivos vigentes específicos para este departamento.</p>
             ) : (
               <ul className="incent">
