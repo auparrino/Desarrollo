@@ -181,7 +181,7 @@ for p in ("Neuquén", "Tierra del Fuego, Antártida e Islas del Atlántico Sur")
     s = m[(m.provincia == p) & ~m.index.isin(["94021", "94028"])]  # TDF: solo Isla Grande
     fiscal_cat = s["sup_fiscal_catastro_fuera_mascara_ha"].sum() + s["sup_sin_parcela_catastro_ha"].sum()
     fuera = max(fiscal_cat - s["sup_fiscal_eap_ha"].sum(), 0)
-    cal.append((p, s["sup_dep_ha"].sum(), s["sup_eap_ha"].sum(), s["sup_fiscal_eap_ha"].sum(), s["sup_fiscal_catastro_ha"].sum(),
+    cal.append((p, s["sup_dep_ha"].sum(), s["sup_eap_ha"].sum(), s["sup_fiscal_eap_ha"].sum(), s["sup_fiscal_catastro_fuera_mascara_ha"].sum(),
                 s["sup_sin_parcela_catastro_ha"].sum(), s["residuo_ha"].sum(), fuera / max(s["residuo_ha"].sum(), 1)))
 cal = pd.DataFrame(cal, columns=["provincia", "sup_ha", "eap_ha", "fiscal_eap_ha", "fiscal_catastro_fuera_mascara_ha", "sin_parcela_ha", "residuo_ha", "ratio_fiscal_fuera_eap_sobre_residuo"])
 print(cal.round(3).to_string())
