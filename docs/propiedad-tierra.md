@@ -312,3 +312,202 @@ data/raw/tierra/
 └── literatura/ (Sili 2006 y 2012, ATE 2022, INDEC CNA 2018 resultados definitivos)
 pipeline/tierra/parse_cna.py build_cna.py parse_rntr.py d950.py
 ```
+
+---
+
+## 9. Profundización (21/10/2026)
+
+Esta sección amplía el relevamiento en cuatro líneas: catastros provinciales, cifras oficiales por provincia, inmuebles del Estado Nacional y una estimación de tierra probablemente fiscal por complemento. Todo lo que es estimación propia está marcado **[J]**. Scripts nuevos (no se tocó `build.py`):
+
+- `pipeline/tierra/fiscal_espacial.py`: máscaras, polígonos fiscales y métricas por departamento.
+- `pipeline/tierra/fiscal_estimacion.py`: inmuebles nacionales, calibración y estimación por departamento.
+- `pipeline/tierra/fiscal_provincias.py`: tabla de cifras por provincia.
+
+Se corren en ese orden con `python -I <script> <raíz del repo>`.
+
+### 9.1 Resultado principal
+
+| Indicador (país, sin Antártida, Islas del Atlántico Sur ni CABA; 277,9 Mha) | Hectáreas | % |
+|---|---|---|
+| Fiscal dentro de EAP (CNA 2018) | 5.190.745 | 1,9 % |
+| **Bajo**: documentado = max(fiscal en EAP, catastro fiscal) + Estado Nacional con superficie | 7.536.716 | 2,7 % |
+| **Central [J]**: bajo + fracción calibrada del residuo fuera de EAP | 47.301.379 | 17,0 % |
+| **Alto [J]** | 73.130.007 | 26,3 % |
+
+- **Hallazgo nuevo: el catastro de Neuquén publica la fiscalidad parcela por parcela.** Expone el servicio ArcGIS REST `https://catastro.neuquen.gov.ar/nqn_ide/rest/services/Informacion/MapServer`, con el campo `FISCALIDAD` (FISCO PROVINCIAL, MUNICIPAL, NACIONAL, NO FISCAL o NO SE PUEDE DETERMINAR). Es el primer catastro provincial con titularidad abierta después del de Tierra del Fuego.
+  - Hay **2.084.240 ha fiscales en parcelas rurales**: 2.011.752 provinciales, 50.860 nacionales y 8.550 municipales en la capa rural extensiva, más 13.709 en la rural intensiva.
+  - Frente a eso, el CNA 2018 registra 904.787 ha fiscales en EAP en Neuquén. **Aun dentro de lo mensurado, el CNA capta menos de la mitad de la tierra fiscal.**
+  - Además hay 2.431.800 ha **sin parcela ni ejido** fuera de las áreas protegidas y del agua. Es probablemente tierra fiscal sin mensura [J], equivalente a la categoría "tierras fiscales sin mensura" de la capa de TDF.
+  - Suma: ≈ 4,5 Mha, es decir **48 % de la provincia**. Es coherente con el "50 % de la superficie provincial son tierras fiscales" que publicó La Nación (1998).
+- **La calibración converge.** La proporción del residuo fuera de EAP que resulta fiscal es **0,729 en Neuquén y 0,734 en Tierra del Fuego (Isla Grande)**, medida en dos catastros independientes (`_calibracion_catastro.csv`).
+- **Validación contra cifras oficiales.**
+  - Río Negro: estimación central de 5,25 Mha (rango 0,59–6,64), contra 4,8 Mha de "tierras denominadas fiscales" (Legislatura, 2014). Además hay 2,37 Mha sin mensura y 4 Mha ocupadas sin regularizar (Dirección de Tierras y Catastro, 2026).
+  - Jujuy: central de 0,96 Mha (alto 1,66), contra 1,28 Mha de tierras fiscales rurales del convenio de la Ley 5030.
+  - Salta: las parcelas del catastro llamadas "FISCAL 14" y "FISCAL 55" suman 621.733 ha, contra las 643.000 ha oficiales de los ex lotes fiscales 14 y 55.
+
+### 9.2 Catastros e IDE provinciales (línea 1)
+
+Método: el buscador de IDERA está alojado en `https://opendata.fi.uncoma.edu.ar/IDERA/TableroWFSProvincias.html` (tablero del 03/10/2026, enlazado desde `idera.gob.ar/index.php/servicios/geoservicios`). Extraje sus tablas embebidas, que listan 3.992 capas WFS provinciales con atributos, y las guardé en `data/raw/tierra/idera/idera_tablero_wfs_provincias_capas.txt`. Busqué en nombres y atributos las palabras fiscal, titular, dominio, tierras, colonia y parcela, y después probé cada candidato en vivo.
+
+| Provincia | Servicio | Capa / atributo | Resultado |
+|---|---|---|---|
+| **Neuquén** | ArcGIS REST `catastro.neuquen.gov.ar/nqn_ide/rest/services/Informacion/MapServer/2` (rural intensiva) y `/3` (rural extensiva), `Fiscalidad/MapServer/0`, `IDE/Catastro/MapServer` (WFS) | `FISCALIDAD`, `TIPO_PARCELA`, `INFO_TITULO`, `PROCEDENCIA` | ✅ Descargué 2.975 parcelas rurales extensivas, 1.337 rurales intensivas fiscales, 3.602 rurales intensivas no fiscales y 68 ejidos (`data/raw/tierra/provincias/neuquen/`). Las parcelas urbanas fiscales salen de las estadísticas del servicio: provincial 2.431 ha, municipal 3.019 ha y nacional 403 ha. El servidor resetea conexiones; hay que usar reintentos |
+| **Tierra del Fuego** | WFS `geonode:tierras_fiscales_provinciales` | `clas_titul` | ✅ Ya estaba descargada. Medida dentro de la provincia: 759.168 ha, de las cuales 691.815 son "sin mensura" |
+| **Río Negro** | IDERN `idern.rionegro.gov.ar/geoserver` | `geonode:par_tit_estatal`: **parcelas de titularidad estatal** con `TITULAR1`, `OCUPANTE`, `POSEEDOR`, `ADJUDICATA` y `CONCESIONA`. También `SUELO_URBANO`, con `Titula` | ❌ La capa existe en el catálogo de IDERA, pero el GeoServer devuelve un error interno (`relation "public.gf_rule_limits" does not exist`) en todo GetFeature y GetMap. La API GeoNode no la lista como pública. Hay que pedirla a la IDERN o a la Agencia de Recaudación Tributaria |
+| **Salta** | `geoportal.salta.gob.ar/geoserver/wfs`, `geonode:fc_parcelas_v20` (315.533 parcelas) | sin campo de dominio. Hay `finca`, `categoria` y `catastro` | ⚠️ Filtré con `finca ILIKE '%fiscal%'`: 630 parcelas que suman 3.526.657 ha. Destacan "FISCAL 63", una parcela de 2,38 Mha en Los Andes, y "FISCAL 14" y "FISCAL 55" en Rivadavia. **El nombre indica el origen como lote fiscal, no la titularidad actual** (los lotes 14 y 55 están en proceso de titulación a favor de comunidades y criollos) |
+| Chubut | `sit.chubut.gov.ar/geoserver/wfs`: `Chubut:ParcelasRurales` (`TIPO_PARCELA`, `COLONIA`, `SUP_MENSURA`; **sin titular**) | — | ❌ 503 / connection reset desde el proxy. Aunque respondiera, la capa no informa el dominio |
+| La Pampa | `geoidelp.lapampa.gob.ar/geoserver/p_dirg_catastro` (parcelario por sección, `cca`, `pda`, `tpa`, `ara`) | sin dominio | ❌ connection reset |
+| Córdoba | IDECOR `idecor:parcelas` | valuación, sin dominio | ✅ responde, sin titularidad |
+| Chaco | `idechaco.gob.ar/geoserver/idechaco` (998 capas): solo asentamientos con campo `dominio` | — | ❌ 503 |
+| Santa Cruz (SITU), Corrientes, Catamarca (`nodoide`, detrás de Cloudflare), Mendoza (`atmgis`/`siat`: no resuelven), San Juan, San Luis, La Rioja, Jujuy, Formosa, Santiago del Estero, Misiones | — | — | ❌ No hay capas de dominio en el tablero de IDERA. Los hosts candidatos responden 502 o no resuelven |
+
+### 9.3 Cifras oficiales por provincia (línea 2) → `fiscal_provincias.csv`
+
+| Provincia | Cifra | Año | Fuente |
+|---|---|---|---|
+| Río Negro | 4.800.000 ha "denominadas fiscales" | 2014 | Legislador J. Ocampos, ANBariloche 05/05/2014 |
+| Río Negro | 4.000.000 ha ocupadas sin regularizar y 2.368.100 ha sin mensura | 2026 | Diario Río Negro 27/04/2026 (Dir. de Tierras y Catastro) |
+| Río Negro (Meseta / Región Sur) | 3.400.000 ha (~30 % de la región) | 2006 | Sili (2006) |
+| Patagonia | 2.500.000 ha (fiscal en EAP, base CNA 2002) | 2012 | Sili y Li (2012) |
+| Neuquén | 50 % de la superficie provincial | 1998 | La Nación |
+| Neuquén | 2.084.240 ha en parcelas rurales fiscales y ~5.850 ha urbanas | 2026 | catastro provincial (cálculo propio) |
+| Mendoza | 792.000 ha sin regularizar (> 5 % de la provincia) | 2012 | Gobierno de Mendoza (prensa). Según el BO, no hay inventario completo |
+| Jujuy | 1.283.300 ha fiscales rurales y 15.583 parcelas urbanas a regularizar a favor de comunidades | 1996/2000 | Ley 5030 y protocolo, citados en el informe de la SDH (2023) |
+| Salta | 643.000 ha (ex lotes fiscales 14 y 55) | 2020 | Memo del Estado Nacional sobre la sentencia de la Corte IDH Lhaka Honhat |
+| Tierra del Fuego | 759.168 ha | 2026 | WFS provincial (cálculo propio) |
+| Chubut, Santa Cruz, La Pampa, San Juan, San Luis, La Rioja, Catamarca, Formosa, Chaco, Santiago del Estero, Corrientes, Misiones | **sin cifra oficial encontrada** | — | Se buscaron informes de las direcciones de tierras (IACyFR de Chubut, CAP de Santa Cruz, institutos de colonización de Chaco y Formosa) y las leyes de tierras: ninguna publica un total. Santiago del Estero: unos 24.000 poseedores expuestos a desalojo (Defensor del Pueblo, citado por FLACSO) |
+
+La Ley 279 de Río Negro fue reemplazada por la Ley 5705 (2023), reglamentada por el Decreto 423/2025. No encontré pedidos de acceso a la información pública ya respondidos con cifras de superficie fiscal. El CSV también incluye el fiscal en EAP del CNA por provincia, las superficies de catastro y la estimación central de este trabajo, para poder compararlas.
+
+### 9.4 Inmuebles del Estado Nacional (línea 3) → `inmuebles_estado.geojson`
+
+- **AABE / RENABE / SIENA.**
+  - La API CKAN de datos.gob.ar no tiene ningún dataset de inmuebles del Estado: probé "inmuebles", "bienes del estado", "AABE", "RENABE", "SIENA", "inmuebles del estado", "tierras fiscales" y "catastro", y ninguna búsqueda devuelve resultados relevantes.
+  - Los hosts `siena.`, `visor.`, `mapa.`, `geo.` y `datos.bienesdelestado.gob.ar` no responden desde el proxy.
+  - Los informes presupuestarios de la AABE de 2023 y 2024 (`data/raw/tierra/aabe/memorias/`) no informan superficie total.
+  - El inventario sigue siendo cerrado. En el archivo se incluyen las 370 subastas y los 57 renglones del Decreto 950/2024, de los cuales 18 son ferroviarios y 7 tienen croquis con superficie.
+- **Defensa.**
+  - Hallazgo: **18 polígonos de Reservas Naturales de la Defensa** (WFS de Ambiente, `areas_protegidas:reserva_natural_defensa`), con **390.620 ha declaradas**. Las más grandes son Uspallata (215.375 ha), Estancia Los Manantiales en San Juan (121.400 ha) y La Calera (13.628 ha).
+  - Las 152 instalaciones militares del IGN son solo puntos y no incluyen Campo de Mayo.
+  - Cifras sin geometría: Campo de Mayo, 5.000 ha (El País 2018, vía Wikipedia); terrenos del Ejército en Córdoba, 13.360 ha (HCDN 4985-D-2025).
+  - La UAI de Defensa (Informe 08/2020) cuenta 84 inmuebles desafectados, sin superficie.
+  - No encontré la superficie total de las Fuerzas Armadas ni datos de Magdalena, Puerto Belgrano o Holmberg.
+- **Ferrocarriles.** Hay 3.287 estaciones de la IDE de Transporte (`idera:Estacion_Ferroviaria`), con `linea` y `gna`. No tienen atributo de uso ni de superficie, y ADIF no publica un inventario. Nota técnica: el certificado de `ide.transporte.gob.ar` no envía la cadena intermedia, así que agregué el intermedio "YR2" de Let's Encrypt (`http://yr2.i.lencr.org/`) a una copia del bundle de CA. La verificación TLS siguió activa.
+- **INTA.**
+  - 381 unidades (WFS `geo-nodo07.inta.gob.ar`, `geonode:unidades_inta_01`): 46 EEA, 15 centros regionales y 319 AER. Las columnas `point_x` y `point_y` del servicio están corridas, pero la geometría es correcta.
+  - Superficie de 23 campos según el plan INTA/AABE (Bichos de Campo, 20/11/2024): 30.874 ha, de las cuales 27.019 se proponen para desafectar. Se cargaron en 18 EEA y en 5 registros sin geometría.
+  - Hay una segunda lista de unas 100.000 ha, que incluye 45.149 ha en la AER Santa Victoria Oeste (Salta), y un documento de diciembre de 2025 que habla de 42.000 ha.
+- **Aeropuertos (ORSNA).** La capa "predios aeropuertos" de datos.gob.ar publica 55 **puntos**, no polígonos, así que no tienen superficie.
+- **Universidades nacionales.** No encontré un dataset de campos universitarios con superficie. Las capas `mardis_universidadesnacionales` y `mineduc_universitarioestatal` solo ubican sedes.
+
+Campos del archivo: `categoria` (militar, aabe, ferroviario, inta, aeroportuario), `subcategoria`, `nombre`, `titular`, `superficie_ha`, `superficie_origen`, `estado`, `provincia`, `fuente`, `url` y `cod_dep`. Son 4.327 registros; 57 no tienen geometría porque solo hay cifras de prensa o renglones del Decreto 950 sin croquis.
+
+### 9.5 Tierra probablemente fiscal por complemento (línea 4) → `fiscal_departamento.csv`
+
+**Supuesto.** En las zonas áridas, la superficie del departamento que no está en EAP, no es urbana, no es agua o salina y no es área protegida tiende a ser fiscal o a tener una situación dominial irregular.
+
+**Evidencia a favor.**
+
+1. Por definición, el CNA solo censa EAP con producción. La tierra fiscal vacante queda afuera (INDEC, metodología). Sili y Li (2012) estiman 2,5 Mha fiscales patagónicas "ocupadas", pero aclaran que millones de hectáreas más siguen siendo provinciales.
+2. Los dos catastros con titularidad abierta dan la misma proporción: **0,73** en Neuquén y en TDF.
+3. Las 2,37 Mha sin mensura de Río Negro (2026) están en las zonas con menos EAP (Somuncurá, El Cuy).
+
+**Evidencia en contra.**
+
+1. Campos privados abandonados en la meseta patagónica.
+   - Federación de Sociedades Rurales de Chubut: el 40 % de los establecimientos de la meseta central están inactivos. Fuente: Bichos de Campo, "Si queremos mantener la soberanía sobre la Patagonia…".
+   - FIAS (Santa Cruz) habla de campos "en situación de abandono" (Bichos de Campo, 16/08/2026).
+   - Esos campos son privados, pero ya no son EAP.
+2. Campos comuneros e indivisos (condominios privados) en La Rioja, Catamarca y Santiago del Estero. Aparecen en el CNA como TSL sin hectáreas.
+3. Las EAP se asignan al departamento de la sede, lo que genera falsos residuos y falsos negativos entre departamentos vecinos.
+4. Tierras indígenas con relevamiento o con título comunitario.
+
+**Fórmula [J].** Para cada departamento:
+
+- `residuo = max(0, sup_dep − EAP − (protegidas ∪ urbano ∪ agua perenne ∪ salinas))`.
+- `documentado = max(fiscal_EAP, catastro_fiscal) + nacional_fuera_de_catastro`, donde "nacional" suma RND, INTA, subastas vigentes de la AABE y Decreto 950.
+- `estimación = documentado + f × residuo_neto`, con `residuo_neto = residuo − catastro fiscal que excede el fiscal en EAP`.
+
+Valores de `f` (bajo / central / alto):
+
+- Patagonia: 0 / **0,731** (media de la calibración) / 0,95.
+- Árido y norte (Mendoza, San Juan, La Rioja, Catamarca, Salta, Jujuy, Formosa, Chaco, Santiago del Estero, La Pampa, San Luis, Tucumán): 0 / 0,366 (la mitad del valor patagónico, porque pesan los campos comuneros) / 0,731.
+- Región húmeda: 0 / 0,10 / 0,25.
+
+Casos especiales:
+
+- **Neuquén**: la estimación central es catastro fiscal más la superficie sin parcela fuera de máscaras.
+- **TDF**: la estimación central es la capa provincial.
+- **Salta**: en el central y el alto, el piso es max(documentado, parcelas "finca FISCAL").
+- Antártida, Islas del Atlántico Sur y CABA no tienen estimación.
+
+Por región (estimación central): Patagonia 20,8 Mha (26 %), árido y norte 24,7 Mha (21 %), húmeda 1,8 Mha (2 %).
+
+| Provincia | Fiscal en EAP (CNA) | Catastro fiscal | Estado Nacional | Bajo | **Central [J]** | Alto [J] | % central |
+|---|---|---|---|---|---|---|---|
+| Santa Cruz | 46.458 | — | 15 | 46.473 | 6.581.258 | 8.533.350 | 27 % |
+| Salta | 81.878 | — | 0 | 81.878 | 5.790.661 | 8.062.436 | 37 % |
+| Río Negro | 589.976 | — | 321 | 589.976 | 5.247.910 | 6.639.342 | 26 % |
+| Neuquén | 904.787 | 2.079.714 | 52.125 | 2.130.460 | 4.562.261 | 5.417.197 | 48 % |
+| Chubut | 1.029.651 | — | 8.690 | 1.038.341 | 3.605.635 | 4.372.546 | 16 % |
+| Santiago del Estero | 578.420 | — | 7.475 | 585.895 | 3.090.697 | 5.595.499 | 23 % |
+| Mendoza | 120.721 | — | 233.505 | 354.226 | 2.688.817 | 5.023.406 | 18 % |
+| Catamarca | 3.497 | — | 0 | 3.497 | 2.676.167 | 5.348.839 | 26 % |
+| San Juan | 10.737 | — | 124.171 | 134.908 | 2.121.233 | 4.107.561 | 24 % |
+| La Rioja | 4.489 | — | 0 | 4.489 | 2.100.613 | 4.196.732 | 23 % |
+| Formosa | 844.597 | — | 0 | 844.597 | 1.687.896 | 2.531.198 | 22 % |
+| Chaco | 295.268 | — | 0 | 295.268 | 1.622.976 | 2.950.680 | 16 % |
+| La Pampa | 71.122 | — | 3.752 | 74.874 | 1.187.940 | 2.301.005 | 8 % |
+| Jujuy | 228.764 | — | 0 | 228.764 | 957.208 | 1.664.398 | 18 % |
+| Tierra del Fuego (Isla Grande) | 67.648 | 755.336 | 0 | 755.336 | 755.336 | 762.882 | 36 % |
+| Buenos Aires | 80.238 | — | 6.669 | 86.907 | 624.719 | 1.431.426 | 2 % |
+| San Luis | 1.454 | — | 1.011 | 2.465 | 494.114 | 985.762 | 7 % |
+| Córdoba | 23.049 | — | 19.398 | 42.447 | 341.161 | 789.230 | 2 % |
+| Santa Fe | 27.362 | — | 6.587 | 33.949 | 318.088 | 744.293 | 2 % |
+| Tucumán | 2.330 | — | 4.885 | 7.215 | 290.307 | 573.396 | 13 % |
+| Misiones | 133.500 | — | 8.420 | 141.920 | 214.650 | 323.750 | 7 % |
+| Corrientes | 37.294 | — | 6.300 | 43.593 | 191.860 | 414.258 | 2 % |
+| Entre Ríos | 7.505 | — | 1.733 | 9.238 | 149.872 | 360.821 | 2 % |
+
+Departamentos con mayor estimación central: Los Andes, Salta (2,37 Mha, la parcela "FISCAL 63"); Deseado, Santa Cruz (2,34 Mha); Rivadavia, Salta (1,14 Mha); Río Chico, Santa Cruz (1,05 Mha); 25 de Mayo, Río Negro (0,98 Mha); Malargüe, Mendoza (0,97 Mha); Antofagasta de la Sierra, Catamarca (0,88 Mha).
+
+### 9.6 Limitaciones
+
+1. **La estimación central y la alta son modelos [J], no inventarios.** La calibración se basa en dos provincias patagónicas, y el factor del norte no está calibrado. Santa Cruz y Chubut probablemente están sobreestimadas por los campos privados abandonados. Para Santa Cruz conviene leer el rango completo.
+2. El residuo resta las áreas protegidas completas. Algunas incluyen estancias privadas en EAP, como Península Valdés, y eso subestima el residuo. Algunas RND también están en la capa IGN de protegidas (por ejemplo, Punta Delgada y Primeros Pinos): en esos casos quedan fuera del residuo y se cuentan solo como superficie nacional.
+3. La superficie EAP se asigna por sede: hay departamentos con EAP mayor al 100 % (residuo 0) y vecinos con residuo inflado.
+4. El catastro de Neuquén no es una foto oficial de "tierra disponible": las parcelas fiscales incluyen permisos de ocupación y concesiones hidrocarburíferas, y la superficie "sin parcela" es una inferencia [J].
+5. En Salta, el nombre "FISCAL" de la finca no prueba la titularidad actual. Por eso no entra en la estimación baja.
+6. El INTA se asigna al departamento de la sede de la EEA, no al del campo. Las superficies del INTA y de los predios militares sin geometría vienen de prensa o de documentos internos filtrados.
+7. Las tierras fiscales **no están vacantes**: cruzar siempre con ocupantes (CNA: `sup_fiscal_ocupacion_permiso_ha` y `sup_fiscal_ocupacion_hecho_ha`, incluidas en el CSV), comunidades indígenas (§2.8) y barrios del RENABAP.
+
+### 9.7 Archivos nuevos
+
+```
+data/interim/tierra/
+├── fiscal_departamento.csv      # 529 deptos; columnas pedidas + auxiliares (region, sup_eap_ha, máscaras, residuo_ha,
+│                                #  sup_sin_parcela_catastro_ha, sup_rnd_ha, sup_inta_ha, sup_aabe_ha, sup_salta_finca_fiscal_ha, ocupación fiscal, tsl)
+├── fiscal_poligonos.gpkg        # capa fiscal_poligonos: 3.756 polígonos (Neuquén, TDF, Salta 'finca FISCAL', RND);
+│                                #  origen, titular, superficie_ha, fuente, provincia, cod_dep, detalle
+├── inmuebles_estado.geojson     # 4.327 registros nacionales (militar, aabe, ferroviario, inta, aeroportuario)
+├── fiscal_provincias.csv        # 85 filas: provincia, jurisdiccion, hectareas_fiscales, pct_superficie_provincial, anio, tipo_cifra, fuente, url, nota
+├── _calibracion_catastro.csv    # ratio fiscal/residuo en Neuquén y TDF
+└── _metricas_departamento.parquet
+data/raw/tierra/
+├── provincias/neuquen/          # nqn_rue_*.geojson, nqn_rui_fiscal.geojson, nqn_rui_nofiscal_*.geojson, nqn_ejidos.geojson, nqn_fiscalidad_stats_depto.json
+├── provincias/salta/salta_parcelas_finca_fiscal.geojson
+├── nacion/                      # rnd_reservas_naturales_defensa, orsna_predios_aeropuertos_sna, inta_unidades, transporte_estacion_ferroviaria, defensa/uai_defensa_inf08_2020_inmuebles.pdf
+├── ign/ign_areas_de_aguas_continentales_perenne.json, ign_edafologia_salina.json
+├── aabe/memorias/aabe_2023.pdf, aabe_2024.pdf
+└── idera/idera_tablero_wfs_provincias_capas.txt
+```
+
+### 9.8 Pedidos de acceso a la información sugeridos (Ley 27.275 y leyes provinciales)
+
+- **IDERN / ART Río Negro**: exportar la capa `par_tit_estatal`. Ya existe en su GeoServer.
+- **IACyFR Chubut**: agregar el atributo de dominio a `Chubut:ParcelasRurales`.
+- **Consejo Agrario Provincial de Santa Cruz**: el registro de tierras fiscales.
+- **Catastro de Salta**: un campo de titular (fiscal o privado) en `fc_parcelas_v20`.
+- **AABE**: el extracto del RENABE con CIE, superficie y polígono.
+- **Ministerio de Defensa**: el inventario de inmuebles asignados a las Fuerzas Armadas, con superficie.
+- **ADIF**: los inmuebles ferroviarios sin uso operativo.

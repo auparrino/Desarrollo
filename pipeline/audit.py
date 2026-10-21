@@ -34,7 +34,7 @@ RANGES = {
     "empleo_50km": (0, 5e6), "emp_crec": (-30, 30), "salario_rel": (0.2, 5), "n_proyectos_100km": (0, 500),
     "d_parque_ind": (0, 1000), "pct_agua_red": (0, 100), "pct_cloaca": (0, 100), "pct_internet": (0, 100),
     "pct_nbi": (0, 100), "pct_viv_ociosas": (0, 100), "salud_int_100mil": (0, 1000), "crec_proy_2035": (-60, 200),
-    "viv_ociosas_50km": (0, 2e6), "d_universidad": (0, 1500), "d_hospital": (0, 1500),
+    "viv_ociosas_50km": (0, 2e6), "pct_fiscal_est": (0, 100), "frac_fiscal_conocida": (0, 1), "d_inmueble_estado": (0, 1000), "d_universidad": (0, 1500), "d_hospital": (0, 1500),
 }
 
 # Ciudades de control (coordenadas del centro; fuente: BAHRA/IGN).

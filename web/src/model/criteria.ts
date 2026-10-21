@@ -256,11 +256,12 @@ export const FACTORS: Factor[] = [
     disponible: true, evidencia: ["J"], refs: ["INDEC Censo 2022", "Plan DHI p. 50 (trabajo remoto)"],
   },
   {
-    id: "T01", nombre: "Tierra fiscal (cota inferior)", grupo: "tierra", peso: 0, unidad: "%",
-    variable: "superficie fiscal sobre superficie de explotaciones agropecuarias del departamento (CNA 2018)", column: "pct_fiscal_eap",
-    fn: { kind: "increasing", a: 0, b: 30 },
-    disponible: true, evidencia: ["J"], refs: ["INDEC CNA 2018", "Salim & Negara 2019", "Ley 23.512"],
-    nota: "El CNA solo registra tierra fiscal ocupada por productores: la tierra fiscal vacante no aparece. El dominio es provincial (art. 124 CN).",
+    id: "T01", nombre: "Tierra pública disponible", grupo: "tierra", peso: 0, unidad: "%",
+    variable: "% fiscal estimado del departamento (CNA 2018 + residuo fuera de explotaciones calibrado con catastros de Neuquén y TDF); 1 si la zona es fiscal según catastro",
+    fn: { kind: "increasing", a: 0, b: 40 },
+    score: (c, i, fn) => Math.max(evaluate(fn ?? { kind: "increasing", a: 0, b: 40 }, c.pct_fiscal_est[i]), c.frac_fiscal_conocida[i] >= 0.5 ? 1 : 0),
+    disponible: true, evidencia: ["J"], refs: ["INDEC CNA 2018", "Catastro de Neuquén (FISCALIDAD)", "Tierra del Fuego, tierras fiscales", "docs/propiedad-tierra.md §9"],
+    nota: "Estimación [J]: no hay catastro nacional de tierra fiscal. El dominio es provincial (art. 124 CN) y la tierra fiscal suele estar ocupada por pobladores.",
   },
   {
     id: "P06", nombre: "Pueblo que pierde habitantes", grupo: "equilibrio", peso: 0, unidad: "%/año",

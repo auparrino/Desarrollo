@@ -77,9 +77,11 @@ export function facts(ds: Dataset, i: number): Fact[] {
     ...(c.as_prob[i] >= 0.5 && c.q_rio25[i] < 50
       ? [{ icono: "⚠️", texto: "Alta probabilidad de arsénico en el agua subterránea: habría que tratarla o traer agua de otra fuente." }]
       : []),
-    ...(Number.isFinite(c.pct_fiscal_eap[i])
-      ? [{ icono: "📜", texto: `Tierra fiscal registrada: ${c.pct_fiscal_eap[i].toFixed(1)} % de la superficie productiva del departamento (CNA 2018; no incluye tierra fiscal vacante).` }]
-      : []),
+    ...(c.frac_fiscal_conocida[i] >= 0.5
+      ? [{ icono: "📜", texto: "Según el catastro provincial, la mayor parte de esta zona es tierra fiscal." }]
+      : Number.isFinite(c.pct_fiscal_est[i])
+        ? [{ icono: "📜", texto: `Se estima que alrededor del ${Math.round(c.pct_fiscal_est[i])} % del departamento es tierra fiscal (estimación; no hay catastro nacional).` }]
+        : []),
     ...(c.d_comunidad[i] < 15
       ? [{ icono: "🪶", texto: `Hay una comunidad indígena registrada a ${n0(c.d_comunidad[i])} km: cualquier proyecto requiere consulta previa, libre e informada (Convenio 169 OIT).` }]
       : []),

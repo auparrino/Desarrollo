@@ -453,6 +453,25 @@ def main() -> None:
                          ["nombre", "tipo", "beneficiario"])
         log(f"incentivos municipales: {len(mun)} programas")
     log(f"empleo: {emp.puestos_priv_2022.sum():,.0f} puestos; {len(motores)} proyectos motores")
+    # --- tierra fiscal estimada por departamento (docs/propiedad-tierra.md §9) y polígonos fiscales conocidos
+    fis_path = RAW.parent / "interim" / "tierra" / "fiscal_departamento.csv"
+    if fis_path.exists():
+        fis = pd.read_csv(fis_path, dtype={"cod_dep": str}).set_index("cod_dep")
+        pct = 100 * fis.estimacion_fiscal_ha_central / fis.sup_dep_ha
+        C["pct_fiscal_est"] = dep_s.map(pct.clip(upper=100)).values
+        C["pct_fiscal_est_bajo"] = dep_s.map((100 * fis.estimacion_fiscal_ha_bajo / fis.sup_dep_ha).clip(upper=100)).values
+    gpk = RAW.parent / "interim" / "tierra" / "fiscal_poligonos.gpkg"
+    if gpk.exists():
+        fp = gpd.read_file(gpk).to_crs(4326)
+        r = rasterize([(g, 1) for g in fp.geometry if g is not None and not g.is_empty], out_shape=(HEIGHT, WIDTH),
+                      transform=TRANSFORM, fill=0, dtype="uint8")
+        C["frac_fiscal_conocida"] = agg.frac(r.astype(bool))
+        del r
+    ie = RAW.parent / "interim" / "tierra" / "inmuebles_estado.geojson"
+    if ie.exists():
+        ine = gpd.read_file(ie)
+        ine = ine[ine.geometry.notna() & ~ine.geometry.is_empty]
+        C["d_inmueble_estado"] = distances_km(centers_m, ine[ine.categoria.fillna("") != "ferroviario"])
     log(f"tenencia: CNA {cna.shape[0]} deptos, RNTR {rntr.shape[0]}, {len(ci_pts)} comunidades con coordenadas")
     log("población 50 km")
 

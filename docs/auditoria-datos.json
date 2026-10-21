@@ -221,6 +221,18 @@
    "nan": 0,
    "fuera_rango": 0
   },
+  "pct_fiscal_est": {
+   "nan": 10,
+   "fuera_rango": 0
+  },
+  "frac_fiscal_conocida": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "d_inmueble_estado": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
   "d_universidad": {
    "nan": 0,
    "fuera_rango": 0

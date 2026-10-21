@@ -61,6 +61,9 @@ Grilla generada el 2026-10-21: 95,682 celdas H3 res 6. Se genera con `python pip
 | salud_int_100mil | 0 | 0 | 15.8 | 124 | 0 |
 | crec_proy_2035 | 0 | -16.7 | 2.06 | 24.3 | 0 |
 | viv_ociosas_50km | 0 | 4.89 | 647 | 2.2e+05 | 0 |
+| pct_fiscal_est | 10 | 0 | 13.3 | 94.4 | 0 |
+| frac_fiscal_conocida | 0 | 0 | 0 | 1 | 0 |
+| d_inmueble_estado | 0 | 0 | 44.9 | 303 | 0 |
 | d_universidad | 0 | 0.0426 | 54.1 | 303 | 0 |
 | d_hospital | 0 | 0.0653 | 28.5 | 300 | 0 |
 
