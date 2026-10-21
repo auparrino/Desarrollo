@@ -54,7 +54,7 @@ export function siteName(s: Site, loc?: GeoJSON.FeatureCollection) {
 function uniqueByPlace(sites: Site[], loc?: GeoJSON.FeatureCollection): Site[] {
   const seen = new Set<string>();
   return sites.filter((s) => {
-    const k = `${siteName(s, loc)}|${s.provincia}`;
+    const k = siteName(s, loc);
     if (seen.has(k)) return false;
     seen.add(k);
     return true;
