@@ -199,4 +199,57 @@ describe("costo-beneficio", () => {
     expect(Math.abs(o.social.van)).toBeGreaterThan(Math.abs(p.social.van) * 0.5);
     expect(Number.isFinite(o.social.bc)).toBe(true);
   });
+
+  it("la brecha salarial cuenta solo en parte y los vecinos dan resultados parecidos", async () => {
+    const { estimateCosts } = await import("./costs");
+    const { UNIT_COSTS } = await import("./unitCostsData");
+    const { costBenefit } = await import("./benefits");
+    const { BENEFIT_PARAMS } = await import("./benefitParamsData");
+    const one = (v: number) => Float32Array.from([v]);
+    const c = {
+      q_rio25: one(100), q95_rio25: one(30), aridez: one(0.2), prec: one(400), d_ruta: one(20), d_alta_tension: one(20),
+      d_rio10: one(5), viv_ociosas_50km: one(0), pob_50km: one(100000), salario_rel: one(1),
+    };
+    const costos = estimateCosts("ciudad_nueva", c, 0, "Neuquén", { poblacion: 500_000, densidad: 75 }, UNIT_COSTS);
+    const base = { policy: "ciudad_nueva" as const, poblacion: 500_000, costos, c, i: 0, codProv: "58", relAmba: 1.1 };
+    const a = costBenefit({ ...base, relDest: 1.3 }, BENEFIT_PARAMS, "base");
+    const b = costBenefit({ ...base, relDest: 1.32 }, BENEFIT_PARAMS, "base");
+    expect(a.supuestos.brecha).toBeLessThan(1);
+    expect(a.anual.productividad).toBeGreaterThan(0);
+    expect(Math.abs(b.anual.productividad / a.anual.productividad - 1)).toBeLessThan(0.15);
+  });
+
+  it("el plazo de recupero es el año en que el saldo queda positivo para siempre", async () => {
+    const { estimateCosts } = await import("./costs");
+    const { UNIT_COSTS } = await import("./unitCostsData");
+    const { costBenefit } = await import("./benefits");
+    const { BENEFIT_PARAMS } = await import("./benefitParamsData");
+    const one = (v: number) => Float32Array.from([v]);
+    const c = {
+      q_rio25: one(100), q95_rio25: one(30), aridez: one(0.2), prec: one(400), d_ruta: one(20), d_alta_tension: one(20),
+      d_rio10: one(5), viv_ociosas_50km: one(0), pob_50km: one(100000), salario_rel: one(1),
+    };
+    const costos = estimateCosts("ciudad_nueva", c, 0, "Neuquén", { poblacion: 500_000, densidad: 75 }, UNIT_COSTS);
+    const r = costBenefit({ policy: "ciudad_nueva", poblacion: 500_000, costos, c, i: 0, codProv: "58", relDest: 1.4, relAmba: 1.1 }, BENEFIT_PARAMS, "base");
+    expect(r.social.recupero).not.toBeNull();
+    expect(r.cronograma.length).toBe(r.horizonte + 1);
+    const pobre = costBenefit({ policy: "ciudad_nueva", poblacion: 500_000, costos, c, i: 0, codProv: "58", relDest: 0.7, relAmba: 1.1 }, BENEFIT_PARAMS, "base");
+    expect(pobre.social.recupero).toBeNull();
+  });
+
+  it("la edificación patagónica cuesta más que en la región pampeana", async () => {
+    const { estimateCosts, coefRegional } = await import("./costs");
+    const { UNIT_COSTS } = await import("./unitCostsData");
+    const one = (v: number) => Float32Array.from([v]);
+    const c = {
+      q_rio25: one(100), q95_rio25: one(30), aridez: one(0.2), prec: one(900), d_ruta: one(20), d_alta_tension: one(20),
+      d_rio10: one(5), viv_ociosas_50km: one(0), pob_50km: one(100000), salario_rel: one(1),
+    };
+    expect(coefRegional("Santa Cruz")).toBeGreaterThan(1.2);
+    expect(coefRegional("Santa Fe")).toBe(1);
+    const sc = estimateCosts("ciudad_nueva", c, 0, "Santa Cruz", { poblacion: 100_000, densidad: 75 }, UNIT_COSTS);
+    const sf = estimateCosts("ciudad_nueva", c, 0, "Santa Fe", { poblacion: 100_000, densidad: 75 }, UNIT_COSTS);
+    expect(sc.totalCapital[1]).toBeGreaterThan(sf.totalCapital[1] * 1.2);
+    expect(sc.propio[1]).toBeGreaterThan(sf.propio[1]);
+  });
 });

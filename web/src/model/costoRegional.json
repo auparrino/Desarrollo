@@ -1,0 +1,167 @@
+{
+  "fecha": "2021-08-10",
+  "metodo": "Cociente entre el monto máximo financiable por m² (en UVI) que la Secretaría de Hábitat (MDTyH) fijó para cada provincia en el Programa Casa Propia - Construir Futuro (Res. SH 8/2021, vivienda nueva unifamiliar de 64 m², 2 dormitorios, planta baja, incluye vereda, forestación y alumbrado) y el valor fijado para Gran Buenos Aires (943,30 UVI/m²). Al estar en UVI, el cociente es independiente de la inflación. La Res. SH 2/2021 (en pesos, marzo 2021) reproduce casi la misma estructura y se usa como control de consistencia. Ninguna provincia es imputada; buenos_aires (06) toma el valor común a GBA e Interior de Bs. As.",
+  "fuentes": [
+    {
+      "id": "res8-2021",
+      "cita": "Secretaría de Hábitat, Ministerio de Desarrollo Territorial y Hábitat. Resolución 8/2021 (BO 10/08/2021), Anexo IF-2021-70745373-APN-SH#MDTYH: Montos máximos financiables Programa Casa Propia - Construir Futuro, viviendas nuevas, valores en UVIs por m².",
+      "url": "https://www.argentina.gob.ar/sites/default/files/infoleg/352785/res8.pdf"
+    },
+    {
+      "id": "res2-2021",
+      "cita": "Secretaría de Hábitat, MDTyH. Resolución 2/2021, Anexo IF-2021-17607708-APN-SH#MDTYH: Montos máximos financiables Programa Casa Propia - Construir Futuro, valores en pesos por m² (marzo 2021). Control de consistencia.",
+      "url": "https://www.argentina.gob.ar/sites/default/files/infoleg/347550/res2.pdf"
+    },
+    {
+      "id": "patagonia-construye-2026",
+      "cita": "Patagonia Construye, 'El m² de construcción sube a entre $1,35 y $3,16 millones en la Patagonia' (sept. 2026). Estimación privada (ICC CABA + diferenciales de flete y zona UOCRA). Solo contraste cualitativo.",
+      "url": "https://patagoniaconstruye.com.ar/notas/costo-m2-construccion-patagonia-septiembre-2026/"
+    }
+  ],
+  "valores": {
+    "02": {
+      "coef": 1.0,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 943.3
+    },
+    "06": {
+      "coef": 1.0,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 943.3
+    },
+    "10": {
+      "coef": 1.044,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 985
+    },
+    "14": {
+      "coef": 1.02,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 962
+    },
+    "18": {
+      "coef": 1.02,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 962
+    },
+    "22": {
+      "coef": 1.02,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 962
+    },
+    "26": {
+      "coef": 1.264,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 1192
+    },
+    "30": {
+      "coef": 1.0,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 943.3
+    },
+    "34": {
+      "coef": 1.02,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 962
+    },
+    "38": {
+      "coef": 1.044,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 985
+    },
+    "42": {
+      "coef": 1.044,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 985
+    },
+    "46": {
+      "coef": 1.044,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 985
+    },
+    "50": {
+      "coef": 1.044,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 985
+    },
+    "54": {
+      "coef": 1.02,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 962
+    },
+    "58": {
+      "coef": 1.044,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 985
+    },
+    "62": {
+      "coef": 1.044,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 985
+    },
+    "66": {
+      "coef": 1.044,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 985
+    },
+    "70": {
+      "coef": 1.044,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 985
+    },
+    "74": {
+      "coef": 1.044,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 985
+    },
+    "78": {
+      "coef": 1.378,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 1300
+    },
+    "82": {
+      "coef": 1.0,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 943.3
+    },
+    "86": {
+      "coef": 1.02,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 962
+    },
+    "90": {
+      "coef": 1.02,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 962
+    },
+    "94": {
+      "coef": 1.589,
+      "fuente": "res8-2021",
+      "imputado": false,
+      "uvi_m2": 1499
+    }
+  }
+}

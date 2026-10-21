@@ -1,3 +1,4 @@
+import { cbaInput } from "../../model/labor";
 import { useMemo, useState } from "react";
 import type { Dataset } from "../../data/load";
 import type { Site } from "../../model/sites";
@@ -196,8 +197,7 @@ export default function SimulatorPanel(p: Props) {
               <CostBreakdown r={costos} poblacionLabel={p.policy.id === "polos" ? "empleo" : "habitante"} fecha={UNIT_COSTS.fecha_base} />
               <h4>¿Conviene? Análisis costo-beneficio</h4>
               <CostBenefit
-                inp={{ policy: p.policy.id, poblacion: pob, costos, c: p.ds.col, i: site.best,
-                  codProv: p.ds.meta.departamentos[p.ds.dep[site.best]]?.cod.slice(0, 2) ?? "" }}
+                inp={cbaInput(p.ds, p.policy.id, pob, costos, site.best)}
               />
             </details>
             );

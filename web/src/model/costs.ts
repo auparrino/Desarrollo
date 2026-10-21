@@ -5,6 +5,23 @@
 
 import type { Cols } from "./criteria";
 import type { PolicyId } from "./policies";
+import regional from "./costoRegional.json";
+
+// Coeficiente de costo de construcción por provincia (GBA = 1), Res. SH 8/2021 (Casa Propia).
+// docs/costo-construccion-regional.md
+const COD_PROV: Record<string, string> = {
+  "Ciudad Autónoma de Buenos Aires": "02", "Buenos Aires": "06", Catamarca: "10", Córdoba: "14", Corrientes: "18", Chaco: "22",
+  Chubut: "26", "Entre Ríos": "30", Formosa: "34", Jujuy: "38", "La Pampa": "42", "La Rioja": "46", Mendoza: "50", Misiones: "54",
+  Neuquén: "58", "Río Negro": "62", Salta: "66", "San Juan": "70", "San Luis": "74", "Santa Cruz": "78", "Santa Fe": "82",
+  "Santiago del Estero": "86", Tucumán: "90", "Tierra del Fuego, Antártida e Islas del Atlántico Sur": "94",
+};
+const VALORES = (regional as { valores: Record<string, { coef: number }> }).valores;
+export function coefRegional(provincia: string): number {
+  const cod = COD_PROV[provincia] ?? (provincia.startsWith("Tierra del Fuego") ? "94" : "");
+  return VALORES[cod]?.coef ?? 1;
+}
+/** Rubros de edificación a los que se aplica el coeficiente regional. */
+const EDIFICACION = new Set(["vivienda", "rehab", "urbanizacion", "escuelas", "hospital", "oficinas", "planta", "parque"]);
 
 export interface UnitItem {
   nombre: string;
@@ -49,7 +66,12 @@ export interface CostResult {
   porHabitante: Range;
   pctPBI: Range | null;
   region: string;
+  /** parte del capital que depende del lugar (conexión, agua, tierra); el resto cuesta lo mismo en cualquier sitio */
+  propio: Range;
 }
+
+/** Rubros cuyo costo cambia según el sitio elegido. */
+export const RUBROS_DEL_LUGAR = new Set(["ruta", "at", "acueducto", "suelo", "rehab"]);
 
 const tri = (u: UnitItem | undefined): Range | null =>
   u && u.central !== null ? [u.bajo ?? u.central, u.central, u.alto ?? u.central] : null;
@@ -81,8 +103,12 @@ export function estimateCosts(
   const U = uc.items;
   const cap: CostLine[] = [];
   const op: CostLine[] = [];
+  const kReg = coefRegional(provincia);
   const line = (arr: CostLine[], id: string, rubro: string, qty: number, unitId: string, cantidad: string) => {
-    const r = tri(U[unitId]);
+    const r0 = tri(U[unitId]);
+    const k = EDIFICACION.has(id) ? kReg : 1;
+    const r = r0 && (k === 1 ? r0 : mul(r0, k));
+    if (k !== 1) cantidad += ` · costo regional ×${k.toLocaleString("es-AR", { maximumFractionDigits: 2 })}`;
     arr.push({
       id, rubro, cantidad,
       usd: r ? mul(r, qty) : [0, 0, 0],
@@ -164,5 +190,9 @@ export function estimateCosts(
     porHabitante: mul(totalCapital, 1 / Math.max(P, 1)),
     pctPBI: pbi ? mul(totalCapital, 100 / pbi) : null,
     region,
+    propio: add(
+      cap.filter((l) => RUBROS_DEL_LUGAR.has(l.id)).reduce((a, l) => add(a, l.usd), [0, 0, 0] as Range),
+      cap.filter((l) => EDIFICACION.has(l.id) && l.id !== "rehab").reduce((a, l) => add(a, mul(l.usd, 1 - 1 / kReg)), [0, 0, 0] as Range),
+    ),
   };
 }

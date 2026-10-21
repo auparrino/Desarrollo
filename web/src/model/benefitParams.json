@@ -223,6 +223,24 @@
       ],
       "fuente": "ECES 2026, Economic Lens 20 (CAPMAS 1/1/2024, https://eces.org.eg/wp-content/uploads/2026/07/ECONOMIC-LENS-Issue-20-En.pdf): 10 de Ramadán 12,7 %, Sadat 13,5 %, 15 de Mayo 20,2 %, El Obour 13,7 % a 40-47 años; New Cairo 8,0 % a ~24 años; cuarta generación <1 %",
       "evidencia": "J"
+    },
+    "fraccion_brecha_causal": {
+      "nombre": "Parte de la diferencia salarial entre regiones que gana quien se muda",
+      "unidad": "fracción",
+      "bajo": 0.3,
+      "central": 0.5,
+      "alto": 0.7,
+      "fuente": "Combes, Duranton y Gobillon (2008), 'Spatial wage disparities: Sorting matters!', J. Urban Econ. 63(2): entre 40 y 50 % de la brecha salarial espacial se explica por quién vive en cada lugar y no por el lugar; Glaeser y Maré (2001), J. Labor Econ. 19(2): la prima salarial urbana cae entre un tercio y la mitad al seguir a los mismos trabajadores.",
+      "evidencia": "E"
+    },
+    "adicionalidad_nacional_empleo": {
+      "nombre": "Fracción de los empleos de un polo que es actividad nueva para el país (no desplazada de otra región)",
+      "unidad": "fracción",
+      "bajo": 0.1,
+      "central": 0.25,
+      "alto": 0.5,
+      "fuente": "HM Treasury, The Green Book (2022) y Homes and Communities Agency, Additionality Guide (4.ª ed., 2014): a escala nacional el desplazamiento es alto y se recomienda suponer adicionalidad baja salvo evidencia; Kline y Moretti (2014), QJE 129(1): las ganancias locales de la TVA se compensan en buena parte con pérdidas en otras regiones.",
+      "evidencia": "O"
     }
   },
   "pbg_pc_provincia": {

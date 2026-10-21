@@ -249,3 +249,28 @@
 4. Valor del tiempo oficial argentino, si existe en la DNIP o en Vialidad.
 5. Serie censal de Ciudad Guayana entre 1961 y 1990, y meta del plan CVG-MIT (Rodwin 1969).
 6. Evaluación del KDI sobre Sejong, en coreano.
+
+## Revisión de octubre de 2026 (uso por funcionarios)
+
+Cambios hechos después de probar la herramienta como la usaría un ministro:
+
+1. **Salario del destino por mercado de trabajo, no por provincia.** Antes se usaba el salario promedio de la provincia: dos sitios vecinos a ambos lados de un límite (Villa Manzano, Neuquén, y Mainqué, Río Negro) daban resultados 16 veces distintos. Ahora se usa el salario privado de los departamentos a ≤ 50 km, ponderado por sus puestos de trabajo (CEP XXI 2022, `web/src/model/economiaDep.json`). El AMBA se calcula igual (CABA más 24 partidos, ponderado por puestos: ≈ 1,12 veces el promedio nacional). Ponderarlo por residentes daría ≈ 0,97, porque gran parte del empleo de CABA lo ocupan residentes del conurbano.
+2. **Solo una parte de la brecha salarial es efecto del lugar** (`fraccion_brecha_causal`, central 0,5; rango 0,3–0,7). Combes, Duranton y Gobillon (2008) y Glaeser y Maré (2001) muestran que entre un tercio y la mitad de las diferencias salariales entre regiones se debe a quién trabaja en cada lugar. Sin este ajuste, los sueldos petroleros de Vaca Muerta se atribuían a cualquiera que se mudara a Neuquén.
+3. **Polos con adicionalidad nacional** (`adicionalidad_nacional_empleo`, central 0,25). Antes se tomaba la mitad del producto del polo por un multiplicador local de 1,6. Los multiplicadores locales (Moretti) no se trasladan a escala nacional, porque buena parte del empleo se desplaza desde otras regiones (Kline y Moretti 2014; HM Treasury, *Additionality Guide*). Ahora solo cuenta como producción nueva el 25 % de los empleos. Además, el lado fiscal suma el costo de los incentivos a las empresas (10 años por empleo creado), y el parque industrial se urbaniza por etapas en lugar de construirse entero el primer año.
+4. **Plazo de recupero estable.** El recupero es el primer año desde el cual el saldo acumulado descontado queda positivo hasta el final del horizonte. Los plazos menores a 5 años se muestran como "en menos de 5 años": ocurren cuando casi toda la inversión se necesitaría igual en el AMBA, por ejemplo al fortalecer ciudades intermedias.
+5. **Costo de construcción regional** (Res. SH 8/2021, Casa Propia; `docs/costo-construccion-regional.md`). Se aplica a la edificación: vivienda, urbanización, escuelas, hospitales, oficinas, plantas y parques. Chubut ×1,26, Santa Cruz ×1,38, Tierra del Fuego ×1,59. Cada tarjeta muestra qué parte del costo depende del lugar.
+
+### Ficha para gabinete
+
+Cada sitio del modo simple tiene una ficha imprimible (`web/src/ui/panels/Ficha.tsx`, cálculos en `web/src/model/brief.ts`):
+
+- **Inversión por mandato de 4 años:** escenario "lo más probable". La conexión se hace en 5 años y el resto acompaña la ocupación.
+- **Quién paga:** responsable principal de cada rubro según las competencias habituales. Educación y salud son provinciales (Ley 24.049).
+- **Si no se hace nada:** proyección del INDEC 2022–2035 por departamento (`web/src/model/proyecciones.json`). El AMBA pierde unas 98.000 personas y el país suma unas 983.000.
+- **Misma inversión pública, otro instrumento, en la misma zona:** ciudades y pueblos existentes se toman de la celda más cercana que corresponde al instrumento.
+- **Empleo necesario frente al existente:** incluye los sectores principales y los proyectos a ≤ 100 km.
+- **Origen probable de la gente:** modelo de gravedad orientativo, sin calibrar con datos de migración.
+- **Hoja de ruta institucional:** art. 3 de la Constitución Nacional, Ley 21.499, Convenio 169 de la OIT, Ley 25.675, Ley 26.331, Ley 24.156 y RIGI.
+- **Riesgos con su mitigación.**
+
+El botón **Presentar** deja el mapa y una lámina con los cinco mejores lugares, para proyectar en una reunión.

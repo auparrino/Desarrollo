@@ -54,7 +54,7 @@ export const POLICIES: Policy[] = [
     icono: "🏗️",
     nombre: "Crear una ciudad nueva",
     pregunta: "¿Dónde conviene fundar una ciudad desde cero?",
-    unidad: "Regiones de celdas contiguas con superficie para la población objetivo",
+    unidad: "Lugares con terreno libre suficiente para toda la población",
     evidencia: [
       "En los casos con datos, las ciudades nuevas alcanzan en promedio menos del 15 % de la población planeada.",
       "La causa de fracaso más repetida es la falta de empleo: funcionan las conectadas a una ciudad grande o con una actividad económica que las sostenga (La Plata, Tierra del Fuego).",
@@ -84,7 +84,7 @@ export const POLICIES: Policy[] = [
     icono: "🏛️",
     nombre: "Trasladar la capital",
     pregunta: "¿Dónde podría ir una nueva capital del país?",
-    unidad: "Regiones cercanas (≤45 min) a una ciudad base existente",
+    unidad: "Lugares a menos de 45 minutos de una ciudad existente que sirva de base",
     evidencia: [
       "Ningún traslado de capital redujo de forma medible el peso de la ciudad de origen (Lagos, Karachi, El Cairo, Seúl).",
       "Sí hace crecer a la ciudad que recibe la capital: por cada empleo público trasladado se crea alrededor de un empleo privado, muy cerca.",
@@ -112,7 +112,7 @@ export const POLICIES: Policy[] = [
     icono: "🏙️",
     nombre: "Fortalecer ciudades intermedias",
     pregunta: "¿Qué ciudades existentes podrían recibir más población?",
-    unidad: "Zonas urbanas de regiones de 50.000 a 1 millón de habitantes, fuera del AMBA",
+    unidad: "Ciudades de regiones de 50.000 a 1 millón de habitantes, fuera del AMBA",
     evidencia: [
       "Atraer población requiere empleo y vivienda a la vez: el empleo solo no alcanza.",
       "La movilidad entre provincias está bajando: el 15,8 % vive fuera de su provincia natal (20,9 % en 2010).",
@@ -142,7 +142,7 @@ export const POLICIES: Policy[] = [
     icono: "🏡",
     nombre: "Repoblar pueblos",
     pregunta: "¿Qué pueblos podrían recuperar habitantes?",
-    unidad: "Pueblos (zonas de 200 a 5.000 hab.) a ≤40 min de una ciudad, como propone el Plan DHI",
+    unidad: "Pueblos de 200 a 5.000 habitantes a menos de 40 minutos de una ciudad, como propone el Plan DHI",
     evidencia: [
       "Ningún programa de repoblamiento (España, Japón, Italia, Argentina) tiene una evaluación rigurosa de resultados.",
       "En Japón, el 57,5 % de quienes se mudan sigue en el pueblo años después: conviene medir la permanencia.",
@@ -166,7 +166,7 @@ export const POLICIES: Policy[] = [
     icono: "🏭",
     nombre: "Crear polos productivos",
     pregunta: "¿Dónde conviene impulsar un polo de empleo?",
-    unidad: "Zonas fuera del AMBA con una ciudad base de ≥100.000 hab. en 50 km y acceso a la red eléctrica",
+    unidad: "Lugares fuera del AMBA, a menos de 50 km de una ciudad de 100.000 habitantes o más y con red eléctrica",
     evidencia: [
       "Los polos sin una ciudad base o demasiados polos a la vez suelen fracasar.",
       "La promoción industrial de La Rioja, Catamarca, San Luis y San Juan costó cerca de USD 461.000 por empleo (estimación de una parte interesada).",

@@ -14,6 +14,7 @@ import { PlainVerdict, runAll } from "./CostBenefit";
 import { downloadCSV } from "../../model/share";
 import { useState } from "react";
 import { UNIT_COSTS } from "../../model/unitCostsData";
+import { cbaInput } from "../../model/labor";
 
 interface Props {
   ds: Dataset;
@@ -33,6 +34,7 @@ interface Props {
   weights: Record<string, number>;
   localidades?: GeoJSON.FeatureCollection;
   onSelect: (s: Site) => void;
+  onFicha: (s: Site, nombre: string) => void;
   selected: Site | null;
   aptasPct: number;
   onExpert: () => void;
@@ -57,13 +59,16 @@ const label = (n: number) => (n >= 1_000_000 ? `${n / 1_000_000} millón` : `${(
 
 const GROUP_NAME: Record<string, string> = Object.fromEntries(PRIORITIES.map((p) => [p.grupo, p.titulo]));
 
+const musd = (v: number) =>
+  v >= 1e9 ? `USD ${(v / 1e9).toLocaleString("es-AR", { maximumFractionDigits: 1 })} mil millones` : `USD ${Math.round(v / 1e6).toLocaleString("es-AR")} millones`;
+
 export function siteName(s: Site, loc?: GeoJSON.FeatureCollection) {
   const near = nearestPlace(loc, s.center[0], s.center[1]);
   return near ? `Cerca de ${near.nombre}` : s.departamento;
 }
 
 /** En modo simple, una tarjeta por lugar: se descartan regiones con el mismo nombre de referencia. */
-function uniqueByPlace(sites: Site[], loc?: GeoJSON.FeatureCollection): Site[] {
+export function uniqueByPlace(sites: Site[], loc?: GeoJSON.FeatureCollection): Site[] {
   const seen = new Set<string>();
   return sites.filter((s) => {
     const k = siteName(s, loc);
@@ -98,12 +103,11 @@ function Acciones({ p }: { p: Props }) {
   const [msg, setMsg] = useState("");
   const top = uniqueByPlace(p.sites, p.localidades).slice(0, 10);
   const rows = () =>
-    top.map((s) => {
+    top.map((s, k) => {
       const c = estimateCosts(p.policy.id, p.ds.col, s.best, s.provincia, { poblacion: p.poblacion, densidad: 75 }, UNIT_COSTS);
-      const cba = runAll({ policy: p.policy.id, poblacion: p.poblacion, costos: c, c: p.ds.col, i: s.best,
-        codProv: p.ds.meta.departamentos[p.ds.dep[s.best]]?.cod.slice(0, 2) ?? "" });
+      const cba = runAll(cbaInput(p.ds, p.policy.id, p.poblacion, c, s.best));
       return {
-        puesto: s.rank, lugar: siteName(s, p.localidades), departamento: s.departamento, provincia: s.provincia,
+        puesto: k + 1, lugar: siteName(s, p.localidades), departamento: s.departamento, provincia: s.provincia,
         lon: s.center[0].toFixed(3), lat: s.center[1].toFixed(3), aptitud: s.score.toFixed(3), superficie_km2: Math.round(s.areaKm2),
         costo_central_usd: Math.round(c.totalCapital[1]), costo_bajo_usd: Math.round(c.totalCapital[0]), costo_alto_usd: Math.round(c.totalCapital[2]),
         van_social_base_usd: Math.round(cba.base.social.van), van_fiscal_base_usd: Math.round(cba.base.fiscal.van),
@@ -272,16 +276,16 @@ export default function SimplePanel(p: Props) {
           <span className="step">4</span> Los mejores lugares
         </h3>
         <p className="muted small">
-          {p.policy.unidad}. Después de aplicar los descartes queda apto el {p.aptasPct.toFixed(1)} % del territorio.
+          {p.policy.unidad}. Después de aplicar los descartes queda apto el {p.aptasPct.toLocaleString("es-AR", { maximumFractionDigits: 1 })} % del territorio.
           {p.policy.requiereSuperficie && ` Estas zonas además tienen espacio para ${p.poblacion.toLocaleString("es-AR")} personas.`}
         </p>
         <ol className="cards">
-          {uniqueByPlace(p.sites, p.localidades).slice(0, 6).map((s) => {
+          {uniqueByPlace(p.sites, p.localidades).slice(0, 6).map((s, k) => {
             const a = p.agreement(s.best);
             return (
               <li key={s.rank}>
                 <button className={`card-site ${p.selected?.rank === s.rank ? "active" : ""}`} onClick={() => p.onSelect(s)}>
-                  <span className="site-rank">{s.rank}</span>
+                  <span className="site-rank">{k + 1}</span>
                   <span className="site-body">
                     <b>{siteName(s, p.localidades)}</b>
                     <span className="muted small">
@@ -291,8 +295,7 @@ export default function SimplePanel(p: Props) {
                     {(() => {
                       const c = estimateCosts(p.policy.id, p.ds.col, s.best, s.provincia,
                         { poblacion: p.poblacion, densidad: 75 }, UNIT_COSTS);
-                      const cba = runAll({ policy: p.policy.id, poblacion: p.poblacion, costos: c, c: p.ds.col, i: s.best,
-                        codProv: p.ds.meta.departamentos[p.ds.dep[s.best]]?.cod.slice(0, 2) ?? "" });
+                      const cba = runAll(cbaInput(p.ds, p.policy.id, p.poblacion, c, s.best));
                       const f = (v: number) => (v / 1e9).toLocaleString("es-AR", { maximumFractionDigits: 1 });
                       return (
                         <>
@@ -304,15 +307,22 @@ export default function SimplePanel(p: Props) {
                             {c.pctPBI && ` · ${c.pctPBI[1].toLocaleString("es-AR", { maximumFractionDigits: 2 })} % del PBI`}
                           </span>
                         </span>
+                        <span className="small muted">
+                          De eso, {musd(c.propio[1])} dependen de este lugar (rutas, energía, agua, tierra y el sobrecosto regional de construir); el resto
+                          (viviendas, escuelas, hospitales) cuesta parecido en cualquier sitio.
+                        </span>
                         </>
                       );
                     })()}
                     <span className={`trust t${a.n >= a.total - 1 ? "hi" : a.n >= 2 ? "mid" : "lo"}`}>
                       {a.n === a.total
-                        ? "Muy confiable: aparece entre los mejores con todos los enfoques"
-                        : `Aparece entre los mejores con ${a.n} de ${a.total} enfoques`}
+                        ? `Muy confiable: sale entre los mejores con cualquiera de las ${a.total} formas de repartir prioridades que probamos`
+                        : `Sale entre los mejores con ${a.n} de las ${a.total} formas de repartir prioridades que probamos`}
                     </span>
                   </span>
+                </button>
+                <button className="ficha-btn" onClick={() => p.onFicha(s, siteName(s, p.localidades))}>
+                  Ficha para gabinete (imprimible) →
                 </button>
               </li>
             );
@@ -342,7 +352,7 @@ export default function SimplePanel(p: Props) {
             </li>
             <li>Las notas se combinan según la importancia que elegiste y se buscan áreas con espacio suficiente.</li>
             <li>
-              Para saber si el resultado es confiable, se repite el cálculo con distintos enfoques: un lugar que gana con
+              Para saber si el resultado es confiable, se repite el cálculo con distintas formas de repartir las prioridades: un lugar que gana con
               todos es una apuesta más sólida.
             </li>
           </ol>

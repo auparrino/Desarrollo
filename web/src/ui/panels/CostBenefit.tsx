@@ -7,6 +7,8 @@ const musd = (v: number, signed = true) => {
   return `${signed && v < 0 ? "−" : signed && v > 0 ? "+" : ""}USD ${s}`;
 };
 const n0 = (v: number) => Math.round(v).toLocaleString("es-AR");
+/** Plazo de recupero en palabras ("en menos de 5 años", "en unos 12 años"). */
+export const plazo = (n: number) => (n < 5 ? "en menos de 5 años" : `en unos ${n} años`);
 
 const ESC: { id: Escenario; nombre: string; desc: string }[] = [
   { id: "optimista", nombre: "Si llega toda la gente", desc: "se llena en ~20 años, como Harlow o Brasília" },
@@ -18,15 +20,21 @@ export function runAll(inp: CBAInput): Record<Escenario, CBAResult> {
   return Object.fromEntries(ESC.map((e) => [e.id, costBenefit(inp, BENEFIT_PARAMS, e.id)])) as Record<Escenario, CBAResult>;
 }
 
+const inpPolos = (b: CBAResult) => b.anual.polo !== 0;
+
 /** Una frase para la tarjeta del modo simple. */
 export function PlainVerdict({ r }: { r: Record<Escenario, CBAResult> }) {
   const b = r.base;
   const anual = b.anual.productividad + b.anual.aglomeracion + b.anual.congestion + b.anual.polo;
   return (
     <span className="small">
-      <span className={`dot ${anual >= 0 ? "pos-bg" : "neg-bg"}`} aria-hidden /> Con la gente que probablemente llegue, el país {anual >= 0 ? "gana" : "pierde"}{" "}
-      <b>{musd(Math.abs(anual), false)} por año</b> frente a que esa gente viva en el AMBA
-      {b.social.recupero !== null ? ` y la inversión extra se paga en ~${b.social.recupero} años.` : "; la inversión extra no se recupera."}
+      <span className={`dot ${anual >= 0 ? "pos-bg" : "neg-bg"}`} aria-hidden /> Cuando esté funcionando (año {b.anual.anio}, con la gente que probablemente llegue), el país {anual >= 0 ? "gana" : "pierde"}{" "}
+      <b>{musd(Math.abs(anual), false)} por año</b> {inpPolos(b) ? "frente a no tener el polo" : "frente a que esa gente viva en el AMBA"}
+      {b.social.recupero !== null
+        ? `; la inversión extra se paga ${plazo(b.social.recupero)}.`
+        : anual > 0
+          ? `, pero ${inpPolos(b) ? "los empleos llegan" : "la gente llega"} tan de a poco que la inversión extra no se termina de pagar en ${b.horizonte} años.`
+          : "; la inversión extra no se recupera."}
     </span>
   );
 }
@@ -61,7 +69,12 @@ export default function CostBenefit({ inp }: { inp: CBAInput }) {
               </li>
             )}
             {a.congestion > 0 && <li className="pos">ahorra {musd(a.congestion, false)} de congestión en el AMBA;</li>}
-            {polos && <li className="pos">suma {musd(a.polo, false)} de producción nueva (la mitad del polo se considera actividad nueva).</li>}
+            {polos && (
+              <li className="pos">
+                suma {musd(a.polo, false)} de producción nueva: solo cuenta el {Math.round(b.supuestos.adicionalidad * 100)} % de
+                los empleos, porque el resto se habría creado igual en otra región.
+              </li>
+            )}
           </ul>
           <b className={anual >= 0 ? "pos" : "neg"}>
             Resultado: {anual >= 0 ? "gana" : "pierde"} {musd(Math.abs(anual), false)} por año.
@@ -70,7 +83,7 @@ export default function CostBenefit({ inp }: { inp: CBAInput }) {
         <li>
           <b>
             {b.social.recupero !== null
-              ? `La inversión extra se paga en ~${b.social.recupero} años.`
+              ? `La inversión extra se paga ${plazo(b.social.recupero)}.`
               : "La inversión extra no se paga en el horizonte de evaluación."}
           </b>{" "}
           Sumando todos los años (valor presente al {Math.round(b.tasa * 100)} % anual, {b.horizonte} años), el saldo es{" "}
@@ -92,7 +105,7 @@ export default function CostBenefit({ inp }: { inp: CBAInput }) {
                 <b>{e.nombre}</b> <span className="small muted">{e.desc}</span>
               </td>
               <td className={`num ${r[e.id].social.van >= 0 ? "pos" : "neg"}`}>{musd(r[e.id].social.van)}</td>
-              <td className="num">{r[e.id].social.recupero !== null ? `~${r[e.id].social.recupero} años` : "no se paga"}</td>
+              <td className="num">{r[e.id].social.recupero !== null ? (r[e.id].social.recupero! < 5 ? "< 5 años" : `~${r[e.id].social.recupero} años`) : "no se paga"}</td>
             </tr>
           ))}
         </tbody>
@@ -100,10 +113,14 @@ export default function CostBenefit({ inp }: { inp: CBAInput }) {
       <p className="small">
         <b>Para el Estado:</b> pone {musd(b.fiscal.vpCostos, false)} extra (en valor presente) y recupera{" "}
         {musd(b.fiscal.vpBeneficios, false)} en impuestos y captura de plusvalía:{" "}
-        {b.fiscal.recupero !== null ? `se recupera en ~${b.fiscal.recupero} años.` : "no lo recupera."}
+        {b.fiscal.recupero !== null ? `se recupera ${plazo(b.fiscal.recupero)}.` : "no lo recupera."}
       </p>
       <p className="muted small">
         Lo que más mueve la cuenta: cuánto más (o menos) productivo es el destino que el AMBA y cuánta gente llega de verdad.
+        Se usa el salario promedio de la zona (50 km a la redonda: {b.supuestos.relDest.toLocaleString("es-AR", { maximumFractionDigits: 2 })} veces
+        el promedio nacional; AMBA {b.supuestos.relAmba.toLocaleString("es-AR", { maximumFractionDigits: 2 })}), y solo el{" "}
+        {Math.round(b.supuestos.brecha * 100)} % de la diferencia cuenta como ganancia de quien se muda: el resto se explica por
+        quién trabaja en cada lugar (por ejemplo, los sueldos petroleros).
         No incluye beneficios difíciles de medir, como la soberanía, la integración territorial o la calidad de vida.
         Parámetros y fuentes: docs/beneficios-parametros.md.
       </p>

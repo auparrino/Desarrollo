@@ -20,6 +20,8 @@ import { CLASSES, PRESETS, classify, defaultPoints, presetPoints, weightsFromPoi
 import { DIV_RED_BLUE, EXCLUDED, SEQ_BLUE, SEQ_ORANGE, VIRIDIS, css, gradientCss, ramp, type RGB } from "./ui/colors";
 import { VARIABLES, VAR_BY_ID, fmtVar } from "./ui/variables";
 import { SolDeMayo } from "./ui/art/Icons";
+import Ficha from "./ui/panels/Ficha";
+import Presentacion from "./ui/panels/Presentacion";
 
 type Tab = "aptitud" | "sitios" | "diagnostico" | "simulador" | "casos" | "metodo";
 type View = "aptitud" | "robustez" | "exclusion" | "variable";
@@ -113,6 +115,8 @@ export default function App() {
   const [mcProgress, setMcProgress] = useState<number | null>(null);
   const [selCell, setSelCell] = useState<number | null>(null);
   const [selSite, setSelSite] = useState<Site | null>(null);
+  const [ficha, setFicha] = useState<{ site: Site; nombre: string } | null>(null);
+  const [presentar, setPresentar] = useState(false);
   const [flyTo, setFlyTo] = useState<{ center: [number, number]; zoom: number; key: number } | null>(null);
   const [depMetric, setDepMetric] = useState<DepMetric>("crec_anual");
   const [selDep, setSelDep] = useState<DepProps | null>(null);
@@ -425,7 +429,7 @@ export default function App() {
     : L0;
 
   return (
-    <div className="app">
+    <div className={`app ${presentar ? "presentando" : ""}`}>
       <header className="top">
         <div className="brand">
           <SolDeMayo size={46} />
@@ -442,6 +446,9 @@ export default function App() {
             <option value="josefin">Josefin Sans</option>
           </select>
         </label>
+        <button className="presentar-btn" onClick={() => setPresentar((v) => !v)} aria-pressed={presentar}>
+          {presentar ? "Salir de la presentación" : "Presentar"}
+        </button>
         <div className="mode" role="group" aria-label="Modo de uso">
           <button className={!expert ? "on" : ""} onClick={() => setMode("simple")}>Simple</button>
           <button className={expert ? "on" : ""} onClick={() => setMode("experto")}>Experto</button>
@@ -472,6 +479,7 @@ export default function App() {
                 weights={effW}
                 localidades={geo.localidades}
                 onSelect={selectSite}
+                onFicha={(st, nombre) => setFicha({ site: st, nombre })}
                 selected={selSite}
                 aptasPct={(100 * stats.aptas) / stats.total}
                 onExpert={() => setMode("experto")}
@@ -655,7 +663,13 @@ export default function App() {
           )}
         </div>
       </div>
+      {presentar && (
+        <Presentacion ds={ds} sites={sites} policy={policy} poblacion={siteParams.poblacion} localidades={geo.localidades}
+          onSelect={selectSite} onFicha={(st, nombre) => setFicha({ site: st, nombre })} />
+      )}
+      {ficha && (
+        <Ficha ds={ds} site={ficha.site} nombre={ficha.nombre} policy={policy} poblacion={siteParams.poblacion} geo={geo} onClose={() => setFicha(null)} />
+      )}
     </div>
   );
 }
-
