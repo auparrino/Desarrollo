@@ -443,6 +443,16 @@ def main() -> None:
     simplify_out(at, 0.005, capas / "alta_tension.geojson", [])
     simplify_out(ap.assign(nombre=ap.fna), 0.005, capas / "areas_protegidas.geojson", ["nombre", "categoria"])
     simplify_out(rios100.assign(caudal=rios100.DIS_AV_CMS.round(0)), 0.01, capas / "rios.geojson", ["caudal"])
+    # localidades de referencia para nombrar lugares: solo las que están en celdas con
+    # ≥3.000 hab. (pueblos y ciudades reconocibles), una por celda
+    cell_pop = pd.Series(C["pob"], index=uniq)
+    lc = np.asarray(h3v.coordinates_to_cells(locs.lat_gd.astype(float).values, locs.long_gd.astype(float).values, H3_RES)).astype(np.uint64)
+    locs = locs.assign(pob_celda=cell_pop.reindex(lc).fillna(0).values.round(), _c=lc)
+    locs = locs.assign(_simple=(locs.tipo_asent != "Localidad simple").astype(int))
+    ref = locs[locs.pob_celda >= 3000].sort_values(["_c", "_simple", "fna"]).drop_duplicates("_c")
+    ref = gpd.GeoDataFrame(ref, geometry=gpd.points_from_xy(ref.long_gd.astype(float), ref.lat_gd.astype(float)), crs=4326)
+    simplify_out(ref.assign(nombre=ref.fna, provincia=ref.nom_pcia), 0, capas / "localidades.geojson",
+                 ["nombre", "provincia", "pob_celda"])
 
     (OUT / "fuentes.json").write_text(
         json.dumps({k: {kk: v[kk] for kk in ("cita", "licencia", "url")} for k, v in SOURCES.items()},

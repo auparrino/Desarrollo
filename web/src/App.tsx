@@ -11,6 +11,9 @@ import CellDetail from "./ui/panels/CellDetail";
 import DiagnosticPanel, { METRICS, type DepMetric, type DepProps } from "./ui/panels/DiagnosticPanel";
 import SimulatorPanel from "./ui/panels/SimulatorPanel";
 import MethodPanel from "./ui/panels/MethodPanel";
+import SimplePanel from "./ui/panels/SimplePanel";
+import SimpleCellCard from "./ui/panels/SimpleCellCard";
+import { CLASSES, DEFAULT_LEVELS, PRESETS, classify, weightsFromLevels, type Level } from "./model/plain";
 import { DIV_RED_BLUE, EXCLUDED, SEQ_BLUE, SEQ_ORANGE, css, gradientCss, ramp, type RGB } from "./ui/colors";
 import { VARIABLES, VAR_BY_ID, fmtVar } from "./ui/variables";
 
@@ -38,7 +41,22 @@ const GEO_FILES = {
   alta_tension: "capas/alta_tension.geojson",
   rios: "capas/rios.geojson",
   areas_protegidas: "capas/areas_protegidas.geojson",
+  localidades: "capas/localidades.geojson",
+  plan_dhi: "capas/plan_dhi.geojson",
 };
+
+// Rampa ordinal para las clases del modo simple (sin el paso más claro, que no contrasta).
+const CLASS_COLORS: RGB[] = ["#86b6ef", "#3987e5", "#1c5cab", "#0d366b"].map(
+  (h) => [1, 3, 5].map((k) => parseInt(h.slice(k, k + 2), 16)) as RGB,
+);
+
+function initialMode(): "simple" | "experto" {
+  try {
+    return localStorage.getItem("modo") === "experto" ? "experto" : "simple";
+  } catch {
+    return "simple";
+  }
+}
 
 function useDark() {
   const q = typeof window !== "undefined" ? window.matchMedia("(prefers-color-scheme: dark)") : null;
@@ -61,7 +79,7 @@ export default function App() {
   const [view, setView] = useState<View>("aptitud");
   const [variable, setVariable] = useState("pob");
   const [overlays, setOverlays] = useState<Overlays>({
-    provincias: true, rutas: false, ferrocarril: false, alta_tension: false, rios: false, areas_protegidas: false,
+    provincias: true, rutas: false, ferrocarril: false, alta_tension: false, rios: false, areas_protegidas: false, plan_dhi: false,
   });
 
   const [scenario, setScenario] = useState("E1");
@@ -80,6 +98,46 @@ export default function App() {
   const [depMetric, setDepMetric] = useState<DepMetric>("crec_anual");
   const [selDep, setSelDep] = useState<DepProps | null>(null);
   const [sheet, setSheet] = useState(true);
+  const [mode, setModeState] = useState<"simple" | "experto">(initialMode);
+  const [levels, setLevelsState] = useState<Record<string, Level>>(DEFAULT_LEVELS);
+  const [preset, setPresetState] = useState<string | null>("expertos");
+  const setMode = (m: "simple" | "experto") => {
+    setModeState(m);
+    try {
+      localStorage.setItem("modo", m);
+    } catch {
+      /* sin almacenamiento: no se recuerda la preferencia */
+    }
+  };
+  const setLevels = (l: Record<string, Level>) => {
+    setLevelsState(l);
+    setPresetState(PRESETS.find((p) => JSON.stringify(p.levels) === JSON.stringify(l))?.id ?? null);
+    setWeights(weightsFromLevels(l));
+    setScenario("custom");
+  };
+  const setPreset = (id: string) => {
+    const p = PRESETS.find((x) => x.id === id)!;
+    setLevels(p.levels);
+    if (p.scenario) {
+      setWeights(SCENARIOS.find((s) => s.id === p.scenario)!.weights());
+      setScenario(p.scenario);
+      setPresetState(p.id);
+    }
+  };
+  // tipo de crecimiento: ciudad nueva (R11) o ampliar pueblos existentes a ≤30 km (R15, Plan DHI)
+  const tipo = restrictions.find((r) => r.id === "R15")?.activo ? "pueblos" : "nueva";
+  const setTipo = (t: "nueva" | "pueblos") =>
+    setRestrictions((rs) =>
+      rs.map((r) =>
+        // al hacer crecer pueblos solo se excluyen las ciudades ya consolidadas (>~550 hab/km²)
+        r.id === "R11" ? { ...r, activo: true, umbral: t === "nueva" ? 3600 : 20000 }
+        : r.id === "R15" ? { ...r, activo: t === "pueblos" } : r,
+      ),
+    );
+  const setPoblacion = (n: number) => {
+    setWaterState((w) => ({ ...w, poblacion: n }));
+    setSiteParamsState((x) => ({ ...x, poblacion: n }));
+  };
 
   useEffect(() => {
     loadDataset().then(setDs).catch((e) => setErr(String(e)));
@@ -110,6 +168,22 @@ export default function App() {
         { id: "R13", nombre: "Suficiencia hídrica", n: counts[restrictions.length + 1] }],
     };
   }, [reason, restrictions]);
+
+  // acuerdo entre enfoques: en cuántos de los enfoques predefinidos la celda queda en el 20 % superior
+  const presetClasses = useMemo(
+    () =>
+      PRESETS.map((p) => {
+        const w = p.scenario ? SCENARIOS.find((s) => s.id === p.scenario)!.weights() : weightsFromLevels(p.levels);
+        return classify(aggregate(fScores, effectiveWeights(w), reason, agg));
+      }),
+    [fScores, reason, agg],
+  );
+  const agreement = useCallback(
+    (i: number) => ({ n: presetClasses.reduce((a, c) => a + (c[i] >= 3 ? 1 : 0), 0), total: presetClasses.length }),
+    [presetClasses],
+  );
+  const classes = useMemo(() => classify(score), [score]);
+  const reasonIds = useMemo(() => [...restrictions.map((r) => r.id), "R13"], [restrictions]);
 
   const sites = useMemo(() => (ds ? findSites(ds, score, siteParams, mcProb) : []), [ds, score, siteParams, mcProb]);
 
@@ -152,7 +226,19 @@ export default function App() {
       out[i * 4] = c[0]; out[i * 4 + 1] = c[1]; out[i * 4 + 2] = c[2]; out[i * 4 + 3] = a;
     };
     const hl = new Set(selSite?.cells ?? []);
-    if (view === "aptitud") {
+    if (mode === "simple") {
+      for (let i = 0; i < ds.n; i++) {
+        if (reason[i]) put(i, EXCLUDED, 55);
+        else put(i, CLASS_COLORS[classes[i] - 1], hl.size && !hl.has(i) ? 160 : 230);
+      }
+      legend.current = {
+        title: "¿Qué tan buena es cada zona?",
+        cats: [
+          ...[...CLASSES].map((c) => ({ c: CLASS_COLORS[c.id - 1], n: `${c.nombre} (${c.desc})` })),
+          { c: EXCLUDED, n: "No apta (sin agua, inundable, sísmica, protegida, montaña…)" },
+        ],
+      };
+    } else if (view === "aptitud") {
       const lo = quantile(score, 0.02);
       const hi = quantile(score, 0.995);
       for (let i = 0; i < ds.n; i++) {
@@ -204,8 +290,8 @@ export default function App() {
       };
     }
     return out;
-  }, [ds, view, score, reason, mcProb, variable, selSite, stats, reasonNames, mcParams.topFrac]);
-  const colorKey = useMemo(() => `${view}|${variable}|${Math.random()}`, [colors]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [ds, view, score, reason, mcProb, variable, selSite, stats, reasonNames, mcParams.topFrac, mode, classes]);
+  const colorKey = useMemo(() => `${mode}|${view}|${variable}|${Math.random()}`, [colors]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const depsProps = useMemo(
     () => (geo.departamentos?.features ?? []).map((f) => f.properties as DepProps),
@@ -226,6 +312,7 @@ export default function App() {
   }, [tab, depMetric, selDep]);
 
   const selectSite = (s: Site) => {
+    if (window.matchMedia("(max-width: 760px)").matches) setSheet(false);
     setSelSite(s);
     setSelCell(s.best);
     setFlyTo({ center: s.center, zoom: 7, key: Date.now() });
@@ -234,7 +321,8 @@ export default function App() {
   if (err) return <div className="loading">Error al cargar datos: {err}</div>;
   if (!ds) return <div className="loading">Cargando grilla territorial…</div>;
 
-  const L = tab === "diagnostico"
+  const expert = mode === "experto";
+  const L = expert && tab === "diagnostico"
     ? { title: METRICS[depMetric].nombre, stops: METRICS[depMetric].stops, ticks: METRICS[depMetric].ticks, cats: undefined }
     : legend.current;
 
@@ -243,7 +331,11 @@ export default function App() {
       <header className="top">
         <div>
           <h1>Atlas de aptitud territorial · Argentina</h1>
-          <p className="muted small">Nuevas ciudades y redistribución poblacional · análisis multicriterio con datos abiertos</p>
+          <p className="muted small">Dónde crear nuevas ciudades y hacia dónde podría crecer la población</p>
+        </div>
+        <div className="mode" role="group" aria-label="Modo de uso">
+          <button className={!expert ? "on" : ""} onClick={() => setMode("simple")}>Simple</button>
+          <button className={expert ? "on" : ""} onClick={() => setMode("experto")}>Experto</button>
         </div>
       </header>
       <div className="main">
@@ -251,6 +343,32 @@ export default function App() {
           <button className="sheet-toggle" onClick={() => setSheet((s) => !s)} aria-expanded={sheet}>
             {sheet ? "Ocultar panel" : "Mostrar panel"}
           </button>
+          {!expert && (
+            <div className="side-body">
+              <SimplePanel
+                ds={ds}
+                levels={levels}
+                setLevels={setLevels}
+                preset={preset}
+                setPreset={setPreset}
+                tipo={tipo}
+                setTipo={setTipo}
+                showDhi={overlays.plan_dhi}
+                setShowDhi={(v) => setOverlays((o) => ({ ...o, plan_dhi: v }))}
+                poblacion={siteParams.poblacion}
+                setPoblacion={setPoblacion}
+                sites={sites}
+                agreement={agreement}
+                fScores={fScores}
+                localidades={geo.localidades}
+                onSelect={selectSite}
+                selected={selSite}
+                aptasPct={(100 * stats.aptas) / stats.total}
+                onExpert={() => setMode("experto")}
+              />
+            </div>
+          )}
+          {expert && <>
           <nav className="tabs" role="tablist">
             {TABS.map((t) => (
               <button key={t.id} role="tab" aria-selected={tab === t.id} className={tab === t.id ? "active" : ""} onClick={() => setTab(t.id)}>
@@ -301,6 +419,7 @@ export default function App() {
             {tab === "simulador" && <SimulatorPanel ds={ds} sites={sites} deps={depsProps} />}
             {tab === "metodo" && <MethodPanel generado={ds.meta.generado} />}
           </div>
+          </>}
         </aside>
 
         <div className="mapwrap">
@@ -310,15 +429,15 @@ export default function App() {
             colorKey={colorKey}
             geo={geo}
             overlays={overlays}
-            depFill={depFill}
-            highlight={tab === "diagnostico" ? [] : selSite?.cells ?? []}
-            selected={tab === "diagnostico" ? null : selCell}
+            depFill={expert ? depFill : null}
+            highlight={expert && tab === "diagnostico" ? [] : selSite?.cells ?? []}
+            selected={expert && tab === "diagnostico" ? null : selCell}
             flyTo={flyTo}
             onCellClick={(i) => { setSelCell(i); if (i === null) setSelSite(null); }}
             onDepClick={(f) => setSelDep((f?.properties as DepProps) ?? null)}
             dark={dark}
           />
-          {tab !== "diagnostico" && (
+          {expert && tab !== "diagnostico" && (
             <div className="mapctl">
               <label>
                 Capa
@@ -347,6 +466,7 @@ export default function App() {
                     ["provincias", "Límites provinciales"], ["rutas", "Rutas nacionales pavimentadas"],
                     ["ferrocarril", "Ferrocarril operativo"], ["alta_tension", "Líneas de alta tensión"],
                     ["rios", "Ríos ≥100 m³/s"], ["areas_protegidas", "Áreas protegidas"],
+                    ["plan_dhi", "Propuestas del Plan DHI"],
                   ] as [keyof Overlays, string][]
                 ).map(([k, n]) => (
                   <label key={k} className="check">
@@ -372,7 +492,18 @@ export default function App() {
               </div>
             ))}
           </div>
-          {selCell !== null && tab !== "diagnostico" && (
+          {selCell !== null && !expert && (
+            <SimpleCellCard
+              ds={ds}
+              i={selCell}
+              clase={classes[selCell]}
+              reasonId={reason[selCell] ? reasonIds[reason[selCell] - 1] : null}
+              fScores={fScores}
+              localidades={geo.localidades}
+              onClose={() => { setSelCell(null); setSelSite(null); }}
+            />
+          )}
+          {selCell !== null && expert && tab !== "diagnostico" && (
             <CellDetail
               ds={ds}
               i={selCell}

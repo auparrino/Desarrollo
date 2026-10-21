@@ -14,6 +14,7 @@ export interface Overlays {
   alta_tension: boolean;
   rios: boolean;
   areas_protegidas: boolean;
+  plan_dhi: boolean;
 }
 
 export interface MapProps {
@@ -164,6 +165,30 @@ export default function MapView(p: MapProps) {
           }),
         );
       }
+    }
+    if (p.overlays.plan_dhi && p.geo.plan_dhi) {
+      layers.push(
+        new GeoJsonLayer({
+          id: "plan_dhi",
+          data: p.geo.plan_dhi,
+          pointType: "circle+text",
+          getPointRadius: 7,
+          pointRadiusUnits: "pixels",
+          getFillColor: (f: GeoJSON.Feature) => (f.properties?.tipo === "obra" ? [235, 104, 52, 240] : [27, 175, 122, 240]),
+          getLineColor: [255, 255, 255, 255],
+          lineWidthMinPixels: 1.5,
+          stroked: true,
+          getText: (f: GeoJSON.Feature) => String(f.properties?.nombre ?? "").replace(" (zona de chacras)", ""),
+          getTextSize: 11,
+          getTextPixelOffset: [0, -14],
+          getTextColor: p.dark ? [240, 239, 236, 255] : [11, 11, 11, 255],
+          textFontWeight: 600,
+          textOutlineWidth: 3,
+          textOutlineColor: p.dark ? [26, 26, 25, 255] : [252, 252, 251, 255],
+          textFontSettings: { sdf: true },
+          textCharacterSet: "auto",
+        }),
+      );
     }
     if (p.overlays.provincias && p.geo.provincias) {
       layers.push(

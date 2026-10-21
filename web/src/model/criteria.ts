@@ -215,6 +215,11 @@ export const RESTRICTIONS: Restriction[] = [
     min: 0, max: 50000, step: 100, unidad: "hab/celda", evidencia: ["C", "J"], refs: ["Sejong 2004"],
     nota: "Para planificar ciudades nuevas, excluye celdas con más de ~100 hab/km² (3.600 hab por celda de 36 km²). Desactivar para evaluar la expansión de ciudades existentes.",
   },
+  {
+    id: "R15", nombre: "Lejos de pueblos existentes", column: "d_localidad", op: ">", umbral: 30, activo: false,
+    min: 5, max: 100, step: 5, unidad: "km", evidencia: ["C"], refs: ["Plan DHI 2023, p. 39 y 49"],
+    nota: "Variante del Plan DHI: repoblar a no más de 30 km de un ejido urbano existente (localidades BAHRA).",
+  },
 ];
 
 // ------------------------------------------------------------------ escenarios de pesos
@@ -250,6 +255,14 @@ export const SCENARIOS: { id: string; nombre: string; desc: string; weights: () 
   {
     id: "E3", nombre: "E3 · Ambiental-hídrico", desc: "Agua 0,30 y riesgos 0,25.",
     weights: () => scaleGroups({ agua: 0.3, riesgo: 0.25 }),
+  },
+  {
+    id: "E4", nombre: "E4 · Plan DHI (Fundación DHI, 2023)",
+    desc:
+      "Pesos inferidos del Plan de Desarrollo Humano Integral: desconcentrar es la tesis central (p. 38–39), 87 % de " +
+      "sus obras son hídricas (p. 198–200) y casi no trata riesgos naturales. Ver docs/plan-dhi-resumen.md.",
+    weights: () =>
+      scaleGroups({ equilibrio: 0.3, acceso: 0.2, agua: 0.2, energia: 0.1, riesgo: 0.07, agro: 0.06, clima: 0.04, topo: 0.03 }),
   },
 ];
 
