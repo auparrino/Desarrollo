@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { loadDataset, loadJSON, type Dataset } from "./data/load";
+import { loadDataset, loadJSON, type Dataset, type Incentivos } from "./data/load";
 import { RESTRICTIONS, SCENARIOS, effectiveWeights, type Restriction, type Weights } from "./model/criteria";
 import { DEFAULT_WATER, aggregate, computeMask, factorScores, quantile, type Aggregation, type WaterParams } from "./model/mcda";
 import { findSites, type Site, type SiteParams } from "./model/sites";
@@ -77,6 +77,7 @@ export default function App() {
   const dark = useDark();
   const [ds, setDs] = useState<Dataset | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const [incentivos, setIncentivos] = useState<Incentivos | null>(null);
   const [geo, setGeo] = useState<Record<string, GeoJSON.FeatureCollection | undefined>>({});
   const [tab, setTab] = useState<Tab>("aptitud");
   const [view, setView] = useState<View>("aptitud");
@@ -152,6 +153,7 @@ export default function App() {
 
   useEffect(() => {
     loadDataset().then(setDs).catch((e) => setErr(String(e)));
+    loadJSON<Incentivos>("incentivos.json").then(setIncentivos).catch(() => setIncentivos(null));
     for (const [k, f] of Object.entries(GEO_FILES)) {
       loadJSON<GeoJSON.FeatureCollection>(f).then((g) => setGeo((x) => ({ ...x, [k]: g }))).catch(() => undefined);
     }
@@ -520,6 +522,7 @@ export default function App() {
               fScores={fScores}
               weights={effW}
               localidades={geo.localidades}
+              incentivos={incentivos}
               onClose={() => { setSelCell(null); setSelSite(null); }}
             />
           )}

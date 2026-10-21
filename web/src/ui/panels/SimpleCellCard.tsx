@@ -1,5 +1,5 @@
 import { cellToLatLng } from "h3-js";
-import type { Dataset } from "../../data/load";
+import type { Dataset, Incentivos } from "../../data/load";
 import { CLASSES, PLAIN_RESTRICTION, PRIORITIES, groupScores, verdict } from "../../model/plain";
 import { facts, nearestPlace } from "../plainFacts";
 
@@ -11,6 +11,7 @@ interface Props {
   fScores: Record<string, Float32Array>;
   weights: Record<string, number>;
   localidades?: GeoJSON.FeatureCollection;
+  incentivos?: Incentivos | null;
   onClose: () => void;
 }
 
@@ -75,6 +76,32 @@ export default function SimpleCellCard(p: Props) {
           </ul>
         </>
       )}
+      {(() => {
+        const ids = p.incentivos?.por_dep[d?.cod ?? ""] ?? [];
+        const list = (p.incentivos?.incentivos ?? []).filter((x) => ids.includes(x.id));
+        if (!p.incentivos) return null;
+        return (
+          <>
+            <h4>Incentivos para radicarse aquí</h4>
+            {list.length === 0 ? (
+              <p className="small muted">No se registran incentivos vigentes específicos para este departamento.</p>
+            ) : (
+              <ul className="incent">
+                {list.map((x) => (
+                  <li key={x.id}>
+                    <span className={`tag ${/hogar|persona|trabajador/i.test(x.beneficiario) ? "pers" : "emp"}`}>
+                      {/hogar|persona|trabajador/i.test(x.beneficiario) ? "personas" : "empresas"}
+                    </span>{" "}
+                    <a href={x.fuente_url} target="_blank" rel="noopener">{x.nombre}</a>
+                    {x.intensidad && <span className="small muted"> · {x.intensidad}</span>}
+                    {x.vigencia_hasta && <span className="small muted"> · hasta {x.vigencia_hasta}</span>}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
+        );
+      })()}
       <h4>La zona en datos</h4>
       <ul className="facts">
         {facts(p.ds, p.i).map((f) => (

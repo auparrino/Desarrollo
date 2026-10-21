@@ -227,3 +227,8 @@ button.link { background: none; border: 0; color: var(--accent); font: inherit; 
 .evidence { margin-top: 10px; background: var(--warn-bg); border-radius: 8px; padding: 8px 10px; }
 .evidence ul { margin: 4px 0; padding-left: 18px; }
 .evidence li { margin-bottom: 3px; line-height: 1.35; }
+.incent { list-style: none; padding: 0; margin: 0; }
+.incent li { padding: 4px 0; border-bottom: 1px solid var(--grid); font-size: 0.85rem; line-height: 1.35; }
+.tag.pers { background: var(--good-bg); color: var(--good-ink); }
+.tag.emp { background: var(--grid); }
+.costs .total td { border-top: 2px solid var(--line); }

@@ -422,6 +422,23 @@ def main() -> None:
     sal = gpd.read_file(raw("establecimientos_salud"))
     # hospital = internación general (tipología 6 del REFES); se excluyen geriátricos y especializados
     C["d_hospital"] = distances_km(centers_m, sal[sal.internacion.astype(bool) & (pd.to_numeric(sal.tipologia_cod, errors="coerce") == 6)])
+    # --- incentivos a la radicación (docs/incentivos-radicacion.md), si el relevamiento existe
+    inc_dir = RAW.parent / "interim" / "incentivos"
+    if (inc_dir / "incentivos.csv").exists():
+        inc = pd.read_csv(inc_dir / "incentivos.csv", dtype=str).fillna("")
+        rel = pd.read_csv(inc_dir / "incentivos_departamento.csv", dtype=str)
+        vig = inc[inc.vigencia_estado.str.lower() == "vigente"]
+        rel = rel[rel.incentivo_id.isin(vig.id)].merge(vig[["id", "beneficiario"]], left_on="incentivo_id", right_on="id")
+        ben = rel.beneficiario.str.lower()
+        n_emp = rel[ben.str.contains("empresa")].groupby("cod_dep").size()
+        n_hog = rel[ben.str.contains("hogar|trabajador|persona")].groupby("cod_dep").size()
+        C["n_incent_empresas"] = dep_s.map(n_emp).fillna(0).values
+        C["n_incent_personas"] = dep_s.map(n_hog).fillna(0).values
+        (OUT / "incentivos.json").write_text(json.dumps({
+            "incentivos": inc.drop(columns=[c for c in ("alcance_codigos",) if c in inc]).to_dict(orient="records"),
+            "por_dep": rel.groupby("cod_dep").incentivo_id.apply(list).to_dict(),
+        }, ensure_ascii=False))
+        log(f"incentivos: {len(vig)} vigentes de {len(inc)}")
     log(f"empleo: {emp.puestos_priv_2022.sum():,.0f} puestos; {len(motores)} proyectos motores")
     log(f"tenencia: CNA {cna.shape[0]} deptos, RNTR {rntr.shape[0]}, {len(ci_pts)} comunidades con coordenadas")
     log("población 50 km")

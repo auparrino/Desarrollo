@@ -52,6 +52,23 @@ export async function loadDataset(): Promise<Dataset> {
   return { n, h3, dep, col, meta, index };
 }
 
+export interface Incentivo {
+  id: string;
+  nombre: string;
+  nivel: string;
+  norma: string;
+  vigencia_estado: string;
+  vigencia_hasta: string;
+  tipo: string;
+  beneficiario: string;
+  intensidad: string;
+  fuente_url: string;
+}
+export interface Incentivos {
+  incentivos: Incentivo[];
+  por_dep: Record<string, string[]>;
+}
+
 export async function loadJSON<T = unknown>(path: string): Promise<T> {
   const r = await fetch(BASE + path);
   if (!r.ok) throw new Error(`No se pudo cargar ${path}`);
