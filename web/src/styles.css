@@ -232,3 +232,14 @@ button.link { background: none; border: 0; color: var(--accent); font: inherit; 
 .tag.pers { background: var(--good-bg); color: var(--good-ink); }
 .tag.emp { background: var(--grid); }
 .costs .total td { border-top: 2px solid var(--line); }
+.fixed { background: var(--plane); border: 1px solid var(--grid); border-radius: 8px; padding: 8px 10px; margin-bottom: 10px; }
+.fixed ul { list-style: none; padding: 0; margin: 4px 0 0; }
+.fixed li { margin-bottom: 3px; }
+.left { color: var(--accent); font-weight: 600; }
+.budget { display: flex; align-items: center; gap: 8px; }
+.budget button { width: 32px; height: 32px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-size: 1.1rem; cursor: pointer; flex: none; }
+.budget button:disabled { opacity: 0.35; cursor: default; }
+.dots { display: flex; gap: 3px; flex: 1; }
+.dots span { flex: 1; height: 10px; border-radius: 3px; background: var(--grid); }
+.dots span.on { background: var(--accent); }
+.pts { width: 18px; text-align: center; font-variant-numeric: tabular-nums; }

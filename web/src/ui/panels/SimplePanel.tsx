@@ -1,8 +1,11 @@
 import type { Dataset } from "../../data/load";
 import { GROUPS } from "../../model/criteria";
 import type { Site } from "../../model/sites";
-import { LEVEL_LABELS, PRESETS, PRIORITIES, groupScores, groupsUsed, verdict, type Level } from "../../model/plain";
+import { BUDGET, FIXED_GROUPS, PRESETS, PRIORITIES, groupScores, prefGroups, verdict, type Points } from "../../model/plain";
 import { POLICIES, type Policy, type PolicyId } from "../../model/policies";
+import { FACTORS } from "../../model/criteria";
+
+const FACTOR_GROUP: Record<string, string> = Object.fromEntries(FACTORS.map((f) => [f.id, f.grupo]));
 import { nearestPlace } from "../plainFacts";
 import { estimateCosts } from "../../model/costs";
 import { UNIT_COSTS } from "../../model/unitCostsData";
@@ -11,8 +14,8 @@ interface Props {
   ds: Dataset;
   policy: Policy;
   setPolicy: (id: PolicyId) => void;
-  levels: Record<string, Level>;
-  setLevels: (l: Record<string, Level>) => void;
+  points: Points;
+  setPoints: (p: Points) => void;
   preset: string | null;
   setPreset: (id: string) => void;
   showDhi: boolean;
@@ -83,7 +86,13 @@ function Reasons({ fs, i, w }: { fs: Record<string, Float32Array>; i: number; w:
 }
 
 export default function SimplePanel(p: Props) {
-  const used = groupsUsed(p.policy.weights());
+  const prefs = prefGroups(p.policy.weights());
+  const spent = prefs.reduce((a, g) => a + (p.points[g] ?? 0), 0);
+  const left = BUDGET - spent;
+  const base = p.policy.weights();
+  const fixed = PRIORITIES.filter(
+    (x) => FIXED_GROUPS.includes(x.grupo) && Object.entries(base).some(([id, w]) => w > 0 && FACTOR_GROUP[id] === x.grupo),
+  );
   return (
     <div className="panel simple">
       <section className="intro">
@@ -139,35 +148,52 @@ export default function SimplePanel(p: Props) {
         <h3>
           <span className="step">3</span> ¿Qué es más importante?
         </h3>
-        <p className="muted small">Elegí un enfoque o ajustá cada tema a tu gusto.</p>
+        <div className="fixed">
+          <b className="small">Siempre se exige (no se negocia)</b>
+          <ul className="small">
+            {fixed.map((x) => (
+              <li key={x.grupo}>
+                {x.icono} <b>{x.titulo}:</b> {x.pregunta.toLowerCase()}
+              </li>
+            ))}
+            <li>
+              🚫 Se descartan siempre las zonas inundables, las de sismicidad muy alta, las áreas protegidas y la alta montaña,
+              más los requisitos propios de esta política.
+            </li>
+          </ul>
+        </div>
+        <p className="small">
+          <b>Repartí {BUDGET} puntos</b> entre el resto de los temas. Lo que le das a uno se lo sacás a otro: así se ve qué
+          resignás. {left > 0 ? <span className="left">Te quedan {left} puntos.</span> : <span className="muted">Usaste todos los puntos.</span>}
+        </p>
         <div className="presets">
-          {PRESETS.filter((x) => !x.scenario || p.policy.id === "ciudad_nueva").map((x) => (
+          {PRESETS.map((x) => (
             <button key={x.id} className={`preset ${p.preset === x.id ? "on" : ""}`} onClick={() => p.setPreset(x.id)} title={x.desc}>
               {x.nombre}
             </button>
           ))}
         </div>
-        {PRIORITIES.filter((pr) => used.has(pr.grupo)).map((pr) => (
-          <div key={pr.grupo} className="prio">
-            <div className="prio-h">
-              <span aria-hidden>{pr.icono}</span> <b>{pr.titulo}</b>
-              <span className="muted small"> · {pr.pregunta}</span>
+        {PRIORITIES.filter((pr) => prefs.includes(pr.grupo)).map((pr) => {
+          const v = p.points[pr.grupo] ?? 0;
+          return (
+            <div key={pr.grupo} className="prio">
+              <div className="prio-h">
+                <span aria-hidden>{pr.icono}</span> <b>{pr.titulo}</b>
+                <span className="muted small"> · {pr.pregunta}</span>
+              </div>
+              <div className="budget" role="group" aria-label={`Puntos para ${pr.titulo}`}>
+                <button aria-label={`Quitar un punto a ${pr.titulo}`} disabled={v <= 0} onClick={() => p.setPoints({ ...p.points, [pr.grupo]: v - 1 })}>−</button>
+                <span className="dots" aria-hidden>
+                  {Array.from({ length: BUDGET }, (_, k) => (
+                    <span key={k} className={k < v ? "on" : ""} />
+                  ))}
+                </span>
+                <b className="pts">{v}</b>
+                <button aria-label={`Sumar un punto a ${pr.titulo}`} disabled={left <= 0} onClick={() => p.setPoints({ ...p.points, [pr.grupo]: v + 1 })}>+</button>
+              </div>
             </div>
-            <div className="seg" role="radiogroup" aria-label={pr.titulo}>
-              {LEVEL_LABELS.map((lab, k) => (
-                <button
-                  key={k}
-                  role="radio"
-                  aria-checked={p.levels[pr.grupo] === k}
-                  className={p.levels[pr.grupo] === k ? "on" : ""}
-                  onClick={() => p.setLevels({ ...p.levels, [pr.grupo]: k as Level })}
-                >
-                  {lab}
-                </button>
-              ))}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </section>
 
       <section>

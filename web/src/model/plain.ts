@@ -3,10 +3,6 @@
 
 import { FACTORS, GROUPS, type GroupId, type Weights } from "./criteria";
 
-export type Level = 0 | 1 | 2 | 3; // nada · poco · importante · muy importante
-export const LEVEL_LABELS = ["No me importa", "Poco", "Importante", "Muy importante"];
-const LEVEL_MULT = [0, 0.4, 1, 2.5];
-
 export interface Priority {
   grupo: GroupId;
   titulo: string;
@@ -14,55 +10,97 @@ export interface Priority {
   icono: string;
 }
 
-/** Prioridades en lenguaje llano (los grupos sin datos disponibles no se muestran). */
+/** Temas en lenguaje llano. */
 export const PRIORITIES: Priority[] = [
-  { grupo: "agua", icono: "💧", titulo: "Agua", pregunta: "Que haya agua suficiente para tomar y producir" },
-  { grupo: "riesgo", icono: "🛡️", titulo: "Seguridad", pregunta: "Que no haya terremotos ni inundaciones" },
+  { grupo: "agua", icono: "💧", titulo: "Agua", pregunta: "Que haya agua suficiente y de buena calidad" },
+  { grupo: "riesgo", icono: "🛡️", titulo: "Seguridad", pregunta: "Que no haya terremotos fuertes ni inundaciones" },
+  { grupo: "clima", icono: "☀️", titulo: "Clima", pregunta: "Que el clima sea vivible, sin calor ni frío extremos" },
   { grupo: "acceso", icono: "🛣️", titulo: "Conexión", pregunta: "Que esté cerca de rutas, ciudades y hospitales" },
-  { grupo: "clima", icono: "☀️", titulo: "Clima", pregunta: "Que el clima sea agradable, sin calor ni frío extremos" },
   { grupo: "equilibrio", icono: "🗺️", titulo: "Descentralizar", pregunta: "Que ayude a que no todo se concentre en Buenos Aires" },
-  { grupo: "energia", icono: "⚡", titulo: "Energía", pregunta: "Que haya red eléctrica y sol o viento para generar" },
-  { grupo: "topo", icono: "⛰️", titulo: "Terreno", pregunta: "Que el terreno sea plano y fácil de construir" },
   { grupo: "trabajo", icono: "💼", titulo: "Trabajo", pregunta: "Que haya empleo y actividad económica cerca" },
   { grupo: "servicios", icono: "🏥", titulo: "Servicios", pregunta: "Que haya agua de red, cloacas, hospital, internet y viviendas" },
   { grupo: "tierra", icono: "📜", titulo: "Tierra pública", pregunta: "Que haya tierra del Estado disponible" },
   { grupo: "centralidad", icono: "🎯", titulo: "Centralidad", pregunta: "Que quede cerca de la mayoría de los argentinos y de todas las provincias" },
+  { grupo: "energia", icono: "⚡", titulo: "Energía", pregunta: "Que haya red eléctrica y sol o viento para generar" },
+  { grupo: "topo", icono: "⛰️", titulo: "Terreno", pregunta: "Que el terreno sea plano y fácil de construir" },
 ];
 
-export const DEFAULT_LEVELS: Record<string, Level> = Object.fromEntries(PRIORITIES.map((p) => [p.grupo, 2]));
+/**
+ * Requisitos no negociables: no son una preferencia personal. Conservan el peso que
+ * les asigna la literatura (además de las restricciones excluyentes).
+ */
+export const FIXED_GROUPS: GroupId[] = ["agua", "riesgo", "clima"];
+export const BUDGET = 10;
 
-/** "Importante" en todo = pesos base del instrumento (por defecto, el escenario E1 de la literatura). */
-export function weightsFromLevels(levels: Record<string, Level>, base?: Weights): Weights {
+export type Points = Record<string, number>;
+
+const groupWeight = (base: Weights, g: string) =>
+  FACTORS.filter((f) => f.grupo === g && f.disponible).reduce((a, f) => a + (base[f.id] ?? 0), 0);
+
+/** Temas negociables que usa el instrumento (con peso base > 0). */
+export function prefGroups(base: Weights): GroupId[] {
+  return PRIORITIES.map((p) => p.grupo).filter((g) => !FIXED_GROUPS.includes(g) && groupWeight(base, g) > 0);
+}
+
+/** Reparto inicial de los puntos proporcional a los pesos de la literatura (resto mayor). */
+export function defaultPoints(base: Weights): Points {
+  const gs = prefGroups(base);
+  const w = gs.map((g) => groupWeight(base, g));
+  const tot = w.reduce((a, b) => a + b, 0) || 1;
+  const raw = w.map((x) => (x / tot) * BUDGET);
+  const pts = raw.map(Math.floor);
+  let rest = BUDGET - pts.reduce((a, b) => a + b, 0);
+  const order = raw.map((x, k) => [x - Math.floor(x), k]).sort((a, b) => b[0] - a[0]);
+  for (const [, k] of order) if (rest-- > 0) pts[k]++;
+  return Object.fromEntries(gs.map((g, k) => [g, pts[k]]));
+}
+
+/** Pesos: bloque fijo intacto; el resto del peso se reparte según los puntos. */
+export function weightsFromPoints(points: Points, base: Weights): Weights {
+  const gs = prefGroups(base);
+  const wPref = gs.reduce((a, g) => a + groupWeight(base, g), 0);
+  const used = gs.reduce((a, g) => a + (points[g] ?? 0), 0) || 1;
   const w: Weights = {};
-  for (const f of FACTORS) w[f.id] = (base ? base[f.id] ?? 0 : f.peso) * LEVEL_MULT[levels[f.grupo] ?? 2];
+  for (const f of FACTORS) {
+    const b = base[f.id] ?? 0;
+    if (!gs.includes(f.grupo as GroupId)) {
+      w[f.id] = b;
+      continue;
+    }
+    const gw = groupWeight(base, f.grupo);
+    w[f.id] = gw > 0 ? (b / gw) * wPref * ((points[f.grupo] ?? 0) / used) : 0;
+  }
   return w;
 }
 
-/** Grupos que usa un conjunto de pesos (para mostrar solo las prioridades pertinentes). */
-export function groupsUsed(w: Weights): Set<string> {
-  return new Set(FACTORS.filter((f) => f.disponible && (w[f.id] ?? 0) > 0).map((f) => f.grupo));
-}
-
-export const PRESETS: { id: string; nombre: string; desc: string; levels: Record<string, Level>; scenario?: string }[] = [
-  { id: "expertos", nombre: "Lo que recomiendan los expertos", desc: "Pesos de la bibliografía especializada.", levels: DEFAULT_LEVELS },
-  {
-    id: "seguro", nombre: "Agua y seguridad primero", desc: "Prioriza agua abundante y bajo riesgo de desastres.",
-    levels: { ...DEFAULT_LEVELS, agua: 3, riesgo: 3, equilibrio: 1 },
-  },
-  {
-    id: "federal", nombre: "Descentralizar el país", desc: "Prioriza lugares lejos del AMBA, como hizo Corea con Sejong.",
-    levels: { ...DEFAULT_LEVELS, equilibrio: 3, acceso: 3, clima: 1 },
-  },
-  {
-    id: "conectado", nombre: "Bien conectado", desc: "Cerca de rutas, ciudades y servicios existentes.",
-    levels: { ...DEFAULT_LEVELS, acceso: 3, energia: 3, equilibrio: 1 },
-  },
-  {
-    id: "dhi", nombre: "Como propone el Plan DHI", scenario: "E4",
-    desc: "Desconcentrar, agua y conexión, según el Plan de Desarrollo Humano Integral (Fundación DHI, 2023).",
-    levels: { ...DEFAULT_LEVELS, equilibrio: 3, riesgo: 1, clima: 1, topo: 1, energia: 3 },
-  },
+/** Enfoques predefinidos: refuerzan algunos temas y descuentan del resto. */
+export const PRESETS: { id: string; nombre: string; desc: string; boost: GroupId[] }[] = [
+  { id: "expertos", nombre: "Lo que recomiendan los expertos", desc: "Reparto según la bibliografía especializada.", boost: [] },
+  { id: "federal", nombre: "Descentralizar el país", desc: "Más peso a alejarse del AMBA y a la centralidad nacional.", boost: ["equilibrio", "centralidad"] },
+  { id: "empleo", nombre: "Empleo primero", desc: "Más peso a que haya trabajo cerca.", boost: ["trabajo"] },
+  { id: "conectado", nombre: "Bien conectado", desc: "Más peso a rutas, ciudades y servicios existentes.", boost: ["acceso", "servicios"] },
+  { id: "dhi", nombre: "Como propone el Plan DHI", desc: "Desconcentrar y conectar (Plan DHI, Fundación DHI 2023).", boost: ["equilibrio", "acceso"] },
 ];
+
+export function presetPoints(id: string, base: Weights): Points {
+  const pts = defaultPoints(base);
+  const p = PRESETS.find((x) => x.id === id);
+  const boost = (p?.boost ?? []).filter((g) => g in pts);
+  if (!boost.length) return pts;
+  let extra = 3 * boost.length;
+  for (const g of boost) pts[g] += 3;
+  // descontar de los temas no reforzados, empezando por los de más puntos
+  while (extra > 0) {
+    const cand = Object.keys(pts).filter((g) => !boost.includes(g as GroupId) && pts[g] > 0).sort((a, b) => pts[b] - pts[a]);
+    if (!cand.length) break;
+    pts[cand[0]]--;
+    extra--;
+  }
+  // si no alcanzó (pocos temas), recortar lo reforzado
+  let sum = Object.values(pts).reduce((a, b) => a + b, 0);
+  for (const g of boost) while (sum > BUDGET && pts[g] > 1) { pts[g]--; sum--; }
+  return pts;
+}
 
 // ------------------------------------------------------------------ clases de aptitud
 

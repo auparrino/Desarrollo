@@ -14,7 +14,7 @@ import MethodPanel from "./ui/panels/MethodPanel";
 import SimplePanel from "./ui/panels/SimplePanel";
 import SimpleCellCard from "./ui/panels/SimpleCellCard";
 import { POLICY_BY_ID, type PolicyId } from "./model/policies";
-import { CLASSES, DEFAULT_LEVELS, PRESETS, classify, weightsFromLevels, type Level } from "./model/plain";
+import { CLASSES, PRESETS, classify, defaultPoints, presetPoints, weightsFromPoints, type Points } from "./model/plain";
 import { DIV_RED_BLUE, EXCLUDED, SEQ_BLUE, SEQ_ORANGE, css, gradientCss, ramp, type RGB } from "./ui/colors";
 import { VARIABLES, VAR_BY_ID, fmtVar } from "./ui/variables";
 
@@ -108,7 +108,7 @@ export default function App() {
   const [policyId, setPolicyId] = useState<PolicyId>("ciudad_nueva");
   const policy = POLICY_BY_ID[policyId];
   const [mode, setModeState] = useState<"simple" | "experto">(initialMode);
-  const [levels, setLevelsState] = useState<Record<string, Level>>(DEFAULT_LEVELS);
+  const [points, setPointsState] = useState<Points>(() => defaultPoints(POLICY_BY_ID.ciudad_nueva.weights()));
   const [preset, setPresetState] = useState<string | null>("expertos");
   const setMode = (m: "simple" | "experto") => {
     setModeState(m);
@@ -118,17 +118,18 @@ export default function App() {
       /* sin almacenamiento: no se recuerda la preferencia */
     }
   };
-  const setLevels = (l: Record<string, Level>, pol = policy) => {
-    setLevelsState(l);
-    setPresetState(PRESETS.find((p) => !p.scenario && JSON.stringify(p.levels) === JSON.stringify(l))?.id ?? null);
-    setWeights(weightsFromLevels(l, pol.weights()));
+  const setPoints = (pt: Points, pol = policy) => {
+    setPointsState(pt);
+    const base = pol.weights();
+    setPresetState(PRESETS.find((p) => JSON.stringify(presetPoints(p.id, base)) === JSON.stringify(pt))?.id ?? null);
+    setWeights(weightsFromPoints(pt, base));
     setScenario("custom");
   };
   const choosePolicy = (id: PolicyId) => {
     const p = POLICY_BY_ID[id];
     setPolicyId(id);
     setRestrictions(p.restrictions());
-    setLevels(DEFAULT_LEVELS, p);
+    setPoints(defaultPoints(p.weights()), p);
     setPresetState("expertos");
     setScenario(id === "ciudad_nueva" ? "E1" : "custom");
     const n = p.tamanos[Math.min(2, p.tamanos.length - 1)];
@@ -138,15 +139,7 @@ export default function App() {
     setSelSite(null);
     setSelCell(null);
   };
-  const setPreset = (id: string) => {
-    const p = PRESETS.find((x) => x.id === id)!;
-    setLevels(p.levels);
-    if (p.scenario) {
-      setWeights(SCENARIOS.find((s) => s.id === p.scenario)!.weights());
-      setScenario(p.scenario);
-      setPresetState(p.id);
-    }
-  };
+  const setPreset = (id: string) => setPoints(presetPoints(id, policy.weights()));
   const setPoblacion = (n: number) => {
     setWaterState((w) => ({ ...w, poblacion: n }));
     setSiteParamsState((x) => ({ ...x, poblacion: n }));
@@ -190,7 +183,7 @@ export default function App() {
   const presetClasses = useMemo(
     () =>
       PRESETS.map((p) => {
-        const w = p.scenario ? SCENARIOS.find((s) => s.id === p.scenario)!.weights() : weightsFromLevels(p.levels, policy.weights());
+        const w = weightsFromPoints(presetPoints(p.id, policy.weights()), policy.weights());
         return classify(aggregate(fScores, effectiveWeights(w), reason, agg));
       }),
     [fScores, reason, agg, policy],
@@ -366,8 +359,8 @@ export default function App() {
                 ds={ds}
                 policy={policy}
                 setPolicy={choosePolicy}
-                levels={levels}
-                setLevels={setLevels}
+                points={points}
+                setPoints={setPoints}
                 preset={preset}
                 setPreset={setPreset}
                 showDhi={overlays.plan_dhi}

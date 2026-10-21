@@ -153,3 +153,29 @@ describe("costos", () => {
     expect(r.totalCapital[1]).toBeLessThanOrEqual(r.totalCapital[2]);
   });
 });
+
+describe("presupuesto de puntos", () => {
+  it("reparto inicial suma 10 y los pesos suman 1 para cada instrumento y enfoque", async () => {
+    const { defaultPoints, presetPoints, weightsFromPoints, PRESETS, BUDGET } = await import("./plain");
+    for (const pol of POLICIES) {
+      const base = pol.weights();
+      const d = defaultPoints(base);
+      expect(Object.values(d).reduce((a, b) => a + b, 0)).toBe(BUDGET);
+      for (const pr of PRESETS) {
+        const pts = presetPoints(pr.id, base);
+        expect(Object.values(pts).reduce((a, b) => a + b, 0)).toBeLessThanOrEqual(BUDGET);
+        const w = weightsFromPoints(pts, base);
+        expect(Object.values(w).reduce((a, b) => a + b, 0)).toBeCloseTo(1, 6);
+      }
+    }
+  });
+  it("el bloque fijo (agua, riesgos, clima) no cambia con los puntos", async () => {
+    const { weightsFromPoints, defaultPoints } = await import("./plain");
+    const base = POLICIES[0].weights();
+    const pts = defaultPoints(base);
+    const k = Object.keys(pts)[0];
+    const w1 = weightsFromPoints(pts, base);
+    const w2 = weightsFromPoints({ ...pts, [k]: 0 }, base);
+    for (const id of ["F01", "F08", "F03"]) expect(w2[id]).toBeCloseTo(w1[id], 9);
+  });
+});
