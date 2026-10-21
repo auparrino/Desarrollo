@@ -1,0 +1,290 @@
+{
+  "fecha_base": "2026-10",
+  "tipo_cambio": "ARS/USD oficial BNA venta, promedio mensual (api.argentinadatos.com): 2026-07 = 1.508,7; 2026-10 = 1.537,9. Valores publicados en USD se toman tal cual (USD corrientes de su año). Detalle y advertencias: docs/beneficios-parametros.md",
+  "items": {
+    "tasa_descuento": {
+      "nombre": "Tasa social de descuento (real, anual)",
+      "unidad": "fracción/año",
+      "bajo": 0.06,
+      "central": 0.12,
+      "alto": 0.12,
+      "fuente": "Central y alto: Res. SPE 110/1996, Anexo I ('La tasa de interés o descuento social a utilizar será del 12 %'), https://www.argentina.gob.ar/normativa/nacional/norma-37536/texto — figura derogada por Res. 13/01; no se halló norma posterior con otro valor. BID y Banco Mundial: 10-12 % 'tasa administrativa convencional' (Mendoza, Informe metodológico TSD 2023, que adopta 11,9 %). Referencia intermedia: la Guía de evaluación ex post de la DNIP (nov-2022) usa 10 % real en su ejemplo. Bajo: Chile 6 % (tabla del informe de Mendoza) para sensibilidad intergeneracional",
+      "evidencia": "O"
+    },
+    "horizonte_anios": {
+      "nombre": "Horizonte de evaluación",
+      "unidad": "años",
+      "bajo": 30,
+      "central": 40,
+      "alto": 50,
+      "fuente": "La guía ex post DNIP 2022 evalúa un aeropuerto con vida útil de 40 años (https://www.argentina.gob.ar/sites/default/files/if-2022-116518616-apn-dnipjgm-canexo.pdf). No hay horizonte normativo; 30 y 50 años son sensibilidad [J]. Las curvas de ocupación muestran que una ciudad nueva necesita 30-40 años para madurar",
+      "evidencia": "J"
+    },
+    "pib_pc_nacional_usd": {
+      "nombre": "PIB per cápita de Argentina, USD corrientes 2025",
+      "unidad": "USD/hab/año",
+      "bajo": 14898,
+      "central": 14898,
+      "alto": 14898,
+      "fuente": "Banco Mundial WDI NY.GDP.PCAP.CD 2025 (consistente con pbi_usd de unitCosts.json)",
+      "evidencia": "O"
+    },
+    "salario_priv_registrado_usd_anio": {
+      "nombre": "Remuneración bruta media del asalariado privado registrado (13 sueldos)",
+      "unidad": "USD/año",
+      "bajo": 14556,
+      "central": 19447,
+      "alto": 19447,
+      "fuente": "SIPA, Situación y evolución del trabajo registrado, jul-2026: media $2.256.861, mediana $1.689.227 por mes (https://www.argentina.gob.ar/sites/default/files/trabajoregistrado_2607_informe.pdf). × 13 (SAC) / TC jul-2026 1.508,7. Bajo = mediana. No incluye contribuciones patronales",
+      "evidencia": "O"
+    },
+    "vab_por_ocupado_usd": {
+      "nombre": "Producto por ocupado (PIB / ocupados totales)",
+      "unidad": "USD/ocupado/año",
+      "bajo": 33100,
+      "central": 33100,
+      "alto": 33100,
+      "fuente": "[J] derivado: PIB 2025 USD 683.098 M (WDI) / (tasa de empleo 45,0 % EPH T2-2026 × población WDI 2025 45,85 M = 20,6 M ocupados). Incluye ocupados informales",
+      "evidencia": "J"
+    },
+    "elasticidad_aglomeracion": {
+      "nombre": "Elasticidad de la productividad (salario) respecto de la densidad o el tamaño urbano",
+      "unidad": "adimensional",
+      "bajo": 0.01,
+      "central": 0.03,
+      "alto": 0.05,
+      "fuente": "Combes & Gobillon 2015, Handbook of Regional and Urban Economics 5:247-348, doi:10.1016/B978-0-444-59517-1.00005-2: 0,04-0,07 sin controlar sorting; ~0,02 con efectos fijos individuales; 0,03 ejemplo de política. Duranton 2016 JRS 56(2):210-238 doi:10.1111/jors.12239: ~0,05 Colombia. Gómez-Lobo et al. 2022 IDB-WP-01324: 0,05 en América Latina, menor al controlar congestión. Quintero & Roberts 2023 JUE 136:103573 doi:10.1016/j.jue.2023.103573: la densidad no explica la variación residual en 16 países de ALC. Grover & Maloney 2022 WB PRWP 9977: Chile 0,017 en salarios y efecto nulo o negativo en TFPQ en países de menor ingreso. Sin estimación para Argentina",
+      "evidencia": "E"
+    },
+    "multiplicador_transable": {
+      "nombre": "Empleos locales no transables por cada empleo transable nuevo",
+      "unidad": "empleos/empleo",
+      "bajo": 0.84,
+      "central": 1.6,
+      "alto": 2.5,
+      "fuente": "Moretti 2010 AER P&P 100(2):373-377 doi:10.1257/aer.100.2.373 (versión del autor paginada 1-7): 1,59 por empleo manufacturero; 2,5 por empleo calificado; 1,0 por no calificado; 4,9 en alta tecnología. Bajo: van Dijk (Oxford WP 771), 0,84 con otro instrumento. Argentina: Zaratiegui 2019 (tesis UdeSA, hdl:10908/18473) ~4. México: Hernández & Rojas, 1,8-2,6",
+      "evidencia": "E"
+    },
+    "multiplicador_publico": {
+      "nombre": "Empleos privados locales por cada empleo público trasladado",
+      "unidad": "empleos/empleo",
+      "bajo": 0.0,
+      "central": 1.0,
+      "alto": 1.4,
+      "fuente": "Bajo: Faggio & Overman 2014 JUE 79:91-107 doi:10.1016/j.jue.2013.05.002 (Inglaterra: +0,5 no transables, -0,4 transables, efecto total nulo; crowding-out en 1999-2007). Central: Becker, Heblich & Sturm 2021 JUE 122:103291 doi:10.1016/j.jue.2020.103291 (Bonn: algo más de 1 en servicios, -0,2 en industria). Alto: Faggio, Schlüter & vom Berge 2025 RSUE 111:104084 doi:10.1016/j.regsciurbeco.2025.104084 (1,3-1,4, muy localizado). ALC: Corbi, Papaioannou & Surico 2019 RES 86(5):1901-1934 doi:10.1093/restud/rdy069 (Brasil: ~3 privados por público, pero con gasto por transferencias, no traslado)",
+      "evidencia": "E"
+    },
+    "valor_lote_urbano_m2_intermedia": {
+      "nombre": "Precio de lote urbano con servicios en ciudad intermedia",
+      "unidad": "USD/m2",
+      "bajo": 17,
+      "central": 40,
+      "alto": 110,
+      "fuente": "[A] avisos de oferta 2026 (Mercado Libre, Argenprop) en Río Cuarto (17-103 USD/m2), Venado Tuerto (29-116), Tandil (88), Gran Córdoba (18-97). Central [J]. Contraste: Plan DHI, tierra por lote USD 4.800 ≈ 13,7 USD/m2 (docs/costos-unitarios.md). Tierra rural: 0,5-2 USD/m2 (tierra_ha_* de unitCosts). Smolka 2013 (Lincoln Institute): el multiplicador urbano en la periferia suele superar 4:1. No hay relevamiento sistemático de lotes en el interior",
+      "evidencia": "A"
+    },
+    "captura_plusvalia_frac": {
+      "nombre": "Fracción de la valorización del suelo recuperable por instrumentos públicos",
+      "unidad": "fracción",
+      "bajo": 0.05,
+      "central": 0.1,
+      "alto": 0.3,
+      "fuente": "Ley 14.449 PBA (Acceso Justo al Hábitat), art. 50: contribución mínima del 10 % de la valorización (CELS, Guías Ley de Hábitat 2017; Smolka 2013, Lincoln Institute, p. 16-17). Alto: Colombia, Ley 388/1997, 30-50 % de la plusvalía (Smolka 2013). Bajo [J]: recaudación efectiva menor que la nominal (Montevideo recaudó 2,5 % de su presupuesto de inversión en 2011). Si el Estado compra la tierra a valor rural (Development Corporations británicas), la captura puede acercarse al 100 %",
+      "evidencia": "O"
+    },
+    "costo_congestion_amba_usd_anio": {
+      "nombre": "Costo directo de la congestión en el AMBA",
+      "unidad": "USD/año",
+      "bajo": 1700000000,
+      "central": 1700000000,
+      "alto": 2900000000,
+      "fuente": "Calatayud et al. 2021, BID, 'Congestión urbana en América Latina y el Caribe: características, costos y mitigación' (https://publications.iadb.org/es/congestion-urbana-en-america-latina-y-el-caribe-caracteristicas-costos-y-mitigacion): USD 1.700 M en 2019, ~1,1 % del PIB metropolitano, USD 112 por habitante; solo tiempo perdido. Alto [J]: 1,1 % aplicado a un PIB del AMBA de ~39 % del PIB 2025 (USD 683.098 M)",
+      "evidencia": "E"
+    },
+    "costo_marginal_hab_amba": {
+      "nombre": "Costo externo de congestión de un habitante adicional en el AMBA",
+      "unidad": "USD/hab/año",
+      "bajo": 112,
+      "central": 224,
+      "alto": 450,
+      "fuente": "[J] Bajo: costo medio de congestión por habitante (BID 2021, USD 112, 2019). Central: 2 × medio (costo marginal social con elasticidad unitaria del tiempo de viaje al volumen). Alto: 4 ×. No se halló estimación publicada del costo marginal de infraestructura o transporte por habitante en megaciudad vs ciudad intermedia para Argentina",
+      "evidencia": "J"
+    },
+    "presion_tributaria": {
+      "nombre": "Presión tributaria consolidada (Nación + provincias + municipios)",
+      "unidad": "fracción del PIB",
+      "bajo": 0.267,
+      "central": 0.276,
+      "alto": 0.29,
+      "fuente": "IARAF (Argañaraz), presión efectiva consolidada 2025: 27,6 % del PIB; ~29 % en 2024; proyección 2026: 26,7 % (Infobae 13/7/2026, https://www.infobae.com/economia/2026/07/13/la-presion-tributaria-es-la-mas-baja-de-los-ultimos-20-anos-por-la-reduccion-de-las-retenciones-a-la-exportacion/). Provincias ~5 % y municipios ~1,1 % del PIB. No se pudo descargar la serie oficial de MECON",
+      "evidencia": "A"
+    },
+    "alquiler_vivienda_60m2_usd_mes": {
+      "nombre": "Alquiler de una vivienda de ~60 m2 (3 ambientes) en ciudades intermedias",
+      "unidad": "USD/mes",
+      "bajo": 396,
+      "central": 715,
+      "alto": 1096,
+      "fuente": "Reporte Inmobiliario vía La Nación 2/8/2026 (https://www.lanacion.com.ar/propiedades/casas-y-departamentos/alquileres-cuanto-cuesta-alquilar-un-y-un-tres-ambientes-en-el-interior-del-pais-nid02082026/): 3 ambientes, mediana de 11 ciudades $1.077.780 (Salta), máx. sin Bariloche $1.653.750 (Neuquén); bajo = 2 ambientes en Tucumán $597.000. TC jul-2026 1.508,7. Precios de oferta, sin expensas declaradas. Son capitales provinciales: en ciudades de 50-150 mil habitantes el valor será menor",
+      "evidencia": "A"
+    },
+    "valor_tiempo_no_trabajo_usd_hora": {
+      "nombre": "Valor del tiempo de viaje no laboral (adultos)",
+      "unidad": "USD/hora",
+      "bajo": 0.57,
+      "central": 0.82,
+      "alto": 2.6,
+      "fuente": "Banco Mundial TRN-15 (Mackie, Nellthorp & Laird 2005), tabla 2: 0,3 × ingreso del hogar por persona y por hora. INDEC EPH T2-2026: ingreso per cápita familiar medio $688.496/mes, mediana $500.000 (prensa del 1/10/2026); 173 h/mes; TC 1.450. Alto [J]: 0,3 × salario medio registrado por hora",
+      "evidencia": "J"
+    },
+    "valor_tiempo_trabajo_usd_hora": {
+      "nombre": "Valor del tiempo de viaje en horario de trabajo",
+      "unidad": "USD/hora",
+      "bajo": 8.7,
+      "central": 11.5,
+      "alto": 11.5,
+      "fuente": "Banco Mundial TRN-15: salario × 1,33 (gastos generales). Salario SIPA jul-2026 $2.256.861/173 h / 1.508,7 = 8,65 USD/h (bajo, sin recargo)",
+      "evidencia": "J"
+    },
+    "tasa_empleo": {
+      "nombre": "Ocupados por habitante",
+      "unidad": "fracción",
+      "bajo": 0.45,
+      "central": 0.45,
+      "alto": 0.45,
+      "fuente": "INDEC EPH T2-2026 (31 aglomerados): tasa de empleo 45,0 %, actividad 48,9 %, desocupación 7,9 % (Comunicado DGEC Entre Ríos, https://www.entrerios.gov.ar/dgec/wp-content/uploads/2026/09/Comunicado-EPH-T2-2026.pdf). Informalidad 45 % de los ocupados",
+      "evidencia": "O"
+    },
+    "puestos_priv_registrados_por_hab": {
+      "nombre": "Puestos privados registrados por habitante",
+      "unidad": "fracción",
+      "bajo": 0.1,
+      "central": 0.14,
+      "alto": 0.27,
+      "fuente": "Derivado de data/interim/economia/indicadores_empleo_departamento.csv (CEP XXI 2022 / Censo 2022): 6,39 M puestos / 45,6 M hab = 0,140. Bajo ~0,10 provincias del NEA/NOA; alto 0,27 CABA",
+      "evidencia": "O"
+    },
+    "ocupacion_optimista": {
+      "nombre": "Población alcanzada / población meta, escenario optimista (satélite con empleo o ancla fuerte)",
+      "unidad": "fracción",
+      "anios": [
+        0,
+        10,
+        20,
+        30,
+        40
+      ],
+      "fraccion": [
+        0.0,
+        0.6,
+        0.9,
+        1.0,
+        1.0
+      ],
+      "fuente": "Harlow (1947, meta 80.000): 67 % a 14 años, 98 % a 24 (British History Online, VCH Essex 8). Brasília (meta 500.000): DF 141.742 en 1960 y 546.015 en 1970, >100 % a 10 años (IBGE). La Plata 1882-1890 y Tierra del Fuego (×14 en 52 años) como casos con ancla",
+      "evidencia": "J"
+    },
+    "ocupacion_base": {
+      "nombre": "Población alcanzada / población meta, escenario base (capital administrativa o new town lejana)",
+      "unidad": "fracción",
+      "anios": [
+        0,
+        10,
+        20,
+        30,
+        40
+      ],
+      "fraccion": [
+        0.0,
+        0.2,
+        0.4,
+        0.55,
+        0.7
+      ],
+      "fuente": "Putrajaya (1995, meta 320.000): 21 % a 15 años (68.361 en 2010) y 34 % a 25 (109.202 en 2020). Sejong (2012): 392.471 en 2025 = 78 % de 500.000 o 49 % de 800.000, con la población previa de Yeongi incluida. Milton Keynes (1967, meta 250.000, 40.000 al inicio): 211.062 en 2011 = 84 % a 44 años (TCPA)",
+      "evidencia": "J"
+    },
+    "ocupacion_pesimista": {
+      "nombre": "Población alcanzada / población meta, escenario pesimista (sin ancla de empleo)",
+      "unidad": "fracción",
+      "anios": [
+        0,
+        10,
+        20,
+        30,
+        40
+      ],
+      "fraccion": [
+        0.0,
+        0.03,
+        0.08,
+        0.12,
+        0.15
+      ],
+      "fuente": "ECES 2026, Economic Lens 20 (CAPMAS 1/1/2024, https://eces.org.eg/wp-content/uploads/2026/07/ECONOMIC-LENS-Issue-20-En.pdf): 10 de Ramadán 12,7 %, Sadat 13,5 %, 15 de Mayo 20,2 %, El Obour 13,7 % a 40-47 años; New Cairo 8,0 % a ~24 años; cuarta generación <1 %",
+      "evidencia": "J"
+    }
+  },
+  "pbg_pc_provincia": {
+    "unidad": "USD corrientes por habitante y año",
+    "fuente": "Índice de VAB per cápita relativo 2022 (Argentina = 100) de Argendata/Fundar (https://argendata.fund.ar/data/CRECIM/provincia_pib_pc_relativo.csv), a partir de CEPAL-MECON 'Desagregación provincial del VAB de la Argentina, base 2004' (LC/TS.2022/196), × PIB per cápita 2025 WDI USD 14.898. Supone la estructura provincial de 2022. El promedio ponderado por la población del Censo 2022 da 100,2",
+    "evidencia": "O",
+    "valores": {
+      "02": 43981,
+      "06": 12525,
+      "10": 10278,
+      "14": 15316,
+      "18": 7696,
+      "22": 9146,
+      "26": 20554,
+      "30": 13585,
+      "34": 7185,
+      "38": 9541,
+      "42": 20080,
+      "46": 9794,
+      "50": 11072,
+      "54": 7107,
+      "58": 34529,
+      "62": 12630,
+      "66": 8698,
+      "70": 11193,
+      "74": 13625,
+      "78": 24928,
+      "82": 15295,
+      "86": 12549,
+      "90": 7841,
+      "94": 36581
+    }
+  },
+  "salario_rel_provincia": {
+    "unidad": "índice (total país = 1), salario medio privado registrado 2022",
+    "fuente": "data/interim/economia/indicadores_empleo_departamento.csv (CEP XXI): promedio de salario_medio_priv_2022 ponderado por puestos_priv_2022, sobre el promedio nacional ($176.198). Multiplicar por salario_priv_registrado_usd_anio",
+    "evidencia": "O",
+    "valores": {
+      "02": 1.385,
+      "06": 0.986,
+      "10": 0.732,
+      "14": 0.869,
+      "18": 0.778,
+      "22": 0.717,
+      "26": 1.527,
+      "30": 0.83,
+      "34": 0.742,
+      "38": 0.791,
+      "42": 0.878,
+      "46": 0.75,
+      "50": 0.804,
+      "54": 0.684,
+      "58": 1.493,
+      "62": 1.073,
+      "66": 0.812,
+      "70": 0.86,
+      "74": 0.915,
+      "78": 1.621,
+      "82": 0.936,
+      "86": 0.628,
+      "90": 0.711,
+      "94": 1.299
+    }
+  }
+}

@@ -179,3 +179,24 @@ describe("presupuesto de puntos", () => {
     for (const id of ["F01", "F08", "F03"]) expect(w2[id]).toBeCloseTo(w1[id], 9);
   });
 });
+
+describe("costo-beneficio", () => {
+  it("más población que llega ⇒ resultados más extremos; B/C finito", async () => {
+    const { estimateCosts } = await import("./costs");
+    const { UNIT_COSTS } = await import("./unitCostsData");
+    const { costBenefit } = await import("./benefits");
+    const { BENEFIT_PARAMS } = await import("./benefitParamsData");
+    const one = (v: number) => Float32Array.from([v]);
+    const c = {
+      q_rio25: one(100), q95_rio25: one(30), aridez: one(0.2), prec: one(400), d_ruta: one(20), d_alta_tension: one(20),
+      d_rio10: one(5), viv_ociosas_50km: one(0), pob_50km: one(100000), salario_rel: one(1),
+    };
+    const costos = estimateCosts("ciudad_nueva", c, 0, "Río Negro", { poblacion: 500_000, densidad: 75 }, UNIT_COSTS);
+    const inp = { policy: "ciudad_nueva" as const, poblacion: 500_000, costos, c, i: 0, codProv: "62" };
+    const o = costBenefit(inp, BENEFIT_PARAMS, "optimista");
+    const p = costBenefit(inp, BENEFIT_PARAMS, "pesimista");
+    expect(o.poblacionFinal).toBeGreaterThan(p.poblacionFinal);
+    expect(Math.abs(o.social.van)).toBeGreaterThan(Math.abs(p.social.van) * 0.5);
+    expect(Number.isFinite(o.social.bc)).toBe(true);
+  });
+});

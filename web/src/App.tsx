@@ -17,6 +17,7 @@ import { POLICY_BY_ID, type PolicyId } from "./model/policies";
 import { CLASSES, PRESETS, classify, defaultPoints, presetPoints, weightsFromPoints, type Points } from "./model/plain";
 import { DIV_RED_BLUE, EXCLUDED, SEQ_BLUE, SEQ_ORANGE, css, gradientCss, ramp, type RGB } from "./ui/colors";
 import { VARIABLES, VAR_BY_ID, fmtVar } from "./ui/variables";
+import { SunBurst } from "./ui/art/Poster";
 
 type Tab = "aptitud" | "sitios" | "diagnostico" | "simulador" | "metodo";
 type View = "aptitud" | "robustez" | "exclusion" | "variable";
@@ -339,9 +340,12 @@ export default function App() {
   return (
     <div className="app">
       <header className="top">
-        <div>
-          <h1>Atlas de aptitud territorial · Argentina</h1>
-          <p className="muted small">Dónde crear nuevas ciudades y hacia dónde podría crecer la población</p>
+        <div className="brand">
+          <SunBurst />
+          <div>
+            <h1>Atlas del Desarrollo Argentino</h1>
+            <p className="small">Dónde crecer · cómo poblar · cuánto cuesta</p>
+          </div>
         </div>
         <div className="mode" role="group" aria-label="Modo de uso">
           <button className={!expert ? "on" : ""} onClick={() => setMode("simple")}>Simple</button>

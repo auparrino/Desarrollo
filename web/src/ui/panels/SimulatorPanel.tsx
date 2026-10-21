@@ -7,6 +7,7 @@ import type { Policy } from "../../model/policies";
 import { estimateCosts } from "../../model/costs";
 import { UNIT_COSTS } from "../../model/unitCostsData";
 import CostBreakdown from "./CostBreakdown";
+import CostBenefit from "./CostBenefit";
 
 interface Props {
   ds: Dataset;
@@ -163,21 +164,25 @@ export default function SimulatorPanel(p: Props) {
       {res.length > 0 && (
         <section>
           <h3>Costo estimado · {p.policy.nombre}</h3>
-          {sel.map((site) => (
+          {sel.map((site) => {
+            const costos = estimateCosts(p.policy.id, p.ds.col, site.best, site.provincia,
+              { poblacion: pob, densidad: s.densidad, personasPorHogar: s.personasPorVivienda }, UNIT_COSTS);
+            return (
             <details key={site.rank} open={sel.length === 1}>
               <summary>
                 <b>
                   {site.rank}. {site.departamento}, {site.provincia}
                 </b>
               </summary>
-              <CostBreakdown
-                r={estimateCosts(p.policy.id, p.ds.col, site.best, site.provincia,
-                  { poblacion: pob, densidad: s.densidad, personasPorHogar: s.personasPorVivienda }, UNIT_COSTS)}
-                poblacionLabel={p.policy.id === "polos" ? "empleo" : "habitante"}
-                fecha={UNIT_COSTS.fecha_base}
+              <CostBreakdown r={costos} poblacionLabel={p.policy.id === "polos" ? "empleo" : "habitante"} fecha={UNIT_COSTS.fecha_base} />
+              <h4>¿Conviene? Análisis costo-beneficio</h4>
+              <CostBenefit
+                inp={{ policy: p.policy.id, poblacion: pob, costos, c: p.ds.col, i: site.best,
+                  codProv: p.ds.meta.departamentos[p.ds.dep[site.best]]?.cod.slice(0, 2) ?? "" }}
               />
             </details>
-          ))}
+            );
+          })}
           <h4>Comparación con casos documentados</h4>
           <table className="provs">
             <thead>

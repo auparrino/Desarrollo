@@ -243,3 +243,134 @@ button.link { background: none; border: 0; color: var(--accent); font: inherit; 
 .dots span { flex: 1; height: 10px; border-radius: 3px; background: var(--grid); }
 .dots span.on { background: var(--accent); }
 .pts { width: 18px; text-align: center; font-variant-numeric: tabular-nums; }
+
+/* ================================================================
+   Tema gráfico: inspirado en la gráfica estatal argentina 1946–1955
+   (litografía de colores planos, letra condensada, sol radiante)
+   ================================================================ */
+:root {
+  --paper: #f2ead7;
+  --paper-2: #e9dfc6;
+  --ink: #1d1b18;
+  --azul: #1e3d6b;
+  --celeste: #74acdf;
+  --sol: #e2a531;
+  --ocre: #c98b2b;
+  --rojo: #b8322a;
+  --verde: #6f8f3a;
+  --surface: #f7f1e3;
+  --plane: var(--paper);
+  --ink-2: #3d3a33;
+  --muted: #6b655a;
+  --grid: #d8ccb0;
+  --line: #1d1b18;
+  --accent: #1e3d6b;
+  --accent-ink: #f7f1e3;
+  --danger: #b8322a;
+  --good-ink: #4d6a1f;
+  --good-bg: #e3e6c4;
+  --warn-bg: #f3dfae;
+  --shadow: 4px 4px 0 rgba(29, 27, 24, 0.85);
+  --display: "Oswald", "Arial Narrow", "Roboto Condensed", sans-serif;
+  font-family: "Libre Franklin", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #142038;
+    --paper-2: #1b2a47;
+    --ink: #f2ead7;
+    --azul: #9cc4ec;
+    --celeste: #2f5d8f;
+    --surface: #1b2a47;
+    --plane: #142038;
+    --ink-2: #ddd3bb;
+    --muted: #a99f8a;
+    --grid: #2c3d5e;
+    --line: #ddd3bb;
+    --accent: #e2a531;
+    --accent-ink: #142038;
+    --good-ink: #a9c46a;
+    --good-bg: #26361f;
+    --warn-bg: #4a3a17;
+    --shadow: 4px 4px 0 rgba(0, 0, 0, 0.6);
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #142038; --paper-2: #1b2a47; --ink: #f2ead7; --azul: #9cc4ec; --celeste: #2f5d8f; --surface: #1b2a47;
+  --plane: #142038; --ink-2: #ddd3bb; --muted: #a99f8a; --grid: #2c3d5e; --line: #ddd3bb; --accent: #e2a531;
+  --accent-ink: #142038; --good-ink: #a9c46a; --good-bg: #26361f; --warn-bg: #4a3a17;
+}
+body {
+  background-color: var(--paper);
+  /* grano de papel impreso */
+  background-image: radial-gradient(rgba(29, 27, 24, 0.05) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+h1, h2, h3, h4, .tabs button, .mode button, .site-rank, .step, .tile b, .legend b {
+  font-family: var(--display);
+}
+.top {
+  background: #1e3d6b;
+  color: #f2ead7;
+  border-bottom: 0;
+  position: relative;
+  padding: 10px 16px 14px;
+}
+.top::after { /* franja celeste y blanca */
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 6px;
+  background: linear-gradient(#74acdf 0 33%, #f2ead7 33% 66%, #74acdf 66%);
+}
+.top .brand { display: flex; align-items: center; gap: 12px; }
+.top h1 { font-size: 1.45rem; letter-spacing: 0.04em; text-transform: uppercase; line-height: 1; }
+.top p, .top .muted { color: #c9d8ee; letter-spacing: 0.02em; }
+.mode { border-color: #f2ead7; }
+.mode button { color: #f2ead7; text-transform: uppercase; letter-spacing: 0.06em; }
+.mode button.on { background: #e2a531; color: #1d1b18; }
+.side { background: var(--surface); border-right: 2px solid var(--line); }
+.tabs { border-bottom: 2px solid var(--line); }
+.tabs button { text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; }
+.tabs button.active { border-bottom: 4px solid var(--rojo); color: var(--ink); }
+.panel section { border-bottom: 2px dashed var(--grid); }
+.simple h2 { font-size: 1.6rem; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.05; color: var(--azul); }
+.simple h3 { text-transform: uppercase; letter-spacing: 0.04em; font-size: 1.05rem; }
+.simple .intro { background: transparent; }
+.scene { width: 100%; height: auto; display: block; border: 2px solid var(--line); box-shadow: var(--shadow); margin-bottom: 12px; }
+.lema { font-family: var(--display); text-transform: uppercase; font-size: 1.05rem; letter-spacing: 0.08em; color: var(--rojo); margin: 0 0 6px; }
+.step { background: var(--rojo); color: #f2ead7; border-radius: 0; transform: rotate(-4deg); }
+.chip, .policy, .preset, .card-site, .detail, .mapctl, .legend, .tile, .card, .fixed, .evidence, .seg, .budget button {
+  border: 2px solid var(--line);
+  border-radius: 2px;
+  box-shadow: var(--shadow);
+}
+.chip.on, .policy.on, .card-site.active { background: var(--azul); color: var(--accent-ink); box-shadow: 2px 2px 0 var(--line); }
+.chip.on .muted, .policy.on .muted, .card-site.active .muted { color: #c9d8ee; }
+.preset { border-radius: 2px; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.04em; font-weight: 700; }
+.preset.on { background: var(--sol); color: #1d1b18; border-color: var(--line); }
+.site-rank { background: var(--rojo); border-radius: 0; color: #f2ead7; }
+.evidence { background: var(--warn-bg); }
+.fixed { background: var(--paper-2); }
+.dots span { border-radius: 0; background: var(--paper-2); outline: 1px solid var(--grid); }
+.dots span.on { background: var(--sol); outline-color: var(--ink); }
+.budget button { border-radius: 0; box-shadow: 2px 2px 0 var(--line); font-weight: 700; }
+button.primary { background: var(--rojo); color: #f2ead7; border: 2px solid var(--line); border-radius: 2px; box-shadow: var(--shadow); text-transform: uppercase; letter-spacing: 0.05em; }
+.trust.thi { background: var(--good-bg); }
+.badge { border: 2px solid var(--line); border-radius: 2px; }
+.legend b, .detail header b { text-transform: uppercase; letter-spacing: 0.03em; }
+.tile b { font-size: 1.4rem; color: var(--azul); }
+.isotype { margin: 6px 0; }
+.iso-icons { display: flex; flex-wrap: wrap; gap: 2px; align-items: center; }
+.sunburst { flex: none; }
+@media (max-width: 760px) {
+  .top h1 { font-size: 1.05rem; }
+  .simple h2 { font-size: 1.3rem; }
+}
+
+.costs .tile b { font-size: 1.15rem; white-space: nowrap; }
+.costs td.num { white-space: nowrap; }
+.chip.on, .policy.on, .card-site.active { color: var(--paper); }
+.chip.on .muted, .policy.on .muted, .card-site.active .muted { color: var(--paper); opacity: 0.8; }
+.pos { color: var(--good-ink); }
+.neg { color: var(--rojo); }
+.cba table { margin-bottom: 6px; }
+.card-site.active .reasons .good, .card-site.active .reasons .bad, .card-site.active .pos, .card-site.active .neg { color: var(--paper); }
+.card-site.active .trust { color: var(--ink); }

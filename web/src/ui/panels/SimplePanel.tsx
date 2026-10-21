@@ -8,6 +8,8 @@ import { FACTORS } from "../../model/criteria";
 const FACTOR_GROUP: Record<string, string> = Object.fromEntries(FACTORS.map((f) => [f.id, f.grupo]));
 import { nearestPlace } from "../plainFacts";
 import { estimateCosts } from "../../model/costs";
+import { Scene } from "../art/Poster";
+import { PlainVerdict, runAll } from "./CostBenefit";
 import { UNIT_COSTS } from "../../model/unitCostsData";
 
 interface Props {
@@ -96,7 +98,9 @@ export default function SimplePanel(p: Props) {
   return (
     <div className="panel simple">
       <section className="intro">
-        <h2>¿Dónde podría crecer Argentina?</h2>
+        <Scene />
+        <p className="lema">Gobernar es poblar</p>
+        <h2>¿Dónde puede crecer la Argentina?</h2>
         <p>
           Esta herramienta divide el país en <b>95.000 zonas</b> y las compara según agua, seguridad, clima y conexión,
           para encontrar los mejores lugares donde crear una <b>ciudad nueva</b> o recibir población. Vos decidís qué es más
@@ -220,8 +224,12 @@ export default function SimplePanel(p: Props) {
                     {(() => {
                       const c = estimateCosts(p.policy.id, p.ds.col, s.best, s.provincia,
                         { poblacion: p.poblacion, densidad: 75 }, UNIT_COSTS);
+                      const cba = runAll({ policy: p.policy.id, poblacion: p.poblacion, costos: c, c: p.ds.col, i: s.best,
+                        codProv: p.ds.meta.departamentos[p.ds.dep[s.best]]?.cod.slice(0, 2) ?? "" });
                       const f = (v: number) => (v / 1e9).toLocaleString("es-AR", { maximumFractionDigits: 1 });
                       return (
+                        <>
+                        <PlainVerdict r={cba} />
                         <span className="small">
                           💰 Costo estimado: <b>USD {f(c.totalCapital[1])} mil millones</b>{" "}
                           <span className="muted">
@@ -229,6 +237,7 @@ export default function SimplePanel(p: Props) {
                             {c.pctPBI && ` · ${c.pctPBI[1].toLocaleString("es-AR", { maximumFractionDigits: 2 })} % del PBI`}
                           </span>
                         </span>
+                        </>
                       );
                     })()}
                     <span className={`trust t${a.n >= a.total - 1 ? "hi" : a.n >= 2 ? "mid" : "lo"}`}>

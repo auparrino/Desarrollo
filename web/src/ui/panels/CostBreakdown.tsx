@@ -1,4 +1,5 @@
 import type { CostResult, Range } from "../../model/costs";
+import { Isotype } from "../art/Poster";
 
 const musd = (v: number) => {
   if (!Number.isFinite(v)) return "—";
@@ -48,6 +49,21 @@ export default function CostBreakdown({
   return (
     <div className="costs">
       <CostSummary r={r} poblacionLabel={poblacionLabel} />
+      {(() => {
+        const qty = (id: string) => {
+          const l = r.capital.find((x) => x.id === id);
+          const m = l?.cantidad.match(/^([\d.]+)/);
+          return m ? Number(m[1].replace(/\./g, "")) : 0;
+        };
+        const viv = qty("vivienda"), alum = qty("escuelas"), camas = qty("hospital");
+        return (
+          <div className="isos">
+            {viv > 0 && <Isotype value={viv} unit={viv > 40000 ? 10000 : 1000} kind="casa" label={`${viv.toLocaleString("es-AR")} viviendas`} />}
+            {alum > 0 && <Isotype value={alum} unit={alum > 40000 ? 10000 : 1000} kind="escuela" label={`${alum.toLocaleString("es-AR")} alumnos`} />}
+            {camas > 0 && <Isotype value={camas} unit={camas > 400 ? 100 : 10} kind="cama" label={`${camas.toLocaleString("es-AR")} camas de hospital`} />}
+          </div>
+        );
+      })()}
       <div className="table-wrap">
         <table className="provs">
           <thead>

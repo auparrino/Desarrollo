@@ -52,7 +52,7 @@ export default function CellDetail(p: Props) {
           </tr>
         </thead>
         <tbody>
-          {FACTORS.filter((f) => f.disponible).map((f) => {
+          {FACTORS.filter((f) => f.disponible && (p.weights[f.id] ?? 0) > 0).map((f) => {
             const s = p.factorScores[f.id]?.[p.i];
             return (
               <tr key={f.id}>
