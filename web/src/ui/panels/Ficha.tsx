@@ -5,9 +5,10 @@ import { gridRing } from "h3-js";
 import type { Dataset } from "../../data/load";
 import { costBenefit, type CBAResult, type Escenario } from "../../model/benefits";
 import { BENEFIT_PARAMS } from "../../model/benefitParamsData";
-import { empleo, equilibrio, musd, origen, porEtapa, riesgos, sinPolitica } from "../../model/brief";
+import { empleo, equilibrio, musd, porEtapa, riesgos, sinPolitica } from "../../model/brief";
 import { estimateCosts } from "../../model/costs";
 import { cbaInput } from "../../model/labor";
+import { planConcreto } from "../../model/plan";
 import { POLICY_BY_ID, type Policy, type PolicyId } from "../../model/policies";
 import type { Site } from "../../model/sites";
 import { UNIT_COSTS } from "../../model/unitCostsData";
@@ -100,7 +101,7 @@ export default function Ficha(p: Props) {
   const b = r.base;
   const mand = porEtapa(b);
   const emp = empleo(p.ds, i, p.policy.id, b, p.geo.proyectos);
-  const ori = polos ? [] : origen(p.ds, i);
+  const plan = useMemo(() => planConcreto(p.ds, i, p.policy.id, p.poblacion, p.nombre.replace(/^Cerca de /, ""), r), [p.ds, i, p.policy.id, p.poblacion, p.nombre, r]);
   const ries = riesgos(p.ds, i, p.policy.id, p.poblacion, r, emp);
   const otros = useMemo(
     () => (p.policy.id === "capital" ? [] : mismoPresupuesto(p.ds, i, p.site.provincia, PUBLICO(costos), p.policy.id)),
@@ -159,6 +160,57 @@ export default function Ficha(p: Props) {
           <div className="tile"><span className="small">Para el Tesoro</span><b className={b.fiscal.van >= 0 ? "pos" : "neg"}>{b.fiscal.van >= 0 ? "+" : ""}{musd(b.fiscal.van)}</b><span className="small muted">pone {musd(b.fiscal.vpCostos)}, recupera {musd(b.fiscal.vpBeneficios)} en impuestos{b.fiscal.recupero !== null ? `; se recupera ${plazo(b.fiscal.recupero)}` : ""} (valor presente)</span></div>
         </section>
 
+        <section>
+          <h3>Qué se haría, paso a paso</h3>
+          <p className="small">{plan.resumen}</p>
+          <ol className="etapas">
+            {plan.etapas.map((e) => (
+              <li key={e.nombre}>
+                <div className="etapa-h">
+                  <b>{e.nombre}</b> <span className="muted small">años {e.desde} a {e.hasta}</span>
+                  <span className="etapa-n">{polos ? `+${n0(e.llegan)} empleos` : `+${n0(e.llegan)} personas`} <span className="muted small">({n0(e.porAnio)} por año · total {n0(e.acumulado)})</span></span>
+                </div>
+                <ul className="small">
+                  {e.obras.map((o) => <li key={o.que}>{o.que}: <b>{o.cantidad}</b></li>)}
+                </ul>
+                <p className="small muted">Para seguir: {e.condicion}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <div className="ficha-cols">
+          <section>
+            <h3>Quiénes llegarían</h3>
+            <ul className="small facts">{plan.quienes.map((q) => <li key={q}>{q}</li>)}</ul>
+            {plan.deDonde.length > 0 && (
+              <>
+                <h3>De dónde vendrían</h3>
+                <table className="provs">
+                  <tbody>
+                    {plan.deDonde.map((o) => (
+                      <tr key={o.lugar}><td>{o.lugar}</td><td className="num">{Math.round(o.pct)} %</td><td className="num">{n0(o.personas)} personas</td></tr>
+                    ))}
+                  </tbody>
+                </table>
+                <p className="small muted">Estimación orientativa (más gente de los lugares grandes y cercanos), a reemplazar por la matriz de migración observada.</p>
+              </>
+            )}
+          </section>
+          <section>
+            <h3>Qué significaría</h3>
+            {plan.significa.map((x) => <p className="small" key={x.titulo}><b>{x.titulo}.</b> {x.texto}</p>)}
+            {emp.proyectos.length > 0 && (
+              <>
+                <p className="small"><b>Proyectos productivos cerca:</b></p>
+                <ul className="small facts">
+                  {emp.proyectos.map((x) => <li key={x.nombre + x.km}>{x.nombre} <span className="muted">({x.tipo}, a {Math.round(x.km)} km)</span></li>)}
+                </ul>
+              </>
+            )}
+          </section>
+        </div>
+
         <div className="ficha-cols">
           <section>
             <h3>La inversión en el tiempo</h3>
@@ -205,30 +257,6 @@ export default function Ficha(p: Props) {
                   </tbody>
                 </table>
                 <p className="small muted">Inversión pública: todo salvo las viviendas y las mudanzas, que pagan los hogares. Fortalecer ciudades y pueblos existentes reutiliza viviendas desocupadas y no necesita obras de conexión nuevas; un polo se mide en empleos (cada empleo sostiene unos 2 habitantes).</p>
-              </>
-            )}
-            <h3>Empleo</h3>
-            <p className="small">
-              {polos
-                ? <>El polo sumaría unos <b>{n0(emp.necesarios)} empleos</b> al año {b.anual.anio}.</>
-                : <>La población que probablemente llegue necesita unos <b>{n0(emp.necesarios)} puestos de trabajo</b> al año {b.anual.anio}.</>}{" "}
-              {emp.publicos > 0 && <>El traslado lleva unos <b>{n0(emp.publicos)} agentes públicos nacionales</b> con su puesto, que con los servicios que demandan sostienen el doble de empleos. </>}
-              Hoy hay {n0(emp.existentes)} puestos privados registrados en los departamentos a 50 km
-              {emp.sectores.length > 0 && <> (sobre todo {emp.sectores.join(", ").toLowerCase()})</>}
-              {Number.isFinite(emp.crecimiento) && <>, que crecieron {emp.crecimiento.toLocaleString("es-AR", { maximumFractionDigits: 1 })} % por año entre 2014 y 2022</>}.
-            </p>
-            {emp.proyectos.length > 0 && (
-              <ul className="small facts">
-                {emp.proyectos.map((x) => <li key={x.nombre + x.km}>{x.nombre} <span className="muted">({x.tipo}, a {Math.round(x.km)} km)</span></li>)}
-              </ul>
-            )}
-            {ori.length > 0 && (
-              <>
-                <h3>De dónde vendría la gente</h3>
-                <p className="small">
-                  {ori.map((o) => `${o.lugar} ${Math.round(o.pct)} %`).join(" · ")}
-                </p>
-                <p className="small muted">Estimación orientativa (modelo de gravedad: más gente de los lugares grandes y cercanos). La cuenta de costo-beneficio supone que vienen del AMBA.</p>
               </>
             )}
           </section>

@@ -81,3 +81,15 @@ export function cbaInput(ds: Dataset, policy: PolicyId, poblacion: number, costo
     relAmba: salarioAMBA(),
   };
 }
+
+/**
+ * Empleos que faltan para quienes llegan: los puestos actuales ya están ocupados por quienes
+ * viven ahí; a los recién llegados los absorbe solo el crecimiento del empleo de la zona
+ * (al ritmo 2014–2022, como máximo 3 % anual) y, en una capital, los puestos públicos trasladados.
+ */
+export function empleoFaltante(necesarios: number, m: Mercado, anios: number, publicos = 0, multPublico = 1) {
+  const g = Math.min(Math.max(Number.isFinite(m.empCrec) ? m.empCrec : 0, 0), 3) / 100;
+  const organico = m.puestos * ((1 + g) ** anios - 1) * 0.5; // la mitad del crecimiento lo toman los que ya viven ahí
+  const traslado = publicos * (1 + multPublico);
+  return { organico, traslado, faltan: Math.max(0, necesarios - organico - traslado) };
+}

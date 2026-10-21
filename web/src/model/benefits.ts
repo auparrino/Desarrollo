@@ -153,6 +153,9 @@ export function costBenefit(inp: CBAInput, p: BenefitParams, esc: Escenario): CB
   const desdeAMBA = inp.policy !== "polos" && inp.origen !== "region";
   const desdeRegion = inp.policy !== "polos" && inp.origen === "region";
   const kOc = inp.escalaOcupacion ?? 1;
+  // retardo hasta que llegan los primeros: en una ciudad nueva primero hay que hacer las obras
+  const lag = inp.policy === "ciudad_nueva" || inp.policy === "capital" ? 3 : polos ? 2 : 1;
+  const ocup = (t: number) => Math.min(1, kOc * curveAt(cv, Math.max(0, t - lag)));
 
   const lines = inp.costos.capital;
   const sum = (f: (id: string) => boolean, troncal: boolean) =>
@@ -186,7 +189,7 @@ export function costBenefit(inp: CBAInput, p: BenefitParams, esc: Escenario): CB
   const flowsF: number[] = [];
   let prev = 0;
   for (let t = 0; t <= H; t++) {
-    const N = P * Math.min(1, kOc * curveAt(cv, t));
+    const N = P * ocup(t);
     const dN = Math.max(0, N - prev);
     prev = N;
     const d = (1 + r) ** -t;
@@ -260,7 +263,7 @@ export function costBenefit(inp: CBAInput, p: BenefitParams, esc: Escenario): CB
     inversionTotal: inp.costos.totalCapital[1],
     inversionExtra: socT + socV,
     fiscal: { ...side(fB, fC), recupero: rec },
-    poblacionFinal: P * Math.min(1, kOc * curveAt(cv, H)),
+    poblacionFinal: P * ocup(H),
     cronograma: cron,
     supuestos: { relDest, relAmba, brecha, adicionalidad: adic },
   };

@@ -9,7 +9,7 @@ import type { Range } from "./costs";
 import type { PolicyId } from "./policies";
 import { isAMBA } from "./simulator";
 import proy from "./proyecciones.json";
-import { mercadoLaboral } from "./labor";
+import { empleoFaltante, mercadoLaboral } from "./labor";
 import { UNIT_COSTS } from "./unitCostsData";
 import { BENEFIT_PARAMS } from "./benefitParamsData";
 
@@ -136,13 +136,12 @@ export function riesgos(ds: Dataset, i: number, policy: PolicyId, poblacion: num
   const out: Riesgo[] = [];
   // los agentes públicos trasladados llegan con su puesto, y cada uno sostiene otro empleo local (multiplicador público)
   const multPub = (BENEFIT_PARAMS.items.multiplicador_publico as { central?: number } | undefined)?.central ?? 1;
-  const cubiertos = emp.publicos * (1 + multPub);
-  const faltan = Math.max(0, emp.necesarios - cubiertos);
-  const ratio = faltan / Math.max(emp.existentes, 1);
-  if (policy !== "polos" && faltan > 0 && (ratio > 0.3 || emp.crecimiento < 0))
+  const ef = empleoFaltante(emp.necesarios, mercadoLaboral(ds, i), 30, emp.publicos, multPub);
+  const ratio = ef.faltan / Math.max(emp.necesarios, 1);
+  if (policy !== "polos" && ef.faltan > 0 && ratio > 0.2)
     out.push({
-      nivel: ratio > 1 ? "alto" : "medio",
-      que: `Falta de trabajo: harían falta unos ${fmt(faltan)} empleos${cubiertos > 0 ? ` además de los ${fmt(cubiertos)} que traen el traslado de organismos y sus servicios` : ""}, y hoy hay ${fmt(emp.existentes)} puestos privados en 50 km${emp.crecimiento < 0 ? ", con empleo en baja" : ""}.`,
+      nivel: ratio > 0.5 ? "alto" : "medio",
+      que: `Falta de trabajo: de los ${fmt(emp.necesarios)} empleos que necesita la gente que llega, ${ef.traslado > 0 ? `el traslado de organismos aporta unos ${fmt(ef.traslado)} y ` : ""}el crecimiento normal de la zona unos ${fmt(ef.organico)}; faltan ${fmt(ef.faltan)}${emp.crecimiento < 0 ? ", con empleo en baja" : ""}.`,
       mitigacion: "Asegurar antes de construir una empresa ancla, un organismo público o un polo productivo; liberar cada etapa de viviendas solo si hay empleo para la anterior.",
     });
   if (policy === "polos") {

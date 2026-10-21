@@ -286,3 +286,9 @@ El botón **Presentar** deja el mapa y una lámina con los cinco mejores lugares
   - Se suma el Congreso, la Corte y los tribunales federales: 200.000 m², orden de magnitud a verificar.
 - **Inundación:** el umbral de exclusión R03 baja de 50 % a 40 % de la celda. La función F09 llega a 0 con 40 % inundable en lugar de 100 %.
 - **Calendario de hitos** por instrumento y **efecto político:** quién gana y quién pierde población, con la aclaración de que ni las bancas ni la coparticipación cambian solas.
+
+### Retardo inicial y techo de empleo (casos concretos)
+
+- **Retardo inicial:** las curvas de ocupación empiezan después de un retardo: 3 años en ciudad nueva y capital (primero hay que construir la conexión y la primera etapa), 2 en polos y 1 al ampliar ciudades o pueblos existentes. Antes la gente llegaba desde el año 1, con las obras sin hacer.
+- **Empleo para los que llegan:** los puestos que ya existen están ocupados por quienes viven en la zona. Para los recién llegados queda la mitad del crecimiento normal del empleo (ritmo 2014–2022, con un tope de 3 % anual), más los puestos públicos trasladados en el caso de la capital (`empleoFaltante` en `web/src/model/labor.ts`). Si falta más del 20 %, el plan muestra cuánta gente llegaría con el trabajo disponible.
+- **Casos concretos:** `docs/casos-concretos.md` (lo genera `web/scripts/casos.ts`) desarrolla un caso por instrumento con los mismos cálculos que la ficha.

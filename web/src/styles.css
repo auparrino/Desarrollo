@@ -507,3 +507,10 @@ button.primary { background: var(--azul); color: #fff; border: 0; border-radius:
 }
 @media print { .comparativa th, .comparativa td { min-width: 0; font-size: 8.5pt; } .tabla-scroll { overflow: visible; } }
 .comparar-btn { font-size: 0.8rem; letter-spacing: 0.04em; }
+.etapas { list-style: none; padding: 0; margin: 6px 0; counter-reset: etapa; }
+.etapas > li { border-left: 4px solid var(--celeste); padding: 6px 10px; margin-bottom: 8px; background: var(--celeste-3); }
+.etapa-h { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.etapa-n { margin-left: auto; font-weight: 600; color: var(--azul); }
+.etapas ul { margin: 4px 0; padding-left: 18px; }
+.etapas p { margin: 2px 0 0; }
+@media print { .etapas > li { break-inside: avoid; } }
