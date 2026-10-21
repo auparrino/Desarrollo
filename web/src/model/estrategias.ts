@@ -20,7 +20,7 @@ const costoPublico = (U.m2_por_empleado?.central ?? 12) * (U.oficina_m2?.central
 
 export function estrategias(pol: PolicyId, meta: number, retardo: number): Estrategia[] {
   const empleosNecesarios = meta * 0.45;
-  const motor = (f: number) => Math.round((empleosNecesarios * f) / 2); // con multiplicador ≈ 1, cada empleo del motor sostiene ~2
+  const motor = (f: number) => Math.round((empleosNecesarios * f) / 2.6); // con multiplicador ≈ 1,6, cada empleo del motor sostiene ~2,6
   if (pol === "capital") {
     const apn = U.empleados_apn_caba?.central ?? 74000;
     const cap = { ...base, motorEmpleos: apn, motorCostoEmpleo: costoPublico, motorInicio: retardo, externos: 1 };

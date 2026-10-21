@@ -6,7 +6,7 @@ durante 30 años, 800 veces cada una, variando lo que no se sabe con certeza:
 
 | Parámetro incierto | Rango | Fuente |
 |---|---|---|
-| Empleos locales por cada empleo del motor | 0,5 a 1,6 | Moretti (2010) |
+| Empleos locales por cada empleo del motor | 0,8 a 2,5 | Moretti (2010): 1,6; implícito en los casos exitosos: Tierra del Fuego 1987 ≈ 1,7, Canberra 1966 ≈ 1,9 (`docs/recorridos-exitosos.md`) |
 | Parte del flujo migratorio hacia la provincia que capta un solo lugar | 2 % a 12 % | observado: Pilar 1,7 %, Colón (Córdoba) 4,3 %, Puerto Madryn 7,8 %, Confluencia 11,7 %; con un techo de 1,5 veces el mayor saldo observado (Pilar, ~2.900 personas netas por año) |
 | Recién llegados sin trabajo que se van cada año | 20 % a 40 % | supuesto; uno de cada tres migrantes vuelve a su provincia (Censo 2022) |
 | Parte del empleo nuevo que ocupan migrantes | 60 % (fijo) | Blanchard y Katz (1992) |
@@ -23,11 +23,11 @@ vacías (las ocupadas se necesitarían igual en otro lugar).
 
 ## Resumen
 
-- **Crear una ciudad nueva** (Sarmiento, meta 500.000): para no perder plata, *organismos públicos primero, luego viviendas a demanda* (33.626 habitantes al año 30, 100 % de probabilidad de saldo positivo). Para poblar, *organismos públicos primero, luego viviendas a demanda*: 33.626 habitantes, y además mejora el saldo. Lo peor: *viviendas primero* (−USD 10,4 mil millones).
-- **Trasladar la capital** (Senillosa, meta 500.000): para no perder plata, *traslado gradual con radicación de las familias* (119.128 habitantes al año 30, 24 % de probabilidad de saldo positivo). Para poblar, *traslado gradual con radicación de las familias*: 119.128 habitantes, y además mejora el saldo. Lo peor: *traslado rápido y viviendas para todos al inicio* (−USD 4,3 mil millones).
-- **Fortalecer ciudades intermedias** (Gran San Nicolás de los Arroyos, meta 100.000): para no perder plata, *a demanda, sin motor de empleo* (61.803 habitantes al año 30, 0 % de probabilidad de saldo positivo). Para poblar, *organismos públicos primero, luego viviendas a demanda*: 71.844 habitantes, a unos USD 13.753 por habitante adicional. Lo peor: *viviendas primero* (−USD 1,2 mil millones).
-- **Repoblar pueblos** (Punta Alta, meta 20.000): para no perder plata, *a demanda, sin motor de empleo* (19.978 habitantes al año 30, 0 % de probabilidad de saldo positivo). Lo peor: *motor de empleo grande primero, luego viviendas a demanda* (−USD 197 millones).
-- **Crear polos productivos** (Laguna Brava, meta 50.000): para no perder plata, *parque por etapas sin incentivos fiscales* (96.144 habitantes al año 30, 72 % de probabilidad de saldo positivo). Para poblar, *parque por etapas e incentivos por 5 años*: 109.852 habitantes, a unos USD 251.675 por habitante adicional. Lo peor: *parque completo e incentivos por 10 años* (−USD 13,1 mil millones).
+- **Crear una ciudad nueva** (Sarmiento, meta 500.000): para no perder plata, *organismos públicos primero, luego viviendas a demanda* (31.980 habitantes al año 30, 100 % de probabilidad de saldo positivo). Para poblar, *organismos públicos primero, luego viviendas a demanda*: 31.980 habitantes, y además mejora el saldo. Lo peor: *viviendas primero* (−USD 10,4 mil millones).
+- **Trasladar la capital** (Senillosa, meta 500.000): para no perder plata, *traslado gradual con radicación de las familias* (141.793 habitantes al año 30, 67 % de probabilidad de saldo positivo). Para poblar, *traslado gradual con radicación de las familias*: 141.793 habitantes, y además mejora el saldo. Lo peor: *traslado rápido y viviendas para todos al inicio* (−USD 2,9 mil millones).
+- **Fortalecer ciudades intermedias** (Gran San Nicolás de los Arroyos, meta 100.000): para no perder plata, *a demanda, sin motor de empleo* (61.803 habitantes al año 30, 0 % de probabilidad de saldo positivo). Para poblar, *organismos públicos primero, luego viviendas a demanda*: 71.547 habitantes, a unos USD 12.298 por habitante adicional. Lo peor: *viviendas primero* (−USD 1,2 mil millones).
+- **Repoblar pueblos** (Punta Alta, meta 20.000): para no perder plata, *a demanda, sin motor de empleo* (19.978 habitantes al año 30, 0 % de probabilidad de saldo positivo). Lo peor: *motor de empleo grande primero, luego viviendas a demanda* (−USD 156 millones).
+- **Crear polos productivos** (Laguna Brava, meta 50.000): para no perder plata, *parque por etapas sin incentivos fiscales* (109.711 habitantes al año 30, 97 % de probabilidad de saldo positivo). Lo peor: *parque completo e incentivos por 10 años* (−USD 12,9 mil millones).
 
 ## Procesos óptimos: lo que se repite en todas las simulaciones
 
@@ -51,27 +51,27 @@ Meta: 500.000 habitantes. Hoy hay 27.130 puestos privados en la zona, que crecie
 | Viviendas primero | 6 – **23** – 104 | 100 % | −USD 10,4 mil millones | 0 % | no suma gente |
 | Por etapas, sin motor de empleo | 0 – **0** – 0 | 100 % | −USD 1,7 mil millones | 0 % | no suma gente |
 | A demanda, sin motor de empleo | 0 – **0** – 0 | 100 % | −USD 213 millones | 0 % | referencia |
-| Motor de empleo chico primero, luego viviendas a demanda | 20.555 – **26.578** – 32.690 | 43 % | −USD 1,1 mil millones | 0 % | USD 34.048 |
-| Motor de empleo grande primero, luego viviendas a demanda | 42.189 – **52.365** – 64.879 | 46 % | −USD 2,8 mil millones | 0 % | USD 49.298 |
-| **Organismos públicos primero, luego viviendas a demanda** ✔ | 27.556 – **33.626** – 39.663 | 43 % | USD 413 millones | 100 % | gana |
-| Motor chico + programa de retorno y ayuda de mudanza | 22.323 – **29.724** – 37.404 | 43 % | −USD 1,1 mil millones | 0 % | USD 29.208 |
+| Motor de empleo chico primero, luego viviendas a demanda | 20.095 – **26.723** – 33.584 | 43 % | −USD 743 millones | 0 % | USD 19.817 |
+| Motor de empleo grande primero, luego viviendas a demanda | 41.528 – **52.591** – 67.090 | 46 % | −USD 1,9 mil millones | 0 % | USD 31.281 |
+| **Organismos públicos primero, luego viviendas a demanda** ✔ | 25.449 – **31.980** – 39.036 | 52 % | USD 415 millones | 100 % | gana |
+| Motor chico + programa de retorno y ayuda de mudanza | 21.938 – **29.893** – 38.137 | 43 % | −USD 705 millones | 0 % | USD 16.455 |
 
-**Si el objetivo es no perder plata: organismos públicos primero, luego viviendas a demanda.** Traslado de 22.500 empleos públicos (universidad, hospitales regionales, organismos nacionales o provinciales), sin incentivos fiscales.
+**Si el objetivo es no perder plata: organismos públicos primero, luego viviendas a demanda.** Traslado de 17.308 empleos públicos (universidad, hospitales regionales, organismos nacionales o provinciales), sin incentivos fiscales.
 
-**Si el objetivo es poblar: organismos públicos primero, luego viviendas a demanda.** Traslado de 22.500 empleos públicos (universidad, hospitales regionales, organismos nacionales o provinciales), sin incentivos fiscales. Suma 33.626 habitantes más que la referencia y cada uno le cuesta al país unos USD 0 en valor presente.
+**Si el objetivo es poblar: organismos públicos primero, luego viviendas a demanda.** Traslado de 17.308 empleos públicos (universidad, hospitales regionales, organismos nacionales o provinciales), sin incentivos fiscales. Suma 31.980 habitantes más que la referencia y cada uno le cuesta al país unos USD 0 en valor presente.
 
 Cómo evoluciona (valores centrales):
 
 | Año | Habitantes | Viviendas | Empleos para los que llegan | Llegan en el año | Se van en el año |
 |---|---|---|---|---|---|
-| 3 | 867 | 1.662 | 7.667 | 858 | 0 |
-| 5 | 8.289 | 4.258 | 19.077 | 3.464 | 48 |
-| 10 | 27.067 | 10.671 | 47.524 | 3.900 | 231 |
-| 15 | 29.155 | 10.671 | 45.862 | 416 | 287 |
-| 20 | 30.867 | 10.830 | 45.972 | 349 | 305 |
-| 30 | 33.158 | 11.627 | 46.034 | 362 | 328 |
+| 3 | 867 | 1.342 | 7.188 | 858 | 0 |
+| 5 | 8.067 | 3.856 | 18.565 | 4.158 | 39 |
+| 10 | 25.431 | 10.359 | 47.890 | 2.936 | 225 |
+| 15 | 27.520 | 10.359 | 45.814 | 416 | 271 |
+| 20 | 29.608 | 10.367 | 45.888 | 416 | 292 |
+| 30 | 31.885 | 11.163 | 45.965 | 416 | 315 |
 
-Lo que más pesa en el resultado: cuánto empleo local genera el motor (correlación 0,86) y cuánta gente que se muda elige este lugar (correlación 0,44).
+Lo que más pesa en el resultado: cuánto empleo local genera el motor (correlación 0,88) y cuánta gente que se muda elige este lugar (correlación 0,4).
 
 ## Trasladar la capital: Senillosa (El Cuy, Río Negro)
 
@@ -79,28 +79,28 @@ Meta: 500.000 habitantes. Hoy hay 76.122 puestos privados en la zona, que crecie
 
 | Estrategia | Habitantes al año 30 (p10 – mediana – p90) | Viviendas vacías (máx.) | Saldo para el país (mediana) | Probabilidad de saldo positivo | Costo por habitante adicional |
 |---|---|---|---|---|---|
-| Traslado rápido y viviendas para todos al inicio | 125.362 – **158.832** – 191.166 | 72 % | −USD 4,3 mil millones | 0 % | USD 64.079 |
-| Traslado rápido, viviendas a demanda | 64.431 – **80.839** – 97.258 | 51 % | −USD 482 millones | 0 % | no suma gente |
-| Traslado gradual (12 años), viviendas a demanda | 77.915 – **95.814** – 114.875 | 45 % | −USD 278 millones | 0 % | referencia |
-| Traslado rápido con radicación de las familias | 82.375 – **100.313** – 118.918 | 41 % | −USD 388 millones | 0 % | no suma gente |
-| **Traslado gradual con radicación de las familias** ✔ | 102.433 – **119.128** – 140.307 | 39 % | −USD 104 millones | 24 % | gana |
+| Traslado rápido y viviendas para todos al inicio | 152.169 – **199.409** – 245.817 | 63 % | −USD 2,9 mil millones | 0 % | USD 34.791 |
+| Traslado rápido, viviendas a demanda | 77.063 – **99.512** – 122.293 | 62 % | −USD 207 millones | 22 % | no suma gente |
+| Traslado gradual (12 años), viviendas a demanda | 92.920 – **119.078** – 147.141 | 57 % | −USD 68 millones | 38 % | referencia |
+| Traslado rápido con radicación de las familias | 94.738 – **118.934** – 142.894 | 51 % | −USD 136 millones | 31 % | no suma gente |
+| **Traslado gradual con radicación de las familias** ✔ | 117.812 – **141.793** – 171.186 | 46 % | USD 90 millones | 67 % | gana |
 
 **Si el objetivo es no perder plata: traslado gradual con radicación de las familias.** 12 años; vivienda y ayuda de mudanza para que el 85 % se mude.
 
-**Si el objetivo es poblar: traslado gradual con radicación de las familias.** 12 años; vivienda y ayuda de mudanza para que el 85 % se mude. Suma 23.314 habitantes más que la referencia y cada uno le cuesta al país unos USD 0 en valor presente.
+**Si el objetivo es poblar: traslado gradual con radicación de las familias.** 12 años; vivienda y ayuda de mudanza para que el 85 % se mude. Suma 22.715 habitantes más que la referencia y cada uno le cuesta al país unos USD 0 en valor presente.
 
 Cómo evoluciona (valores centrales):
 
 | Año | Habitantes | Viviendas | Empleos para los que llegan | Llegan en el año | Se van en el año |
 |---|---|---|---|---|---|
-| 3 | 1.544 | 4.190 | 18.046 | 1.529 | 0 |
-| 5 | 18.325 | 10.073 | 42.061 | 6.176 | 121 |
-| 10 | 62.555 | 23.986 | 100.033 | 10.574 | 519 |
-| 15 | 109.006 | 39.843 | 146.277 | 894 | 1.081 |
-| 20 | 113.464 | 39.843 | 148.667 | 894 | 1.126 |
-| 30 | 118.347 | 41.550 | 153.941 | 505 | 1.178 |
+| 3 | 1.544 | 4.190 | 21.746 | 1.529 | 0 |
+| 5 | 22.271 | 11.439 | 53.161 | 10.083 | 121 |
+| 10 | 74.272 | 29.492 | 132.100 | 10.454 | 637 |
+| 15 | 131.488 | 49.132 | 191.351 | 894 | 1.306 |
+| 20 | 135.934 | 49.132 | 193.741 | 894 | 1.350 |
+| 30 | 142.314 | 50.087 | 199.289 | 95 | 1.455 |
 
-Lo que más pesa en el resultado: cuánto empleo local genera el motor (correlación 0,93) y cuánta gente que se muda elige este lugar (correlación 0,28).
+Lo que más pesa en el resultado: cuánto empleo local genera el motor (correlación 0,96) y cuánta gente que se muda elige este lugar (correlación 0,2).
 
 ## Fortalecer ciudades intermedias: Gran San Nicolás de los Arroyos (San Nicolás, Buenos Aires)
 
@@ -111,14 +111,14 @@ Meta: 100.000 habitantes. Hoy hay 311.579 puestos privados en la zona, que creci
 | Viviendas primero | 65.141 – **67.317** – 68.291 | 83 % | −USD 1,2 mil millones | 0 % | no suma gente |
 | Por etapas, sin motor de empleo | 65.128 – **65.293** – 68.713 | 72 % | −USD 294 millones | 0 % | no suma gente |
 | **A demanda, sin motor de empleo** ✔ | 60.727 – **61.803** – 62.982 | 62 % | −USD 139 millones | 0 % | referencia |
-| Motor de empleo chico primero, luego viviendas a demanda | 68.993 – **70.793** – 72.162 | 77 % | −USD 562 millones | 0 % | USD 47.055 |
-| Motor de empleo grande primero, luego viviendas a demanda | 73.993 – **76.534** – 78.912 | 72 % | −USD 1,1 mil millones | 0 % | USD 67.569 |
-| Organismos públicos primero, luego viviendas a demanda | 70.165 – **71.844** – 73.023 | 71 % | −USD 277 millones | 0 % | USD 13.753 |
-| Motor chico + programa de retorno y ayuda de mudanza | 80.205 – **85.194** – 90.727 | 81 % | −USD 644 millones | 0 % | USD 21.584 |
+| Motor de empleo chico primero, luego viviendas a demanda | 68.806 – **70.643** – 72.097 | 79 % | −USD 480 millones | 0 % | USD 38.511 |
+| Motor de empleo grande primero, luego viviendas a demanda | 73.502 – **76.297** – 78.982 | 76 % | −USD 928 millones | 0 % | USD 54.400 |
+| Organismos públicos primero, luego viviendas a demanda | 69.787 – **71.547** – 72.774 | 73 % | −USD 259 millones | 0 % | USD 12.298 |
+| Motor chico + programa de retorno y ayuda de mudanza | 80.103 – **85.213** – 91.331 | 82 % | −USD 561 millones | 0 % | USD 18.003 |
 
 **Si el objetivo es no perder plata: a demanda, sin motor de empleo.** Se construye cada año lo que pide la llegada del año anterior.
 
-**Si el objetivo es poblar: organismos públicos primero, luego viviendas a demanda.** Traslado de 4.500 empleos públicos (universidad, hospitales regionales, organismos nacionales o provinciales), sin incentivos fiscales. Suma 10.041 habitantes más que la referencia y cada uno le cuesta al país unos USD 13.753 en valor presente.
+**Si el objetivo es poblar: organismos públicos primero, luego viviendas a demanda.** Traslado de 3.462 empleos públicos (universidad, hospitales regionales, organismos nacionales o provinciales), sin incentivos fiscales. Suma 9.745 habitantes más que la referencia y cada uno le cuesta al país unos USD 12.298 en valor presente.
 
 Cómo evoluciona (valores centrales):
 
@@ -142,10 +142,10 @@ Meta: 20.000 habitantes. Hoy hay 71.063 puestos privados en la zona, que crecier
 | Viviendas primero | 17.440 – **17.483** – 17.500 | 50 % | −USD 65 millones | 0 % | no suma gente |
 | Por etapas, sin motor de empleo | 19.931 – **19.978** – 19.997 | 50 % | −USD 17 millones | 0 % | no suma gente |
 | **A demanda, sin motor de empleo** ✔ | 19.933 – **19.978** – 19.999 | 69 % | −USD 14 millones | 0 % | referencia |
-| Motor de empleo chico primero, luego viviendas a demanda | 19.929 – **19.979** – 20.000 | 78 % | −USD 88 millones | 0 % | no suma gente |
-| Motor de empleo grande primero, luego viviendas a demanda | 19.932 – **19.978** – 20.047 | 83 % | −USD 197 millones | 0 % | no suma gente |
-| Organismos públicos primero, luego viviendas a demanda | 19.933 – **19.977** – 20.000 | 72 % | −USD 29 millones | 0 % | no suma gente |
-| Motor chico + programa de retorno y ayuda de mudanza | 19.929 – **19.976** – 20.000 | 78 % | −USD 97 millones | 0 % | no suma gente |
+| Motor de empleo chico primero, luego viviendas a demanda | 19.929 – **19.979** – 20.000 | 79 % | −USD 71 millones | 0 % | no suma gente |
+| Motor de empleo grande primero, luego viviendas a demanda | 19.932 – **19.978** – 20.046 | 84 % | −USD 156 millones | 0 % | no suma gente |
+| Organismos públicos primero, luego viviendas a demanda | 19.933 – **19.977** – 20.000 | 73 % | −USD 26 millones | 0 % | no suma gente |
+| Motor chico + programa de retorno y ayuda de mudanza | 19.929 – **19.976** – 20.000 | 79 % | −USD 81 millones | 0 % | no suma gente |
 
 **Si el objetivo es no perder plata: a demanda, sin motor de empleo.** Se construye cada año lo que pide la llegada del año anterior.
 
@@ -168,25 +168,23 @@ Meta: 50.000 empleos. Hoy hay 90.833 puestos privados en la zona, que crecieron 
 
 | Estrategia | Habitantes al año 30 (p10 – mediana – p90) | Viviendas vacías (máx.) | Saldo para el país (mediana) | Probabilidad de saldo positivo | Costo por habitante adicional |
 |---|---|---|---|---|---|
-| Parque completo e incentivos por 10 años | 101.821 – **109.808** – 110.332 | 52 % | −USD 13,1 mil millones | 0 % | USD 961.693 |
-| Parque por etapas e incentivos por 5 años | 109.565 – **109.852** – 109.998 | 51 % | −USD 3,4 mil millones | 0 % | USD 251.675 |
-| **Parque por etapas sin incentivos fiscales** ✔ | 77.453 – **96.144** – 109.865 | 47 % | USD 64 millones | 72 % | referencia |
-| Parque por etapas, incentivos 5 años y programa de retorno | 109.584 – **109.868** – 109.999 | 52 % | −USD 3,4 mil millones | 0 % | USD 253.921 |
+| Parque completo e incentivos por 10 años | 109.604 – **109.886** – 110.683 | 63 % | −USD 12,9 mil millones | 0 % | no suma gente |
+| Parque por etapas e incentivos por 5 años | 109.617 – **109.880** – 110.319 | 62 % | −USD 3,2 mil millones | 0 % | no suma gente |
+| **Parque por etapas sin incentivos fiscales** ✔ | 92.651 – **109.711** – 109.980 | 57 % | USD 217 millones | 97 % | referencia |
+| Parque por etapas, incentivos 5 años y programa de retorno | 109.610 – **109.883** – 110.367 | 62 % | −USD 3,3 mil millones | 0 % | no suma gente |
 
 **Si el objetivo es no perder plata: parque por etapas sin incentivos fiscales.** Solo infraestructura y suelo; las empresas llegan más despacio.
-
-**Si el objetivo es poblar: parque por etapas e incentivos por 5 años.** Lotes a medida que se venden; incentivos acotados a 5 años. Suma 13.708 habitantes más que la referencia y cada uno le cuesta al país unos USD 251.675 en valor presente.
 
 Cómo evoluciona (valores centrales):
 
 | Año | Habitantes | Viviendas | Empleos para los que llegan | Llegan en el año | Se van en el año |
 |---|---|---|---|---|---|
-| 3 | 4.636 | 2.895 | 16.714 | 3.733 | 9 |
-| 5 | 12.087 | 5.500 | 31.204 | 3.734 | 83 |
-| 10 | 30.662 | 12.866 | 68.845 | 3.642 | 270 |
-| 15 | 56.588 | 21.033 | 104.149 | 6.186 | 503 |
-| 20 | 79.861 | 30.115 | 142.436 | 3.515 | 763 |
-| 30 | 91.940 | 32.427 | 153.358 | 263 | 949 |
+| 3 | 4.636 | 3.626 | 21.770 | 3.733 | 9 |
+| 5 | 14.177 | 6.970 | 40.295 | 3.713 | 104 |
+| 10 | 39.109 | 16.063 | 87.230 | 5.799 | 333 |
+| 15 | 71.500 | 27.017 | 133.453 | 6.854 | 646 |
+| 20 | 102.785 | 38.348 | 181.012 | 5.748 | 970 |
+| 30 | 109.974 | 38.462 | 193.106 | 32 | 1.115 |
 
-Lo que más pesa en el resultado: cuánto empleo local genera el motor (correlación 0,91) y cuánta gente que se muda elige este lugar (correlación 0,35).
+Lo que más pesa en el resultado: cuánto empleo local genera el motor (correlación 0,96) y cuánta gente que se muda elige este lugar (correlación 0,21).
 

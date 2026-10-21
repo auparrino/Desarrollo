@@ -20,7 +20,7 @@ durante 30 años, ${N} veces cada una, variando lo que no se sabe con certeza:
 
 | Parámetro incierto | Rango | Fuente |
 |---|---|---|
-| Empleos locales por cada empleo del motor | 0,5 a 1,6 | Moretti (2010) |
+| Empleos locales por cada empleo del motor | 0,8 a 2,5 | Moretti (2010): 1,6; implícito en los casos exitosos: Tierra del Fuego 1987 ≈ 1,7, Canberra 1966 ≈ 1,9 (\`docs/recorridos-exitosos.md\`) |
 | Parte del flujo migratorio hacia la provincia que capta un solo lugar | 2 % a 12 % | observado: Pilar 1,7 %, Colón (Córdoba) 4,3 %, Puerto Madryn 7,8 %, Confluencia 11,7 %; con un techo de 1,5 veces el mayor saldo observado (Pilar, ~2.900 personas netas por año) |
 | Recién llegados sin trabajo que se van cada año | 20 % a 40 % | supuesto; uno de cada tres migrantes vuelve a su provincia (Censo 2022) |
 | Parte del empleo nuevo que ocupan migrantes | 60 % (fijo) | Blanchard y Katz (1992) |
@@ -61,7 +61,7 @@ for (const pol of POLICIES) {
   const xs = { multiplicador: [] as number[], captacion: [] as number[], salidaDesocupados: [] as number[], vegetativo: [] as number[] };
   const vans: number[] = [];
   for (let k = 0; k < N; k++) {
-    const u = { multiplicador: Uu(0.5, 1.6), captacion: Uu(0.02, 0.12), salidaDesocupados: Uu(0.2, 0.4), vegetativo: Uu(0.006, 0.012) };
+    const u = { multiplicador: Uu(0.8, 2.5), captacion: Uu(0.02, 0.12), salidaDesocupados: Uu(0.2, 0.4), vegetativo: Uu(0.006, 0.012) };
     (Object.keys(xs) as (keyof typeof xs)[]).forEach((key) => xs[key].push(u[key]));
     vans.push(simular(ctx, mejor.estrategia, u).van);
   }

@@ -10,6 +10,7 @@ import { estimateCosts } from "../../model/costs";
 import { cbaInput } from "../../model/labor";
 import { planConcreto } from "../../model/plan";
 import { compararEstrategias } from "../../model/estrategias";
+import Recorridos from "./Recorridos";
 import { POLICY_BY_ID, type Policy, type PolicyId } from "../../model/policies";
 import type { Site } from "../../model/sites";
 import { UNIT_COSTS } from "../../model/unitCostsData";
@@ -242,6 +243,8 @@ export default function Ficha(p: Props) {
               </tbody>
             </table>
           </div>
+          <h3>Comparado con recorridos reales</h3>
+          <Recorridos plan={[0, ...elegido.central.serie.map((x) => x.pob)]} etiqueta="Este lugar" />
           <p className="small muted">
             Recomendado: {elegido.estrategia.descripcion} El plan paso a paso de arriba sigue este proceso. Detalle del modelo y de los supuestos
             en docs/simulaciones-procesos.md.

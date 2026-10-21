@@ -57,7 +57,7 @@ Generado con \`web/scripts/backtest.ts\`. Para cada caso con datos de población
 proceso con lo que pasó de verdad (año de inicio, población inicial, empleos del motor año por año) y se
 compara la población simulada con la observada en cada censo.
 
-- **A ciegas:** con los parámetros que usa la app para la Argentina (multiplicador 1, llegada espontánea
+- **A ciegas:** con los parámetros que usa la app para la Argentina (multiplicador 1,6, llegada espontánea
   de hasta ~4.300 personas por año, crecimiento vegetativo 1 %).
 - **Calibrado:** con los parámetros que mejor reproducen la historia (búsqueda en grilla).
 
@@ -80,7 +80,7 @@ for (const c of casos) {
   const motor = interpolar(mot.map((p) => ({ anio: p.anio - c.t0, v: p.empleos! })), 1, H, 0);
   const tieneMotor = mot.length > 0;
 
-  const ciego = correr(c, pob, motor, pob0, H, { multiplicador: 1, captacion: 1, salidaDesocupados: 0.3, vegetativo: 0.01 }, 4300);
+  const ciego = correr(c, pob, motor, pob0, H, { multiplicador: 1.6, captacion: 1, salidaDesocupados: 0.3, vegetativo: 0.01 }, 4300);
   const eCiego = errorLog(ciego, pob, c.t0);
   let best: Ajuste | null = null;
   for (const m of grid.mult) for (const t of grid.techo) for (const v of grid.veg) {

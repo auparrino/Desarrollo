@@ -517,3 +517,12 @@ button.primary { background: var(--azul); color: #fff; border: 0; border-radius:
 .minimapa .flujo { fill: none; stroke: var(--sol); opacity: 0.85; stroke-linecap: round; }
 .combinacion { border: 1px solid var(--line); border-left: 4px solid var(--sol); background: var(--warn-bg); padding: 8px 10px; margin: 8px 0; }
 .combinacion p { margin: 4px 0 0; }
+.recorridos { margin: 6px 0; }
+.recorridos svg { width: 100%; height: auto; display: block; }
+.recorridos .grid { stroke: var(--grid); stroke-width: 1; }
+.recorridos .tick { font-size: 10px; fill: var(--muted); }
+.recorridos .ref { fill: none; stroke: var(--line); stroke-width: 1.5; }
+.recorridos .ref:hover { stroke: var(--ink-2); stroke-width: 2.5; }
+.recorridos .plan { fill: none; stroke: var(--azul); stroke-width: 3; }
+.recorridos .lbl { font-size: 10px; fill: var(--ink-2); }
+.recorridos .plan-lbl { fill: var(--azul); font-weight: 700; }

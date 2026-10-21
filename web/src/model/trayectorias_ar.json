@@ -1,0 +1,441 @@
+{
+  "meta": {
+    "descripcion": "Trayectorias históricas de ciudades argentinas que crecieron por un 'motor' de empleo. Sirven para contrastar (backtest) el modelo año a año empleo → migración → vivienda → nacimientos.",
+    "fecha_compilacion": "2026-10-21",
+    "reglas": [
+      "Ningún número inventado: cuando no se encontró el dato, empleos o pob = null.",
+      "'estimado': true marca valores derivados o aproximados por la fuente ('más de', 'unos', 'la mitad').",
+      "'verificado': false marca cifras de prensa o testimonio que no se pudieron contrastar con una fuente estadística.",
+      "'ambito' aclara el territorio (localidad, departamento, provincia). Las series no siempre son homogéneas entre años."
+    ],
+    "descargas": "/home/user/Desarrollo/data/raw/trayectorias_ar/ (PDF y texto extraído de las fuentes principales)"
+  },
+  "casos": [
+    {
+      "id": "la_plata",
+      "nombre": "La Plata (nueva capital de la provincia de Buenos Aires)",
+      "pais": "Argentina",
+      "tipo": "capital_nueva",
+      "t0": 1882,
+      "confiabilidad": "media: población 1884–1895 de fuente académica con datos censales; 1909–1947 de Wikipedia; no hay cifra del número de empleados públicos trasladados",
+      "poblacion": [
+        {"anio": 1881, "pob": 6962, "ambito": "partido de Ensenada (incluye las tierras del futuro partido de La Plata): 2.091 en los pueblos de Tolosa y Ensenada + 4.871 rurales", "fuente": "vallejo_2000"},
+        {"anio": 1884, "pob": 10407, "ambito": "ciudad, censo de marzo de 1884; 2.288 argentinos y 4.126 varones italianos", "fuente": "vallejo_2000"},
+        {"anio": 1884, "pob": 21349, "ambito": "censo municipal de noviembre de 1884", "verificado": false, "fuente": "busqueda_censo_municipal_1884"},
+        {"anio": 1890, "pob": 65610, "ambito": "ciudad (27.709 argentinos)", "fuente": "vallejo_2000"},
+        {"anio": 1895, "pob": 60991, "ambito": "ciudad, después de la crisis de 1890 (33.534 argentinos)", "fuente": "vallejo_2000"},
+        {"anio": 1909, "pob": 95126, "ambito": "censo general de la ciudad (Salas y Condomí Alcorta, mayo de 1909)", "fuente": "wikipedia_la_plata"},
+        {"anio": 1914, "pob": 137413, "ambito": "probablemente el partido; Wikipedia no lo aclara", "fuente": "wikipedia_la_plata"},
+        {"anio": 1947, "pob": 302073, "ambito": "no aclarado; la serie de Wikipedia mezcla partido y Gran La Plata", "fuente": "wikipedia_la_plata"},
+        {"anio": 2022, "pob": 772618, "ambito": "partido de La Plata, censo 2022 (el cuadro de la misma página dice 768.547)", "fuente": "wikipedia_partido_la_plata"}
+      ],
+      "motor": [
+        {"anio": 1883, "empleos": 185, "tipo": "construccion", "nota": "inmigrantes que el 14 de enero de 1883 empezaron el ramal ferroviario Ringuelet–Ferrari (Brandsen), de 41,6 km", "fuente": "vallejo_2000"},
+        {"anio": 1883, "empleos": 1000, "tipo": "construccion", "estimado": true, "nota": "meta del decreto del 6 de octubre de 1882: contratar en Europa 'mil obreros o más' (Caetani) entre enero y febrero de 1883. Según el autor 'terminarían siendo muchos más'", "fuente": "vallejo_2000"},
+        {"anio": 1883, "empleos": 457, "tipo": "construccion", "nota": "obreros en 9 edificios públicos al 14 de diciembre de 1883", "fuente": "vallejo_2000"},
+        {"anio": 1884, "empleos": 733, "tipo": "construccion", "nota": "obreros en edificios públicos después de abril de 1884 (se suman el hospital de Melchor Romero, la catedral y otras obras)", "fuente": "vallejo_2000"},
+        {"anio": 1884, "empleos": 1500, "tipo": "construccion", "estimado": true, "nota": "'superaba los mil quinientos' obreros en las obras del puerto en marzo de 1884", "fuente": "vallejo_2000"},
+        {"anio": 1884, "empleos": null, "tipo": "publico", "nota": "los poderes provinciales se trasladaron el 15 de abril de 1884. Una ley del 21 de marzo de 1882 obligaba a radicarse en la ciudad a los empleados que pasaran a la nueva capital. No se encontró cuántos fueron", "fuente": "scba_cinco_palacios"},
+        {"anio": 1890, "empleos": 1800, "tipo": "construccion", "estimado": true, "nota": "'más de mil ochocientos' obreros en el puerto antes de su inauguración", "fuente": "vallejo_2000"}
+      ],
+      "secuencia": [
+        "1880: la ciudad de Buenos Aires se federaliza y la provincia queda sin capital",
+        "1882 (14 de marzo): el gobernador Dardo Rocha anuncia que la capital estará en el municipio de Ensenada",
+        "1882 (21 de marzo): ley que obliga a los funcionarios y empleados trasladados a vivir en la nueva capital",
+        "1882: el Ferrocarril Oeste ya tenía la línea Tolosa–Ensenada; el ferrocarril existe antes que la ciudad",
+        "1882 (6 de octubre): decreto para contratar en Europa mil obreros o más. Se busca mano de obra antes de que haya ciudad",
+        "1882 (19 de noviembre): acto de fundación. Los primeros habitantes son albañiles italianos",
+        "1883 (enero): ramal ferroviario Ringuelet–Brandsen para llevar materiales. El ferrocarril es prioridad antes que los edificios",
+        "Fines de 1883: con los ramales listos empiezan los grandes edificios públicos (Casa de Gobierno, ministerios, Legislatura, Policía, Municipalidad, Justicia, Catedral) y las obras del puerto",
+        "1884 (marzo): primer censo con 10.407 habitantes, 78 % extranjeros y casi todos varones jornaleros",
+        "1884 (31 de marzo): decreto que da 'tierras para inmigrantes' (quintas) en zonas inundables del ejido",
+        "1884 (15 de abril): se trasladan los poderes provinciales y llegan los empleados públicos",
+        "1885–1886: se inauguran los grandes edificios; en 1886, alumbrado eléctrico",
+        "1887: telégrafo y teléfono con Buenos Aires y Ensenada",
+        "1888: Talleres del Ferrocarril Oeste y barrio obrero de las 'Mil Casas' en Tolosa",
+        "1890: se termina el puerto; la crisis de 1890 corta la inmigración",
+        "1895: la población baja a 60.991, un 7 % menos que en 1890",
+        "1897: universidad provincial; en 1905 pasa a ser Universidad Nacional de La Plata y abre un segundo motor de empleo, la universidad",
+        "1906: nueva estación de ferrocarril"
+      ],
+      "vivienda": "Para los obreros la vivienda fue precaria y llegó después de la demanda. Los obreros vivían en casillas de madera que el Estado levantó en el puerto para alquilarlas, o en casillas que construían ellos mismos en tierras ajenas, con mudanzas frecuentes. En Tolosa y en Los Hornos predominaban las 'casas endebles'. El único barrio obrero planificado fueron las 'Mil Casas' de Tolosa, desde 1888, seis años después de la fundación. El Estado dio tierras para quintas a algunos inmigrantes (decreto del 31 de marzo de 1884). Para los funcionarios se desmontaron terrenos y se construyeron edificios.",
+      "origen_migrantes": "Hubo dos corrientes. La interna fueron los empleados y funcionarios trasladados desde la ciudad de Buenos Aires. La externa fue mayor: obreros contratados en Europa, sobre todo italianos del norte (el 'Scrivia' trajo el primer contingente en 1883), y contingentes de la Comisaría General de Inmigración, algunos que venían de la cosecha en Azul. En 1884 había 7.336 varones extranjeros y 796 mujeres extranjeras. Los argentinos fueron minoría durante más de diez años.",
+      "crisis": "La crisis de 1890 cortó la inmigración y la población bajó de 65.610 (1890) a 60.991 (1895). La ciudad se recuperó con la universidad (1897–1905), el ferrocarril y el puerto, y luego con la industria de Berisso y Ensenada (frigoríficos). En las fuentes consultadas no hay fechas ni cifras de esta última etapa.",
+      "lecciones": [
+        "La infraestructura de transporte (ferrocarril para materiales) y la mano de obra contratada llegaron antes que el empleo público. El primer motor fue la construcción, no el Estado.",
+        "Una obra pública de esa escala trae primero varones solos. En 1884 había unos 5,4 varones por mujer (8.779 varones y 1.628 mujeres), así que los nacimientos se demoran años respecto de la llegada de migrantes.",
+        "La población crece rápido mientras dura la obra (de 10.000 a 65.000 en seis años) y puede bajar cuando la obra termina y llega una crisis (1890–1895). El modelo debe permitir saldos negativos al terminar la obra.",
+        "La vivienda obrera fue informal y llegó después de la demanda. El barrio obrero planificado tardó seis años."
+      ],
+      "fuentes": [
+        {"id": "vallejo_2000", "cita": "Vallejo, G. G. (2000). De los Apeninos a La Plata. Los italianos en la construcción de la 'nueva capital'. Anuario del Instituto de Historia Argentina (1), 153-173. FaHCE-UNLP.", "url": "http://www.memoria.fahce.unlp.edu.ar/art_revistas/pr.2914/pr.2914.pdf"},
+        {"id": "wikipedia_la_plata", "cita": "Wikipedia en español, 'La Plata', sección Demografía (consultada en octubre de 2026). Es una fuente secundaria.", "url": "https://es.wikipedia.org/wiki/La_Plata"},
+        {"id": "wikipedia_partido_la_plata", "cita": "Wikipedia en español, 'Partido de La Plata', censo 2022", "url": "https://es.wikipedia.org/wiki/Partido_de_La_Plata"},
+        {"id": "wikipedia_historia_la_plata", "cita": "Wikipedia en español, 'Historia de La Plata' (cronología 1882–1914)", "url": "https://es.wikipedia.org/wiki/Historia_de_La_Plata"},
+        {"id": "scba_cinco_palacios", "cita": "Suprema Corte de Justicia de la Provincia de Buenos Aires, Departamento Histórico. 'Cinco Palacios del Poder Judicial' (traslado de los poderes el 15 de abril de 1884)", "url": "https://www.scba.gov.ar/deptohistorico/Cinco%20Palacios%20del%20Poder%20Judicial.pdf"},
+        {"id": "busqueda_censo_municipal_1884", "cita": "Censo municipal de noviembre de 1884 (21.349 habitantes), visto en resultados de búsqueda que citaban un texto de la UNLP. No se verificó en la fuente primaria.", "url": "http://sedici.unlp.edu.ar/bitstream/handle/10915/49310/Documento_completo.pdf"}
+      ]
+    },
+    {
+      "id": "tierra_del_fuego",
+      "nombre": "Tierra del Fuego: Río Grande y Ushuaia (Ley 19.640)",
+      "pais": "Argentina",
+      "tipo": "ciudad_industrial",
+      "t0": 1972,
+      "confiabilidad": "alta para la población (IPIEC/INDEC, con censos territoriales intermedios de 1966, 1976, 1983 y 1986). Media o baja para el empleo industrial antes de 1996, que viene de prensa; desde 1996 hay datos oficiales (OEDE e IPIEC)",
+      "poblacion": [
+        {"anio": 1960, "pob": 7955, "ambito": "provincia (entonces territorio nacional)", "fuente": "ipiec_poblacion"},
+        {"anio": 1970, "pob": 13527, "ambito": "provincia (el cuadro 2.2 del mismo informe dice 13.560)", "fuente": "ipiec_poblacion"},
+        {"anio": 1980, "pob": 27358, "ambito": "provincia (el cuadro 2.2 dice 27.463)", "fuente": "ipiec_poblacion"},
+        {"anio": 1991, "pob": 69369, "ambito": "provincia", "fuente": "ipiec_poblacion"},
+        {"anio": 2001, "pob": 101079, "ambito": "provincia", "fuente": "ipiec_poblacion"},
+        {"anio": 2010, "pob": 127205, "ambito": "provincia", "fuente": "ipiec_poblacion"},
+        {"anio": 2022, "pob": 185732, "ambito": "provincia", "fuente": "citypopulation_tdf"}
+      ],
+      "poblacion_localidades": {
+        "rio_grande": [
+          {"anio": 1960, "pob": 4064, "ambito": "departamento San Sebastián, antecesor del departamento Río Grande", "fuente": "ipiec_poblacion"},
+          {"anio": 1966, "pob": 4823, "ambito": "población urbana, censo territorial", "fuente": "ipiec_poblacion"},
+          {"anio": 1970, "pob": 6189, "ambito": "población urbana (el departamento tenía 7.754)", "fuente": "ipiec_poblacion"},
+          {"anio": 1976, "pob": 8786, "ambito": "población urbana, censo territorial", "fuente": "ipiec_poblacion"},
+          {"anio": 1980, "pob": 13897, "ambito": "población urbana (el departamento tenía 15.915)", "fuente": "ipiec_poblacion"},
+          {"anio": 1983, "pob": 20250, "ambito": "población urbana, censo territorial", "fuente": "ipiec_poblacion"},
+          {"anio": 1986, "pob": 30002, "ambito": "población urbana, censo territorial", "fuente": "ipiec_poblacion"},
+          {"anio": 1991, "pob": 38137, "ambito": "localidad (el departamento con Tolhuin tenía 39.816)", "fuente": "citypopulation_tdf"},
+          {"anio": 1994, "pob": 44120, "ambito": "población urbana, encuesta de estimación", "fuente": "ipiec_poblacion"},
+          {"anio": 1997, "pob": 47199, "ambito": "población urbana, encuesta de estimación", "fuente": "ipiec_poblacion"},
+          {"anio": 2001, "pob": 52681, "ambito": "localidad", "fuente": "citypopulation_tdf"},
+          {"anio": 2010, "pob": 66475, "ambito": "localidad", "fuente": "citypopulation_tdf"},
+          {"anio": 2022, "pob": 97611, "ambito": "localidad, solo hogares particulares", "fuente": "citypopulation_tdf"}
+        ],
+        "ushuaia": [
+          {"anio": 1960, "pob": 3453, "ambito": "departamento", "fuente": "ipiec_poblacion"},
+          {"anio": 1966, "pob": 3847, "ambito": "población urbana, censo territorial", "fuente": "ipiec_poblacion"},
+          {"anio": 1970, "pob": 5373, "ambito": "población urbana (el departamento tenía 5.677)", "fuente": "ipiec_poblacion"},
+          {"anio": 1976, "pob": 7171, "ambito": "población urbana, censo territorial", "fuente": "ipiec_poblacion"},
+          {"anio": 1980, "pob": 11033, "ambito": "población urbana (el departamento tenía 11.443)", "fuente": "ipiec_poblacion"},
+          {"anio": 1983, "pob": 15975, "ambito": "población urbana, censo territorial", "fuente": "ipiec_poblacion"},
+          {"anio": 1986, "pob": 22718, "ambito": "población urbana, censo territorial", "fuente": "ipiec_poblacion"},
+          {"anio": 1991, "pob": 29166, "ambito": "localidad", "fuente": "citypopulation_tdf"},
+          {"anio": 1994, "pob": 40870, "ambito": "población urbana, encuesta de estimación", "fuente": "ipiec_poblacion"},
+          {"anio": 1997, "pob": 44976, "ambito": "población urbana, encuesta de estimación", "fuente": "ipiec_poblacion"},
+          {"anio": 2001, "pob": 45430, "ambito": "localidad", "fuente": "citypopulation_tdf"},
+          {"anio": 2010, "pob": 56593, "ambito": "localidad", "fuente": "citypopulation_tdf"},
+          {"anio": 2022, "pob": 79409, "ambito": "localidad, solo hogares particulares", "fuente": "citypopulation_tdf"}
+        ]
+      },
+      "motor": [
+        {"anio": 1978, "empleos": 532, "tipo": "industrial", "nota": "59 empresas industriales 'a poco de haberse establecido el régimen' (Anuario Estadístico de Tierra del Fuego de 1978)", "fuente": "fundar_hallak_2023"},
+        {"anio": 1982, "empleos": 2000, "tipo": "industrial", "estimado": true, "verificado": false, "nota": "'superó la cifra de 2.000 operarios'", "fuente": "perfil_2016"},
+        {"anio": 1987, "empleos": 6000, "tipo": "industrial", "estimado": true, "verificado": false, "nota": "'superó los 6.000 empleados', el pico de la primera etapa", "fuente": "perfil_2016"},
+        {"anio": 1995, "empleos": 600, "tipo": "industrial", "estimado": true, "verificado": false, "nota": "solo Río Grande, según el testimonio de un dirigente de la UOM: 'quedamos solo 600 operarios'", "fuente": "perfil_2016"},
+        {"anio": 1996, "empleos": 3000, "tipo": "industrial", "estimado": true, "verificado": false, "nota": "valor derivado: el artículo dice que el empleo cayó 'hasta la mitad en 1996' respecto de 1987", "fuente": "perfil_2016"},
+        {"anio": 2001, "empleos": 2500, "tipo": "industrial", "estimado": true, "nota": "solo electrónica, 'a principios de este siglo'", "fuente": "fundar_hallak_2023"},
+        {"anio": 2002, "empleos": 2000, "tipo": "industrial", "estimado": true, "verificado": false, "nota": "'unos 2.000 empleados'", "fuente": "perfil_2016"},
+        {"anio": 2009, "empleos": 6000, "tipo": "industrial", "estimado": true, "verificado": false, "nota": "'más de 6.000 entre 2007 y 2009', con la Ley 26.539 de 2009 que impulsó celulares y televisores", "fuente": "perfil_2016"},
+        {"anio": 2013, "empleos": 15000, "tipo": "industrial", "estimado": true, "nota": "el Decreto 727/2021 dice que el empleo en las empresas beneficiarias superó los 15.000 puestos directos en los años de mayor actividad (alrededor de 2013–2015)", "fuente": "decreto_727_2021"},
+        {"anio": 2021, "empleos": 10800, "tipo": "industrial", "nota": "promedio de 2021 en las industrias del subrégimen: 30 % del empleo privado registrado y 70 % en Río Grande. Electrónica tenía unos 8.500", "fuente": "fundar_hallak_2023"},
+        {"anio": 2025, "empleos": 9508, "tipo": "industrial", "nota": "industria promovida, julio de 2025 (IPIEC)", "fuente": "origen991_2026"},
+        {"anio": 2026, "empleos": 6651, "tipo": "industrial", "nota": "industria promovida, julio de 2026 (IPIEC): -30 % interanual. Electrónica tenía 5.115", "fuente": "origen991_2026"}
+      ],
+      "secuencia": [
+        "1950: base naval en Ushuaia (antecedente de poblamiento estatal)",
+        "Fines de los años 50: el petróleo en el norte de la isla trae una primera corriente migratoria hacia Río Grande",
+        "1972: Ley 19.640 crea el Área Aduanera Especial y exime de impuestos nacionales. El objetivo explícito, de origen geopolítico por el conflicto del Beagle, era poblar la isla",
+        "Años 70: las regalías petroleras financian obras de infraestructura. En 1976 se cuentan 15.957 habitantes urbanos y hacia 1978 había 59 empresas industriales con 532 empleos",
+        "1977: se planifica el parque industrial de Río Grande (178 ha), consolidado desde 1982. A comienzos de los 80 se instala el parque industrial de Ushuaia (130 ha)",
+        "1980–1987: llegan en masa las ensambladoras de electrónica (TV color, audio) y el empleo supera los 6.000 puestos. Entre 1980 y 1986 la población urbana casi se duplica, de 24.930 a 52.720",
+        "1980–1986: el parque de viviendas crece 244 % y las precarias 684 %, hasta ser el 29 % del total. La vivienda va detrás de la población",
+        "1987–1988: Ushuaia declara la emergencia urbano-habitacional (Ordenanza 558/87). En 1988 el 37 % de las viviendas no tenía vínculo legal con la tierra",
+        "1990–1991: provincialización. El Instituto Provincial de Vivienda (IPV) empieza a relocalizar asentamientos",
+        "1994–1995: cierran plantas, hay suspensiones y despidos. Se duplica el desempleo y en 1995 hay conflicto social. El Estado provincial y los municipios absorben trabajadores",
+        "1991–2001: la población crece solo 46 %, frente a 153 % en la década anterior",
+        "Hasta 2000: el IPV construye 8.500 viviendas en las dos ciudades",
+        "2009: Ley 26.539 (impuestos internos diferenciales) reactiva la electrónica con celulares y notebooks. El empleo vuelve a más de 6.000",
+        "2013–2015: pico histórico de más de 15.000 empleos directos y 231 empresas industriales en 2015",
+        "2021: Decreto 727/2021 prorroga el régimen. El empleo promovido es de unos 10.800",
+        "2025–2026: el empleo industrial vuelve a caer, a 6.651 en julio de 2026"
+      ],
+      "vivienda": "La vivienda se resolvió a demanda, tarde y con mucha informalidad. En la primera ola (1972–1991) el Estado no acompañó el ritmo: entre 1980 y 1986 las viviendas precarias crecieron 684 %. En 1991 los asentamientos eran el 31 % de la expansión urbana de Ushuaia y el 30 % de la de Río Grande. La vivienda estatal llegó después, con barrios colectivos del IPV hacia el norte de Río Grande y relocalizaciones desde 1990: 8.500 viviendas hasta 2000 y planes nacionales en 2008–2010. Ushuaia sumó límites físicos (pendientes y turbales) que empujaron a ocupar humedales. Río Grande, en la estepa, pudo expandirse más.",
+      "origen_migrantes": "Antes de 1970 la migración venía de ultramar y de Chile. Desde los años 70 domina la migración desde otras provincias: en 1991 el 60 % de la población provincial había nacido en otra provincia. Muchos venían de zonas rurales o con poca calificación y entraron a empleos industriales urbanos atraídos por los salarios altos. Hay redes familiares: llegan porque un pariente ya trabajaba en la isla. Los extranjeros eran el 8,6 % en 2010, en su mayoría chilenos.",
+      "crisis": "Hubo dos crisis. En 1994–1996 la apertura y el fin del crédito fiscal llevaron a cierres y despidos: el empleo industrial cayó a la mitad o menos y la población dejó de crecer tan rápido. La recuperación se apoyó en el empleo público provincial y municipal, que hizo de refugio, en el cuentapropismo financiado con indemnizaciones y en los servicios. El segundo ciclo fue una reactivación por ley (26.539, de 2009) con un pico en 2013–2015, seguido de caídas en 2016–2019 y en 2025–2026. La población siguió creciendo pese a las caídas del empleo, por inercia de nacimientos de una población joven y por la vivienda y el empleo público.",
+      "lecciones": [
+        "El incentivo fiscal tardó unos 8 años en mover masivamente el empleo (1972 → 1980). Primero hubo infraestructura y parques industriales (1977–1982).",
+        "La población respondió muy rápido al empleo: de 24.930 a 52.720 urbanos en seis años (1980–1986), con la vivienda formal atrasada y asentamientos informales cercanos a un tercio de la expansión.",
+        "Cuando el empleo motor cae a la mitad (1995–2002), la población no se va: el Estado absorbe y la natalidad de una población joven sostiene el crecimiento. Las salidas son mucho más lentas que las llegadas.",
+        "Un motor que depende de reglas fiscales es volátil (picos en 1987, 2013–2015; caídas en 1995, 2002, 2026). Conviene modelar la volatilidad del empleo motor por separado del stock de población."
+      ],
+      "fuentes": [
+        {"id": "ipiec_poblacion", "cita": "IPIEC Tierra del Fuego. Estadística de Población (síntesis histórica de censos 1895–2010, cuadros 1.1, 2.2 y 2.4 con censos territoriales de 1966, 1976, 1983 y 1986 y encuestas de 1994 y 1997)", "url": "https://ipiec.tierradelfuego.gob.ar/wp-content/uploads/2024/09/1_Estadistica_Poblacion-1-ultimo.pdf"},
+        {"id": "citypopulation_tdf", "cita": "City Population (Brinkhoff) con datos de INDEC, censos 1991–2022, Tierra del Fuego", "url": "https://www.citypopulation.de/en/argentina/tierradelfuego/"},
+        {"id": "fundar_hallak_2023", "cita": "Hallak, J. C. (2023). Diagnóstico del Régimen de Tierra del Fuego. Fundar, Documento 1", "url": "https://fund.ar/wp-content/uploads/2023/06/Fundar_DOC1_Diagnostico_TDF.pdf"},
+        {"id": "perfil_2016", "cita": "Noticias/Perfil (8 de diciembre de 2016). 'Una historia que va desde el pionero Mauricio Macri hasta los permisos de Débora Giorgi'. Cifras periodísticas de empleo industrial", "url": "http://noticias.perfil.com/2016/12/08/una-historia-que-va-desde-el-pionero-mauricio-macri-hasta-los-permisos-de-debora-giorgi"},
+        {"id": "decreto_727_2021", "cita": "Decreto 727/2021 (prórroga del régimen de la Ley 19.640), considerandos", "url": "https://www.argentina.gob.ar/normativa/nacional/norma-355761/texto"},
+        {"id": "origen991_2026", "cita": "FM Origen 99.1 (2026). 'Día de la Industria: Tierra del Fuego perdió casi 2.900 puestos de trabajo durante el último año', con datos del Boletín Mensual del IPIEC", "url": "https://www.origen991.com.ar/2026/dia-de-la-industria-tierra-del-fuego-perdio-casi-2-900-puestos-de-trabajo-durante-el-ultimo-ano/"},
+        {"id": "carpinetti_2009", "cita": "Carpinetti, N. E. (2009). Dinámica migratoria y promoción industrial: la inserción ocupacional en Tierra del Fuego después del poblamiento. Papeles de Población 15(60), 65-97", "url": "http://www.redalyc.org/articulo.oa?id=11211340004"},
+        {"id": "fank_2019", "cita": "Fank, L. (2019). Promoción Industrial e Informalidad urbana en Tierra del Fuego: análisis histórico comparativo. Revista F@ro 2(30), 138-162", "url": "https://dialnet.unirioja.es/descarga/articulo/7871323.pdf"},
+        {"id": "varela_2015", "cita": "Varela, J. P. (2015). Configuración de la fuerza laboral en Tierra del Fuego. XI Jornadas de Sociología, UBA", "url": "https://cdsa.aacademica.org/000-061/314.pdf"},
+        {"id": "tdf_gestion_19640", "cita": "Gobierno de Tierra del Fuego, Secretaría de Calidad de la Gestión Pública. 'Conociéndonos mejor: La 19.640' y 'Brevísima historia de la ciudad de Río Grande' (2017)", "url": "https://www.tierradelfuego.gob.ar/wp-content/uploads/2017/08/cono-9-2017-19640-tecnico.pdf"}
+      ]
+    },
+    {
+      "id": "puerto_madryn",
+      "nombre": "Puerto Madryn (ALUAR)",
+      "pais": "Argentina",
+      "tipo": "ciudad_industrial",
+      "t0": 1971,
+      "confiabilidad": "alta para la población (INDEC vía Kaminker y Ortiz-Camargo 2016) y para la secuencia de obras (Fiorito 2020). Media para el empleo de ALUAR, con pocos puntos y no siempre comparables. No hay dato de contratistas",
+      "poblacion": [
+        {"anio": 1970, "pob": 6115, "ambito": "población urbana; el departamento Biedma tenía 6.981. Fiorito (2020) da 6.945 para la ciudad", "fuente": "kaminker_ortiz_2016"},
+        {"anio": 1980, "pob": 20478, "ambito": "población urbana; Biedma 21.689", "fuente": "kaminker_ortiz_2016"},
+        {"anio": 1991, "pob": 44916, "ambito": "población urbana; Biedma 45.494", "fuente": "kaminker_ortiz_2016"},
+        {"anio": 2001, "pob": 57571, "ambito": "población urbana; Biedma 58.634. City Population da 57.614", "fuente": "kaminker_ortiz_2016"},
+        {"anio": 2010, "pob": 81315, "ambito": "población urbana; Biedma 82.883", "fuente": "kaminker_ortiz_2016"},
+        {"anio": 2022, "pob": 97625, "ambito": "localidad, solo hogares particulares; Biedma 103.173", "fuente": "citypopulation_chubut"}
+      ],
+      "motor": [
+        {"anio": 1972, "empleos": 300, "tipo": "construccion", "nota": "trabajadores en la construcción de la planta siete meses después del inicio de obra (noviembre de 1971)", "fuente": "kaminker_ortiz_2016"},
+        {"anio": 1974, "empleos": 900, "tipo": "industrial", "estimado": true, "nota": "'más de 900' empleados directos al iniciar la producción (julio de 1974), según Rougier (2011)", "fuente": "kaminker_ortiz_2016"},
+        {"anio": 1993, "empleos": 930, "tipo": "industrial", "nota": "rebaja salarial de alrededor del 25 % planteada a 930 trabajadores en noviembre de 1993", "fuente": "perez_alvarez_2014"},
+        {"anio": 2021, "empleos": 3400, "tipo": "industrial", "nota": "'3.400 puestos de trabajo directos' (acuerdo con el Gobierno nacional, octubre de 2021), con +600 anunciados", "fuente": "eleconomista_2021"}
+      ],
+      "secuencia": [
+        "Años 60: ya había industria textil promocionada, ferrocarril y puerto a Trelew, y algo de turismo. Unos 6.000 habitantes",
+        "1968: la Fuerza Aérea, por la delegación COPEDESMEL, presenta el esquema de una planta de aluminio y las directivas para la presa de Futaleufú",
+        "1969–1971: el Estado construye el acueducto Trelew–Madryn (63 km). Agua antes que fábrica",
+        "1970 (noviembre y diciembre): licitación y adjudicación de la presa de Futaleufú (Vialco)",
+        "1971: se adjudica la planta al grupo de FATE (ALUAR). El Estado garantiza energía, puerto de aguas profundas, tierra barata y exenciones. Según Solari Yrigoyen, el Estado aportó cerca del 85 % de la inversión total",
+        "1971 (noviembre): empieza la obra de la planta. En 1972 ya hay 300 obreros",
+        "1972 (abril): empieza el puerto de aguas profundas, habilitado en parte en enero de 1974",
+        "1972–1978: ALUAR construye viviendas para su personal en etapas: 14 para profesionales, 12 para gerentes, grupos en el sector 1 para jerárquicos y el barrio Roca de 468 viviendas para técnicos y operarios, con escuela y centro comercial",
+        "1974 (julio): empieza la producción con más de 900 empleados directos. Mientras la presa no estaba lista, la energía venía de una central termoeléctrica y de la conexión al gasoducto de Pico Truncado, también obras del Estado",
+        "1974: quiebra la constructora de la presa y Agua y Energía termina la obra. El complejo hidroeléctrico se inaugura en 1978",
+        "1979–1985: se instalan pesqueras (Conarpesa en 1979, Alpesca, Harengus en 1985) que llegan a emplear tanto como ALUAR. Es un segundo motor que usa el puerto",
+        "1980: la ciudad llega a 20.478 habitantes, más del triple que en 1970",
+        "Años 90: apertura y reforma del Estado. En 1993–1994 ALUAR baja salarios y reestructura; la población crece solo 2,5 % por año (1991–2001). El turismo (ballenas, Península Valdés, Patrimonio de la Humanidad en 1999) pasa a ser motor",
+        "Hacia 2005: ampliación de ALUAR con central propia, más pesca y construcción. La población crece 41 % entre 2001 y 2010"
+      ],
+      "vivienda": "La vivienda para el personal se construyó por adelantado: la empresa armó barrios propios (barrio Roca, 468 viviendas económicas en etapas, más grupos para jerárquicos, gerentes y profesionales), con escuela y servicios, a cambio de rebajas en el precio de la tierra que vendió la CORFO de Chubut. Se usó construcción industrializada para hacerlo rápido con mano de obra no especializada. En los 90 la empresa vendió esas viviendas a particulares. Para el resto de la población (pesca, comercio, turismo) el crecimiento fue a demanda, con segregación residencial y problemas de acceso a la vivienda en 1991–2010.",
+      "origen_migrantes": "Sobre todo migración interna: chubutenses del interior rural (por la crisis de la lana y la desertificación) y migrantes de otras provincias, convocados en distintos puntos del país para trabajar en ALUAR. Entre 1970 y 1980 la migración explica el 83 % del crecimiento; 68 % en 1980–1991, 52 % en 1991–2001 y 58 % en 2001–2010. Los nacidos en el extranjero nunca superaron el 8,2 % (máximo en 1980). En 2010 había 3.245 nacidos en Bolivia y 1.388 en Chile.",
+      "crisis": "Los años 90 trajeron la apertura, la crisis del precio del aluminio (1993) y la reestructuración laboral de ALUAR. El crecimiento poblacional bajó de 71 por mil anual (1980–1991) a 25 por mil (1991–2001). La ciudad se recuperó diversificando su economía: pesca exportadora, turismo de naturaleza (Península Valdés) y, después de 2001, la ampliación de ALUAR y la construcción.",
+      "lecciones": [
+        "La secuencia fue infraestructura estatal primero (agua 1969–71, puerto 1972–74, energía 1974–78), después la obra de la planta (1971), la vivienda de la empresa y la producción (1974). La población se triplicó en 10 años.",
+        "El empleo directo del motor fue chico (unos 900 en 1974) en relación con el crecimiento de la población (+14.000 entre 1970 y 1980). El multiplicador vino de la construcción, la pesca y los servicios. No conviene modelar solo con el empleo directo.",
+        "Un segundo motor que usa la infraestructura del primero (la pesca usa el puerto) y un tercero (el turismo) sostienen el crecimiento cuando el primero se estanca.",
+        "Construir vivienda de empresa por adelantado acelera la radicación de las familias, porque la planta convocó trabajadores con su familia."
+      ],
+      "fuentes": [
+        {"id": "kaminker_ortiz_2016", "cita": "Kaminker, S. A. y Ortiz-Camargo, D. P. (2016). Puerto Madryn, de pueblo a ciudad intermedia. La dinámica poblacional local a través de cinco retratos censales (1970-2010). Papeles de Población 22(89), 223-254", "url": "http://www.redalyc.org/articulo.oa?id=11248009009"},
+        {"id": "fiorito_2020", "cita": "Fiorito, M. I. (2020). Hormigón y gran escala: presa, puerto y viviendas, las obras complementarias de la puesta en marcha de Aluar en Puerto Madryn, Argentina (1969-1974). Anales de Investigación en Arquitectura 10(1), 7-27. doi:10.18861/ania.2020.10.1.2966", "url": "https://dialnet.unirioja.es/descarga/articulo/7508763.pdf"},
+        {"id": "perez_alvarez_2014", "cita": "Pérez Álvarez, G. (2014). Paternalismo, experiencia obrera y desarrollo del régimen de gran industria: la historia de ALUAR. Ciclos 24(43)", "url": "https://dialnet.unirioja.es/descarga/articulo/8685605.pdf"},
+        {"id": "citypopulation_chubut", "cita": "City Population (Brinkhoff) con datos de INDEC, Chubut, censos 1991–2022", "url": "https://www.citypopulation.de/en/argentina/chubut/"},
+        {"id": "eleconomista_2021", "cita": "El Economista (13 de octubre de 2021). Acuerdo Gobierno–Aluar: energía, empleo y exportaciones", "url": "https://eleconomista.com.ar/economia/acuerdo-gobierno-aluar-energia-empleo-exportaciones-n46850"}
+      ]
+    },
+    {
+      "id": "neuquen_confluencia",
+      "nombre": "Neuquén capital y departamento Confluencia",
+      "pais": "Argentina",
+      "tipo": "capital_provincial_energetica",
+      "t0": 1958,
+      "confiabilidad": "alta para la población provincial y de la ciudad desde 1970 (INDEC). La de 1960 es de prensa, que cita a historiadores de la UNComahue. Baja para las series de empleo: no se encontró una serie del empleo de El Chocón, del petróleo ni del Estado provincial antes de 2021",
+      "poblacion": [
+        {"anio": 1960, "pob": 16738, "ambito": "ciudad (otras fuentes dan entre 15.000 y 15.800)", "fuente": "rionegro_2021"},
+        {"anio": 1970, "pob": 43070, "ambito": "localidad (municipio 45.140)", "fuente": "wikipedia_neuquen_ciudad"},
+        {"anio": 1980, "pob": 90089, "ambito": "localidad (municipio 92.047)", "fuente": "wikipedia_neuquen_ciudad"},
+        {"anio": 1991, "pob": 167296, "ambito": "localidad; Confluencia 265.123", "fuente": "citypopulation_neuquen"},
+        {"anio": 2001, "pob": 201868, "ambito": "localidad; Confluencia 314.793", "fuente": "citypopulation_neuquen"},
+        {"anio": 2010, "pob": 231198, "ambito": "localidad; Confluencia 362.673", "fuente": "citypopulation_neuquen"},
+        {"anio": 2022, "pob": 287787, "ambito": "localidad, solo hogares particulares; Confluencia 468.794", "fuente": "citypopulation_neuquen"}
+      ],
+      "poblacion_provincia": [
+        {"anio": 1914, "pob": 28866, "fuente": "mininterior_evolucion"},
+        {"anio": 1947, "pob": 86836, "fuente": "mininterior_evolucion"},
+        {"anio": 1960, "pob": 109890, "fuente": "mininterior_evolucion"},
+        {"anio": 1970, "pob": 154570, "fuente": "mininterior_evolucion"},
+        {"anio": 1980, "pob": 243850, "fuente": "mininterior_evolucion"},
+        {"anio": 1991, "pob": 388833, "fuente": "citypopulation_neuquen"},
+        {"anio": 2001, "pob": 474155, "fuente": "citypopulation_neuquen"},
+        {"anio": 2010, "pob": 551266, "fuente": "citypopulation_neuquen"},
+        {"anio": 2022, "pob": 710814, "fuente": "citypopulation_neuquen"}
+      ],
+      "crecimiento_intercensal_confluencia_pct": {"1947-1960": 98.9, "1960-1970": 76.9, "1970-1980": 73.6, "1980-1991": 69.8, "1991-2001": 18.7, "fuente": "kloster_2005"},
+      "motor": [
+        {"anio": 1970, "empleos": 2000, "tipo": "construccion", "estimado": true, "nota": "unos 2.000 obreros con sus familias (alrededor de 5.000 personas) en la villa temporaria de El Chocón; las huelgas del 'Choconazo' fueron en 1969–1970", "fuente": "rionegro_chocon"},
+        {"anio": 1970, "empleos": null, "tipo": "construccion", "nota": "en 1970 la construcción en la ciudad 'llegó casi a triplicar' sus ocupados respecto de la década anterior; no hay cifra absoluta", "fuente": "rionegro_2021"},
+        {"anio": 2021, "empleos": 74317, "tipo": "publico", "nota": "agentes del Estado provincial, julio de 2021 (toda la provincia)", "fuente": "lmneuquen_empleo_publico"},
+        {"anio": 2022, "empleos": 72043, "tipo": "publico", "nota": "agentes del Estado provincial, julio de 2022 (toda la provincia)", "fuente": "lmneuquen_empleo_publico"},
+        {"anio": 2024, "empleos": 71678, "tipo": "petrolero", "nota": "ocupados en el upstream de hidrocarburos en TODO EL PAÍS, no solo en Neuquén (CEPH con datos de la Secretaría de Trabajo). Neuquén usa 77 trabajadores por millón de barriles equivalentes, contra 178 en Santa Cruz y 189 en Chubut", "fuente": "mase_ceph_2025"}
+      ],
+      "secuencia": [
+        "1904: la capital del territorio se traslada de Chos Malal a la Confluencia (unos 800 vecinos)",
+        "1914–1950: crecimiento lento, de unos 2.000 a unos 7.000 habitantes",
+        "1955: Ley 14.408 de provincialización. En 1957 hay constitución y en 1958 gobierno provincial y Concejo Deliberante. Empieza el empleo público provincial como motor",
+        "1947–1960: Confluencia casi se duplica (+98,9 %) con el riego y la fruticultura del Alto Valle y la capital",
+        "1968–1972/73: obra del complejo El Chocón–Cerros Colorados, con unos 2.000 obreros en la villa temporaria. Arrastra servicios y construcción en la capital",
+        "1960–1970: la ciudad pasa de 16.738 a 43.070 habitantes (+157 %)",
+        "Años 70–80: hidrocarburos y obra pública y privada. La provincia crece 57,8 % (1970–80) y 59,5 % (1980–91); la ciudad duplica su población entre 1970 y 1980",
+        "1980: alrededor del 60 % de los habitantes de la capital eran migrantes",
+        "Años 90: privatización de empresas públicas y retiros voluntarios. Desde 1995 crecen los problemas de empleo en Neuquén–Plottier; la provincia crece solo 21,9 % (1991–2001) y las ciudades petroleras (Cutral Có, de 33.463 a 33.718) se estancan",
+        "2010–2022: Vaca Muerta. Confluencia pasa de 362.673 a 468.794 (+29 %) y crecen mucho Plottier (+61 %) y Centenario (+45 %), las ciudades dormitorio"
+      ],
+      "vivienda": "En las fuentes consultadas no se encontró una serie de vivienda estatal (IPVU o FONAVI) para Neuquén. Las fuentes describen una expansión hacia áreas vacías y el crecimiento de ciudades dormitorio (Plottier, Centenario) después de 2000. El Chocón tuvo una villa temporaria precaria y luego una villa planificada (diseñada en 1968–1970).",
+      "origen_migrantes": "En los años 60 y 70 vinieron sobre todo de Río Negro, La Pampa y Mendoza; desde los 80, de la provincia de Buenos Aires y la Capital Federal. En los 60 eran sobre todo varones jóvenes de 20 a 24 años. Hubo una ola chilena fuerte en los 70, 80 y 90. En 1980 el 25 % de la población provincial había nacido en otra provincia y el 8 % en un país limítrofe; en 1991, el 28 % y el 8 %.",
+      "crisis": "La privatización de YPF y del Estado en los 90 llevó a desempleo y a un estancamiento de las ciudades petroleras del interior (Cutral Có–Plaza Huincul). La capital siguió creciendo más despacio, sostenida por el empleo público provincial y los servicios regionales. Al terminar las represas se vació la población de los departamentos donde estaban, como Collón Curá (-44 % en 1991–2001). Vaca Muerta reactivó el crecimiento desde 2010.",
+      "lecciones": [
+        "Una capital provincial nueva más un motor energético (represas y luego petróleo) dieron el crecimiento sostenido más largo del país: unos 70 % por década en Confluencia durante cuatro décadas seguidas (1947–1991).",
+        "Las grandes obras (represas) son motores transitorios: la población del lugar de la obra cae al terminar (Collón Curá, -44 %), pero la capital regional retiene parte de la población.",
+        "El empleo público provincial amortigua las caídas del motor privado.",
+        "En el ciclo de Vaca Muerta el crecimiento se reparte en el área metropolitana (ciudades dormitorio), no solo en la ciudad central."
+      ],
+      "fuentes": [
+        {"id": "rionegro_2021", "cita": "Diario Río Negro (12 de septiembre de 2021). 'De caserío a la gran ciudad de la Confluencia' (cifras tomadas de libros de historiadores de la UNComahue)", "url": "https://www.rionegro.com.ar/de-caserio-a-la-gran-ciudad-de-la-confluencia-1953556/"},
+        {"id": "wikipedia_neuquen_ciudad", "cita": "Wikipedia en español, 'Neuquén (ciudad)', cuadro de población por censo, municipio y localidad", "url": "https://es.wikipedia.org/wiki/Neuqu%C3%A9n_(ciudad)"},
+        {"id": "citypopulation_neuquen", "cita": "City Population (Brinkhoff) con datos de INDEC, Neuquén, censos 1991–2022", "url": "https://www.citypopulation.de/en/argentina/neuquen/"},
+        {"id": "mininterior_evolucion", "cita": "Ministerio del Interior, Evolución de la población por provincias 1914–2001 (INDEC), visto en resultados de búsqueda. El PDF no se pudo descargar", "url": "https://mininterior.gob.ar/poblacion/archivos_estadisticas/EvolucionPoblacionProvincias1914.pdf"},
+        {"id": "kloster_2005", "cita": "Kloster, E. E. y otros (2005). Características del proceso de urbanización y redistribución de la población en las provincias de Río Negro y del Neuquén en el período 1991-2001. VIII Jornadas AEPA, Tandil", "url": "https://www.aacademica.org/viiijornadasaepa/33.pdf"},
+        {"id": "kloster_revele", "cita": "Kloster, E. E. Análisis comparativo de la evolución, la distribución y la estructura de la población de las provincias de Río Negro y Neuquén en la última década. Boletín Geográfico (UNComahue)", "url": "https://revele.uncoma.edu.ar/index.php/geografia/article/download/237/223/663"},
+        {"id": "rionegro_chocon", "cita": "Diario Río Negro. 'Los hijos de El Chocón rearman sus orígenes a 50 años del Choconazo'", "url": "https://www.rionegro.com.ar/los-hijos-de-el-chocon-rearman-sus-origenes-a-50-anos-del-choconazo-1245697/"},
+        {"id": "lmneuquen_empleo_publico", "cita": "LM Neuquén. 'En Neuquén hay más de un empleo público cada dos puestos privados'", "url": "https://www.lmneuquen.com/neuquen/en-neuquen-hay-mas-un-empleo-publico-cada-dos-puestos-privados-n961127"},
+        {"id": "mase_ceph_2025", "cita": "Mase/LM Neuquén. 'Se necesitan 77 trabajadores para producir un millón de barriles equivalentes en Vaca Muerta' (informe CEPH con datos de la Secretaría de Trabajo)", "url": "https://mase.lmneuquen.com/petroleo/se-necesitan-77-trabajadores-producir-un-millon-barriles-equivalentes-vaca-muerta-n1197539"}
+      ]
+    },
+    {
+      "id": "el_calafate",
+      "nombre": "El Calafate (Glaciar Perito Moreno)",
+      "pais": "Argentina",
+      "tipo": "turismo",
+      "t0": 2000,
+      "confiabilidad": "alta para población (INDEC) y oferta hotelera (Secretaría de Turismo municipal). No se encontró una serie de empleo turístico: el motor se representa con camas hoteleras",
+      "poblacion": [
+        {"anio": 1991, "pob": 3101, "ambito": "localidad; departamento Lago Argentino 3.940", "fuente": "citypopulation_santacruz"},
+        {"anio": 2001, "pob": 6410, "ambito": "localidad; Lago Argentino 7.500", "fuente": "citypopulation_santacruz"},
+        {"anio": 2010, "pob": 16655, "ambito": "localidad; Lago Argentino 18.864", "fuente": "citypopulation_santacruz"},
+        {"anio": 2022, "pob": 22844, "ambito": "localidad, solo hogares particulares; Lago Argentino 25.586", "fuente": "citypopulation_santacruz"}
+      ],
+      "motor": [
+        {"anio": 2001, "empleos": null, "tipo": "turismo", "nota": "no se encontró una serie de empleo turístico; ver indicadores_motor (camas)", "fuente": "calafate_turismo_2023"}
+      ],
+      "indicadores_motor": {
+        "descripcion": "camas hoteleras por año (Secretaría de Turismo de El Calafate)",
+        "serie": [
+          {"anio": 2001, "camas": 2586}, {"anio": 2002, "camas": 2555}, {"anio": 2003, "camas": 2792},
+          {"anio": 2004, "camas": 3597}, {"anio": 2005, "camas": 4703}, {"anio": 2006, "camas": 5802},
+          {"anio": 2007, "camas": 6801}, {"anio": 2008, "camas": 7022}, {"anio": 2009, "camas": 7603},
+          {"anio": 2010, "camas": 7585}, {"anio": 2011, "camas": 7827}, {"anio": 2012, "camas": 7745},
+          {"anio": 2013, "camas": 7728}, {"anio": 2014, "camas": 7801}, {"anio": 2015, "camas": 7886},
+          {"anio": 2016, "camas": 7713}, {"anio": 2017, "camas": 7985}, {"anio": 2018, "camas": 8113},
+          {"anio": 2019, "camas": 8211}, {"anio": 2020, "camas": 8450}, {"anio": 2021, "camas": 5017},
+          {"anio": 2022, "camas": 6966}
+        ],
+        "fuente": "calafate_turismo_2023"
+      },
+      "secuencia": [
+        "1937: se crea el Parque Nacional Los Glaciares, que en 1981 es declarado Patrimonio de la Humanidad",
+        "Años 80: se agota la ganadería ovina y aparecen los primeros emprendimientos turísticos",
+        "1991–2001: la población se duplica, de 3.101 a 6.410",
+        "2000–2001: aeropuerto internacional (fin de 2000 según la prensa; la Secretaría de Turismo dice 2001). Atrae grandes inversiones",
+        "2002: salida de la convertibilidad, con turismo receptivo barato. Desde 2003 la presidencia de Néstor Kirchner da visibilidad al destino",
+        "2004–2009: la oferta hotelera se triplica (de 3.597 a 7.603 camas), unas 1.000 plazas por año entre 2005 y 2008",
+        "2001–2010: la población crece 160 % (6.410 → 16.655), en torno al 10,9 % anual en el departamento según docs/migracion-interna.md",
+        "2009: la crisis internacional baja la ocupación hotelera casi 20 %",
+        "2010–2019: la oferta se estanca entre 7.600 y 8.200 camas y la población sigue creciendo más despacio (+37 % entre 2010 y 2022)",
+        "2020–2021: la pandemia baja las camas a 5.017. En 2022–2023 hay recuperación"
+      ],
+      "vivienda": "En las fuentes consultadas no hay una serie de vivienda estatal (IDUV). El crecimiento fue a demanda del mercado turístico. No se encontraron datos verificados sobre déficit habitacional.",
+      "origen_migrantes": "Para los puestos calificados, trabajadores con experiencia que llegan de otros centros turísticos y estudiantes avanzados de otras provincias. Para tareas de baja calificación, mano de obra local que venía de la administración pública o del campo. En las fuentes consultadas no hay porcentajes por origen.",
+      "crisis": "La crisis internacional de 2009 bajó la ocupación hotelera casi 20 % y reveló empleo de baja calidad (polifuncional, mal pago, estacional). La pandemia de 2020–2021 bajó la oferta a 5.017 camas, con recuperación desde 2022.",
+      "lecciones": [
+        "El motor turístico necesitó una infraestructura que lo destrabara (el aeropuerto internacional de 2000–2001) y un contexto macroeconómico favorable (devaluación de 2002). Las camas se triplicaron en 5 años, con 2–3 años de retraso respecto del aeropuerto.",
+        "La población siguió a las camas: el gran salto (×2,6 entre 2001 y 2010) coincide con la expansión hotelera, y cuando las camas se estancaron (2010–2019) la población creció más lento.",
+        "El empleo turístico es estacional y de baja calidad, y el atractivo (el glaciar) es fijo. El techo lo da la capacidad de recibir turistas, no el empleo industrial."
+      ],
+      "fuentes": [
+        {"id": "citypopulation_santacruz", "cita": "City Population (Brinkhoff) con datos de INDEC, Santa Cruz, censos 1991–2022", "url": "https://www.citypopulation.de/en/argentina/santacruz/"},
+        {"id": "calafate_turismo_2023", "cita": "Municipalidad de El Calafate, Secretaría de Turismo. Informe Estadístico Temporada septiembre 2022 – abril 2023 (evolución de la oferta hotelera 2001–2022)", "url": "https://elcalafate.tur.ar/img/varios/ESTADISTICAS/informes%20pdf/INFORME%20FINAL%202022%20-2023.pdf"},
+        {"id": "schinelli_vacca", "cita": "Schinelli, D. y Vacca, C. Impacto de la crisis internacional sobre nuevos sectores dinámicos de la economía regional. El turismo en la Cuenca Austral. Revista de Estudios Regionales (UNLP/SEDICI)", "url": "https://sedici.unlp.edu.ar/bitstream/handle/10915/60191/Documento_completo.pdf"},
+        {"id": "lanacion_calafate", "cita": "La Nación. 'Auge hotelero en El Calafate'", "url": "https://www.lanacion.com.ar/propiedades/inmuebles-comerciales/auge-hotelero-en-el-calafate-nid853470"}
+      ]
+    },
+    {
+      "id": "anelo",
+      "nombre": "Añelo (Vaca Muerta)",
+      "pais": "Argentina",
+      "tipo": "polo_petrolero",
+      "t0": 2013,
+      "nota_t0": "Año del acuerdo YPF–Chevron para Loma Campana, cuando empieza el desarrollo masivo del no convencional. Es una fecha de contexto general que no se verificó en las fuentes consultadas.",
+      "confiabilidad": "alta para la población censal (INDEC). Baja para el empleo y la población flotante, que vienen de prensa con rangos muy amplios",
+      "poblacion": [
+        {"anio": 1991, "pob": 893, "ambito": "localidad; departamento 4.668", "fuente": "citypopulation_neuquen"},
+        {"anio": 2001, "pob": 1543, "ambito": "localidad; departamento 7.554", "fuente": "citypopulation_neuquen"},
+        {"anio": 2010, "pob": 2449, "ambito": "localidad; departamento 10.786", "fuente": "citypopulation_neuquen"},
+        {"anio": 2022, "pob": 6304, "ambito": "localidad, solo hogares particulares; departamento 18.166", "fuente": "citypopulation_neuquen"},
+        {"anio": 2025, "pob": 8500, "ambito": "residentes permanentes según la prensa", "estimado": true, "verificado": false, "fuente": "forbes_2025"},
+        {"anio": 2026, "pob": 10000, "ambito": "'supera los 10.000 habitantes' según una investigadora", "estimado": true, "verificado": false, "fuente": "infobae_2026"}
+      ],
+      "motor": [
+        {"anio": 2025, "empleos": null, "tipo": "petrolero", "nota": "población flotante de 15.000 a 40.000 trabajadores petroleros (rango de prensa). Muchos viajan más de 2 horas por día desde Neuquén capital", "estimado": true, "verificado": false, "fuente": "forbes_2025"},
+        {"anio": 2024, "empleos": 71678, "tipo": "petrolero", "nota": "upstream nacional, no solo Añelo; sirve como orden de magnitud. Hay unos 15 empleos indirectos por cada directo según la CEPH", "fuente": "mase_ceph_2025"}
+      ],
+      "secuencia": [
+        "1970–1980: el departamento crece 229,8 % con el avance petrolero y agrícola (antecedente)",
+        "1991–2001: la localidad crece 72,8 % con la frontera agrícola y el petróleo",
+        "2010: 2.449 habitantes",
+        "2013 en adelante: empieza el desarrollo masivo del no convencional en Vaca Muerta (fecha de contexto)",
+        "Las empresas alojan a su personal en campamentos y módulos prefabricados corporativos antes que en vivienda urbana permanente. Mucha gente viaja todos los días desde Neuquén",
+        "2010–2022: la localidad crece 157 % (2.449 → 6.304) y el departamento 68 %",
+        "2025: el IPV de Neuquén estima un faltante de más de 15.000 viviendas en el área de influencia directa de Vaca Muerta; la prensa habla de unas 20.000 camas faltantes",
+        "2026: llegan unas 1.500 personas por año. El intendente pide no mudarse sin una oferta laboral confirmada porque la infraestructura no alcanza; el 50 % de las parcelas está sin construir"
+      ],
+      "vivienda": "El mercado reaccionó a demanda y tarde. Predominan los campamentos y los módulos prefabricados de las empresas, la vivienda modular y alquileres muy caros. Una investigadora estima el déficit habitacional en 60 %, más por calidad de las viviendas que por falta de unidades. Las redes de gas, saneamiento y calles van detrás de la población.",
+      "origen_migrantes": "En las fuentes consultadas no hay datos sistemáticos. En `docs/migracion-interna.md` figura que Añelo tiene una tasa de inmigración interdepartamental de 391 por mil en 10 años (RENAPER).",
+      "crisis": "No se documentó una crisis poblacional. El riesgo señalado es la caída del precio del crudo, que reduciría la demanda de trabajo.",
+      "lecciones": [
+        "Un motor petrolero muy intensivo en capital y con rotación de personal genera mucha población flotante y poca población permanente: en 2022 la localidad tenía unos 6.300 residentes frente a 15.000–40.000 trabajadores estimados.",
+        "Si no hay vivienda, el empleo no se convierte en radicación: la gente viaja desde la capital regional (Neuquén) o vive en campamentos. En el modelo, el paso de empleo a migración permanente debe depender de la oferta de vivienda.",
+        "Aun así, la radicación permanente creció rápido (+157 % entre 2010 y 2022)."
+      ],
+      "fuentes": [
+        {"id": "citypopulation_neuquen", "cita": "City Population (Brinkhoff) con datos de INDEC, Neuquén, censos 1991–2022", "url": "https://www.citypopulation.de/en/argentina/neuquen/"},
+        {"id": "forbes_2025", "cita": "Forbes Argentina (octubre de 2025). 'La escasez de vivienda en Vaca Muerta dispara la construcción y las rentas por alquiler'", "url": "https://www.forbesargentina.com/negocios/la-escasez-vivienda-vaca-muerta-dispara-construccion-rentas-alquiler-n79409"},
+        {"id": "infobae_2026", "cita": "Infobae (19 de junio de 2026). 'El boom de Vaca Muerta pone en jaque a Añelo: la ciudad creció un 142% y la infraestructura no alcanza'", "url": "https://www.infobae.com/politica/2026/06/19/el-boom-de-vaca-muerta-pone-en-jaque-a-anelo-la-ciudad-crecio-un-142-y-la-infraestructura-no-alcanza/"},
+        {"id": "eleconomista_anelo", "cita": "El Economista. 'Añelo: la presión del boom petrolero exige más viviendas y obras' (cita al IPV de Neuquén: más de 15.000 unidades faltantes)", "url": "https://eleconomista.com.ar/energia/anelo-neuquen-presion-boom-petrolero-exige-mas-viviendas-obras-n97659"},
+        {"id": "kloster_2005", "cita": "Kloster, E. E. y otros (2005). VIII Jornadas AEPA (crecimiento intercensal por departamento, Neuquén)", "url": "https://www.aacademica.org/viiijornadasaepa/33.pdf"},
+        {"id": "mase_ceph_2025", "cita": "Mase/LM Neuquén, informe CEPH sobre empleo en hidrocarburos", "url": "https://mase.lmneuquen.com/petroleo/se-necesitan-77-trabajadores-producir-un-millon-barriles-equivalentes-vaca-muerta-n1197539"}
+      ]
+    },
+    {
+      "id": "comodoro_rivadavia",
+      "nombre": "Comodoro Rivadavia (petróleo desde 1907)",
+      "pais": "Argentina",
+      "tipo": "polo_petrolero",
+      "t0": 1907,
+      "confiabilidad": "baja: solo se verificó la población desde 1991. Las fuentes históricas (revistas del CSIC) no se pudieron descargar (error 503)",
+      "poblacion": [
+        {"anio": 1991, "pob": 124104, "ambito": "localidad; departamento Escalante 129.229", "fuente": "citypopulation_chubut"},
+        {"anio": 2001, "pob": 135632, "ambito": "localidad; Escalante 143.689", "fuente": "citypopulation_chubut"},
+        {"anio": 2010, "pob": 175196, "ambito": "localidad; Escalante 186.583", "fuente": "citypopulation_chubut"},
+        {"anio": 2022, "pob": 199369, "ambito": "localidad, solo hogares particulares; Escalante 215.453", "fuente": "citypopulation_chubut"}
+      ],
+      "motor": [
+        {"anio": 1914, "empleos": 1401, "tipo": "petrolero", "nota": "1.401 obreros petroleros, solo 3,3 % argentinos. Visto en resultados de búsqueda de una revista del CSIC; no se pudo abrir la fuente", "verificado": false, "fuente": "busqueda_csic_comodoro"}
+      ],
+      "secuencia": [
+        "1907: descubrimiento de petróleo",
+        "1922: se crea YPF; desde 1930 construye barrios, escuelas, salas de primeros auxilios y caminos en sus campamentos (fuente escolar, no verificada)",
+        "1991–2001: con la privatización de YPF la población crece solo 9 %",
+        "2001–2010: boom petrolero y de precios, +29 %"
+      ],
+      "vivienda": "Hubo campamentos de empresa: YPF y las compañías privadas construyeron barrios propios, que son el origen de la ciudad dispersa. No se verificaron cifras.",
+      "origen_migrantes": "En 1914 los obreros eran sobre todo europeos (españoles entre otros) y solo un 3,3 % argentinos (dato no verificado). Más tarde llegaron chilenos y migrantes del norte argentino; no se verificaron porcentajes.",
+      "crisis": "En los 90 la privatización de YPF llevó a despidos y estancamiento (+9 % entre 1991 y 2001). La ciudad se recuperó con el alza del precio del crudo en los 2000 (+29 % entre 2001 y 2010).",
+      "lecciones": [
+        "El caso es incompleto. Muestra la sensibilidad de la población al ciclo petrolero y a la política sobre la empresa estatal: estancamiento con la privatización y rebote con el boom de precios."
+      ],
+      "fuentes": [
+        {"id": "citypopulation_chubut", "cita": "City Population (Brinkhoff) con datos de INDEC, Chubut, censos 1991–2022", "url": "https://www.citypopulation.de/en/argentina/chubut/"},
+        {"id": "busqueda_csic_comodoro", "cita": "Revista de Estudios Americanos / Revista de Indias (CSIC), artículos sobre inmigración en Comodoro Rivadavia. Vistos solo en resultados de búsqueda", "url": "https://estudiosamericanos.revistas.csic.es/index.php/estudiosamericanos/article/download/278/283/283"}
+      ]
+    }
+  ]
+}

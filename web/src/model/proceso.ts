@@ -57,7 +57,7 @@ export interface Contexto {
 }
 
 export interface Inciertos {
-  multiplicador: number; // empleos locales por empleo del motor (Moretti 2010: 0,6–1,6)
+  multiplicador: number; // empleos locales por empleo del motor (Moretti 2010: 1,6; casos exitosos 1,7–1,9)
   captacion: number; // fracción máxima del flujo anual hacia la provincia que capta un solo lugar
   salidaDesocupados: number; // fracción de recién llegados sin trabajo que se va cada año
   vegetativo: number; // crecimiento natural anual
@@ -65,7 +65,9 @@ export interface Inciertos {
 
 // captación: entre 0,5 % y 12 % del flujo hacia la provincia en los lugares que más crecieron
 // (Pilar 1,7 %, Colón 4,3 %, Puerto Madryn 7,8 %, Confluencia 11,7 %)
-export const INCIERTOS_CENTRAL: Inciertos = { multiplicador: 1.0, captacion: 0.06, salidaDesocupados: 0.3, vegetativo: 0.01 };
+// multiplicador: calibrado con los casos que funcionaron (docs/recorridos-exitosos.md): Tierra del Fuego
+// 1987 ≈ 1,7 y Canberra 1966 ≈ 1,9 empleos locales por empleo del motor; Moretti (2010) da 1,6
+export const INCIERTOS_CENTRAL: Inciertos = { multiplicador: 1.6, captacion: 0.06, salidaDesocupados: 0.3, vegetativo: 0.01 };
 
 export interface Anio { t: number; pob: number; viviendas: number; ocupadas: number; empleos: number; ocupados: number; llegan: number; seVan: number; inversion: number }
 
@@ -202,7 +204,7 @@ export function montecarlo(ctx: Contexto, e: Estrategia, n = 500, seed = 1): Res
   const U = (a: number, b: number) => a + (b - a) * r();
   const rs: Resultado[] = [];
   for (let k = 0; k < n; k++) {
-    rs.push(simular(ctx, e, { multiplicador: U(0.5, 1.6), captacion: U(0.02, 0.12), salidaDesocupados: U(0.2, 0.4), vegetativo: U(0.006, 0.012) }));
+    rs.push(simular(ctx, e, { multiplicador: U(0.8, 2.5), captacion: U(0.02, 0.12), salidaDesocupados: U(0.2, 0.4), vegetativo: U(0.006, 0.012) }));
   }
   const pick = (f: (x: Resultado) => number) => rs.map(f);
   const pobs = pick((x) => x.pob30), vans = pick((x) => x.van);
