@@ -11,6 +11,7 @@ import CellDetail from "./ui/panels/CellDetail";
 import DiagnosticPanel, { METRICS, type DepMetric, type DepProps } from "./ui/panels/DiagnosticPanel";
 import SimulatorPanel from "./ui/panels/SimulatorPanel";
 import MethodPanel from "./ui/panels/MethodPanel";
+import CasosPanel from "./ui/panels/Casos";
 import SimplePanel from "./ui/panels/SimplePanel";
 import SimpleCellCard from "./ui/panels/SimpleCellCard";
 import { POLICY_BY_ID, type PolicyId } from "./model/policies";
@@ -20,7 +21,7 @@ import { DIV_RED_BLUE, EXCLUDED, PALETTES, SEQ_BLUE, SEQ_ORANGE, css, gradientCs
 import { VARIABLES, VAR_BY_ID, fmtVar } from "./ui/variables";
 import { SunBurst } from "./ui/art/Poster";
 
-type Tab = "aptitud" | "sitios" | "diagnostico" | "simulador" | "metodo";
+type Tab = "aptitud" | "sitios" | "diagnostico" | "simulador" | "casos" | "metodo";
 type View = "aptitud" | "robustez" | "exclusion" | "variable";
 
 const TABS: { id: Tab; nombre: string }[] = [
@@ -28,6 +29,7 @@ const TABS: { id: Tab; nombre: string }[] = [
   { id: "sitios", nombre: "Sitios" },
   { id: "simulador", nombre: "Simulador" },
   { id: "diagnostico", nombre: "Diagnóstico" },
+  { id: "casos", nombre: "Mundo" },
   { id: "metodo", nombre: "Método" },
 ];
 
@@ -505,6 +507,7 @@ export default function App() {
               <DiagnosticPanel deps={depsProps} metric={depMetric} setMetric={setDepMetric} selected={selDep} />
             )}
             {tab === "simulador" && <SimulatorPanel ds={ds} sites={sites} deps={depsProps} policy={policy} />}
+            {tab === "casos" && <CasosPanel />}
             {tab === "metodo" && <MethodPanel generado={ds.meta.generado} />}
           </div>
           </>}

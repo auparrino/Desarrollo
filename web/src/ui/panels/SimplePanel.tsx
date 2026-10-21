@@ -9,6 +9,7 @@ const FACTOR_GROUP: Record<string, string> = Object.fromEntries(FACTORS.map((f) 
 import { nearestPlace } from "../plainFacts";
 import { estimateCosts } from "../../model/costs";
 import { PolicyIcon } from "../art/Icons";
+import { CasosPolitica } from "./Casos";
 import { PlainVerdict, runAll } from "./CostBenefit";
 import { downloadCSV } from "../../model/share";
 import { useState } from "react";
@@ -197,6 +198,7 @@ export default function SimplePanel(p: Props) {
           </ul>
           {p.policy.plazo && <p className="small muted">Plazo: {p.policy.plazo}</p>}
         </div>
+        <CasosPolitica policy={p.policy.id} />
       </section>
 
       <section>

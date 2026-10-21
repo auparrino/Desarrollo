@@ -367,3 +367,14 @@ button.primary { background: var(--azul); color: #fff; border: 0; border-radius:
 .costs .total td { border-top: 2px solid var(--line); }
 .card-site.active .reasons .good { color: var(--good-ink); }
 .card-site.active .reasons .bad { color: var(--danger); }
+.casos { margin-top: 10px; border-top: 1px solid var(--grid); padding-top: 8px; }
+.casos ul, .casos-list { list-style: none; padding: 0; margin: 4px 0; }
+.caso { padding: 6px 0; border-bottom: 1px solid var(--grid); }
+.caso p { margin: 2px 0; }
+.caso-h { font-size: 0.86rem; }
+.tag.ev-E { background: var(--good-bg); color: var(--good-ink); }
+.tag.ev-O { background: #e2ebf5; color: #1f4e79; }
+.tag.ev-A { background: var(--grid); }
+.lecciones { margin-top: 10px; background: var(--paper-2); border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; }
+.lecciones ol { padding-left: 18px; margin: 4px 0; }
+.lecciones li { margin-bottom: 3px; }
