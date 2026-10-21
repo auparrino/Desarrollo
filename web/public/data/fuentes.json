@@ -1,0 +1,112 @@
+{
+ "provincias": {
+  "cita": "Instituto Geográfico Nacional (IGN), capa 'provincia', WFS oficial.",
+  "licencia": "CC BY 4.0 (IGN)",
+  "url": "https://wms.ign.gob.ar/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=ign:provincia&outputFormat=application/json&srsName=EPSG:4326"
+ },
+ "departamentos": {
+  "cita": "IGN, capa 'departamento'.",
+  "licencia": "CC BY 4.0 (IGN)",
+  "url": "https://wms.ign.gob.ar/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=ign:departamento&outputFormat=application/json&srsName=EPSG:4326"
+ },
+ "areas_protegidas": {
+  "cita": "IGN / SIB-APN, capa 'area_protegida' (nacionales y provinciales).",
+  "licencia": "CC BY 4.0 (IGN)",
+  "url": "https://wms.ign.gob.ar/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=ign:area_protegida&outputFormat=application/json&srsName=EPSG:4326"
+ },
+ "rutas_nacionales": {
+  "cita": "IGN / Dirección Nacional de Vialidad, red vial nacional.",
+  "licencia": "CC BY 4.0 (IGN)",
+  "url": "https://wms.ign.gob.ar/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=ign:vial_nacional&outputFormat=application/json&srsName=EPSG:4326"
+ },
+ "ferrocarril": {
+  "cita": "IGN / Ministerio de Transporte, red ferroviaria.",
+  "licencia": "CC BY 4.0 (IGN)",
+  "url": "https://wms.ign.gob.ar/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=ign:lineas_de_transporte_ferroviario_AN010&outputFormat=application/json&srsName=EPSG:4326"
+ },
+ "lineas_electricas": {
+  "cita": "IGN, líneas de transmisión eléctrica (AT030). Se usan las de código ten=6 (alta tensión).",
+  "licencia": "CC BY 4.0 (IGN)",
+  "url": "https://wms.ign.gob.ar/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=ign:lineas_de_energia_AT030&outputFormat=application/json&srsName=EPSG:4326"
+ },
+ "puertos": {
+  "cita": "IGN / Ministerio de Transporte, puertos.",
+  "licencia": "CC BY 4.0 (IGN)",
+  "url": "https://wms.ign.gob.ar/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=ign:puntos_de_puertos_y_muelles_BB005&outputFormat=application/json&srsName=EPSG:4326"
+ },
+ "localidades": {
+  "cita": "BAHRA (Base de Asentamientos Humanos de la República Argentina), INDEC/IGN.",
+  "licencia": "CC BY 4.0",
+  "url": "https://wms.ign.gob.ar/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=ign:localidad_bahra&outputFormat=application/json&srsName=EPSG:4326"
+ },
+ "censo2022": {
+  "cita": "INDEC, Censo Nacional de Población, Hogares y Viviendas 2022, población en viviendas particulares por radio censal.",
+  "licencia": "CC BY 4.0 (datos.gob.ar)",
+  "url": "https://infra.datos.gob.ar/catalog/indec/dataset/50/distribution/50.1/download/radios-censales-2022.csv"
+ },
+ "censo2010": {
+  "cita": "INDEC, Censo Nacional de Población, Hogares y Viviendas 2010, población por radio censal.",
+  "licencia": "CC BY 4.0 (datos.gob.ar)",
+  "url": "https://infra.datos.gob.ar/catalog/indec/dataset/50/distribution/50.4/download/radios-censales-2010.csv"
+ },
+ "worldpop": {
+  "cita": "WorldPop (2018). Global High Resolution Population Denominators, 2020, 1 km, UN-adjusted. doi:10.5258/SOTON/WP00671",
+  "licencia": "CC BY 4.0",
+  "url": "https://data.worldpop.org/GIS/Population/Global_2000_2020_1km_UNadj/2020/ARG/arg_ppp_2020_1km_Aggregated_UNadj.tif"
+ },
+ "elevacion": {
+  "cita": "WorldClim 2.1 elevación 30\" (derivada de SRTM). Fick & Hijmans (2017) doi:10.1002/joc.5086",
+  "licencia": "CC BY 4.0",
+  "url": "https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_30s_elev.zip"
+ },
+ "clima_bio": {
+  "cita": "WorldClim 2.1 variables bioclimáticas 1970-2000, 2.5'. Fick & Hijmans (2017).",
+  "licencia": "CC BY 4.0",
+  "url": "https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_2.5m_bio.zip"
+ },
+ "clima_tavg": {
+  "cita": "WorldClim 2.1 temperatura media mensual 1970-2000, 2.5'.",
+  "licencia": "CC BY 4.0",
+  "url": "https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_2.5m_tavg.zip"
+ },
+ "radiacion": {
+  "cita": "WorldClim 2.1 radiación solar incidente mensual (kJ m-2 día-1), 2.5'.",
+  "licencia": "CC BY 4.0",
+  "url": "https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_2.5m_srad.zip"
+ },
+ "aridez": {
+  "cita": "Zomer, Xu & Trabucco (2022). Version 3 of the Global Aridity Index and Potential Evapotranspiration Database. Scientific Data 9:409. doi:10.1038/s41597-022-01493-1 (v3.1)",
+  "licencia": "CC BY 4.0",
+  "url": "https://ndownloader.figshare.com/files/56300327"
+ },
+ "rios": {
+  "cita": "Lehner & Grill (2013). Global river hydrography and network routing. Hydrological Processes 27(15). doi:10.1002/hyp.9740",
+  "licencia": "HydroSHEDS License (uso libre con atribución)",
+  "url": "https://data.hydrosheds.org/file/HydroRIVERS/HydroRIVERS_v10_sa_shp.zip"
+ },
+ "sismicidad": {
+  "cita": "Pagani et al. (2023). GEM Global Seismic Hazard Map v2023.1, PGA 10% en 50 años (475 años), roca. doi:10.5281/zenodo.8409647",
+  "licencia": "CC BY-NC-SA 4.0 (uso no comercial)",
+  "url": "https://zenodo.org/records/8409647/files/GEM-GSHM_PGA-475y-rock_v2023.zip"
+ },
+ "inundacion": {
+  "cita": "Dottori et al. (2016). JRC Global flood hazard map, período de retorno 100 años. Ver Dottori et al. (2016) Adv. Water Resour. doi:10.1016/j.advwatres.2016.05.002",
+  "licencia": "CC BY 4.0 (JRC)",
+  "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/FLOODS/GlobalMaps/floodMapGL_rp100y.zip"
+ },
+ "accesibilidad": {
+  "cita": "Weiss et al. (2018). A global map of travel time to cities to assess inequalities in accessibility in 2015. Nature 553:333-336. doi:10.1038/nature25181",
+  "licencia": "CC BY 4.0",
+  "url": "https://data.malariaatlas.org/geoserver/Accessibility/wcs?service=WCS&version=2.0.1&request=GetCoverage&coverageId=Accessibility__201501_Global_Travel_Time_to_Cities&subset=Long(-74,-53)&subset=Lat(-56,-21)&format=image/geotiff"
+ },
+ "viento": {
+  "cita": "Global Wind Atlas 3 (DTU / Banco Mundial), velocidad media a 100 m. Davis et al. (2023) BAMS doi:10.1175/BAMS-D-21-0075.1",
+  "licencia": "CC BY 4.0",
+  "url": "https://globalwindatlas.info/api/gis/country/ARG/wind-speed/100"
+ },
+ "salud": {
+  "cita": "Weiss et al. (2020). Global maps of travel time to healthcare facilities. Nature Medicine 26:1835-1838. doi:10.1038/s41591-020-1059-1",
+  "licencia": "CC BY 4.0",
+  "url": "https://data.malariaatlas.org/geoserver/Accessibility/wcs?service=WCS&version=2.0.1&request=GetCoverage&coverageId=Accessibility__202001_Global_Motorized_Travel_Time_to_Healthcare&subset=Long(-74,-53)&subset=Lat(-56,-21)&format=image/geotiff"
+ }
+}

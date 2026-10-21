@@ -1,0 +1,868 @@
+{
+ "celdas": 95059,
+ "aptas": 41644,
+ "E1": {
+  "top5_por_provincia": {
+   "Buenos Aires": 34.2,
+   "Chaco": 12.9,
+   "Chubut": 12.1,
+   "Corrientes": 9.8,
+   "Santa Fe": 9.6,
+   "Misiones": 8.4,
+   "Río Negro": 4.3,
+   "Formosa": 4.1,
+   "Neuquén": 2.9,
+   "Entre Ríos": 1.7,
+   "Córdoba": 0.1
+  },
+  "sitios": [
+   {
+    "rank": 1,
+    "lugar": "Rawson, Chubut",
+    "aptitud": 0.894,
+    "km2": 84,
+    "centro": [
+     -65.31,
+     -43.12
+    ]
+   },
+   {
+    "rank": 2,
+    "lugar": "Patagones, Buenos Aires",
+    "aptitud": 0.887,
+    "km2": 461,
+    "centro": [
+     -62.84,
+     -40.77
+    ]
+   },
+   {
+    "rank": 3,
+    "lugar": "Adolfo Alsina, Río Negro",
+    "aptitud": 0.887,
+    "km2": 716,
+    "centro": [
+     -63.22,
+     -40.84
+    ]
+   },
+   {
+    "rank": 4,
+    "lugar": "Gaiman, Chubut",
+    "aptitud": 0.885,
+    "km2": 3364,
+    "centro": [
+     -65.16,
+     -43.38
+    ]
+   },
+   {
+    "rank": 5,
+    "lugar": "Rawson, Chubut",
+    "aptitud": 0.885,
+    "km2": 480,
+    "centro": [
+     -65.2,
+     -43.08
+    ]
+   },
+   {
+    "rank": 6,
+    "lugar": "Adolfo Alsina, Río Negro",
+    "aptitud": 0.884,
+    "km2": 183,
+    "centro": [
+     -63.64,
+     -40.73
+    ]
+   },
+   {
+    "rank": 7,
+    "lugar": "Patagones, Buenos Aires",
+    "aptitud": 0.884,
+    "km2": 515,
+    "centro": [
+     -63,
+     -40.72
+    ]
+   },
+   {
+    "rank": 8,
+    "lugar": "Confluencia, Neuquén",
+    "aptitud": 0.883,
+    "km2": 771,
+    "centro": [
+     -68.87,
+     -39.27
+    ]
+   },
+   {
+    "rank": 9,
+    "lugar": "Balcarce, Buenos Aires",
+    "aptitud": 0.881,
+    "km2": 2895,
+    "centro": [
+     -58.15,
+     -37.88
+    ]
+   },
+   {
+    "rank": 10,
+    "lugar": "Santo Tomé, Corrientes",
+    "aptitud": 0.879,
+    "km2": 3593,
+    "centro": [
+     -55.9,
+     -27.55
+    ]
+   },
+   {
+    "rank": 11,
+    "lugar": "Necochea, Buenos Aires",
+    "aptitud": 0.877,
+    "km2": 3040,
+    "centro": [
+     -58.93,
+     -38.47
+    ]
+   },
+   {
+    "rank": 12,
+    "lugar": "Picún Leufú, Neuquén",
+    "aptitud": 0.877,
+    "km2": 145,
+    "centro": [
+     -69.31,
+     -39.54
+    ]
+   },
+   {
+    "rank": 13,
+    "lugar": "Sarmiento, Chubut",
+    "aptitud": 0.877,
+    "km2": 122,
+    "centro": [
+     -68.81,
+     -45.73
+    ]
+   },
+   {
+    "rank": 14,
+    "lugar": "Picún Leufú, Neuquén",
+    "aptitud": 0.876,
+    "km2": 115,
+    "centro": [
+     -69.12,
+     -39.39
+    ]
+   },
+   {
+    "rank": 15,
+    "lugar": "Candelaria, Misiones",
+    "aptitud": 0.876,
+    "km2": 94,
+    "centro": [
+     -55.57,
+     -27.49
+    ]
+   }
+  ]
+ },
+ "E0": {
+  "top5_por_provincia": {
+   "Chubut": 25.4,
+   "Buenos Aires": 16.9,
+   "Chaco": 10.3,
+   "Santa Cruz": 9.3,
+   "Neuquén": 8.1,
+   "Formosa": 7.5,
+   "Río Negro": 7.3,
+   "Corrientes": 6.4,
+   "Salta": 4.4,
+   "Misiones": 2.8,
+   "Córdoba": 0.9,
+   "Tucumán": 0.4,
+   "Jujuy": 0.3
+  },
+  "sitios": [
+   {
+    "rank": 1,
+    "lugar": "Gaiman, Chubut",
+    "aptitud": 0.884,
+    "km2": 6938,
+    "centro": [
+     -65.16,
+     -43.38
+    ]
+   },
+   {
+    "rank": 2,
+    "lugar": "Escalante, Chubut",
+    "aptitud": 0.876,
+    "km2": 6118,
+    "centro": [
+     -67.68,
+     -45.41
+    ]
+   },
+   {
+    "rank": 3,
+    "lugar": "El Cuy, Río Negro",
+    "aptitud": 0.868,
+    "km2": 2149,
+    "centro": [
+     -68.87,
+     -39.27
+    ]
+   },
+   {
+    "rank": 4,
+    "lugar": "Adolfo Alsina, Río Negro",
+    "aptitud": 0.864,
+    "km2": 1029,
+    "centro": [
+     -63.17,
+     -40.93
+    ]
+   },
+   {
+    "rank": 5,
+    "lugar": "Patagones, Buenos Aires",
+    "aptitud": 0.86,
+    "km2": 461,
+    "centro": [
+     -62.79,
+     -40.7
+    ]
+   },
+   {
+    "rank": 6,
+    "lugar": "Patagones, Buenos Aires",
+    "aptitud": 0.86,
+    "km2": 515,
+    "centro": [
+     -63,
+     -40.72
+    ]
+   },
+   {
+    "rank": 7,
+    "lugar": "Corpen Aike, Santa Cruz",
+    "aptitud": 0.859,
+    "km2": 1097,
+    "centro": [
+     -69.27,
+     -50.28
+    ]
+   },
+   {
+    "rank": 8,
+    "lugar": "Picún Leufú, Neuquén",
+    "aptitud": 0.857,
+    "km2": 146,
+    "centro": [
+     -69.51,
+     -39.69
+    ]
+   },
+   {
+    "rank": 9,
+    "lugar": "Güer Aike, Santa Cruz",
+    "aptitud": 0.856,
+    "km2": 1255,
+    "centro": [
+     -69.44,
+     -51.56
+    ]
+   },
+   {
+    "rank": 10,
+    "lugar": "Confluencia, Neuquén",
+    "aptitud": 0.856,
+    "km2": 367,
+    "centro": [
+     -68.7,
+     -38.53
+    ]
+   },
+   {
+    "rank": 11,
+    "lugar": "Confluencia, Neuquén",
+    "aptitud": 0.855,
+    "km2": 255,
+    "centro": [
+     -68.47,
+     -38.87
+    ]
+   },
+   {
+    "rank": 12,
+    "lugar": "Sarmiento, Chubut",
+    "aptitud": 0.855,
+    "km2": 92,
+    "centro": [
+     -69.1,
+     -45.54
+    ]
+   },
+   {
+    "rank": 13,
+    "lugar": "Confluencia, Neuquén",
+    "aptitud": 0.855,
+    "km2": 201,
+    "centro": [
+     -69.08,
+     -38.83
+    ]
+   },
+   {
+    "rank": 14,
+    "lugar": "Palpalá, Jujuy",
+    "aptitud": 0.854,
+    "km2": 68,
+    "centro": [
+     -65.19,
+     -24.15
+    ]
+   },
+   {
+    "rank": 15,
+    "lugar": "Corpen Aike, Santa Cruz",
+    "aptitud": 0.853,
+    "km2": 218,
+    "centro": [
+     -68.69,
+     -49.79
+    ]
+   }
+  ]
+ },
+ "E2": {
+  "top5_por_provincia": {
+   "Chubut": 25.2,
+   "Salta": 16.5,
+   "Formosa": 13.9,
+   "Santa Cruz": 12.7,
+   "Misiones": 11.1,
+   "Chaco": 7.6,
+   "Neuquén": 6,
+   "Tucumán": 3.2,
+   "Río Negro": 2.3,
+   "Jujuy": 1.4,
+   "Catamarca": 0
+  },
+  "sitios": [
+   {
+    "rank": 1,
+    "lugar": "Rawson, Chubut",
+    "aptitud": 0.91,
+    "km2": 84,
+    "centro": [
+     -65.31,
+     -43.12
+    ]
+   },
+   {
+    "rank": 2,
+    "lugar": "Gaiman, Chubut",
+    "aptitud": 0.907,
+    "km2": 4760,
+    "centro": [
+     -66.17,
+     -43.49
+    ]
+   },
+   {
+    "rank": 3,
+    "lugar": "Rawson, Chubut",
+    "aptitud": 0.9,
+    "km2": 508,
+    "centro": [
+     -65.2,
+     -43.08
+    ]
+   },
+   {
+    "rank": 4,
+    "lugar": "Escalante, Chubut",
+    "aptitud": 0.897,
+    "km2": 5757,
+    "centro": [
+     -68.81,
+     -45.73
+    ]
+   },
+   {
+    "rank": 5,
+    "lugar": "Sarmiento, Chubut",
+    "aptitud": 0.896,
+    "km2": 92,
+    "centro": [
+     -68.97,
+     -45.56
+    ]
+   },
+   {
+    "rank": 6,
+    "lugar": "Güer Aike, Santa Cruz",
+    "aptitud": 0.894,
+    "km2": 2724,
+    "centro": [
+     -69.41,
+     -51.76
+    ]
+   },
+   {
+    "rank": 7,
+    "lugar": "General José de San Martín, Salta",
+    "aptitud": 0.887,
+    "km2": 3239,
+    "centro": [
+     -63.84,
+     -22.78
+    ]
+   },
+   {
+    "rank": 8,
+    "lugar": "Metán, Salta",
+    "aptitud": 0.884,
+    "km2": 467,
+    "centro": [
+     -64.98,
+     -25.6
+    ]
+   },
+   {
+    "rank": 9,
+    "lugar": "Palpalá, Jujuy",
+    "aptitud": 0.882,
+    "km2": 130,
+    "centro": [
+     -65.19,
+     -24.15
+    ]
+   },
+   {
+    "rank": 10,
+    "lugar": "La Caldera, Salta",
+    "aptitud": 0.881,
+    "km2": 395,
+    "centro": [
+     -65.31,
+     -24.43
+    ]
+   },
+   {
+    "rank": 11,
+    "lugar": "General Manuel Belgrano, Misiones",
+    "aptitud": 0.881,
+    "km2": 2014,
+    "centro": [
+     -54.11,
+     -25.67
+    ]
+   },
+   {
+    "rank": 12,
+    "lugar": "Picún Leufú, Neuquén",
+    "aptitud": 0.881,
+    "km2": 349,
+    "centro": [
+     -69.31,
+     -39.54
+    ]
+   },
+   {
+    "rank": 13,
+    "lugar": "La Viña, Salta",
+    "aptitud": 0.88,
+    "km2": 625,
+    "centro": [
+     -65.48,
+     -25.21
+    ]
+   },
+   {
+    "rank": 14,
+    "lugar": "Corpen Aike, Santa Cruz",
+    "aptitud": 0.88,
+    "km2": 752,
+    "centro": [
+     -69.2,
+     -50.31
+    ]
+   },
+   {
+    "rank": 15,
+    "lugar": "Iguazú, Misiones",
+    "aptitud": 0.878,
+    "km2": 625,
+    "centro": [
+     -54.44,
+     -25.74
+    ]
+   }
+  ]
+ },
+ "E3": {
+  "top5_por_provincia": {
+   "Buenos Aires": 34.7,
+   "Santa Fe": 14.5,
+   "Chaco": 12.7,
+   "Corrientes": 10.2,
+   "Misiones": 8.7,
+   "Chubut": 4.9,
+   "Formosa": 4.5,
+   "Río Negro": 4.3,
+   "Neuquén": 2.7,
+   "Entre Ríos": 2.4,
+   "Córdoba": 0.3,
+   "Santa Cruz": 0
+  },
+  "sitios": [
+   {
+    "rank": 1,
+    "lugar": "Patagones, Buenos Aires",
+    "aptitud": 0.915,
+    "km2": 461,
+    "centro": [
+     -62.84,
+     -40.77
+    ]
+   },
+   {
+    "rank": 2,
+    "lugar": "Adolfo Alsina, Río Negro",
+    "aptitud": 0.914,
+    "km2": 716,
+    "centro": [
+     -63.22,
+     -40.84
+    ]
+   },
+   {
+    "rank": 3,
+    "lugar": "Patagones, Buenos Aires",
+    "aptitud": 0.912,
+    "km2": 515,
+    "centro": [
+     -63,
+     -40.72
+    ]
+   },
+   {
+    "rank": 4,
+    "lugar": "Adolfo Alsina, Río Negro",
+    "aptitud": 0.911,
+    "km2": 209,
+    "centro": [
+     -63.64,
+     -40.73
+    ]
+   },
+   {
+    "rank": 5,
+    "lugar": "Confluencia, Neuquén",
+    "aptitud": 0.909,
+    "km2": 942,
+    "centro": [
+     -68.87,
+     -39.27
+    ]
+   },
+   {
+    "rank": 6,
+    "lugar": "Santo Tomé, Corrientes",
+    "aptitud": 0.908,
+    "km2": 3903,
+    "centro": [
+     -55.9,
+     -27.55
+    ]
+   },
+   {
+    "rank": 7,
+    "lugar": "Balcarce, Buenos Aires",
+    "aptitud": 0.908,
+    "km2": 4567,
+    "centro": [
+     -58.15,
+     -37.88
+    ]
+   },
+   {
+    "rank": 8,
+    "lugar": "Rawson, Chubut",
+    "aptitud": 0.908,
+    "km2": 109,
+    "centro": [
+     -65.16,
+     -43.38
+    ]
+   },
+   {
+    "rank": 9,
+    "lugar": "Gaiman, Chubut",
+    "aptitud": 0.907,
+    "km2": 543,
+    "centro": [
+     -66.23,
+     -43.51
+    ]
+   },
+   {
+    "rank": 10,
+    "lugar": "Necochea, Buenos Aires",
+    "aptitud": 0.907,
+    "km2": 3336,
+    "centro": [
+     -58.93,
+     -38.47
+    ]
+   },
+   {
+    "rank": 11,
+    "lugar": "Picún Leufú, Neuquén",
+    "aptitud": 0.907,
+    "km2": 174,
+    "centro": [
+     -69.31,
+     -39.54
+    ]
+   },
+   {
+    "rank": 12,
+    "lugar": "Picún Leufú, Neuquén",
+    "aptitud": 0.906,
+    "km2": 87,
+    "centro": [
+     -69.12,
+     -39.39
+    ]
+   },
+   {
+    "rank": 13,
+    "lugar": "Gaiman, Chubut",
+    "aptitud": 0.905,
+    "km2": 140,
+    "centro": [
+     -65.56,
+     -43.25
+    ]
+   },
+   {
+    "rank": 14,
+    "lugar": "Ituzaingó, Corrientes",
+    "aptitud": 0.905,
+    "km2": 187,
+    "centro": [
+     -56.1,
+     -27.46
+    ]
+   },
+   {
+    "rank": 15,
+    "lugar": "General Donovan, Chaco",
+    "aptitud": 0.905,
+    "km2": 90,
+    "centro": [
+     -59.34,
+     -27.11
+    ]
+   }
+  ]
+ },
+ "E1-OWA0.3": {
+  "top5_por_provincia": {
+   "Buenos Aires": 29.2,
+   "Chaco": 20.3,
+   "Chubut": 14.4,
+   "Corrientes": 12.2,
+   "Misiones": 6.7,
+   "Formosa": 5.4,
+   "Río Negro": 4.7,
+   "Neuquén": 3.6,
+   "Santa Fe": 2.9,
+   "Córdoba": 0.6
+  },
+  "sitios": [
+   {
+    "rank": 1,
+    "lugar": "Rawson, Chubut",
+    "aptitud": 0.816,
+    "km2": 84,
+    "centro": [
+     -65.31,
+     -43.12
+    ]
+   },
+   {
+    "rank": 2,
+    "lugar": "Rawson, Chubut",
+    "aptitud": 0.802,
+    "km2": 536,
+    "centro": [
+     -65.2,
+     -43.08
+    ]
+   },
+   {
+    "rank": 3,
+    "lugar": "Gaiman, Chubut",
+    "aptitud": 0.789,
+    "km2": 3787,
+    "centro": [
+     -65.16,
+     -43.38
+    ]
+   },
+   {
+    "rank": 4,
+    "lugar": "Patagones, Buenos Aires",
+    "aptitud": 0.783,
+    "km2": 563,
+    "centro": [
+     -62.84,
+     -40.77
+    ]
+   },
+   {
+    "rank": 5,
+    "lugar": "Patagones, Buenos Aires",
+    "aptitud": 0.782,
+    "km2": 593,
+    "centro": [
+     -63,
+     -40.72
+    ]
+   },
+   {
+    "rank": 6,
+    "lugar": "Adolfo Alsina, Río Negro",
+    "aptitud": 0.782,
+    "km2": 1159,
+    "centro": [
+     -63.22,
+     -40.84
+    ]
+   },
+   {
+    "rank": 7,
+    "lugar": "El Cuy, Río Negro",
+    "aptitud": 0.775,
+    "km2": 830,
+    "centro": [
+     -68.87,
+     -39.27
+    ]
+   },
+   {
+    "rank": 8,
+    "lugar": "Escalante, Chubut",
+    "aptitud": 0.766,
+    "km2": 774,
+    "centro": [
+     -67.62,
+     -45.44
+    ]
+   },
+   {
+    "rank": 9,
+    "lugar": "Santo Tomé, Corrientes",
+    "aptitud": 0.766,
+    "km2": 4029,
+    "centro": [
+     -55.9,
+     -27.55
+    ]
+   },
+   {
+    "rank": 10,
+    "lugar": "Balcarce, Buenos Aires",
+    "aptitud": 0.765,
+    "km2": 1752,
+    "centro": [
+     -58.15,
+     -37.88
+    ]
+   },
+   {
+    "rank": 11,
+    "lugar": "Escalante, Chubut",
+    "aptitud": 0.763,
+    "km2": 1032,
+    "centro": [
+     -68.81,
+     -45.73
+    ]
+   },
+   {
+    "rank": 12,
+    "lugar": "General Pueyrredón, Buenos Aires",
+    "aptitud": 0.762,
+    "km2": 226,
+    "centro": [
+     -57.74,
+     -38.06
+    ]
+   },
+   {
+    "rank": 13,
+    "lugar": "Lobería, Buenos Aires",
+    "aptitud": 0.762,
+    "km2": 248,
+    "centro": [
+     -58.62,
+     -38.46
+    ]
+   },
+   {
+    "rank": 14,
+    "lugar": "General Donovan, Chaco",
+    "aptitud": 0.761,
+    "km2": 120,
+    "centro": [
+     -59.34,
+     -27.11
+    ]
+   },
+   {
+    "rank": 15,
+    "lugar": "1° de Mayo, Chaco",
+    "aptitud": 0.761,
+    "km2": 271,
+    "centro": [
+     -59.05,
+     -27.24
+    ]
+   }
+  ]
+ },
+ "jaccard_top5": {
+  "E1~E0": 0.4,
+  "E1~E2": 0.17,
+  "E1~E3": 0.8,
+  "E1~E1-OWA0.3": 0.68,
+  "E0~E2": 0.39,
+  "E0~E3": 0.33,
+  "E0~E1-OWA0.3": 0.46,
+  "E2~E3": 0.13,
+  "E2~E1-OWA0.3": 0.19,
+  "E3~E1-OWA0.3": 0.57
+ },
+ "montecarlo_E1": {
+  "celdas_prob_ge_90": 1104,
+  "por_provincia_pct": {
+   "Buenos Aires": 41.8,
+   "Corrientes": 15.1,
+   "Chaco": 12.5,
+   "Santa Fe": 9.6,
+   "Chubut": 8.8,
+   "Río Negro": 4.5,
+   "Misiones": 4.3,
+   "Neuquén": 2.4,
+   "Formosa": 0.5,
+   "Entre Ríos": 0.5
+  }
+ }
+}

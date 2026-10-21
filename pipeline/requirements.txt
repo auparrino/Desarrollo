@@ -1,0 +1,10 @@
+numpy>=2.0
+pandas>=2.2
+geopandas>=1.0
+shapely>=2.0
+pyogrio>=0.9
+rasterio>=1.4
+h3>=4.1
+h3ronpy>=0.22
+pyarrow>=16
+scipy>=1.13
