@@ -89,13 +89,16 @@ No accesibles desde este entorno: `geointa.inta.gob.ar` y `visor.geointa.inta.go
 - **Licencia:** CC (licencia libre), según el servicio de Ambiente. Hay que citar al Ministerio de Ambiente y a las autoridades provinciales.
 - **Procesamiento:**
   - El GeoJSON crudo pesa 1,35 GB en una sola línea. Se partió por feature (`data/raw/restricciones/otbn_split/`) y se procesó de a uno.
-  - Las geometrías se simplificaron con tolerancia de 0,0001° (unos 10 m), mucho menor que la celda de 30″ (unos 900 m), y se repararon.
+  - Las geometrías del gpkg se simplificaron parte por parte con tolerancia de 0,0001° (unos 10 m), mucho menor que la celda de 30″ (unos 900 m), y se repararon con `make_valid`.
+  - Algunos polígonos tienen más de 100.000 huecos. En ellos se rellenaron los huecos menores a 2·10⁻⁵ grados² (unos 0,2 km², subpíxel): sin eso, `make_valid` tardaba decenas de minutos por polígono.
+  - Por ese paso, 3 de los 66 multipolígonos quedan con partes que se tocan o solapan (`is_valid = False`). Si se van a hacer operaciones de overlay, aplicar `make_valid` antes.
+  - **El raster `otbn_30s.tif` se generó a partir de las geometrías originales**, sin simplificar ni rellenar.
 - **Conteos:**
   - 66 multipolígonos: una fila por provincia y categoría.
   - 23 provincias. CABA no tiene OTBN.
   - Córdoba y Santa Fe no tienen categoría III.
   - Santa Cruz solo tiene I y II.
-  - Superficie por categoría: OTBN_AREAS.
+  - Superficie por categoría, calculada sobre `otbn_30s.tif`: I = 112 mil km², II = 323 mil km², III = 103 mil km². El total es de unos 539 mil km² (53,9 Mha), coherente con las ~53,6 Mha que informa la Nación.
 
 **Campos de `otbn.gpkg`** (capa `otbn`):
 
