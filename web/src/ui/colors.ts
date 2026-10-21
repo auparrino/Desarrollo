@@ -12,8 +12,14 @@ export const SEQ_OCRE = ["#f7e9c4", "#f0cf85", "#e2a531", "#c98b2b", "#9a6514", 
 export const SEQ_ROJO = ["#f7d9d3", "#eda89c", "#de6e5d", "#b8322a", "#8f241e", "#651813", "#3d0e0b"].map(hex);
 export const EXCLUDED: RGB = [137, 135, 129];
 
-/** Paletas secuenciales de un solo matiz, de claro a oscuro. */
-export const PALETTES = { azul: SEQ_BLUE, ocre: SEQ_OCRE, rojo: SEQ_ROJO } as const;
+// Paletas perceptualmente uniformes de seaborn/matplotlib (de claro = bajo a oscuro = alto).
+export const MAKO = ["#def5e5", "#8ad9b1", "#40b7ad", "#348fa7", "#37659e", "#413d7b", "#2e1e3c", "#0b0405"].map(hex);
+export const ROCKET = ["#faebdd", "#f6b48f", "#f37651", "#e13342", "#ad1759", "#701f57", "#36193e", "#03051a"].map(hex);
+export const CREST = ["#a5cd90", "#79b791", "#56a18f", "#3c8a8d", "#2d7289", "#225b84", "#25427b", "#2c3172"].map(hex);
+export const VIRIDIS = ["#fde725", "#b5de2b", "#6ece58", "#35b779", "#1f9e89", "#26828e", "#31688e", "#3e4989", "#482878", "#440154"].map(hex);
+
+/** Paletas secuenciales disponibles (la primera es la predeterminada). */
+export const PALETTES = { mako: MAKO, rocket: ROCKET, crest: CREST, viridis: VIRIDIS, azul: SEQ_BLUE } as const;
 export type PaletteId = keyof typeof PALETTES;
 
 export function ramp(stops: RGB[], t: number): RGB {

@@ -66,7 +66,7 @@ export default function CriteriaPanel(p: Props) {
         <select value={p.policyId} onChange={(e) => p.setPolicy(e.target.value as PolicyId)}>
           {POLICIES.map((x) => (
             <option key={x.id} value={x.id}>
-              {x.icono} {x.nombre}
+              {x.nombre}
             </option>
           ))}
         </select>

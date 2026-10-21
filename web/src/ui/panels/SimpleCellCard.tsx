@@ -62,7 +62,7 @@ export default function SimpleCellCard(p: Props) {
                     {MARK[v]}
                   </span>
                   <span>
-                    {x.icono} {x.titulo}
+                    {x.titulo}
                   </span>
                   <span className="score">
                     <span className="bar">
@@ -121,7 +121,7 @@ export default function SimpleCellCard(p: Props) {
       <ul className="facts">
         {facts(p.ds, p.i).map((f) => (
           <li key={f.texto}>
-            <span aria-hidden>{f.icono}</span> {f.texto}
+            {f.texto}
           </li>
         ))}
       </ul>

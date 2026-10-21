@@ -107,7 +107,7 @@ export default function App() {
   const [sheet, setSheet] = useState(true);
   const [basemap, setBasemap] = useState<Basemap>("lito");
   const [escala, setEscala] = useState<"hex" | "dep" | "prov">("hex");
-  const [paleta, setPaleta] = useState<PaletteId>("azul");
+  const [paleta, setPaleta] = useState<PaletteId>("mako");
   const pal = PALETTES[paleta];
   const CLASS_COLORS = useMemo(() => classColors(pal), [pal]);
   const [policyId, setPolicyId] = useState<PolicyId>("ciudad_nueva");
@@ -412,7 +412,6 @@ export default function App() {
             <p className="small">Dónde crecer · cómo poblar · cuánto cuesta</p>
           </div>
         </div>
-        <div className="ribbon" aria-hidden>¡La Argentina crece en todo su territorio!</div>
         <div className="mode" role="group" aria-label="Modo de uso">
           <button className={!expert ? "on" : ""} onClick={() => setMode("simple")}>Simple</button>
           <button className={expert ? "on" : ""} onClick={() => setMode("experto")}>Experto</button>
@@ -536,7 +535,7 @@ export default function App() {
             </div>
             <div className="seg-mini" role="group" aria-label="Paleta">
               {(Object.keys(PALETTES) as PaletteId[]).map((k) => (
-                <button key={k} className={paleta === k ? "on" : ""} onClick={() => setPaleta(k)} title={`Paleta ${k}`}>
+                <button key={k} className={paleta === k ? "on" : ""} onClick={() => setPaleta(k)} title={`Paleta ${k}`} aria-label={`Paleta ${k}`}>
                   <span className="pal" style={{ background: gradientCss(PALETTES[k]) }} />
                 </button>
               ))}

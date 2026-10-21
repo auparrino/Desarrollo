@@ -1,0 +1,704 @@
+[
+  {
+    "id": "cn-desarrollo-oeste",
+    "pais": "China",
+    "programa": "Gran Desarrollo del Oeste (Xibu Da Kaifa)",
+    "periodo": "2000–presente",
+    "instrumento_app": [
+      "polos",
+      "intermedias"
+    ],
+    "tipo_instrumento": "Inversión pública e incentivo fiscal",
+    "costo": "Unos 2,2 billones de yuanes en 120 obras clave entre 2000 y 2009, según datos oficiales citados por la prensa [A]",
+    "resultado": "El PBI de las provincias del oeste creció 1,6 puntos por año más que el de las provincias comparables, pero no aumentaron ni el empleo no agrícola ni los salarios. El crecimiento vino de la inversión física, no de la productividad.",
+    "evidencia": "E",
+    "leccion": "Gastar mucho en obras hace subir el PBI de una región, pero si no crea empleo, la gente no se queda.",
+    "lat": 33.0,
+    "lon": 98.0,
+    "fuente": "Jia, Ma, Qin & Wang (2020), European Economic Review 123:103398. doi:10.1016/j.euroecorev.2020.103398"
+  },
+  {
+    "id": "cn-hukou",
+    "pais": "China",
+    "programa": "Sistema de registro hukou y su reforma (Plan Nacional de Nueva Urbanización)",
+    "periodo": "1958–presente; reforma desde 2014",
+    "instrumento_app": [
+      "intermedias"
+    ],
+    "tipo_instrumento": "Regla migratoria interna (permiso de residencia)",
+    "costo": "No aplica (es una regla, no un gasto)",
+    "resultado": "Bajar los costos de migrar y de comerciar dentro del país explicó el 36 % del crecimiento de la productividad del trabajo entre 2000 y 2005. En 2023 el 66,16 % de la población vivía en ciudades, pero una parte grande no tiene registro urbano y no accede a todos los servicios.",
+    "evidencia": "O",
+    "leccion": "Facilitar que la gente se mude a donde hay trabajo suele rendir más que retenerla con trabas.",
+    "lat": 35.9,
+    "lon": 104.2,
+    "fuente": "Tombe & Zhu (2019), American Economic Review 109(5):1843–72. doi:10.1257/aer.20150811; urbanización 2023: Xinhua, https://www.news.cn/politics/20240923/6a5dade56e6b43749b08d7838f6c6fb5/c.html"
+  },
+  {
+    "id": "cn-xiongan",
+    "pais": "China",
+    "programa": "Nueva Área de Xiong'an",
+    "periodo": "2017–presente",
+    "instrumento_app": [
+      "ciudad_nueva",
+      "capital"
+    ],
+    "tipo_instrumento": "Nueva ciudad y traslado de empresas estatales y universidades",
+    "costo": "Más de 1 billón de yuanes de inversión acumulada a fines de 2025 (Xinhua) [O]",
+    "resultado": "La población pasó de 1,2 M (censo 2020, ya incluía los tres condados originales) a unos 1,4 M en 2025. Se instalaron las sedes de 3 empresas estatales centrales, más de 400 filiales y más de 4.000 empresas de Pekín.",
+    "evidencia": "O",
+    "leccion": "Una ciudad nueva crece cuando el Estado le manda empleadores reales, no solo viviendas.",
+    "lat": 39.03,
+    "lon": 115.95,
+    "fuente": "Xinhua (3/12/2025), https://www.news.cn/enterprise/20251203/b3bb6648f8034cdd969b35c5b07a6e02/c.html; China Daily (12/8/2017), https://www.chinadaily.com.cn/china/2017-08/12/content_30507985.htm"
+  },
+  {
+    "id": "kr-ciudades-innovacion",
+    "pais": "Corea del Sur",
+    "programa": "Ciudades de la Innovación (traslado de 153 instituciones públicas)",
+    "periodo": "2005–2019",
+    "instrumento_app": [
+      "intermedias",
+      "capital"
+    ],
+    "tipo_instrumento": "Traslado de agencias públicas",
+    "costo": "Sin costo total verificado. En 2023 las instituciones trasladadas gastaron 3,14 billones de wones (unos USD 2.300 M) en compras y aportes regionales [A]",
+    "resultado": "Se trasladaron 153 instituciones, 112 de ellas a 10 Ciudades de la Innovación. Llegaron 234.684 residentes nuevos sobre 267.869 previstos (88 %). Solo el 40 % de los empleados se mudó con su familia. La región de Seúl pasó a tener más de la mitad de la población del país (50,2 % en 2020). Un estudio cuasiexperimental encuentra que las ciudades receptoras atrajeron más jóvenes que el grupo de control, sobre todo en sitios en las afueras.",
+    "evidencia": "E",
+    "leccion": "Mudar oficinas públicas atrae algo de gente joven, pero no alcanza para frenar a la capital si las familias no se mudan.",
+    "lat": 35.02,
+    "lon": 126.79,
+    "fuente": "Kang, Lee & Kim (2024), Urban Studies 61(5):900–922. doi:10.1177/00420980231193567; Bizhankook (31/8/2026), https://en.bizhankook.com/articles/public-institution-relocation-report-card.html; Korea Times (18/6/2025), https://www.koreatimes.co.kr/amp/southkorea/society/20250618/koreas-innovation-city-dream-stumbles-on-poor-planning-and-policy-drift"
+  },
+  {
+    "id": "kr-sejong",
+    "pais": "Corea del Sur",
+    "programa": "Ciudad Administrativa Multifuncional de Sejong",
+    "periodo": "2005–presente",
+    "instrumento_app": [
+      "capital",
+      "ciudad_nueva"
+    ],
+    "tipo_instrumento": "Nueva ciudad y traslado de ministerios",
+    "costo": "Se suele citar 22,5 billones de wones [no verificado]",
+    "resultado": "La meta original era 500.000 habitantes para 2030. La población real ronda los 390.000–400.000 (2025–2026). La región de Seúl siguió creciendo.",
+    "evidencia": "A",
+    "leccion": "Trasladar ministerios crea una ciudad mediana, no una nueva capital económica.",
+    "lat": 36.48,
+    "lon": 127.29,
+    "fuente": "Ver docs/politicas-territoriales.md §1.1; Al Jazeera (31/5/2025), https://www.aljazeera.com/news/2025/5/31/south-koreas-presidential-favourite-has-plans-for-new-de-facto-capital"
+  },
+  {
+    "id": "jp-chiho-sosei",
+    "pais": "Japón",
+    "programa": "Chihō Sōsei (revitalización regional) 1.0 y 2.0",
+    "periodo": "2014–presente",
+    "instrumento_app": [
+      "pueblos",
+      "intermedias"
+    ],
+    "tipo_instrumento": "Transferencias a municipios, subsidios a la mudanza y donaciones con deducción fiscal",
+    "costo": "Unos 1,5 billones de yenes acumulados en la versión 1.0, según el Japan Institute for Local Government citado por ISVD [A]",
+    "resultado": "La meta de igualar los flujos de entrada y salida de Tokio no se cumplió durante 11 años seguidos. En 2024 la región de Tokio ganó 135.843 personas netas. El gobierno lanzó la versión 2.0 (2025–2034) sin una evaluación completa de la 1.0.",
+    "evidencia": "O",
+    "leccion": "Diez años de subsidios a los pueblos no frenaron la migración hacia Tokio.",
+    "lat": 39.72,
+    "lon": 140.1,
+    "fuente": "Yokota (13/5/2026), Institute for Social Vision Design, https://isvd.or.jp/en/columns/regional-revitalization-2-kankeijinko; ver docs/politicas-territoriales.md §4"
+  },
+  {
+    "id": "jp-agencia-cultura",
+    "pais": "Japón",
+    "programa": "Traslado de la Agencia de Asuntos Culturales a Kioto",
+    "periodo": "Decidido en 2016; traslado en 2023",
+    "instrumento_app": [
+      "intermedias"
+    ],
+    "tipo_instrumento": "Traslado de agencias públicas",
+    "costo": "Sin dato verificado",
+    "resultado": "Es el primer organismo nacional que movió su sede fuera de Tokio (27/3/2023). Las funciones parlamentarias y diplomáticas siguen en Tokio.",
+    "evidencia": "A",
+    "leccion": "Trasladar una sola agencia es un gesto simbólico; no cambia el mapa del empleo.",
+    "lat": 35.01,
+    "lon": 135.77,
+    "fuente": "Agencia de Asuntos Culturales, https://www.bunka.go.jp/english/pr/Timeline_of_the_Agency/index.html; Japan Times (27/3/2023), https://japantimes.co.jp/news/2023/03/27/national/culture-agency-kyoto"
+  },
+  {
+    "id": "ru-hectarea",
+    "pais": "Rusia",
+    "programa": "Hectárea del Lejano Oriente (tierra gratis)",
+    "periodo": "2016–presente",
+    "instrumento_app": [
+      "pueblos"
+    ],
+    "tipo_instrumento": "Tierra gratis",
+    "costo": "Sin costo fiscal publicado; el Estado ofreció hasta 1 hectárea gratis por persona",
+    "resultado": "Recibieron tierra 151.103 personas en el Lejano Oriente (98.000 ha), pero solo unas 35.000 la registraron como propiedad o arriendo. El 53 % la usa para construir una casa. La prensa y los investigadores coinciden en que atrajo sobre todo a residentes locales y no frenó la pérdida de población de la región.",
+    "evidencia": "O",
+    "leccion": "Regalar tierra sin trabajo ni servicios no atrae pobladores nuevos: la usan los que ya viven ahí.",
+    "lat": 43.12,
+    "lon": 131.89,
+    "fuente": "Corporación de Desarrollo del Lejano Oriente y el Ártico (27/8/2025), https://erdc.ru/en/news/svyshe-150-tysyach-chelovek-poluchili-zemlyu-po-programme-gektar-na-dalnem-vostoke/; RFE/RL (20/9/2020), https://www.rferl.org/a/on-russia-s-far-eastern-frontier-acres-of-free-land-but-little-interest/30848156.html"
+  },
+  {
+    "id": "kz-astana",
+    "pais": "Kazajistán",
+    "programa": "Traslado de la capital a Astaná",
+    "periodo": "1997–presente",
+    "instrumento_app": [
+      "capital",
+      "ciudad_nueva"
+    ],
+    "tipo_instrumento": "Traslado de capital",
+    "costo": "Sin dato verificado",
+    "resultado": "Pasó de unos 280.000 habitantes (1997) a más de 1,3 M. Almaty sigue siendo el centro económico.",
+    "evidencia": "A",
+    "leccion": "Una capital nueva crece, pero la ciudad más grande del país no deja de ser la principal.",
+    "lat": 51.17,
+    "lon": 71.45,
+    "fuente": "Ver docs/politicas-territoriales.md §1.1 (fuentes [A])"
+  },
+  {
+    "id": "kz-reasentamiento",
+    "pais": "Kazajistán",
+    "programa": "Programas de reasentamiento del sur al norte (Enbek, Serpin-2050) y de repatriados (kandas)",
+    "periodo": "2017–presente",
+    "instrumento_app": [
+      "intermedias",
+      "pueblos"
+    ],
+    "tipo_instrumento": "Subsidio a la mudanza, alquiler y becas",
+    "costo": "Sin dato verificado",
+    "resultado": "Entre 2017 y 2021 se mudaron algo más de 32.000 personas, y la mitad no estaba en condiciones de trabajar. En 2024 el presidente del Senado reconoció que los programas fracasaron.",
+    "evidencia": "A",
+    "leccion": "Pagar la mudanza no alcanza si el destino no ofrece trabajo y vivienda que la gente quiera.",
+    "lat": 54.87,
+    "lon": 69.15,
+    "fuente": "Eurasianet (20/2/2024), https://eurasianet.org/kazakhstan-population-resettlement-program-declared-a-failure; bne IntelliNews (29/2/2024), https://www.intellinews.com/kazakhstan-population-resettlement-programmes-declared-a-failure-314724"
+  },
+  {
+    "id": "id-transmigrasi",
+    "pais": "Indonesia",
+    "programa": "Transmigrasi (reasentamiento de Java a otras islas)",
+    "periodo": "1950–2015 (pico en 1979–1988)",
+    "instrumento_app": [
+      "pueblos",
+      "ciudad_nueva"
+    ],
+    "tipo_instrumento": "Tierra gratis, vivienda y traslado organizado",
+    "costo": "Sin cifra total verificada; el Banco Mundial cofinanció parte del programa",
+    "resultado": "Entre 1979 y 1988 se trasladaron 2 millones de personas a asentamientos rurales nuevos. Los pueblos que recibieron colonos de zonas con clima y suelos parecidos tuvieron más productividad de arroz y más actividad económica 10 a 20 años después.",
+    "evidencia": "E",
+    "leccion": "Mover gente funciona mejor cuando lo que saben hacer sirve en el lugar de destino.",
+    "lat": -5.45,
+    "lon": 105.26,
+    "fuente": "Bazzi, Gaduh, Rothenberg & Wong (2016), American Economic Review 106(9):2658–98. doi:10.1257/aer.20141781"
+  },
+  {
+    "id": "in-smart-cities",
+    "pais": "India",
+    "programa": "Smart Cities Mission (100 ciudades)",
+    "periodo": "2015–2025",
+    "instrumento_app": [
+      "intermedias"
+    ],
+    "tipo_instrumento": "Inversión pública urbana",
+    "costo": "7.504 proyectos terminados por ₹1,50 billones (1,50,306 crore) al 4/3/2025, el 93 % del total [O]",
+    "resultado": "El 93 % de los proyectos se completó al terminar la misión (31/3/2025), pero solo 18 de las 100 ciudades terminaron todos. No hay una evaluación de impacto sobre población o empleo.",
+    "evidencia": "O",
+    "leccion": "Mejorar las ciudades intermedias ayuda a la calidad de vida, pero sin medir resultados no se sabe si atrae gente.",
+    "lat": 18.52,
+    "lon": 73.86,
+    "fuente": "Down To Earth (2025), https://www.downtoearth.org.in/governance/after-a-decade-of-its-launch-only-18-out-of-100-cities-have-completed-smart-cities-mission-projects-but-there-are-some-positive-takeaways"
+  },
+  {
+    "id": "in-zee",
+    "pais": "India",
+    "programa": "Zonas Económicas Especiales (Ley SEZ de 2005)",
+    "periodo": "2006–presente",
+    "instrumento_app": [
+      "polos"
+    ],
+    "tipo_instrumento": "Incentivo fiscal y aduanero",
+    "costo": "Sin dato verificado",
+    "resultado": "Comparando los censos de 2001 y 2011, los distritos con zonas especiales no mostraron mejoras en desarrollo local. El autor lo atribuye a que los políticos estatales usaron las zonas para capturar rentas de la tierra.",
+    "evidencia": "E",
+    "leccion": "Una zona franca sin controles sobre el uso de la tierra puede terminar en un negocio inmobiliario sin empleo.",
+    "lat": 23.03,
+    "lon": 70.22,
+    "fuente": "Alkon (2018), World Development 107:396–409. doi:10.1016/j.worlddev.2018.02.028"
+  },
+  {
+    "id": "br-sudene",
+    "pais": "Brasil",
+    "programa": "SUDENE y Fondo Constitucional del Nordeste (FNE)",
+    "periodo": "1959–presente (FNE desde 1989)",
+    "instrumento_app": [
+      "polos",
+      "intermedias"
+    ],
+    "tipo_instrumento": "Incentivo fiscal (hasta 75 % del impuesto a las ganancias) y crédito subsidiado",
+    "costo": "Sin cifra total verificada",
+    "resultado": "Los créditos industriales del FNE crearon empleo en las firmas que los recibieron, pero no se detectó efecto sobre el PBI per cápita de los municipios (2000–2006). Los incentivos fiscales aumentaron el empleo en la industria intensiva en mano de obra. Con créditos grandes, el FNE muestra efectos positivos en ingreso y PBI municipal (2010–2020).",
+    "evidencia": "E",
+    "leccion": "El crédito barato crea empleos en las empresas que lo reciben, pero cuesta que eso cambie a toda la región.",
+    "lat": -8.05,
+    "lon": -34.88,
+    "fuente": "Resende (2014), Regional Studies 48(4):646–664. doi:10.1080/00343404.2012.667872; Costa et al. (2024, en línea), Applied Economics Letters 33(7):1011–1016. doi:10.1080/13504851.2024.2402927; Monte et al. (2025), Journal of Regional Science 65(3):678–697. doi:10.1111/jors.12759"
+  },
+  {
+    "id": "br-zona-franca-manaus",
+    "pais": "Brasil",
+    "programa": "Zona Franca de Manaus",
+    "periodo": "1967–2073 (prorrogada)",
+    "instrumento_app": [
+      "polos",
+      "ciudad_nueva"
+    ],
+    "tipo_instrumento": "Incentivo fiscal y aduanero",
+    "costo": "Unos R$ 24.220 M previstos para 2021, el quinto mayor gasto tributario federal (TCU) [O]",
+    "resultado": "La zona aumentó el PBI per cápita y la producción de servicios de Manaus frente a un control sintético, pero redujo la producción agrícola per cápita.",
+    "evidencia": "E",
+    "leccion": "Un régimen fiscal muy generoso puede hacer crecer una ciudad aislada, pero es caro y depende de que el beneficio siga.",
+    "lat": -3.12,
+    "lon": -60.02,
+    "fuente": "Possebom (2017), Revista Brasileira de Economia 71(2):217–231. doi:10.5935/0034-7140.20170011; TCU, https://portal.tcu.gov.br/data/files/7B/65/50/0D/438F0810B4FE0FF7E18818A8/LEVANTAMENTO%20SOBRE%20AS%20POLITICAS%20PUBLICAS%20DE%20DESENVOLVIMENTO%20ZONA%20FRANCA%20DE%20MANAUS.pdf"
+  },
+  {
+    "id": "br-marcha-oeste",
+    "pais": "Brasil",
+    "programa": "Marcha para el Oeste y expansión de la frontera agrícola",
+    "periodo": "1938–2010",
+    "instrumento_app": [
+      "pueblos",
+      "polos"
+    ],
+    "tipo_instrumento": "Rutas, colonias agrícolas y tierra",
+    "costo": "Sin dato verificado",
+    "resultado": "La migración de agricultores al Centro-Oeste (1950–2010) explica el 25 % del cambio en la especialización exportadora de Brasil (soja, carne, maíz). Las rutas fueron el motor principal de esa migración.",
+    "evidencia": "E",
+    "leccion": "Las rutas que bajan el costo de mudarse hacen más por poblar una frontera que cualquier decreto.",
+    "lat": -15.6,
+    "lon": -56.1,
+    "fuente": "Pellegrina & Sotelo (2025), Journal of Political Economy 133(12):3993–4049. doi:10.1086/738147"
+  },
+  {
+    "id": "br-brasilia",
+    "pais": "Brasil",
+    "programa": "Brasília",
+    "periodo": "1956–1960 (construcción)",
+    "instrumento_app": [
+      "capital",
+      "ciudad_nueva"
+    ],
+    "tipo_instrumento": "Traslado de capital y red de rutas",
+    "costo": "Unos 12,3 % del PBI de 1959, acumulado en 4 años [A]",
+    "resultado": "Diseñada para 500.000 habitantes, hoy supera los 2,5 M. Las rutas hacia Brasília generaron una ganancia de bienestar del 2,8 % por comercio y migración. Río y São Paulo siguieron siendo los centros económicos.",
+    "evidencia": "E",
+    "leccion": "Lo que más deja una capital nueva son las rutas que la conectan con el resto del país.",
+    "lat": -15.79,
+    "lon": -47.88,
+    "fuente": "Morten & Oliveira (2024), AEJ: Applied 16(2):389–421. doi:10.1257/app.20180487; ver docs/politicas-territoriales.md §1.1"
+  },
+  {
+    "id": "cl-ley-arica",
+    "pais": "Chile",
+    "programa": "Ley Arica (Ley 19.420) y franquicias de zonas extremas",
+    "periodo": "1975 (DL 889)–2035",
+    "instrumento_app": [
+      "polos",
+      "intermedias"
+    ],
+    "tipo_instrumento": "Incentivo fiscal (crédito por inversión del 30–40 %) y bonificación a la contratación",
+    "costo": "Crédito tributario de CLP 45.398 M y bonificación a la mano de obra de CLP 12.293 M (año 2016) en Arica y Parinacota [O]",
+    "resultado": "La bonificación alcanza a unos 27.000–32.000 trabajadores por año, con un número estable de empleadores: el propio informe del Senado lo describe como estancamiento. La zona franca industrial de Arica facturó USD 30 M en 2016, menos del 1 % de la de Iquique. No hay evaluación de impacto.",
+    "evidencia": "O",
+    "leccion": "Un beneficio fiscal que se renueva por décadas sin evaluar se vuelve un derecho adquirido y deja de mover la economía.",
+    "lat": -18.48,
+    "lon": -70.31,
+    "fuente": "Senado de Chile, Asesoría Técnica Parlamentaria (febrero de 2020), Análisis de incentivos tributarios, bonificaciones y beneficios especiales en zonas extremas, https://tramitacion.senado.cl/appsenado/index.php?mo=transparencia&ac=doctoInformeAsesoria&id=14129"
+  },
+  {
+    "id": "mx-zee",
+    "pais": "México",
+    "programa": "Zonas Económicas Especiales",
+    "periodo": "2016–2019",
+    "instrumento_app": [
+      "polos"
+    ],
+    "tipo_instrumento": "Incentivo fiscal y aduanero, administración privada de la zona",
+    "costo": "Sin dato verificado",
+    "resultado": "Se crearon 7 zonas en el sur (Puerto Chiapas, Coatzacoalcos, Lázaro Cárdenas, Progreso, Salina Cruz, Campeche y Tabasco). Las declaratorias se derogaron el 19/11/2019 porque ninguna tuvo administrador integral y los gobiernos locales no hicieron la infraestructura. La inversión que se mencionaba (más de USD 4.000 M en Lázaro Cárdenas, según empresarios) eran compromisos anunciados, no inversión verificada.",
+    "evidencia": "O",
+    "leccion": "Una zona especial que depende de un solo gobierno muere con el cambio de gobierno.",
+    "lat": 14.7,
+    "lon": -92.4,
+    "fuente": "IDC Online (20/11/2019), https://idconline.mx/fiscal-contable/2019/11/20/amlo-dice-adios-a-las-zonas-economicas-especiales; El Financiero, https://www.elfinanciero.com.mx/empresas/michoacan-perdera-25-mil-empleos-si-desaparecen-zee-advierten-empresarios"
+  },
+  {
+    "id": "ue-cohesion",
+    "pais": "Unión Europea",
+    "programa": "Política de Cohesión (Fondos Estructurales, Objetivo 1)",
+    "periodo": "1989–presente",
+    "instrumento_app": [
+      "intermedias",
+      "polos"
+    ],
+    "tipo_instrumento": "Inversión pública y transferencias a regiones pobres",
+    "costo": "€392.000 M en 2021–2027, casi un tercio del presupuesto de la UE [O]",
+    "resultado": "Las regiones con menos del 75 % del PBI per cápita europeo que recibieron fondos crecieron más en PBI per cápita, pero no en empleo. Solo un 30 % de las regiones, las que tenían más capital humano y mejores instituciones, logró convertir los fondos en más crecimiento.",
+    "evidencia": "E",
+    "leccion": "La plata para regiones pobres rinde solo donde hay gente capacitada y gobiernos que funcionan.",
+    "lat": 50.85,
+    "lon": 4.35,
+    "fuente": "Becker, Egger & von Ehrlich (2010), Journal of Public Economics 94(9–10):578–590. doi:10.1016/j.jpubeco.2010.06.006; (2013), AEJ: Economic Policy 5(4):29–77. doi:10.1257/pol.5.4.29; Comisión Europea, https://ec.europa.eu/regional_policy/funding/available-budget_en"
+  },
+  {
+    "id": "it-cassa-mezzogiorno",
+    "pais": "Italia",
+    "programa": "Cassa per il Mezzogiorno y Áreas de Desarrollo Industrial",
+    "periodo": "1950–1992",
+    "instrumento_app": [
+      "polos"
+    ],
+    "tipo_instrumento": "Inversión pública e incentivos a la inversión",
+    "costo": "Las Áreas de Desarrollo Industrial recibieron unos €90.000 M (cerca del 0,5 % del PBI por año) [O]",
+    "resultado": "Las áreas industriales elegidas mantuvieron más empleo y salarios décadas después de terminado el programa, con efectos que pasaron de la industria a los servicios calificados. En las zonas más periféricas el efecto fue transitorio. La Cassa funcionó bien en sus dos primeras décadas; cuando en 1971 se descentralizó, el Sur perdió un 11 % de PBI per cápita en la década siguiente.",
+    "evidencia": "E",
+    "leccion": "Concentrar la inversión en pocos polos con base industrial deja efectos duraderos; repartirla por todos lados, no.",
+    "lat": 40.85,
+    "lon": 14.27,
+    "fuente": "Incoronato & Lattanzio (2024), CSEF WP 733. doi:10.2139/ssrn.4991746; nota CSEF, https://csef.it/wp-content/uploads/7.nota-csef_Place-Based-Industrial-Policies-and-Local-Agglomeration-in-the-Long-Run.pdf; Buscemi (2025), Cliometrica 20:185–220. doi:10.1007/s11698-025-00310-0; Felice & Lepore (2017), Business History 59(3):319–341. doi:10.1080/00076791.2016.1174214"
+  },
+  {
+    "id": "de-aufbau-ost",
+    "pais": "Alemania",
+    "programa": "Reunificación y Aufbau Ost (Pactos de Solidaridad)",
+    "periodo": "1990–2019",
+    "instrumento_app": [
+      "intermedias",
+      "polos"
+    ],
+    "tipo_instrumento": "Transferencias fiscales, inversión pública e incentivos",
+    "costo": "Unos €1,3 billones netos de Oeste a Este entre 1990 y 2005, según un estudio del IWH citado por la prensa [A]",
+    "resultado": "El PBI real del Este (sin Berlín) creció 98 % entre 1991 y 2024, contra 43 % en el Oeste. El PBI por habitante del Este llegó al 79 % del Oeste en 2022 (informe anual del gobierno, vía prensa). Pero la población del Este (sin Berlín) cayó 16 %, a 12,4 M, y 1,2 M de personas más se fueron al Oeste que las que volvieron.",
+    "evidencia": "O",
+    "leccion": "Se puede cerrar buena parte de la brecha de ingreso y aun así perder población durante 30 años.",
+    "lat": 51.34,
+    "lon": 12.37,
+    "fuente": "Statistisches Landesamt Rheinland-Pfalz (29/9/2025), Datenblick 23/2025, https://www.statistischebibliothek.de/mir/servlets/MCRFileNodeServlet/RPHeft_derivate_00009147/Datenblick_23-2025_35%20Jahre%20Deutsche%20Einheit.pdf; Tagesspiegel, https://www.tagesspiegel.de/wirtschaft/ramsauer-will-aufbau-west-1790581.html; Nordkurier, https://www.nordkurier.de/regional/brandenburg/wirtschaftskraft-im-osten-gleicht-sich-langsam-dem-westen-an-1929250"
+  },
+  {
+    "id": "de-agencias-federales",
+    "pais": "Alemania",
+    "programa": "Bonn como capital y traslado del gobierno a Berlín; regla de ubicar agencias nuevas en el Este",
+    "periodo": "1949–presente (regla de 1992)",
+    "instrumento_app": [
+      "capital",
+      "intermedias"
+    ],
+    "tipo_instrumento": "Traslado de agencias públicas",
+    "costo": "Sin dato verificado",
+    "resultado": "Cada empleo público en Bonn creó algo más de 1 empleo privado en servicios y desplazó unos 0,2 industriales. En Berlín el efecto fue de 1,3 a 1,4 empleos privados por cada público, pero concentrado a menos de 300 m de las oficinas. La regla de 1992 de poner las agencias nuevas en el Este no es obligatoria.",
+    "evidencia": "E",
+    "leccion": "Cada empleo público trasladado trae más o menos un empleo privado, pero en el mismo barrio.",
+    "lat": 50.73,
+    "lon": 7.1,
+    "fuente": "Becker, Heblich & Sturm (2021), JUE 122:103291. doi:10.1016/j.jue.2020.103291; Faggio, Schlüter & vom Berge (2025), RSUE 111:104084. doi:10.1016/j.regsciurbeco.2025.104084; Bundestag WD 3-3000-004/19, https://www.bundestag.de/resource/blob/629638/9f9f983d9bea78c180dfbb2d38275614/WD-3-004-19-pdf-data.pdf"
+  },
+  {
+    "id": "de-zonenrand",
+    "pais": "Alemania",
+    "programa": "Zonenrandgebiet (franja limítrofe con Alemania Oriental)",
+    "periodo": "1971–1994",
+    "instrumento_app": [
+      "polos",
+      "intermedias"
+    ],
+    "tipo_instrumento": "Incentivo fiscal e inversión",
+    "costo": "Sin dato verificado",
+    "resultado": "La actividad económica siguió más alta después de terminado el subsidio, gracias a una base fiscal mayor y más inversión pública local. Parte vino de zonas vecinas y se reflejó en el precio del suelo.",
+    "evidencia": "E",
+    "leccion": "Un subsidio puede dejar efectos duraderos si ayuda a armar una base económica que después se sostiene sola.",
+    "lat": 51.54,
+    "lon": 9.93,
+    "fuente": "von Ehrlich & Seidel (2018), AEJ: Economic Policy 10(4):344–374. doi:10.1257/pol.20160395"
+  },
+  {
+    "id": "fr-metropoles-equilibre",
+    "pais": "Francia",
+    "programa": "DATAR y métropoles d'équilibre",
+    "periodo": "1963–1970s",
+    "instrumento_app": [
+      "intermedias"
+    ],
+    "tipo_instrumento": "Inversión pública en ciudades regionales y control de la industria en París",
+    "costo": "Sin dato verificado",
+    "resultado": "Se eligieron 8 metrópolis regionales (Lille, Lyon, Marsella, Toulouse, Burdeos, Nantes, Estrasburgo, Nancy-Metz). En 1973 casi todas crecían más rápido que París y se había revertido la emigración de las provincias, pero París concentraba el 61 % de los investigadores. No hay evaluación causal.",
+    "evidencia": "A",
+    "leccion": "Apostar a pocas ciudades regionales grandes ayudó a equilibrar, pero los empleos más calificados se quedaron en la capital.",
+    "lat": 45.76,
+    "lon": 4.84,
+    "fuente": "Larousse, Journal de l'année 1973, https://www.larousse.fr/archives/journaux_annee/1973/60/legislation; Watkins (SJSU), https://sjsu.edu/faculty/watkins/francereg.htm"
+  },
+  {
+    "id": "fr-villes-nouvelles",
+    "pais": "Francia",
+    "programa": "Villes nouvelles de Île-de-France (Cergy, Évry, Marne-la-Vallée, Saint-Quentin, Sénart)",
+    "periodo": "1965–2000s",
+    "instrumento_app": [
+      "ciudad_nueva"
+    ],
+    "tipo_instrumento": "Nueva ciudad satélite con organismo público de desarrollo",
+    "costo": "Sin dato verificado",
+    "resultado": "Pasaron de 178.000 habitantes (1968) a más de 740.000 (1999), el 7 % de la región. Se crearon 300.000 empleos entre 1968 y 1999 y en 2005 el 43 % de los ocupados trabajaba en su propia ciudad nueva. No contuvieron la expansión urbana, que era el objetivo original.",
+    "evidencia": "O",
+    "leccion": "Una ciudad nueva cerca de una metrópoli llega a su tamaño si se lleva empleo con ella; Sénart, sin empleo público, quedó más dormitorio.",
+    "lat": 49.04,
+    "lon": 2.07,
+    "fuente": "IAURIF (octubre de 2005), Note rapide n.º 394, https://www.institutparisregion.fr/fileadmin/NewEtudes/Etude_371/nr_394_les_villes_nouvelles.pdf"
+  },
+  {
+    "id": "fr-zfu",
+    "pais": "Francia",
+    "programa": "Zones Franches Urbaines",
+    "periodo": "1997–presente",
+    "instrumento_app": [
+      "intermedias"
+    ],
+    "tipo_instrumento": "Incentivo fiscal en barrios",
+    "costo": "Sin dato verificado",
+    "resultado": "Las empresas eligieron instalarse dentro de la zona en vez de al lado, sin crear actividad neta en el municipio. Hubo más empleo, sobre todo para trabajadores de bajos salarios. Se crearon más firmas nuevas en los barrios bien conectados que en los aislados.",
+    "evidencia": "E",
+    "leccion": "Una exención fiscal en un lugar mal conectado mueve empresas unas cuadras, pero no crea empleo nuevo.",
+    "lat": 43.3,
+    "lon": 5.37,
+    "fuente": "Mayer, Mayneris & Py (2017), Journal of Economic Geography 17(4):709–752. doi:10.1093/jeg/lbv035; Briant, Lafourcade & Schmutz (2015), AEJ: Economic Policy 7(2):88–124. doi:10.1257/pol.20120137"
+  },
+  {
+    "id": "uk-levelling-up",
+    "pais": "Reino Unido",
+    "programa": "Levelling Up (Levelling Up Fund, Towns Fund y otros)",
+    "periodo": "2019–2026",
+    "instrumento_app": [
+      "intermedias",
+      "pueblos"
+    ],
+    "tipo_instrumento": "Fondos concursables para obras locales",
+    "costo": "£9.500 M en tres fondos, de los cuales £4.800 M son del Levelling Up Fund [O]",
+    "resultado": "A marzo de 2023 se había gastado solo el 14 % de la primera ronda del Levelling Up Fund. La Comisión de Cuentas Públicas no encontró ejemplos de resultados y señaló que se eligieron proyectos 'listos para empezar' en lugar de los de más impacto.",
+    "evidencia": "O",
+    "leccion": "Repartir fondos por concurso con plazos cortos favorece proyectos rápidos, no los que cambian una región.",
+    "lat": 54.52,
+    "lon": -1.55,
+    "fuente": "NAO (noviembre de 2023), vía Room151, https://www.room151.co.uk/funding/levelling-up-projects-behind-schedule-and-unlikely-to-be-completed-by-deadlines-says-nao/; Civil Service World, https://www.civilserviceworld.com/professions/article/dhluc-wasted-opportunities-levelling-up-spending-impact-billions"
+  },
+  {
+    "id": "uk-freeports",
+    "pais": "Reino Unido",
+    "programa": "Freeports (puertos francos)",
+    "periodo": "2021–presente",
+    "instrumento_app": [
+      "polos"
+    ],
+    "tipo_instrumento": "Incentivo fiscal y aduanero en sitios definidos",
+    "costo": "Sin costo fiscal total en lo leído; se prevén £880 M de impuestos locales retenidos en 25 años [O]",
+    "resultado": "12 puertos francos y 52 sitios. El gobierno informa £6.400 M de inversión privada (89 % extranjera). Se estiman unos 5.600 empleos en Inglaterra, pero cerca de dos tercios no serían nuevos sino desplazados o que se habrían creado igual. La Oficina de Responsabilidad Fiscal asumió que la actividad se traslada desde otros lugares.",
+    "evidencia": "O",
+    "leccion": "Una zona franca suele mudar actividad de un lugar a otro más que crearla.",
+    "lat": 54.58,
+    "lon": -1.15,
+    "fuente": "Gobierno del Reino Unido (23/6/2025), UK Freeports Programme Report 2025, https://www.gov.uk/government/publications/uk-freeports-programme-report-2025; UK Trade Policy Observatory (3/7/2024), https://blogs.sussex.ac.uk/uktpo/2024/07/03/whatever-happened-to-freeports-trade-and-local-development-in-the-general-election/"
+  },
+  {
+    "id": "uk-legi",
+    "pais": "Reino Unido",
+    "programa": "Local Enterprise Growth Initiative (apoyo a empresas de zonas pobres)",
+    "periodo": "2006–2011",
+    "instrumento_app": [
+      "intermedias"
+    ],
+    "tipo_instrumento": "Subsidio a empresas locales",
+    "costo": "Sin dato verificado",
+    "resultado": "No hubo efecto neto sobre el empleo en las zonas apoyadas, y sí un desplazamiento de empleo desde zonas vecinas equivalente a cerca del 10 % del empleo local.",
+    "evidencia": "E",
+    "leccion": "Ayudar a los comercios de un barrio le quita clientes al barrio de al lado.",
+    "lat": 53.41,
+    "lon": -2.98,
+    "fuente": "Einiö & Overman (2020), Regional Science and Urban Economics 83:103500. doi:10.1016/j.regsciurbeco.2019.103500"
+  },
+  {
+    "id": "no-zona-finnmark",
+    "pais": "Noruega",
+    "programa": "Zona de acción de Finnmark y Nord-Troms y aportes patronales diferenciados por región",
+    "periodo": "1990–presente",
+    "instrumento_app": [
+      "pueblos",
+      "intermedias"
+    ],
+    "tipo_instrumento": "Incentivo fiscal a personas y empresas (menos impuesto a la renta, condonación de créditos estudiantiles, sin aporte patronal)",
+    "costo": "Medidas a personas: unos NOK 1.340 M en 2020 (suma propia de las partidas oficiales) [O]",
+    "resultado": "Cuando la UE obligó a eliminar la rebaja de aportes patronales, el empleo local cayó y parte del costo pasó a los salarios: el incentivo creaba empleo. En la zona de acción las evaluaciones encuentran efectos, pero no alcanzaron para frenar la emigración: según una proyección de Menon sin inmigración, el este de Finnmark pasaría de unos 29.000 habitantes (2000) a 21.000 en 2050.",
+    "evidencia": "E",
+    "leccion": "Bajar impuestos a quien vive en una zona lejana ayuda a retener gente, pero no alcanza por sí solo para revertir la emigración.",
+    "lat": 70.66,
+    "lon": 23.68,
+    "fuente": "Ku, Schönberg & Schreiner (2020), Journal of Public Economics 191:104105. doi:10.1016/j.jpubeco.2019.104105; Menon Economics, Grünfeld & Klyve (2022), https://ofr.no/wp-content/uploads/2022/05/Notat-om-personrettede-tiltak.pdf"
+  },
+  {
+    "id": "se-agencias",
+    "pais": "Suecia",
+    "programa": "Ubicación de agencias estatales fuera de Estocolmo",
+    "periodo": "2004–2020",
+    "instrumento_app": [
+      "intermedias"
+    ],
+    "tipo_instrumento": "Traslado de agencias públicas",
+    "costo": "Sin dato verificado; costos iniciales altos y caída de productividad transitoria",
+    "resultado": "62 decisiones en 17 años: algo más de 4.000 empleos nuevos y casi 6.000 preservados fuera de Estocolmo, en 27 municipios. El efecto fue importante en pocos lugares (Arvidsjaur, Östersund, Gotland) y chico en el total. A largo plazo no hubo pérdida de eficiencia.",
+    "evidencia": "O",
+    "leccion": "Mudar agencias funciona como apoyo a ciudades concretas, no como política para equilibrar el país.",
+    "lat": 63.18,
+    "lon": 14.64,
+    "fuente": "Riksrevisionen (2023), RiR 2023:1, https://www.riksrevisionen.se/en/audits/audit-reports/2023/establishment-of-government-agencies-outside-of-stockholm---small-regional-contributions-without-jeopardised-efficiency-in-the-long-term.html"
+  },
+  {
+    "id": "dk-bedre-balance",
+    "pais": "Dinamarca",
+    "programa": "Bedre Balance (traslado de empleos estatales fuera de Copenhague)",
+    "periodo": "2015–2018",
+    "instrumento_app": [
+      "intermedias"
+    ],
+    "tipo_instrumento": "Traslado de agencias públicas",
+    "costo": "DKK 550 M estimados para la segunda ronda [A]",
+    "resultado": "En la segunda ronda, uno de cada tres empleados afectados renunció antes del traslado. La auditoría danesa señala que, como en Noruega y Suecia, la producción de los organismos se resintió durante varios años.",
+    "evidencia": "A",
+    "leccion": "Si se traslada una oficina, buena parte del personal se queda y hay que contratar y formar gente nueva.",
+    "lat": 56.45,
+    "lon": 9.4,
+    "fuente": "The Copenhagen Post, https://cphpost.dk/?p=105126; Rigsrevisionen, resumen en https://egov.nik.gov.pl/DK/2017/relocationGovJobs/alg_relocationGovJobs.html"
+  },
+  {
+    "id": "us-tva",
+    "pais": "Estados Unidos",
+    "programa": "Tennessee Valley Authority",
+    "periodo": "1933–presente",
+    "instrumento_app": [
+      "polos"
+    ],
+    "tipo_instrumento": "Inversión pública (energía, rutas, obras)",
+    "costo": "Sin dato verificado en este relevamiento",
+    "resultado": "El empleo agrícola subió y volvió a bajar al terminar los subsidios. El industrial siguió creciendo décadas después. Las inversiones directas rindieron más de lo que costaron, pero la ganancia de la región se compensó con pérdidas en el resto del país.",
+    "evidencia": "E",
+    "leccion": "La infraestructura grande puede dejar industria duradera, aunque buena parte de lo que gana una región lo pierde otra.",
+    "lat": 35.96,
+    "lon": -83.92,
+    "fuente": "Kline & Moretti (2014), Quarterly Journal of Economics 129(1):275–331. doi:10.1093/qje/qjt034"
+  },
+  {
+    "id": "us-empowerment-zones",
+    "pais": "Estados Unidos",
+    "programa": "Empowerment Zones (primera ronda)",
+    "periodo": "1994–2004",
+    "instrumento_app": [
+      "intermedias"
+    ],
+    "tipo_instrumento": "Incentivo fiscal al empleo y subsidios a barrios",
+    "costo": "Sin dato verificado en este relevamiento",
+    "resultado": "Aumentaron mucho el empleo y los salarios de los trabajadores locales, sin aumento de población ni del costo de vida. El costo en eficiencia fue modesto.",
+    "evidencia": "E",
+    "leccion": "Un subsidio atado al empleo de los residentes mejora sus ingresos, aunque no atraiga población nueva.",
+    "lat": 42.33,
+    "lon": -83.05,
+    "fuente": "Busso, Gregory & Kline (2013), American Economic Review 103(2):897–947. doi:10.1257/aer.103.2.897"
+  },
+  {
+    "id": "us-opportunity-zones",
+    "pais": "Estados Unidos",
+    "programa": "Opportunity Zones",
+    "periodo": "2018–presente",
+    "instrumento_app": [
+      "intermedias"
+    ],
+    "tipo_instrumento": "Incentivo fiscal a la inversión (ganancias de capital)",
+    "costo": "Unos USD 3.500 M por año entre 2019 y 2022 según el Comité Conjunto de Tributación, citado por CBPP [O]",
+    "resultado": "En áreas metropolitanas el empleo creció entre 3 y 4,5 puntos más que en zonas comparables, pero los nuevos puestos los tomaron sobre todo personas de afuera. En zonas rurales no hubo efecto. No mejoraron el empleo, los ingresos ni la pobreza de los residentes, ni subieron los precios de las casas.",
+    "evidencia": "E",
+    "leccion": "Un beneficio a inversores puede crear empleos en un barrio sin mejorar la vida de quienes viven ahí, y en zonas rurales no hace nada.",
+    "lat": 39.29,
+    "lon": -76.61,
+    "fuente": "Arefeva, Davis, Ghent & Park (2025), Management Science 71(6):4566–4581. doi:10.1287/mnsc.2022.03223; Freedman, Khanna & Neumark (2023), JUE 133:103407. doi:10.1016/j.jue.2021.103407; Chen, Glaeser & Wessel (2023), JUE 133:103451. doi:10.1016/j.jue.2022.103451; CBPP, https://www.cbpp.org/blog/final-opportunity-zone-rules-could-raise-tax-breaks-cost"
+  },
+  {
+    "id": "us-homestead",
+    "pais": "Estados Unidos",
+    "programa": "Homestead Act (tierra gratis para colonos)",
+    "periodo": "1862–1976 (Alaska hasta 1986)",
+    "instrumento_app": [
+      "pueblos"
+    ],
+    "tipo_instrumento": "Tierra gratis",
+    "costo": "270 millones de acres entregados, el 10 % de la superficie del país [O]",
+    "resultado": "Unos 1,6 millones de colonos (cerca del 40 % de los que lo intentaron) cumplieron los requisitos y obtuvieron el título. Hoy las tierras entregadas por homestead tienen menos actividad económica que las vendidas por dinero en la misma época.",
+    "evidencia": "E",
+    "leccion": "Regalar tierra pobló el territorio, pero dejó parcelas chicas que con el tiempo frenaron el desarrollo.",
+    "lat": 40.27,
+    "lon": -96.75,
+    "fuente": "Allen & Leonard (2021), The Economic Journal 131(640):3073–3102. doi:10.1093/ej/ueab030; National Park Service, https://www.nps.gov/home/learn/news/licolns-legacy.htm"
+  },
+  {
+    "id": "ca-pnp",
+    "pais": "Canadá",
+    "programa": "Provincial Nominee Program y Atlantic Immigration Program",
+    "periodo": "1998–presente",
+    "instrumento_app": [
+      "intermedias",
+      "pueblos"
+    ],
+    "tipo_instrumento": "Visa de inmigración regional",
+    "costo": "Sin dato verificado",
+    "resultado": "El 82 % de los inmigrantes nominados entre 2000 y 2008 seguía viviendo en su provincia en 2008, pero en las provincias atlánticas solo el 56 %, contra más del 95 % en Alberta y Columbia Británica. El programa atlántico retuvo mejor al año que los programas provinciales.",
+    "evidencia": "O",
+    "leccion": "Los inmigrantes se quedan donde hay trabajo; en las regiones más pobres casi la mitad se va.",
+    "lat": 49.9,
+    "lon": -97.14,
+    "fuente": "IRCC, Evaluation of the Provincial Nominee Program, https://www.canada.ca/en/immigration-refugees-citizenship/corporate/reports-statistics/evaluations/provincial-nominee-program/summary.html; Statistics Canada, Economic and Social Reports 36-28-0001 (2023), https://www150.statcan.gc.ca/n1/pub/36-28-0001/2023011/article/00002-eng.htm (no leído completo)"
+  },
+  {
+    "id": "au-visas-regionales",
+    "pais": "Australia",
+    "programa": "Visas regionales para trabajadores calificados (subclases 491, 494 y anteriores)",
+    "periodo": "1995–presente",
+    "instrumento_app": [
+      "intermedias",
+      "pueblos"
+    ],
+    "tipo_instrumento": "Visa de inmigración regional",
+    "costo": "Sin dato verificado",
+    "resultado": "Más del 80 % de los titulares ya estaba en Australia al pedir la visa y cerca del 65 % ya vivía en una región: el programa atrae a pocos nuevos. El 70 % sigue fuera de las metrópolis a los 10 años, menos en zonas remotas. Cinco años después, cerca del 45 % de los que siguen en el país vive en Sídney, Melbourne o Brisbane, en parte porque la definición de 'regional' es amplia.",
+    "evidencia": "O",
+    "leccion": "Una visa que obliga a vivir en el interior por unos años no garantiza que la gente se quede.",
+    "lat": -35.12,
+    "lon": 147.37,
+    "fuente": "Laukova et al. (2025), International Migration Review 60(2):1117–1147. doi:10.1177/01979183251330275; e61 Institute (7/5/2026), https://e61.in/moving-to-the-country-analysing-regional-migrant-outcomes/"
+  },
+  {
+    "id": "nz-provincial-growth-fund",
+    "pais": "Nueva Zelanda",
+    "programa": "Provincial Growth Fund",
+    "periodo": "2018–2021",
+    "instrumento_app": [
+      "intermedias",
+      "pueblos"
+    ],
+    "tipo_instrumento": "Fondo de inversión regional (subsidios y préstamos)",
+    "costo": "NZ$3.000 M en tres años [O]",
+    "resultado": "El Auditor General pidió más transparencia y que se compare lo planificado con lo logrado. Las cifras de empleo del gobierno (1.023 empleos a mayo de 2019) fueron cuestionadas por economistas.",
+    "evidencia": "O",
+    "leccion": "Un fondo grande que se reparte rápido sin reglas claras de evaluación termina discutido por sus cifras.",
+    "lat": -35.73,
+    "lon": 174.32,
+    "fuente": "Oficina del Auditor General (2020), https://oag.parliament.nz/media/2019/provincial-growth-fund; MBIE, https://mbie.govt.nz/dmsdocument/14474-evaluation-of-the-provincial-growth-fund-12-march-2021; MBIE, informe semanal (26/7/2019), https://mbie.govt.nz/dmsdocument/10406-0275-19-20-regional-economic-development-weekly-report-for-week-ending-26-july-2019"
+  }
+]

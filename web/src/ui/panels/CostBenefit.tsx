@@ -24,7 +24,7 @@ export function PlainVerdict({ r }: { r: Record<Escenario, CBAResult> }) {
   const anual = b.anual.productividad + b.anual.aglomeracion + b.anual.congestion + b.anual.polo;
   return (
     <span className="small">
-      {anual >= 0 ? "📈" : "📉"} Con la gente que probablemente llegue, el país {anual >= 0 ? "gana" : "pierde"}{" "}
+      <span className={`dot ${anual >= 0 ? "pos-bg" : "neg-bg"}`} aria-hidden /> Con la gente que probablemente llegue, el país {anual >= 0 ? "gana" : "pierde"}{" "}
       <b>{musd(Math.abs(anual), false)} por año</b> frente a que esa gente viva en el AMBA
       {b.social.recupero !== null ? ` y la inversión extra se paga en ~${b.social.recupero} años.` : "; la inversión extra no se recupera."}
     </span>

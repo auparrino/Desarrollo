@@ -8,7 +8,7 @@ import { FACTORS } from "../../model/criteria";
 const FACTOR_GROUP: Record<string, string> = Object.fromEntries(FACTORS.map((f) => [f.id, f.grupo]));
 import { nearestPlace } from "../plainFacts";
 import { estimateCosts } from "../../model/costs";
-import { Cartel, Flameo, Transformacion } from "../art/Cartel";
+import { PolicyIcon } from "../art/Icons";
 import { PlainVerdict, runAll } from "./CostBenefit";
 import { downloadCSV } from "../../model/share";
 import { useState } from "react";
@@ -112,11 +112,11 @@ function Acciones({ p }: { p: Props }) {
   return (
     <div className="acciones">
       <button onClick={() => navigator.clipboard?.writeText(p.shareLink()).then(() => setMsg("Enlace copiado"), () => setMsg(p.shareLink()))}>
-        🔗 Compartir este escenario
+        Compartir este escenario
       </button>
-      <button onClick={() => downloadCSV(`atlas-${p.policy.id}-${p.poblacion}.csv`, rows())}>⬇ Descargar resultados</button>
+      <button onClick={() => downloadCSV(`atlas-${p.policy.id}-${p.poblacion}.csv`, rows())}>Descargar resultados (CSV)</button>
       <button onClick={() => { p.onSave(top.slice(0, 5).map((s) => ({ nombre: siteName(s, p.localidades), best: s.best }))); setMsg("Escenario guardado para comparar"); }}>
-        ★ Guardar para comparar
+        Guardar para comparar
       </button>
       {msg && <span className="small muted">{msg}</span>}
     </div>
@@ -164,21 +164,13 @@ export default function SimplePanel(p: Props) {
   return (
     <div className="panel simple">
       <section className="intro">
-        <div className="marco">
-          <Cartel />
-        </div>
-        <p className="lema"><span>Gobernar es poblar</span></p>
+        <p className="lema">Gobernar es poblar</p>
         <h2>¿Dónde puede crecer la Argentina?</h2>
         <p>
           Esta herramienta divide el país en <b>95.000 zonas</b> y las compara según agua, seguridad, clima y conexión,
           para encontrar los mejores lugares donde crear una <b>ciudad nueva</b> o recibir población. Vos decidís qué es más
           importante.
         </p>
-      </section>
-
-      <section className="transf-wrap">
-        <Transformacion />
-        <Flameo />
       </section>
 
       <section>
@@ -188,7 +180,7 @@ export default function SimplePanel(p: Props) {
         <div className="policies">
           {POLICIES.map((x) => (
             <button key={x.id} className={`policy ${p.policy.id === x.id ? "on" : ""}`} onClick={() => p.setPolicy(x.id)}>
-              <span className="picon" aria-hidden>{x.icono}</span>
+              <PolicyIcon id={x.id} />
               <span>
                 <b>{x.nombre}</b>
                 <span className="small muted">{x.pregunta}</span>
@@ -203,7 +195,7 @@ export default function SimplePanel(p: Props) {
               <li key={e}>{e}</li>
             ))}
           </ul>
-          {p.policy.plazo && <p className="small muted">⏳ {p.policy.plazo}</p>}
+          {p.policy.plazo && <p className="small muted">Plazo: {p.policy.plazo}</p>}
         </div>
       </section>
 
@@ -230,11 +222,11 @@ export default function SimplePanel(p: Props) {
           <ul className="small">
             {fixed.map((x) => (
               <li key={x.grupo}>
-                {x.icono} <b>{x.titulo}:</b> {x.pregunta.toLowerCase()}
+                <b>{x.titulo}:</b> {x.pregunta.toLowerCase()}
               </li>
             ))}
             <li>
-              🚫 Se descartan siempre las zonas inundables, las de sismicidad muy alta, las áreas protegidas y la alta montaña,
+              Se descartan siempre las zonas inundables, las de sismicidad muy alta, las áreas protegidas y la alta montaña,
               más los requisitos propios de esta política.
             </li>
           </ul>
@@ -255,7 +247,7 @@ export default function SimplePanel(p: Props) {
           return (
             <div key={pr.grupo} className="prio">
               <div className="prio-h">
-                <span aria-hidden>{pr.icono}</span> <b>{pr.titulo}</b>
+                <b>{pr.titulo}</b>
                 <span className="muted small"> · {pr.pregunta}</span>
               </div>
               <div className="budget" role="group" aria-label={`Puntos para ${pr.titulo}`}>
@@ -304,7 +296,7 @@ export default function SimplePanel(p: Props) {
                         <>
                         <PlainVerdict r={cba} />
                         <span className="small">
-                          💰 Costo estimado: <b>USD {f(c.totalCapital[1])} mil millones</b>{" "}
+                          Costo estimado: <b>USD {f(c.totalCapital[1])} mil millones</b>{" "}
                           <span className="muted">
                             ({f(c.totalCapital[0])}–{f(c.totalCapital[2])})
                             {c.pctPBI && ` · ${c.pctPBI[1].toLocaleString("es-AR", { maximumFractionDigits: 2 })} % del PBI`}
