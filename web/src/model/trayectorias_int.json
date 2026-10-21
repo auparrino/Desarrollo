@@ -1,0 +1,2197 @@
+{
+ "version": "2026-10-21",
+ "descripcion": "Trayectorias de ciudades nuevas, capitales y polos planificados que crecieron, para contrastar (backtest) el modelo de proceso empleo -> migración -> vivienda -> nacimientos. Los valores null no se encontraron en fuentes verificables; 'estimado': true marca cifras aproximadas, redondas o derivadas.",
+ "casos": [
+  {
+   "id": "brasilia",
+   "nombre": "Brasília",
+   "pais": "Brasil",
+   "tipo": "capital_nueva",
+   "t0": 1956,
+   "t0_nota": "Ley de NOVACAP y comienzo de obras en 1956; inauguración el 21/4/1960. El mandato constitucional existía desde 1891.",
+   "meta_poblacion": 500000,
+   "meta_nota": "Población de diseño del Plano Piloto para el año 2000 (dato del plan, citado en docs/politicas-territoriales.md).",
+   "poblacion": [
+    {
+     "anio": 1957,
+     "pob": 12283,
+     "ambito": "DF",
+     "fuente": "IBGE, conteo/censo experimental 1957 (citado por CODEPLAN y Atlas do DF)"
+    },
+    {
+     "anio": 1959,
+     "pob": 64314,
+     "ambito": "DF",
+     "fuente": "IBGE, Censo Experimental de Brasília (17/5/1959)"
+    },
+    {
+     "anio": 1960,
+     "pob": 141742,
+     "ambito": "DF",
+     "fuente": "IBGE, censo 1960"
+    },
+    {
+     "anio": 1970,
+     "pob": 546015,
+     "ambito": "DF",
+     "fuente": "IBGE, censo 1970"
+    },
+    {
+     "anio": 1980,
+     "pob": 1203333,
+     "ambito": "DF",
+     "fuente": "IBGE, censo 1980"
+    },
+    {
+     "anio": 1991,
+     "pob": 1598415,
+     "ambito": "DF",
+     "fuente": "IBGE, censo 1991"
+    },
+    {
+     "anio": 2000,
+     "pob": 2043169,
+     "ambito": "DF",
+     "fuente": "IBGE, censo 2000"
+    },
+    {
+     "anio": 2010,
+     "pob": 2570160,
+     "ambito": "DF",
+     "fuente": "IBGE, censo 2010"
+    },
+    {
+     "anio": 2022,
+     "pob": 2817381,
+     "ambito": "DF",
+     "fuente": "IBGE, censo 2022"
+    }
+   ],
+   "motor": [
+    {
+     "anio": 1959,
+     "empleos": 30000,
+     "tipo": "construccion",
+     "fuente": "pt.wikipedia «Distrito Federal (Brasil)»: «Trinta mil operários construíram Brasília em 41 meses»",
+     "nota": "Obreros de la construcción (candangos), pico de obra 1957-1960; cifra redonda de fuente secundaria",
+     "estimado": true
+    },
+    {
+     "anio": 1960,
+     "empleos": 700,
+     "tipo": "publico",
+     "fuente": "Correio Braziliense, blog Brasília Todo Dia (13/4/2024)",
+     "nota": "Meta del Grupo de Trabajo de Brasília: instalar ~700 servidores con sus familias en 1960. No es el total de servidores trasladados."
+    },
+    {
+     "anio": 1960,
+     "empleos": null,
+     "tipo": "publico",
+     "fuente": "Jornal de Brasília, «A Velhacap versus a Novacap»",
+     "nota": "Contexto: 363.700 personas trabajaban en la administración federal (IBGE 1960), casi todas en Río. El traslado era voluntario con aumentos salariales y ayudas."
+    },
+    {
+     "anio": 2010,
+     "empleos": 61698,
+     "tipo": "publico",
+     "fuente": "Folha de S. Paulo (2010) citando boletín del Ministerio de Planificación, enero 2010 (leído vía resumen de búsqueda)",
+     "nota": "Servidores federales civiles en el DF, contra 114.739 en el estado de Río de Janeiro: medio siglo después Río seguía teniendo más.",
+     "estimado": true
+    }
+   ],
+   "secuencia": [
+    "1956: se crea NOVACAP (empresa estatal con la tierra y la obra) y se abre la pista de aterrizaje y el campamento de obra (Cidade Livre/Núcleo Bandeirante).",
+    "1957-1960: obra de los palacios, ministerios y primeras supercuadras con ~30.000 obreros; los obreros se instalan en campamentos y asentamientos que la planificación no preveía.",
+    "1958-1960: se fundan ciudades satélite (Taguatinga 1958, Gama 1960, Cruzeiro 1959 para servidores) para alojar a obreros y desalojados.",
+    "21/4/1960: inauguración con la ciudad inconclusa; se traslada la cúpula de los tres poderes, pero la mayor parte de los ministerios sigue en Río.",
+    "1967-1976: segunda ola de traslado por ley (Ley 5.363/1967, CODEBRÁS con fondo de vivienda; Decreto 75.648/1975 paga ayuda de traslado hasta 1976).",
+    "Décadas de 1970-1980: el empleo privado de servicios crece alrededor del sector público; la población del DF se duplica cada ~10 años."
+   ],
+   "vivienda": "Construida por adelantado por el Estado para los servidores: departamentos en supercuadras financiados por los institutos de previsión (IAPI, IAPFESP, etc.) y NOVACAP; la Ley 5.363/1967 asignó un fondo de vivienda a CODEBRÁS para los transferidos. Para los obreros no se previó vivienda: surgieron campamentos y favelas que se erradicaron hacia ciudades satélite con lotes. El Plano Piloto pasó de tener el 48 % de la población del DF en la inauguración al 13 % en 1991.",
+   "radicacion_vs_viaje": "No hay cifra de la proporción que viajaba. El traslado fue voluntario y lento: muchos servidores siguieron en Río, y en 2010 Río aún tenía casi el doble de servidores federales civiles que el DF. Los transferidos sí se radicaban (la distancia, ~1.000 km, impide el viaje diario).",
+   "origen_migrantes": "Goiás, Minas Gerais y sobre todo el Nordeste (candangos). En 2010, el 46,3 % de los residentes del DF había nacido fuera del DF (IBGE/SIDRA); principales orígenes: Goiás, Minas Gerais y Bahía.",
+   "crisis": "Inauguración con la ciudad inconclusa y sin funcionarios suficientes; resistencia de los servidores a dejar Río (campañas en contra); el golpe de 1964 generó dudas sobre la continuidad hasta que los gobiernos militares completaron el traslado por ley (1967-1976). La ocupación informal de obreros se resolvió con ciudades satélite periféricas, lo que dejó una metrópoli muy segregada.",
+   "contexto_nacional": {
+    "anio": 1960,
+    "pob_pais": 72388126,
+    "urbanizacion_pct": 44.7,
+    "migracion_interna_anual": null,
+    "fuente": "Banco Mundial, WDI (SP.POP.TOTL, SP.URB.TOTL.IN.ZS), descargado 21/10/2026"
+   },
+   "lecciones": [
+    "La población de diseño (500.000) se superó en el DF antes de 1980; el crecimiento lo explicó la migración de obreros y de la periferia, no solo los servidores.",
+    "La primera ola de servidores fue chica (cientos a miles); el traslado masivo necesitó una segunda ley y 15 años.",
+    "La vivienda pública por adelantado se hizo solo para los servidores; los que llegaron por el empleo de la obra se alojaron por su cuenta.",
+    "La ruta de los obreros importa tanto como la de los funcionarios: en 1959 vivían 64.000 personas en el DF antes de que llegara ningún ministerio: la obra fue el primer motor."
+   ],
+   "fuentes": [
+    {
+     "id": "ibge-df",
+     "cita": "IBGE, censos 1960-2022, tabla de pt.wikipedia «Distrito Federal (Brasil)», sección Demografia",
+     "url": "https://pt.wikipedia.org/wiki/Distrito_Federal_(Brasil)"
+    },
+    {
+     "id": "ibge-1959",
+     "cita": "IBGE, Censo Experimental de Brasília 1959; Boletim Geográfico 1973 v32 n235",
+     "url": "https://biblioteca.ibge.gov.br/visualizacao/periodicos/19/bg_1973_v32_n235_jul_ago.pdf"
+    },
+    {
+     "id": "atlas-df",
+     "cita": "IPEDF, Atlas do Distrito Federal, cap. 5",
+     "url": "https://atlas.ipe.df.gov.br/en/?p=1132"
+    },
+    {
+     "id": "cb-700",
+     "cita": "Correio Braziliense, blog Brasília Todo Dia, 13/4/2024",
+     "url": "https://blogs.correiobraziliense.com.br/brasiliatododia/2024/04/13/13-de-abril-a-consolidacao-de-brasilia-um-marco-na-historia-administrativa-do-brasil/"
+    },
+    {
+     "id": "jbr-velhacap",
+     "cita": "Jornal de Brasília, «A Velhacap versus a Novacap»",
+     "url": "https://jornaldebrasilia.com.br/60anos/a-velhacap-versus-a-novacap/"
+    },
+    {
+     "id": "lei-5363",
+     "cita": "Ley 5.363 del 30/11/1967 (traslado de órganos y fondo de vivienda CODEBRÁS)",
+     "url": "https://www2.camara.leg.br/legin/fed/lei/1960-1969/lei-5363-30-novembro-1967-359143-publicacaooriginal-1-pl.html"
+    },
+    {
+     "id": "dec-75648",
+     "cita": "Decreto 75.648/1975 (ayuda de traslado de servidores de Río a Brasília)",
+     "url": "https://planalto.gov.br/ccivil_03/decreto/1970-1979/D75648.htm"
+    },
+    {
+     "id": "exame-rio",
+     "cita": "Exame, «Rio ainda tem mais servidores federais que Brasília»",
+     "url": "https://exame.com/mundo/rio-ainda-tem-mais-servidores-federais-que-brasilia/"
+    }
+   ],
+   "derivado": {
+    "ambito": "DF",
+    "tramos": [
+     {
+      "desde": 1957,
+      "hasta": 1959,
+      "crec_anual_pct": 128.8
+     },
+     {
+      "desde": 1959,
+      "hasta": 1960,
+      "crec_anual_pct": 120.4
+     },
+     {
+      "desde": 1960,
+      "hasta": 1970,
+      "crec_anual_pct": 14.4
+     },
+     {
+      "desde": 1970,
+      "hasta": 1980,
+      "crec_anual_pct": 8.2
+     },
+     {
+      "desde": 1980,
+      "hasta": 1991,
+      "crec_anual_pct": 2.6
+     },
+     {
+      "desde": 1991,
+      "hasta": 2000,
+      "crec_anual_pct": 2.8
+     },
+     {
+      "desde": 2000,
+      "hasta": 2010,
+      "crec_anual_pct": 2.3
+     },
+     {
+      "desde": 2010,
+      "hasta": 2022,
+      "crec_anual_pct": 0.8
+     }
+    ],
+    "nota": "Crecimiento anual compuesto calculado entre puntos de la serie; derivado, no fuente."
+   }
+  },
+  {
+   "id": "palmas",
+   "nombre": "Palmas",
+   "pais": "Brasil",
+   "tipo": "capital_nueva",
+   "t0": 1989,
+   "t0_nota": "Estado de Tocantins creado por la Constitución de 1988; piedra fundamental el 20/5/1989; capital desde el 1/1/1990.",
+   "meta_poblacion": null,
+   "poblacion": [
+    {
+     "anio": 1980,
+     "pob": 3288,
+     "ambito": "municipio (área previa)",
+     "fuente": "IBGE, censo 1980 (tabla de pt.wikipedia «Palmas»)"
+    },
+    {
+     "anio": 1991,
+     "pob": 24261,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 1991"
+    },
+    {
+     "anio": 1996,
+     "pob": 86116,
+     "ambito": "municipio",
+     "fuente": "IBGE, conteo 1996"
+    },
+    {
+     "anio": 2000,
+     "pob": 137045,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 2000 (la misma página da también 130.528; se usa la cifra de la tabla)"
+    },
+    {
+     "anio": 2010,
+     "pob": 228332,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 2010"
+    },
+    {
+     "anio": 2022,
+     "pob": 302692,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 2022"
+    }
+   ],
+   "motor": [
+    {
+     "anio": 1990,
+     "empleos": null,
+     "tipo": "publico",
+     "fuente": "pt.wikipedia «Palmas»",
+     "nota": "Traslado del gobierno estatal desde Miracema (capital provisoria 1989). No se encontró el número de servidores. El empleo público estatal y el concurso público son el atractivo principal según estudios locales."
+    }
+   ],
+   "secuencia": [
+    "Ene-feb 1989: capital provisoria en Miracema; la Asamblea autoriza expropiar las tierras del sitio (el Estado queda dueño del suelo).",
+    "Mar-may 1989: comisión de implantación (Novacap) y piedra fundamental.",
+    "1989: se crea el municipio; obra de la Praça dos Girassóis y de las primeras avenidas.",
+    "1/1/1990: se traslada la sede del gobierno aunque los edificios y el alojamiento del personal aún no existían.",
+    "1992: Ley estatal 397 reserva al menos un tercio de los lotes residenciales del patrimonio estatal para venta a familias de hasta 5 salarios mínimos.",
+    "1990-2000: crecimiento rapidísimo por empleo público, obra y comercio; la ciudad se extiende con grandes vacíos urbanos."
+   ],
+   "vivienda": "El Estado era dueño de la tierra expropiada y vendió o cedió lotes (no construyó viviendas en masa): la Ley 397/1992 reservó un tercio de los lotes estatales para familias de bajos ingresos. Resultado: ocupación dispersa, vacíos especulativos y segregación (Taquaralto/Aurenys en el sur).",
+   "radicacion_vs_viaje": "Sin dato. La distancia a otras ciudades grandes impide el viaje diario; los servidores se radicaron.",
+   "origen_migrantes": "Interior de Tocantins y otros estados (Goiás, Maranhão, Pará, Nordeste); estudios locales describen migrantes atraídos por el empleo público y el concurso. Sin tabla de orígenes verificada.",
+   "crisis": "Traslado antes de tener edificios ni alojamiento; crecimiento disperso con vacíos urbanos y alto costo de mantener la infraestructura (estudio UFT 2007).",
+   "contexto_nacional": {
+    "anio": 1989,
+    "pob_pais": 146502972,
+    "urbanizacion_pct": 74.2,
+    "migracion_interna_anual": null,
+    "fuente": "Banco Mundial, WDI (SP.POP.TOTL, SP.URB.TOTL.IN.ZS), descargado 21/10/2026"
+   },
+   "lecciones": [
+    "Una capital estatal nueva en un estado nuevo pasó de ~24.000 a ~137.000 habitantes en 9 años (1991-2000): crecimiento anual del 21 %.",
+    "El control estatal de la tierra permitió lotear rápido, pero sin reglas de ocupación generó dispersión y vacíos.",
+    "El motor fue el empleo público estatal nuevo (no trasladado de otra ciudad grande) más la obra."
+   ],
+   "fuentes": [
+    {
+     "id": "wp-palmas",
+     "cita": "pt.wikipedia «Palmas» (cronología y tabla IBGE)",
+     "url": "https://pt.wikipedia.org/wiki/Palmas"
+    },
+    {
+     "id": "lei-397",
+     "cita": "Ley estatal de Tocantins 397/1992 (lotes para bajos ingresos), Asamblea Legislativa",
+     "url": "https://al.to.leg.br/arquivo/6655"
+    },
+    {
+     "id": "uft-2007",
+     "cita": "Estudio UFT sobre vacíos urbanos de Palmas (2007), en Revista Direito UFT",
+     "url": "https://sistemas.uft.edu.br/periodicos/index.php/direito/article/download/1526/8372"
+    },
+    {
+     "id": "unitins-2024",
+     "cita": "Revista Humanidades e Inovação (Unitins), migración y empleo público en Palmas",
+     "url": "https://revista.unitins.br/index.php/humanidadeseinovacao/article/view/7964/5412"
+    }
+   ],
+   "derivado": {
+    "ambito": "municipio",
+    "tramos": [
+     {
+      "desde": 1991,
+      "hasta": 1996,
+      "crec_anual_pct": 28.8
+     },
+     {
+      "desde": 1996,
+      "hasta": 2000,
+      "crec_anual_pct": 12.3
+     },
+     {
+      "desde": 2000,
+      "hasta": 2010,
+      "crec_anual_pct": 5.2
+     },
+     {
+      "desde": 2010,
+      "hasta": 2022,
+      "crec_anual_pct": 2.4
+     }
+    ],
+    "nota": "Crecimiento anual compuesto calculado entre puntos de la serie; derivado, no fuente."
+   }
+  },
+  {
+   "id": "canberra",
+   "nombre": "Canberra",
+   "pais": "Australia",
+   "tipo": "capital_nueva",
+   "t0": 1913,
+   "t0_nota": "Fundación 1913; Parlamento en 1927; traslado masivo de la administración desde Melbourne recién desde 1958-1959 (NCDC).",
+   "meta_poblacion": 75000,
+   "meta_nota": "Diseño original de ciudad jardín para 50.000-85.000 habitantes (Salim & Negara 2019); se usa el punto medio.",
+   "poblacion": [
+    {
+     "anio": 1911,
+     "pob": 1777,
+     "ambito": "ACT",
+     "fuente": "ABS, Australian Historical Population Statistics (vía en.wikipedia «Demographics of Canberra»)"
+    },
+    {
+     "anio": 1921,
+     "pob": 2583,
+     "ambito": "ACT",
+     "fuente": "ABS, censo"
+    },
+    {
+     "anio": 1933,
+     "pob": 8947,
+     "ambito": "ACT",
+     "fuente": "ABS, censo"
+    },
+    {
+     "anio": 1947,
+     "pob": 16905,
+     "ambito": "ACT",
+     "fuente": "ABS, censo"
+    },
+    {
+     "anio": 1954,
+     "pob": 30315,
+     "ambito": "ACT",
+     "fuente": "ABS, censo"
+    },
+    {
+     "anio": 1961,
+     "pob": 58828,
+     "ambito": "ACT",
+     "fuente": "ABS, censo"
+    },
+    {
+     "anio": 1966,
+     "pob": 96032,
+     "ambito": "ACT",
+     "fuente": "ABS, censo"
+    },
+    {
+     "anio": 1971,
+     "pob": 151169,
+     "ambito": "ACT",
+     "fuente": "ABS, censo"
+    },
+    {
+     "anio": 1976,
+     "pob": 207740,
+     "ambito": "ACT",
+     "fuente": "ABS, censo"
+    },
+    {
+     "anio": 1981,
+     "pob": 227581,
+     "ambito": "ACT",
+     "fuente": "ABS, censo"
+    },
+    {
+     "anio": 1991,
+     "pob": 289320,
+     "ambito": "ACT",
+     "fuente": "ABS, censo"
+    },
+    {
+     "anio": 2001,
+     "pob": 307053,
+     "ambito": "ACT",
+     "fuente": "ABS, censo"
+    },
+    {
+     "anio": 2011,
+     "pob": 357222,
+     "ambito": "ACT",
+     "fuente": "ABS, censo"
+    },
+    {
+     "anio": 2021,
+     "pob": 453890,
+     "ambito": "ACT",
+     "fuente": "ABS, censo 2021"
+    }
+   ],
+   "motor": [
+    {
+     "anio": 1928,
+     "empleos": 646,
+     "tipo": "publico",
+     "fuente": "Documentos de patrimonio del gobierno del ACT, leídos solo vía resumen de búsqueda (no verificado en texto completo)",
+     "nota": "Servidores trasladados desde Melbourne con oficina y alojamiento provistos, hacia 1928.",
+     "estimado": true
+    },
+    {
+     "anio": 1958,
+     "empleos": 3000,
+     "tipo": "publico",
+     "fuente": "en.wikipedia «Public housing in the Australian Capital Territory»",
+     "nota": "Plan inminente de trasladar 3.000 servidores más desde Melbourne y Sídney cuando arrancó la NCDC (marzo 1958)."
+    },
+    {
+     "anio": 1966,
+     "empleos": 14600,
+     "tipo": "publico",
+     "fuente": "APSC, «Fifty years of APS employment data»: 97.416 empleados en 1966, ~15 % en el ACT",
+     "nota": "Estimación derivada (15 % de 97.416).",
+     "estimado": true
+    }
+   ],
+   "secuencia": [
+    "1913: fundación y concurso internacional (Griffin); obras mínimas durante la Primera Guerra.",
+    "1920s: la Federal Capital Commission construye casas del gobierno (545 aprobadas en 1926-27) antes de mudar a los servidores; Parlamento en 1927.",
+    "1927-1950s: estancamiento por la Depresión y la Segunda Guerra; la mayoría de los departamentos sigue en Melbourne.",
+    "1958: nace la National Capital Development Commission con control del suelo (todo en arrendamiento público) y presupuesto; vivienda, lago y barrios planificados por adelantado.",
+    "1959-1970s: traslado de departamentos (Defensa y otros) con vivienda garantizada; población crece ~10 % anual en los sesenta.",
+    "1970s-hoy: diversificación (ANU, servicios, defensa); el sector privado pasa a construir más viviendas que el Estado hacia 1972."
+   ],
+   "vivienda": "Construida por adelantado por el gobierno y alquilada a los servidores: en 1941 había 1.633 casas del gobierno contra 400 privadas. Toda la tierra es pública con arrendamiento (leasehold). Lista de espera de >3.000 familias en 1955: la vivienda fue el cuello de botella del traslado.",
+   "radicacion_vs_viaje": "Radicación: la distancia a Sídney (~280 km) y Melbourne impedía el viaje diario. Hasta inicios de los setenta muchos servidores iban a Canberra por estadías cortas (testimonio citado por el Canberra Times).",
+   "origen_migrantes": "Servidores de Melbourne y Sídney; inmigración europea de posguerra para la construcción. En 2021, el 32,5 % de los residentes había nacido en el extranjero.",
+   "crisis": "35-45 años de estancamiento (1913-1958) por guerras, Depresión y falta de decisión política de mudar la administración. La recuperación llegó con una autoridad única con suelo y presupuesto (NCDC 1958).",
+   "contexto_nacional": {
+    "anio": 1960,
+    "pob_pais": 10276477,
+    "urbanizacion_pct": 81.6,
+    "migracion_interna_anual": null,
+    "fuente": "Banco Mundial, WDI (SP.POP.TOTL, SP.URB.TOTL.IN.ZS), descargado 21/10/2026",
+    "nota": "Se usa 1960 (primer año WDI), cuando arranca el traslado masivo; en 1913 Australia tenía ~4,5 millones de habitantes (no verificado aquí)."
+   },
+   "lecciones": [
+    "Sin traslado efectivo de empleos públicos la capital no crece: 45 años para llegar a 30.000.",
+    "Con autoridad única, suelo público y vivienda por adelantado, el ACT pasó de 30.000 (1954) a 151.000 (1971): ×5 en 17 años.",
+    "La vivienda pública fue el ritmo que limitó el traslado (listas de espera de 3.000 familias)."
+   ],
+   "fuentes": [
+    {
+     "id": "wp-demo-cbr",
+     "cita": "en.wikipedia «Demographics of Canberra» (ABS Australian Historical Population Statistics 2006 y censos)",
+     "url": "https://en.wikipedia.org/wiki/Demographics_of_Canberra"
+    },
+    {
+     "id": "wp-housing-act",
+     "cita": "en.wikipedia «Public housing in the Australian Capital Territory»",
+     "url": "https://en.wikipedia.org/wiki/Public_housing_in_the_Australian_Capital_Territory"
+    },
+    {
+     "id": "apsc-50",
+     "cita": "Australian Public Service Commission, «Fifty years of APS employment data»",
+     "url": "https://www.apsc.gov.au/node/768"
+    },
+    {
+     "id": "salim-negara",
+     "cita": "Salim & Negara (2019), ISEAS Perspective 2019/79",
+     "url": "https://www.iseas.edu.sg/wp-content/uploads/2019/10/ISEAS_Perspective_2019_79.pdf"
+    },
+    {
+     "id": "ct-halton",
+     "cita": "Canberra Times, «Don't forget those who made it work»",
+     "url": "https://www.canberratimes.com.au/story/6157118/dont-forget-those-who-made-it-work/"
+    }
+   ],
+   "derivado": {
+    "ambito": "ACT",
+    "tramos": [
+     {
+      "desde": 1911,
+      "hasta": 1921,
+      "crec_anual_pct": 3.8
+     },
+     {
+      "desde": 1921,
+      "hasta": 1933,
+      "crec_anual_pct": 10.9
+     },
+     {
+      "desde": 1933,
+      "hasta": 1947,
+      "crec_anual_pct": 4.6
+     },
+     {
+      "desde": 1947,
+      "hasta": 1954,
+      "crec_anual_pct": 8.7
+     },
+     {
+      "desde": 1954,
+      "hasta": 1961,
+      "crec_anual_pct": 9.9
+     },
+     {
+      "desde": 1961,
+      "hasta": 1966,
+      "crec_anual_pct": 10.3
+     },
+     {
+      "desde": 1966,
+      "hasta": 1971,
+      "crec_anual_pct": 9.5
+     },
+     {
+      "desde": 1971,
+      "hasta": 1976,
+      "crec_anual_pct": 6.6
+     },
+     {
+      "desde": 1976,
+      "hasta": 1981,
+      "crec_anual_pct": 1.8
+     },
+     {
+      "desde": 1981,
+      "hasta": 1991,
+      "crec_anual_pct": 2.4
+     },
+     {
+      "desde": 1991,
+      "hasta": 2001,
+      "crec_anual_pct": 0.6
+     },
+     {
+      "desde": 2001,
+      "hasta": 2011,
+      "crec_anual_pct": 1.5
+     },
+     {
+      "desde": 2011,
+      "hasta": 2021,
+      "crec_anual_pct": 2.4
+     }
+    ],
+    "nota": "Crecimiento anual compuesto calculado entre puntos de la serie; derivado, no fuente."
+   }
+  },
+  {
+   "id": "milton_keynes",
+   "nombre": "Milton Keynes",
+   "pais": "Reino Unido",
+   "tipo": "ciudad_nueva",
+   "t0": 1967,
+   "t0_nota": "Designación como new town el 23/1/1967; Development Corporation (MKDC) hasta el 31/3/1992.",
+   "meta_poblacion": 250000,
+   "poblacion": [
+    {
+     "anio": 1967,
+     "pob": 40000,
+     "ambito": "área designada",
+     "fuente": "TCPA, ficha Milton Keynes (población al designar)",
+     "estimado": true,
+     "nota": "Cifra redonda de la designación."
+    },
+    {
+     "anio": 1981,
+     "pob": 125437,
+     "ambito": "municipio (borough)",
+     "fuente": "Estimación citada en en.wikipedia «City of Milton Keynes» (HMSO 1996)",
+     "estimado": true
+    },
+    {
+     "anio": 1991,
+     "pob": 179200,
+     "ambito": "municipio (borough)",
+     "fuente": "Censo 1991 (CASWEB, vía en.wikipedia)"
+    },
+    {
+     "anio": 1992,
+     "pob": 183000,
+     "ambito": "municipio (borough)",
+     "fuente": "MK Living Archive, «Milton Keynes Development Corporation 1967-1992»",
+     "estimado": true
+    },
+    {
+     "anio": 2001,
+     "pob": 207057,
+     "ambito": "municipio (borough)",
+     "fuente": "ONS, censo 2001"
+    },
+    {
+     "anio": 2001,
+     "pob": 184506,
+     "ambito": "área urbana (incl. Newport Pagnell)",
+     "fuente": "Censo 2001 (vía en.wikipedia «Milton Keynes urban area»)"
+    },
+    {
+     "anio": 2011,
+     "pob": 248821,
+     "ambito": "municipio (borough)",
+     "fuente": "ONS, censo 2011"
+    },
+    {
+     "anio": 2011,
+     "pob": 211062,
+     "ambito": "barrios urbanos",
+     "fuente": "TCPA (censo 2011, 17 wards urbanos)"
+    },
+    {
+     "anio": 2021,
+     "pob": 287060,
+     "ambito": "municipio (borough)",
+     "fuente": "ONS, censo 2021 (Nomis)"
+    },
+    {
+     "anio": 2021,
+     "pob": 264349,
+     "ambito": "área urbana",
+     "fuente": "ONS, censo 2021 (vía en.wikipedia «Milton Keynes»)"
+    }
+   ],
+   "motor": [
+    {
+     "anio": 1986,
+     "empleos": 40000,
+     "tipo": "privado",
+     "fuente": "Notas de discurso de M. Thatcher, almuerzo MKDC, 26/9/1986 (Thatcher Foundation)",
+     "nota": "Empleos nuevos acumulados; 7.000 de inversores extranjeros."
+    },
+    {
+     "anio": 1992,
+     "empleos": 80000,
+     "tipo": "privado",
+     "fuente": "MK Living Archive, «Milton Keynes Development Corporation 1967-1992»",
+     "nota": "Empleos atraídos acumulados en 25 años (fuente secundaria).",
+     "estimado": true
+    }
+   ],
+   "secuencia": [
+    "1967: designación; la corporación compra la tierra a valor de uso agrícola (captura de plusvalía).",
+    "1968-1970: plan (Llewelyn-Davies): malla vial de ~1 km, centros de barrio, parques lineales.",
+    "1970s: vivienda pública en alquiler para inquilinos derivados de Londres, junto con naves industriales y oficinas para empresas que se trasladaban; recortes en la crisis de los setenta.",
+    "1979: se inaugura el centro comercial central (centro:mk).",
+    "1980s: giro a vivienda en propiedad construida por privados; atracción de empresas extranjeras.",
+    "1992: la corporación se disuelve con 183.000 habitantes; después la ciudad sigue creciendo por mercado."
+   ],
+   "vivienda": "Por adelantado y coordinada con el empleo: la MKDC construyó o contrató ~44.000 viviendas en 25 años (fuente secundaria); en los setenta predominó el alquiler público para hogares de Londres con empleo asegurado, en los ochenta la venta por privados. En 2011: 55 % propietarios, 20 % alquiler social.",
+   "radicacion_vs_viaje": "Ciudad de radicación con más empleos que residentes en edad de trabajar: recibe viajeros netos (TCPA).",
+   "origen_migrantes": "Sobrecupo (overspill) del Gran Londres, por convenios con distritos londinenses; desde los cincuenta Bletchley ya recibía vivienda de overspill.",
+   "crisis": "Crisis fiscal de los setenta: recortes del gobierno central y límites de costo a la vivienda pública (Housing Yardstick). Se recuperó con el giro a vivienda privada en propiedad y la atracción de empresas en los ochenta.",
+   "contexto_nacional": {
+    "anio": 1967,
+    "pob_pais": 54943600,
+    "urbanizacion_pct": 77.2,
+    "migracion_interna_anual": null,
+    "fuente": "Banco Mundial, WDI (SP.POP.TOTL, SP.URB.TOTL.IN.ZS), descargado 21/10/2026"
+   },
+   "lecciones": [
+    "Empleo y vivienda se entregaban juntos: la familia se mudaba con trabajo y casa asignados.",
+    "La compra de tierra a valor agrícola financió la infraestructura.",
+    "Crecimiento de ~40.000 a ~183.000 en 25 años (×4,6), con la ciudad pegada a la autopista M1 y al ferrocarril a Londres.",
+    "El desarrollo siguió después de disolverse la corporación porque ya había una base de empleo diversificada."
+   ],
+   "fuentes": [
+    {
+     "id": "tcpa-mk",
+     "cita": "TCPA, ficha «Milton Keynes» (New Towns Today), copia en data/raw/trayectorias_int/tcpa_milton_keynes.pdf",
+     "url": "https://www.tcpa.org.uk/wp-content/uploads/2021/11/Milton_Keynes.pdf"
+    },
+    {
+     "id": "wp-city-mk",
+     "cita": "en.wikipedia «City of Milton Keynes» (censos 1981-2021)",
+     "url": "https://en.wikipedia.org/wiki/City_of_Milton_Keynes"
+    },
+    {
+     "id": "mk-archive",
+     "cita": "MK Living Archive, «Milton Keynes Development Corporation 1967-1992»",
+     "url": "https://www.livingarchive.org.uk/?p=3838"
+    },
+    {
+     "id": "thatcher-1986",
+     "cita": "Thatcher, speaking notes MKDC lunch, 26/9/1986",
+     "url": "https://archive.margaretthatcher.org/doc09/860926%20MT%20spkg%20notes%20MKDC%20LUNCH%20THCR%206-2-4-96%20f48.pdf"
+    },
+    {
+     "id": "mkheritage",
+     "cita": "MK Heritage, Marshworth background (vivienda de los setenta)",
+     "url": "https://www.mkheritage.org.uk/archive/whp/marshworth/BACKGROUND.htm"
+    }
+   ],
+   "derivado": {
+    "ambito": "municipio (borough)",
+    "tramos": [
+     {
+      "desde": 1981,
+      "hasta": 1991,
+      "crec_anual_pct": 3.6
+     },
+     {
+      "desde": 1991,
+      "hasta": 1992,
+      "crec_anual_pct": 2.1
+     },
+     {
+      "desde": 1992,
+      "hasta": 2001,
+      "crec_anual_pct": 1.4
+     },
+     {
+      "desde": 2001,
+      "hasta": 2011,
+      "crec_anual_pct": 1.9
+     },
+     {
+      "desde": 2011,
+      "hasta": 2021,
+      "crec_anual_pct": 1.4
+     }
+    ],
+    "nota": "Crecimiento anual compuesto calculado entre puntos de la serie; derivado, no fuente."
+   }
+  },
+  {
+   "id": "shenzhen",
+   "nombre": "Shenzhen",
+   "pais": "China",
+   "tipo": "zona_economica_especial",
+   "t0": 1980,
+   "t0_nota": "Ciudad de Shenzhen creada en 1979 (zona industrial de Shekou); Zona Económica Especial el 26/8/1980.",
+   "meta_poblacion": null,
+   "poblacion": [
+    {
+     "anio": 1979,
+     "pob": 314100,
+     "ambito": "municipio (residentes permanentes)",
+     "fuente": "Shenzhen Statistical Yearbook 2020 (vía en.wikipedia «Demographics of Shenzhen»)"
+    },
+    {
+     "anio": 1980,
+     "pob": 332900,
+     "ambito": "municipio",
+     "fuente": "Shenzhen Statistical Yearbook"
+    },
+    {
+     "anio": 1982,
+     "pob": 449500,
+     "ambito": "municipio",
+     "fuente": "Shenzhen Statistical Yearbook"
+    },
+    {
+     "anio": 1985,
+     "pob": 881500,
+     "ambito": "municipio",
+     "fuente": "Shenzhen Statistical Yearbook"
+    },
+    {
+     "anio": 1988,
+     "pob": 1201400,
+     "ambito": "municipio",
+     "fuente": "Shenzhen Statistical Yearbook"
+    },
+    {
+     "anio": 1990,
+     "pob": 1677800,
+     "ambito": "municipio",
+     "fuente": "Shenzhen Statistical Yearbook"
+    },
+    {
+     "anio": 1993,
+     "pob": 3359700,
+     "ambito": "municipio",
+     "fuente": "Shenzhen Statistical Yearbook"
+    },
+    {
+     "anio": 1995,
+     "pob": 4491500,
+     "ambito": "municipio",
+     "fuente": "Shenzhen Statistical Yearbook"
+    },
+    {
+     "anio": 2000,
+     "pob": 7012400,
+     "ambito": "municipio",
+     "fuente": "Shenzhen Statistical Yearbook"
+    },
+    {
+     "anio": 2005,
+     "pob": 8277500,
+     "ambito": "municipio",
+     "fuente": "Shenzhen Statistical Yearbook"
+    },
+    {
+     "anio": 2010,
+     "pob": 10372000,
+     "ambito": "municipio",
+     "fuente": "Shenzhen Statistical Yearbook"
+    },
+    {
+     "anio": 2015,
+     "pob": 11378700,
+     "ambito": "municipio",
+     "fuente": "Shenzhen Statistical Yearbook"
+    },
+    {
+     "anio": 2020,
+     "pob": 17560000,
+     "ambito": "municipio",
+     "fuente": "Censo 2020 (de ellos 5,874 M con hukou local, 33,4 %)"
+    }
+   ],
+   "motor": [
+    {
+     "anio": 1979,
+     "empleos": 30000,
+     "tipo": "total",
+     "fuente": "en.wikipedia «Shenzhen Special Economic Zone»",
+     "nota": "Antes de la ZEE: ~310.000 residentes y menos de 30.000 trabajadores (tope)."
+    },
+    {
+     "anio": 1983,
+     "empleos": 20000,
+     "tipo": "construccion",
+     "fuente": "Gobierno de Shenzhen, «深圳故事» (2023)",
+     "nota": "Cuerpo de Ingenieros de Construcción del EPL desmovilizado en bloque el 15/9/1983 y convertido en empresas constructoras municipales, con hukou urbano de Shenzhen."
+    },
+    {
+     "anio": 2000,
+     "empleos": 3090000,
+     "tipo": "total",
+     "fuente": "en.wikipedia «Shenzhen Special Economic Zone»",
+     "nota": "Fuerza laboral a fines de 2000 (dentro de una población de 4,33 M en la definición usada por esa fuente, que no coincide con los 7,01 M del anuario).",
+     "estimado": true
+    }
+   ],
+   "secuencia": [
+    "1979: zona industrial de Shekou (China Merchants, capital de Hong Kong): puerto, energía y naves primero.",
+    "1980: ZEE con reglas propias (tierra en arrendamiento, empresas extranjeras, salarios libres).",
+    "1980-1983: infraestructura básica (rutas, energía, agua) con mano de obra militar: 20.000 soldados ingenieros se quedan como civiles en 1983.",
+    "1980s: fábricas de procesamiento para empresas de Hong Kong con mano de obra migrante joven (sobre todo mujeres) alojada en dormitorios de fábrica.",
+    "1992: el viaje de Deng al sur relanza la zona tras dudas políticas; crecimiento de 1,7 M (1990) a 7 M (2000).",
+    "2000s-2010s: transición a electrónica y tecnología (Huawei, Tencent); en 2010 la ZEE se extiende a toda la ciudad."
+   ],
+   "vivienda": "Bajo demanda: dormitorios de fábrica para obreros migrantes y aldeas urbanas (urban villages) que los campesinos locales densificaron para alquilar. El Estado no construyó vivienda masiva por adelantado para los migrantes; solo una minoría con hukou accedió a vivienda de unidad de trabajo.",
+   "radicacion_vs_viaje": "Radicación temporaria: la mayoría vive en la ciudad sin hukou local (en 2020, el 66,6 %); el obstáculo no es el viaje sino la residencia legal y el acceso a servicios.",
+   "origen_migrantes": "Resto de Guangdong (hakka, cantoneses, teochew) y provincias del interior: Hunan (la mayor colonia), Guangxi, Jiangxi, Sichuan y Henan.",
+   "crisis": "Críticas políticas a mediados de los ochenta (contrabando, sobreinversión) y freno tras 1989; el viaje de Deng de 1992 restableció el apoyo. Despidos en las constructoras estatales al privatizarse (más del 10 % de los ex soldados).",
+   "contexto_nacional": {
+    "anio": 1980,
+    "pob_pais": 981235000,
+    "urbanizacion_pct": 19.4,
+    "migracion_interna_anual": null,
+    "fuente": "Banco Mundial, WDI (SP.POP.TOTL, SP.URB.TOTL.IN.ZS), descargado 21/10/2026"
+   },
+   "lecciones": [
+    "El motor fue el empleo industrial exportador con capital y mercado de Hong Kong al lado; la población siguió al empleo con un rezago corto.",
+    "Crecimiento anual de ~21 % entre 1980 y 1990: un caso extremo que requiere un reservorio rural enorme (China tenía 19 % de urbanización).",
+    "La vivienda la resolvieron los privados y los aldeanos locales, no el plan; la ciudad legal (hukou) quedó siempre muy por debajo de la ciudad real.",
+    "Las reglas propias (tierra, inversión, trabajo) importaron más que el gasto público."
+   ],
+   "fuentes": [
+    {
+     "id": "wp-demo-sz",
+     "cita": "en.wikipedia «Demographics of Shenzhen» (Shenzhen Statistical Yearbook 2020)",
+     "url": "https://en.wikipedia.org/wiki/Demographics_of_Shenzhen"
+    },
+    {
+     "id": "wp-sez",
+     "cita": "en.wikipedia «Shenzhen Special Economic Zone»",
+     "url": "https://en.wikipedia.org/wiki/Shenzhen_Special_Economic_Zone"
+    },
+    {
+     "id": "sz-gov-corps",
+     "cita": "Gobierno de Shenzhen, «深圳故事» 2023/2 (desmovilización de 20.000 soldados ingenieros)",
+     "url": "https://www.sz.gov.cn/szstory/202302/content/post_10398734.html"
+    },
+    {
+     "id": "mic-corps",
+     "cita": "Made in China Journal, «From the Third Front to the Second Line: The Construction Soldiers of Shenzhen»",
+     "url": "https://madeinchinajournal.com/?p=22505"
+    }
+   ],
+   "derivado": {
+    "ambito": "municipio",
+    "tramos": [
+     {
+      "desde": 1980,
+      "hasta": 1982,
+      "crec_anual_pct": 16.2
+     },
+     {
+      "desde": 1982,
+      "hasta": 1985,
+      "crec_anual_pct": 25.2
+     },
+     {
+      "desde": 1985,
+      "hasta": 1988,
+      "crec_anual_pct": 10.9
+     },
+     {
+      "desde": 1988,
+      "hasta": 1990,
+      "crec_anual_pct": 18.2
+     },
+     {
+      "desde": 1990,
+      "hasta": 1993,
+      "crec_anual_pct": 26.0
+     },
+     {
+      "desde": 1993,
+      "hasta": 1995,
+      "crec_anual_pct": 15.6
+     },
+     {
+      "desde": 1995,
+      "hasta": 2000,
+      "crec_anual_pct": 9.3
+     },
+     {
+      "desde": 2000,
+      "hasta": 2005,
+      "crec_anual_pct": 3.4
+     },
+     {
+      "desde": 2005,
+      "hasta": 2010,
+      "crec_anual_pct": 4.6
+     },
+     {
+      "desde": 2010,
+      "hasta": 2015,
+      "crec_anual_pct": 1.9
+     },
+     {
+      "desde": 2015,
+      "hasta": 2020,
+      "crec_anual_pct": 9.1
+     }
+    ],
+    "nota": "Crecimiento anual compuesto calculado entre puntos de la serie; derivado, no fuente."
+   }
+  },
+  {
+   "id": "gaborone",
+   "nombre": "Gaborone",
+   "pais": "Botsuana",
+   "tipo": "capital_nueva",
+   "t0": 1964,
+   "t0_nota": "Construcción desde mediados de 1964; capital trasladada desde Mafeking (Sudáfrica) en 1965; independencia el 30/9/1966.",
+   "meta_poblacion": 20000,
+   "poblacion": [
+    {
+     "anio": 1964,
+     "pob": 3855,
+     "ambito": "ciudad",
+     "fuente": "Statistics Botswana (vía en.wikipedia «Gaborone»)"
+    },
+    {
+     "anio": 1971,
+     "pob": 17718,
+     "ambito": "ciudad",
+     "fuente": "Statistics Botswana, censo 1971"
+    },
+    {
+     "anio": 1981,
+     "pob": 59657,
+     "ambito": "ciudad",
+     "fuente": "Statistics Botswana, censo 1981"
+    },
+    {
+     "anio": 1991,
+     "pob": 133468,
+     "ambito": "ciudad",
+     "fuente": "Statistics Botswana, censo 1991"
+    },
+    {
+     "anio": 2001,
+     "pob": 186007,
+     "ambito": "ciudad",
+     "fuente": "Statistics Botswana, censo 2001"
+    },
+    {
+     "anio": 2011,
+     "pob": 231626,
+     "ambito": "ciudad",
+     "fuente": "Statistics Botswana, censo 2011"
+    },
+    {
+     "anio": 2022,
+     "pob": 246325,
+     "ambito": "ciudad",
+     "fuente": "Statistics Botswana, censo 2022"
+    }
+   ],
+   "motor": [
+    {
+     "anio": 1965,
+     "empleos": null,
+     "tipo": "publico",
+     "fuente": "en.wikipedia «Gaborone»",
+     "nota": "Traslado de la administración del protectorado desde Mafeking; sin cifra de servidores encontrada."
+    }
+   ],
+   "secuencia": [
+    "1964: obra de la ciudad completa en ~3 años: más de 1.000 casas, oficinas de gobierno, escuelas, hospital y servicios.",
+    "1965-1966: traslado del gobierno e independencia.",
+    "Fines de los sesenta: los obreros de la construcción se asientan informalmente (Naledi) en la zona industrial.",
+    "1971-1975: lotes para bajos ingresos (Bontleng), viviendas de la Botswana Housing Corporation (1973) y regularización de Naledi como barrio (1975).",
+    "1970s-1990s: la riqueza de los diamantes financia el Estado; la ciudad supera ampliamente la meta de 20.000."
+   ],
+   "vivienda": "Por adelantado para los funcionarios (más de 1.000 casas iniciales construidas por el gobierno); bajo demanda para el resto, con asentamientos informales luego regularizados y lotes con servicios (self-help).",
+   "radicacion_vs_viaje": "Sin dato.",
+   "origen_migrantes": "Obreros de la construcción y después migración neta del resto de Botsuana (país casi totalmente rural al inicio).",
+   "crisis": "Crecimiento muy por encima del plan (20.000) con asentamientos informales; incursiones sudafricanas a mediados de los ochenta; disturbios por desempleo en 1994.",
+   "contexto_nacional": {
+    "anio": 1964,
+    "pob_pais": 566266,
+    "urbanizacion_pct": 3.4,
+    "migracion_interna_anual": null,
+    "fuente": "Banco Mundial, WDI (SP.POP.TOTL, SP.URB.TOTL.IN.ZS), descargado 21/10/2026"
+   },
+   "lecciones": [
+    "La meta de 20.000 se triplicó en 17 años: en un país casi sin ciudades, la capital concentró la urbanización nacional.",
+    "Construir solo para los funcionarios deja a los obreros y migrantes fuera del plan; la solución fueron lotes con servicios.",
+    "El motor de largo plazo fue la renta de los diamantes que financió el empleo público."
+   ],
+   "fuentes": [
+    {
+     "id": "wp-gab",
+     "cita": "en.wikipedia «Gaborone» (censos de Statistics Botswana)",
+     "url": "https://en.wikipedia.org/wiki/Gaborone"
+    }
+   ],
+   "derivado": {
+    "ambito": "ciudad",
+    "tramos": [
+     {
+      "desde": 1964,
+      "hasta": 1971,
+      "crec_anual_pct": 24.3
+     },
+     {
+      "desde": 1971,
+      "hasta": 1981,
+      "crec_anual_pct": 12.9
+     },
+     {
+      "desde": 1981,
+      "hasta": 1991,
+      "crec_anual_pct": 8.4
+     },
+     {
+      "desde": 1991,
+      "hasta": 2001,
+      "crec_anual_pct": 3.4
+     },
+     {
+      "desde": 2001,
+      "hasta": 2011,
+      "crec_anual_pct": 2.2
+     },
+     {
+      "desde": 2011,
+      "hasta": 2022,
+      "crec_anual_pct": 0.6
+     }
+    ],
+    "nota": "Crecimiento anual compuesto calculado entre puntos de la serie; derivado, no fuente."
+   }
+  },
+  {
+   "id": "astana",
+   "nombre": "Astaná",
+   "pais": "Kazajistán",
+   "tipo": "capital_nueva",
+   "t0": 1997,
+   "t0_nota": "Decisión del Soviet Supremo el 6/7/1994; decreto del 20/10/1997 y traslado efectivo el 10/12/1997 a una ciudad existente (Akmola, ex Tselinogrado).",
+   "meta_poblacion": null,
+   "poblacion": [
+    {
+     "anio": 1989,
+     "pob": 277365,
+     "ambito": "ciudad",
+     "fuente": "Censo soviético 1989 (vía en.wikipedia «Astana»)"
+    },
+    {
+     "anio": 1999,
+     "pob": 312965,
+     "ambito": "ciudad",
+     "fuente": "Censo de Kazajistán 1999"
+    },
+    {
+     "anio": 2002,
+     "pob": 493000,
+     "ambito": "ciudad",
+     "fuente": "en.wikipedia «Astana»",
+     "estimado": true,
+     "nota": "Valor aproximado."
+    },
+    {
+     "anio": 2009,
+     "pob": 613006,
+     "ambito": "ciudad",
+     "fuente": "Censo de Kazajistán 2009"
+    },
+    {
+     "anio": 2021,
+     "pob": 1234042,
+     "ambito": "ciudad",
+     "fuente": "Censo de Kazajistán 2021 (tabla de en.wikipedia)"
+    },
+    {
+     "anio": 2025,
+     "pob": 1528703,
+     "ambito": "ciudad",
+     "fuente": "Bureau of National Statistics (stat.gov.kz), 1/1/2025"
+    }
+   ],
+   "motor": [
+    {
+     "anio": 1997,
+     "empleos": null,
+     "tipo": "publico",
+     "fuente": "e-history.kz, «It was not easy, but in 1997 we transferred the capital»",
+     "nota": "Cupo de traslado: ~40 % del aparato presidencial y 20-30 % del personal de los ministerios, según un ex funcionario que no recuerda cifras exactas."
+    }
+   ],
+   "secuencia": [
+    "1994: decisión parlamentaria (por mayoría estrecha).",
+    "1995: comisión estatal y fondo extrapresupuestario «Nueva Capital».",
+    "1997: traslado del gobierno a la ciudad existente; vivienda para funcionarios construida con muchas restricciones.",
+    "1998: cambio de nombre a Astaná y lanzamiento internacional.",
+    "2000s: con la renta petrolera, construcción masiva en la margen izquierda (oficinas, vivienda, edificios emblemáticos); la población se duplica en 10 años.",
+    "2010s-2020s: la ciudad supera el millón; tren ligero demorado por corrupción."
+   ],
+   "vivienda": "Por adelantado para los funcionarios (con carencias en 1997-1998); después, construcción masiva de departamentos por desarrolladores con financiamiento estatal y petrolero.",
+   "radicacion_vs_viaje": "Muchos funcionarios volvían periódicamente a Almaty y varios ministerios (Defensa, Educación, Cultura, Ciencia, Información) quedaron allí al principio. Sin cifra.",
+   "origen_migrantes": "Kazajos de todo el país (en especial rurales y del sur); la proporción de kazajos étnicos subió del 17 % a la independencia al 83 % según en.wikipedia; también trabajadores de Uzbekistán y Kirguistán.",
+   "crisis": "Traslado en plena crisis económica (salarios atrasados); el país perdía población por emigración de rusos y alemanes; la ciudad creció poco entre 1989 y 1999 (+13 %). La recuperación vino con el auge petrolero de los 2000.",
+   "contexto_nacional": {
+    "anio": 1997,
+    "pob_pais": 16043251,
+    "urbanizacion_pct": 56.5,
+    "migracion_interna_anual": null,
+    "fuente": "Banco Mundial, WDI (SP.POP.TOTL, SP.URB.TOTL.IN.ZS), descargado 21/10/2026"
+   },
+   "lecciones": [
+    "Partir de una ciudad existente de ~280.000 habitantes dio servicios y vivienda iniciales.",
+    "El crecimiento fuerte llegó recién cuando hubo dinero (petróleo) para construir; antes, el traslado solo frenó la caída.",
+    "×4 en 22 años (1999-2021): uno de los crecimientos más rápidos de una capital nueva."
+   ],
+   "fuentes": [
+    {
+     "id": "wp-astana",
+     "cita": "en.wikipedia «Astana» (censos 1989-2021 y stat.gov.kz 2025)",
+     "url": "https://en.wikipedia.org/wiki/Astana"
+    },
+    {
+     "id": "wp-reloc-kz",
+     "cita": "en.wikipedia «Capital relocation in Kazakhstan»",
+     "url": "https://en.wikipedia.org/wiki/Capital_relocation_in_Kazakhstan"
+    },
+    {
+     "id": "ehistory-kz",
+     "cita": "e-history.kz, «It was not easy, but in 1997 we transferred the capital»",
+     "url": "https://e-history.kz/en/news/show/7958"
+    },
+    {
+     "id": "csm-1999",
+     "cita": "Christian Science Monitor (3/2/1999), «Puzzle over capital move in Central Asia»",
+     "url": "https://www.csmonitor.com/1999/0203/p7s1.html"
+    }
+   ],
+   "derivado": {
+    "ambito": "ciudad",
+    "tramos": [
+     {
+      "desde": 1989,
+      "hasta": 1999,
+      "crec_anual_pct": 1.2
+     },
+     {
+      "desde": 1999,
+      "hasta": 2002,
+      "crec_anual_pct": 16.4
+     },
+     {
+      "desde": 2002,
+      "hasta": 2009,
+      "crec_anual_pct": 3.2
+     },
+     {
+      "desde": 2009,
+      "hasta": 2021,
+      "crec_anual_pct": 6.0
+     },
+     {
+      "desde": 2021,
+      "hasta": 2025,
+      "crec_anual_pct": 5.5
+     }
+    ],
+    "nota": "Crecimiento anual compuesto calculado entre puntos de la serie; derivado, no fuente."
+   }
+  },
+  {
+   "id": "belo_horizonte",
+   "nombre": "Belo Horizonte",
+   "pais": "Brasil",
+   "tipo": "capital_nueva",
+   "t0": 1894,
+   "t0_nota": "Decisión del congreso minero en 1893; obras desde 1894 (Comisión Constructora, Aarão Reis); inauguración el 12/12/1897 con la ciudad inconclusa.",
+   "meta_poblacion": 200000,
+   "meta_nota": "Capacidad del plan según la literatura habitual; la página consultada dice que se esperaban 100.000 habitantes en 100 años. Dato no verificado en fuente primaria.",
+   "poblacion": [
+    {
+     "anio": 1897,
+     "pob": 10000,
+     "ambito": "ciudad",
+     "fuente": "pt.wikipedia «Belo Horizonte»",
+     "estimado": true,
+     "nota": "~10.000 habitantes en la inauguración."
+    },
+    {
+     "anio": 1900,
+     "pob": 13472,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 1900"
+    },
+    {
+     "anio": 1920,
+     "pob": 55563,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 1920"
+    },
+    {
+     "anio": 1940,
+     "pob": 211377,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 1940"
+    },
+    {
+     "anio": 1950,
+     "pob": 352724,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 1950"
+    },
+    {
+     "anio": 1960,
+     "pob": 693328,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 1960"
+    },
+    {
+     "anio": 1970,
+     "pob": 1255415,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 1970"
+    },
+    {
+     "anio": 1980,
+     "pob": 1822221,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 1980"
+    },
+    {
+     "anio": 1991,
+     "pob": 2017127,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 1991"
+    },
+    {
+     "anio": 2000,
+     "pob": 2232747,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 2000"
+    },
+    {
+     "anio": 2010,
+     "pob": 2375151,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 2010"
+    },
+    {
+     "anio": 2022,
+     "pob": 2315560,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 2022"
+    }
+   ],
+   "motor": [
+    {
+     "anio": 1897,
+     "empleos": null,
+     "tipo": "publico",
+     "fuente": "pt.wikipedia «Belo Horizonte»",
+     "nota": "Traslado del gobierno de Minas Gerais desde Ouro Preto; sin cifra de servidores."
+    },
+    {
+     "anio": 1941,
+     "empleos": null,
+     "tipo": "industrial",
+     "fuente": "Conocimiento general; Cidade Industrial de Contagem (no verificado en esta búsqueda)",
+     "nota": "Polo industrial estatal en la periferia que acelera el crecimiento desde los años cuarenta."
+    }
+   ],
+   "secuencia": [
+    "1893-1894: elección del sitio (aldea de Curral del-Rei, demolida) y Comisión Constructora.",
+    "1895: plano aprobado (malla de manzanas de 120 m con diagonales y Avenida do Contorno).",
+    "1897: inauguración apresurada con ~10.000 habitantes; traslado del gobierno estatal.",
+    "1897-1922: crecimiento lento (13.000 en 1900, 56.000 en 1920).",
+    "Desde los años cuarenta: industrialización (Cidade Industrial, siderurgia) y migración rural del interior de Minas: la ciudad se duplica cada década hasta 1970."
+   ],
+   "vivienda": "Lotes del área central donados o vendidos en condiciones preferenciales a funcionarios públicos y ex propietarios de Ouro Preto (barrio Funcionários). Para los obreros no se previó vivienda: favelas desde la fundación.",
+   "radicacion_vs_viaje": "Radicación (la distancia a Ouro Preto, ~100 km, era larga para la época).",
+   "origen_migrantes": "Interior de Minas Gerais y, al inicio, inmigrantes europeos (sobre todo italianos): en 1920 había 4.824 extranjeros sobre 55.563. En 2010, el 93,7 % había nacido en Minas Gerais.",
+   "crisis": "Dos décadas de crecimiento lento tras la inauguración; los obreros sin lote formaron favelas (132 favelas con 346.480 personas a inicios de los noventa).",
+   "contexto_nacional": {
+    "anio": 1900,
+    "pob_pais": null,
+    "urbanizacion_pct": null,
+    "migracion_interna_anual": null,
+    "fuente": "No buscado en fuente verificable para 1897"
+   },
+   "lecciones": [
+    "La función de capital sola dio un crecimiento lento (~7 % anual 1900-1920 desde una base chica); la industrialización desde los cuarenta multiplicó la escala.",
+    "El plan sobrevivió como centro, pero la población real vivió fuera del perímetro planificado.",
+    "Superó con creces la capacidad de diseño (~200.000) hacia 1940."
+   ],
+   "fuentes": [
+    {
+     "id": "wp-bh",
+     "cita": "pt.wikipedia «Belo Horizonte» (historia y tabla IBGE 1900-2022)",
+     "url": "https://pt.wikipedia.org/wiki/Belo_Horizonte"
+    },
+    {
+     "id": "anpuh-bh",
+     "cita": "ANPUH 2019, ponencia sobre la formación de Belo Horizonte (lotes a funcionarios)",
+     "url": "https://anpuh.org.br/uploads/anais-simposios/pdf/2019-01/1548855456_66bf40d036104dc39c8b649784052361.pdf"
+    }
+   ],
+   "derivado": {
+    "ambito": "municipio",
+    "tramos": [
+     {
+      "desde": 1900,
+      "hasta": 1920,
+      "crec_anual_pct": 7.3
+     },
+     {
+      "desde": 1920,
+      "hasta": 1940,
+      "crec_anual_pct": 6.9
+     },
+     {
+      "desde": 1940,
+      "hasta": 1950,
+      "crec_anual_pct": 5.3
+     },
+     {
+      "desde": 1950,
+      "hasta": 1960,
+      "crec_anual_pct": 7.0
+     },
+     {
+      "desde": 1960,
+      "hasta": 1970,
+      "crec_anual_pct": 6.1
+     },
+     {
+      "desde": 1970,
+      "hasta": 1980,
+      "crec_anual_pct": 3.8
+     },
+     {
+      "desde": 1980,
+      "hasta": 1991,
+      "crec_anual_pct": 0.9
+     },
+     {
+      "desde": 1991,
+      "hasta": 2000,
+      "crec_anual_pct": 1.1
+     },
+     {
+      "desde": 2000,
+      "hasta": 2010,
+      "crec_anual_pct": 0.6
+     },
+     {
+      "desde": 2010,
+      "hasta": 2022,
+      "crec_anual_pct": -0.2
+     }
+    ],
+    "nota": "Crecimiento anual compuesto calculado entre puntos de la serie; derivado, no fuente."
+   }
+  },
+  {
+   "id": "goiania",
+   "nombre": "Goiânia",
+   "pais": "Brasil",
+   "tipo": "capital_nueva",
+   "t0": 1933,
+   "t0_nota": "Decreto de comisión de sitio 20/12/1932; piedra fundamental 24/10/1933; traslado formal 1937; inauguración cultural 5/7/1942.",
+   "meta_poblacion": 50000,
+   "poblacion": [
+    {
+     "anio": 1940,
+     "pob": 48166,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 1940"
+    },
+    {
+     "anio": 1950,
+     "pob": 53389,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 1950"
+    },
+    {
+     "anio": 1960,
+     "pob": 153505,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 1960"
+    },
+    {
+     "anio": 1970,
+     "pob": 389784,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 1970"
+    },
+    {
+     "anio": 1980,
+     "pob": 738117,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 1980"
+    },
+    {
+     "anio": 1991,
+     "pob": 920840,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 1991"
+    },
+    {
+     "anio": 2000,
+     "pob": 1090737,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 2000"
+    },
+    {
+     "anio": 2010,
+     "pob": 1302001,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 2010"
+    },
+    {
+     "anio": 2022,
+     "pob": 1437366,
+     "ambito": "municipio",
+     "fuente": "IBGE, censo 2022"
+    }
+   ],
+   "motor": [
+    {
+     "anio": 1935,
+     "empleos": null,
+     "tipo": "publico",
+     "fuente": "pt.wikipedia «Goiânia»",
+     "nota": "Traslado escalonado: Secretaría General, de Gobierno y Casa Militar en dic/1935; Policía y Hacienda 1935-36; capital formal 1937. Sin cifra de servidores."
+    }
+   ],
+   "secuencia": [
+    "1932-1933: comisión, elección del sitio y piedra fundamental.",
+    "1935-1937: traslado escalonado de las secretarías desde la Ciudad de Goiás.",
+    "1942: inauguración oficial.",
+    "1951: llega el ferrocarril.",
+    "1956-1960: la construcción de Brasília y las rutas al Planalto aceleran el crecimiento (×2,9 entre 1950 y 1960)."
+   ],
+   "vivienda": "Sin dato verificado en esta búsqueda (se sabe que el Estado vendió lotes, pero no se confirmó en fuente).",
+   "radicacion_vs_viaje": "Radicación.",
+   "origen_migrantes": "Interior de Goiás primero; después Minas Gerais, Bahía, Tocantins, Maranhão, São Paulo y Pará. En 2010, el 74,6 % había nacido en Goiás.",
+   "crisis": "Campaña «antimudancista» contra el traslado; crecimiento casi nulo en los cuarenta (48.000 a 53.000) hasta que llegaron el ferrocarril y Brasília.",
+   "contexto_nacional": {
+    "anio": 1940,
+    "pob_pais": null,
+    "urbanizacion_pct": null,
+    "migracion_interna_anual": null,
+    "fuente": "No verificado en esta búsqueda"
+   },
+   "lecciones": [
+    "La capital estatal alcanzó su meta (50.000) en 7 años, pero se estancó 10 años más: la función administrativa sola llega a un techo.",
+    "El salto vino con la conectividad (ferrocarril 1951, rutas a Brasília): +188 % en los cincuenta."
+   ],
+   "fuentes": [
+    {
+     "id": "wp-goiania",
+     "cita": "pt.wikipedia «Goiânia» (cronología y tabla IBGE)",
+     "url": "https://pt.wikipedia.org/wiki/Goi%C3%A2nia"
+    }
+   ],
+   "derivado": {
+    "ambito": "municipio",
+    "tramos": [
+     {
+      "desde": 1940,
+      "hasta": 1950,
+      "crec_anual_pct": 1.0
+     },
+     {
+      "desde": 1950,
+      "hasta": 1960,
+      "crec_anual_pct": 11.1
+     },
+     {
+      "desde": 1960,
+      "hasta": 1970,
+      "crec_anual_pct": 9.8
+     },
+     {
+      "desde": 1970,
+      "hasta": 1980,
+      "crec_anual_pct": 6.6
+     },
+     {
+      "desde": 1980,
+      "hasta": 1991,
+      "crec_anual_pct": 2.0
+     },
+     {
+      "desde": 1991,
+      "hasta": 2000,
+      "crec_anual_pct": 1.9
+     },
+     {
+      "desde": 2000,
+      "hasta": 2010,
+      "crec_anual_pct": 1.8
+     },
+     {
+      "desde": 2010,
+      "hasta": 2022,
+      "crec_anual_pct": 0.8
+     }
+    ],
+    "nota": "Crecimiento anual compuesto calculado entre puntos de la serie; derivado, no fuente."
+   }
+  },
+  {
+   "id": "ciudad_guayana",
+   "nombre": "Ciudad Guayana",
+   "pais": "Venezuela",
+   "tipo": "polo_industrial",
+   "t0": 1961,
+   "t0_nota": "CVG creada en 1960; ciudad fundada el 2/7/1961 uniendo San Félix y Puerto Ordaz; plan con el Joint Center MIT-Harvard.",
+   "meta_poblacion": null,
+   "meta_nota": "Proyecciones de varios millones (2,5 M para 2020) no verificadas en Rodwin (1969).",
+   "poblacion": [
+    {
+     "anio": 1950,
+     "pob": 3500,
+     "ambito": "zona urbana",
+     "fuente": "Ravuri (2003), Delaware Review of Latin American Studies 4(2)",
+     "estimado": true,
+     "nota": "~3.500 (otra fuente da 5.358 para el distrito Caroní)."
+    },
+    {
+     "anio": 1960,
+     "pob": 44100,
+     "ambito": "zona urbana de San Félix",
+     "fuente": "Institut des hautes études de l'Amérique latine (OpenEdition), books.openedition.org/iheal/6955"
+    },
+    {
+     "anio": 1975,
+     "pob": 225000,
+     "ambito": "ciudad",
+     "fuente": "OpenEdition IHEAL",
+     "estimado": true
+    },
+    {
+     "anio": 1990,
+     "pob": 453047,
+     "ambito": "ciudad",
+     "fuente": "Ravuri (2003)"
+    },
+    {
+     "anio": 2001,
+     "pob": 619784,
+     "ambito": "ciudad",
+     "fuente": "Britannica"
+    },
+    {
+     "anio": 2011,
+     "pob": 672651,
+     "ambito": "ciudad",
+     "fuente": "Britannica"
+    },
+    {
+     "anio": 2011,
+     "pob": 704585,
+     "ambito": "municipio Caroní",
+     "fuente": "INE Venezuela, censo 2011 (vía en.wikipedia)"
+    }
+   ],
+   "motor": [
+    {
+     "anio": null,
+     "empleos": 13000,
+     "tipo": "industrial",
+     "fuente": "en.wikipedia «SIDOR»",
+     "nota": "Empleados de la siderúrgica SIDOR (fecha no indicada). Industrias: SIDOR, Venalum, Alcasa, Bauxilum, Ferrominera; represa de Guri."
+    }
+   ],
+   "secuencia": [
+    "Años cincuenta: minas de hierro de empresas estadounidenses (Orinoco Mining, U.S. Steel) y Puerto Ordaz como pueblo de empresa.",
+    "1960-1961: CVG con control de tierra y empresas; plan MIT-Harvard; fundación de la ciudad.",
+    "1960s-1980s: siderurgia y aluminio estatales, represas (Macagua, Guri), vivienda y barrios planificados en Puerto Ordaz; San Félix crece por autoconstrucción.",
+    "Desde 2007: estatización y caída de la producción (SIDOR de 4,3 Mt en 2007 a 0,26 Mt en 2017)."
+   ],
+   "vivienda": "Mixta: urbanizaciones planificadas en Puerto Ordaz (empresas y CVG) y autoconstrucción en San Félix; el empleo creció más lento que la llegada de migrantes ya a inicios de los sesenta.",
+   "radicacion_vs_viaje": "Radicación (lejos de otras ciudades grandes).",
+   "origen_migrantes": "Estados del nororiente (Anzoátegui, Monagas, Sucre, Delta Amacuro): 63,7 % de los inmigrantes del estado Bolívar en 1950 y 78,8 % en 1971; luego de más lejos. Migración neta de toda la vida del estado: +56.230 (1971), +128.118 (1981), +157.347 (1990).",
+   "crisis": "Dependencia de empresas estatales: la crisis venezolana y la caída de la producción siderúrgica afectan a toda la ciudad.",
+   "contexto_nacional": {
+    "anio": 1961,
+    "pob_pais": 8455915,
+    "urbanizacion_pct": 62.8,
+    "migracion_interna_anual": null,
+    "fuente": "Banco Mundial, WDI (SP.POP.TOTL, SP.URB.TOTL.IN.ZS), descargado 21/10/2026"
+   },
+   "lecciones": [
+    "Un ancla industrial pesada con energía barata multiplicó la ciudad por ~10 en 30 años (1960-1990).",
+    "La industria es intensiva en capital: el empleo directo es chico frente a la población que atrae.",
+    "La mono-dependencia de empresas públicas la hizo vulnerable a la crisis nacional."
+   ],
+   "fuentes": [
+    {
+     "id": "ravuri-2003",
+     "cita": "Ravuri, E. (2003), «Reassessing the Guayana Project: Migration to and from Bolívar State, Venezuela, 1950-1990», Delaware Review of Latin American Studies 4(2)",
+     "url": "https://www1.udel.edu/LAS/Vol4-2Ravuri.html"
+    },
+    {
+     "id": "iheal",
+     "cita": "OpenEdition, IHEAL (libro sobre Venezuela, cap. Guayana)",
+     "url": "https://books.openedition.org/iheal/6955"
+    },
+    {
+     "id": "brit-cg",
+     "cita": "Encyclopaedia Britannica, «Ciudad Guayana»",
+     "url": "https://www.britannica.com/place/Ciudad-Guayana"
+    },
+    {
+     "id": "wp-caroni",
+     "cita": "en.wikipedia «Caroní Municipality» (censo 2011)",
+     "url": "https://en.wikipedia.org/wiki/Caron%C3%AD_Municipality"
+    },
+    {
+     "id": "wp-sidor",
+     "cita": "en.wikipedia «SIDOR»",
+     "url": "https://en.wikipedia.org/wiki/SIDOR"
+    }
+   ],
+   "derivado": {
+    "ambito": "ciudad",
+    "tramos": [
+     {
+      "desde": 1975,
+      "hasta": 1990,
+      "crec_anual_pct": 4.8
+     },
+     {
+      "desde": 1990,
+      "hasta": 2001,
+      "crec_anual_pct": 2.9
+     },
+     {
+      "desde": 2001,
+      "hasta": 2011,
+      "crec_anual_pct": 0.8
+     }
+    ],
+    "nota": "Crecimiento anual compuesto calculado entre puntos de la serie; derivado, no fuente."
+   }
+  },
+  {
+   "id": "sejong",
+   "nombre": "Sejong",
+   "pais": "Corea del Sur",
+   "tipo": "ciudad_administrativa",
+   "t0": 2007,
+   "t0_nota": "Ley especial de 2005 tras el fallo de la Corte Constitucional de 2004; obras desde 2007; ciudad autónoma especial el 1/7/2012; traslado de ministerios desde fines de 2012.",
+   "meta_poblacion": 500000,
+   "meta_nota": "500.000 para 2030 (luego 800.000 para 2040).",
+   "poblacion": [
+    {
+     "anio": 2010,
+     "pob": 81447,
+     "ambito": "área de la futura ciudad (Yeongi-gun)",
+     "fuente": "Censo (vía en.wikipedia «Sejong City»)"
+    },
+    {
+     "anio": 2012,
+     "pob": 115000,
+     "ambito": "ciudad",
+     "fuente": "Asia Economy (12/3/2020): ~115.000 al lanzamiento",
+     "estimado": true
+    },
+    {
+     "anio": 2013,
+     "pob": 117177,
+     "ambito": "ciudad",
+     "fuente": "Statistics Korea, censo especial al 1/11/2013 (vía Seoul Shinmun)"
+    },
+    {
+     "anio": 2015,
+     "pob": 204088,
+     "ambito": "ciudad",
+     "fuente": "Censo 2015 (registro), citypopulation.de"
+    },
+    {
+     "anio": 2017,
+     "pob": 281120,
+     "ambito": "ciudad",
+     "fuente": "en.wikipedia «Sejong City»"
+    },
+    {
+     "anio": 2020,
+     "pob": 353933,
+     "ambito": "ciudad",
+     "fuente": "Censo 2020 (registro), citypopulation.de"
+    },
+    {
+     "anio": 2024,
+     "pob": 394630,
+     "ambito": "ciudad",
+     "fuente": "Registro de residentes, julio 2024 (vía en.wikipedia)"
+    },
+    {
+     "anio": 2025,
+     "pob": 392471,
+     "ambito": "ciudad",
+     "fuente": "Censo 2025 (registro), citypopulation.de"
+    }
+   ],
+   "motor": [
+    {
+     "anio": 2012,
+     "empleos": 10452,
+     "tipo": "publico",
+     "fuente": "Korea Herald vía brentphone.kr (17/1/2012)",
+     "nota": "Total previsto de servidores a trasladar desde Seúl en tres etapas (2012-2014); 36 organismos."
+    },
+    {
+     "anio": 2013,
+     "empleos": 4973,
+     "tipo": "publico",
+     "fuente": "Korea Herald vía brentphone.kr (18/11/2013)",
+     "nota": "Servidores ya instalados en las nuevas oficinas a fines de 2013."
+    },
+    {
+     "anio": 2026,
+     "empleos": 3000,
+     "tipo": "publico",
+     "fuente": "Korea Times (17/10/2026)",
+     "nota": "Casi 3.000 servidores más podrían trasladarse en 2027.",
+     "estimado": true
+    }
+   ],
+   "secuencia": [
+    "2003-2005: promesa de capital nueva; la Corte la anula (2004); se rehace como ciudad administrativa (2005).",
+    "2007-2012: obra de complejo de gobierno, vías y primeras torres de departamentos (LH y privados) antes del traslado.",
+    "2010: intento del gobierno de cambiar el plan, derrotado en la Asamblea.",
+    "2012-2014: traslado en tres etapas de ~36 organismos y ~10.000 servidores, con buses diarios a Seúl y KTX en Osong.",
+    "2015-2020: entrega masiva de departamentos (5.770 en 2020 y 10.268 en 2021 programados); +2.500 habitantes por mes.",
+    "2025: primer saldo migratorio negativo (−47 personas); la fecundidad cae por debajo de 1."
+   ],
+   "vivienda": "Por adelantado y masiva: departamentos en torre construidos por la corporación pública LH y desarrolladores, con cupos especiales y beneficios impositivos para servidores trasladados. Se ofreció la vivienda antes que los servicios (escuelas, comercio), lo que frenó la mudanza de familias.",
+   "radicacion_vs_viaje": "Encuesta 2011 (16 organismos, 10.179 servidores): 46,1 % pensaba mudarse con la familia, 40,6 % solo, ~10 % viajar. En 2013, 1.400 servidores (23 %) seguían viajando desde Seúl. En 2014, el 34 % se había mudado solo o viajaba desde la región capital. Motivo principal para no mudar a la familia: la educación (54,2 %).",
+   "origen_migrantes": "Mayormente de la propia región: 72.460 residentes de Daejeon se mudaron a Sejong entre 2012 y 2017; más de 80.000 del Chungcheong en 5 años; de los ~28.000 jóvenes llegados, ~5.000 venían de la región capital.",
+   "crisis": "Anulación judicial (2004) e intento de revertir el plan (2010); servidores que viajan o viven separados de la familia; comercio vacío; en 2025 un ministerio se fue y la ciudad tuvo su primer saldo migratorio negativo.",
+   "contexto_nacional": {
+    "anio": 2012,
+    "pob_pais": 50199853,
+    "urbanizacion_pct": 81.9,
+    "migracion_interna_anual": null,
+    "fuente": "Banco Mundial, WDI (SP.POP.TOTL, SP.URB.TOTL.IN.ZS), descargado 21/10/2026"
+   },
+   "lecciones": [
+    "El empleo público trasladado (~10.000-15.000) atrajo una población mucho mayor (+280.000 en 12 años), pero casi toda de la región vecina, no de Seúl.",
+    "La vivienda por adelantado no alcanza si no hay escuelas: la familia es la decisión, no el empleado.",
+    "Con KTX y buses, un cuarto de los servidores eligió viajar en vez de mudarse.",
+    "El crecimiento se frena cuando termina la entrega masiva de viviendas: 2025 tuvo saldo migratorio negativo."
+   ],
+   "fuentes": [
+    {
+     "id": "wp-sejong",
+     "cita": "en.wikipedia «Sejong City»",
+     "url": "https://en.wikipedia.org/wiki/Sejong_City"
+    },
+    {
+     "id": "citypop-sejong",
+     "cita": "citypopulation.de, Sejong (censos 2015, 2020, 2025)",
+     "url": "https://citypopulation.de/en/southkorea/admin/29__sejong/"
+    },
+    {
+     "id": "asiae-2020",
+     "cita": "Asia Economy (12/3/2020), «Sejong surpasses population of 350,000»",
+     "url": "https://www.asiae.co.kr/en/article/2020031212060694149"
+    },
+    {
+     "id": "kh-2012",
+     "cita": "Korea Herald (17/1/2012), «Sejong move splits families, hits marriage prospects» (copia brentphone.kr)",
+     "url": "https://brentphone.kr/contents/board/eng_news_view.asp?seq=1375"
+    },
+    {
+     "id": "kh-2013",
+     "cita": "Korea Herald (18/11/2013), «Life in Sejong is a bowl of hassles» (copia brentphone.kr)",
+     "url": "https://www.brentphone.kr/contents/board/eng_news_view.asp?seq=2183"
+    },
+    {
+     "id": "seoul-2011",
+     "cita": "Seoul Shinmun (11/3/2011), «공무원 40% 세종시 가족과 함께 안가»",
+     "url": "https://m.go.seoul.co.kr/news/2011/03/11/20110311012007"
+    },
+    {
+     "id": "seoul-2017",
+     "cita": "Seoul Shinmun (3/2/2017), «5년간 8만여명 충청권서 유입»",
+     "url": "https://m.go.seoul.co.kr/news/2017/02/03/20170203012010"
+    },
+    {
+     "id": "seoul-2018",
+     "cita": "Seoul Shinmun (10/5/2018), «세종시 인구 블랙홀 현실화»",
+     "url": "https://m.go.seoul.co.kr/news/2018/05/10/20180510014016"
+    },
+    {
+     "id": "hk-2026",
+     "cita": "Hankyung (1/2/2026), primer saldo migratorio negativo de Sejong",
+     "url": "https://www.hankyung.com/article/202602015789i"
+    },
+    {
+     "id": "kt-2026",
+     "cita": "Korea Times (17/10/2026), «Sejong relocation set to worsen KTX seat shortage»",
+     "url": "https://www.koreatimes.co.kr/southkorea/20261017/sejong-relocation-set-to-worsen-ktx-seat-shortage"
+    }
+   ],
+   "derivado": {
+    "ambito": "ciudad",
+    "tramos": [
+     {
+      "desde": 2012,
+      "hasta": 2013,
+      "crec_anual_pct": 1.9
+     },
+     {
+      "desde": 2013,
+      "hasta": 2015,
+      "crec_anual_pct": 32.0
+     },
+     {
+      "desde": 2015,
+      "hasta": 2017,
+      "crec_anual_pct": 17.4
+     },
+     {
+      "desde": 2017,
+      "hasta": 2020,
+      "crec_anual_pct": 8.0
+     },
+     {
+      "desde": 2020,
+      "hasta": 2024,
+      "crec_anual_pct": 2.8
+     },
+     {
+      "desde": 2024,
+      "hasta": 2025,
+      "crec_anual_pct": -0.5
+     }
+    ],
+    "nota": "Crecimiento anual compuesto calculado entre puntos de la serie; derivado, no fuente."
+   }
+  },
+  {
+   "id": "putrajaya",
+   "nombre": "Putrajaya",
+   "pais": "Malasia",
+   "tipo": "ciudad_administrativa",
+   "t0": 1995,
+   "t0_nota": "Obras desde agosto 1995; oficina del primer ministro en 1999; territorio federal 2001; la mayoría de los servidores entre 1999 y 2005.",
+   "meta_poblacion": 320000,
+   "poblacion": [
+    {
+     "anio": 2000,
+     "pob": 12240,
+     "ambito": "territorio federal",
+     "fuente": "DOSM, censo 2000 (vía citypopulation.de)"
+    },
+    {
+     "anio": 2007,
+     "pob": 30000,
+     "ambito": "territorio federal",
+     "fuente": "en.wikipedia «Putrajaya» (estimación «más de 30.000»)",
+     "estimado": true
+    },
+    {
+     "anio": 2010,
+     "pob": 72413,
+     "ambito": "territorio federal",
+     "fuente": "DOSM, censo 2010 (vía citypopulation.de; en.wikipedia da 68.361)"
+    },
+    {
+     "anio": 2015,
+     "pob": 88300,
+     "ambito": "territorio federal",
+     "fuente": "DOSM, estimación (vía en.wikipedia)",
+     "estimado": true
+    },
+    {
+     "anio": 2020,
+     "pob": 109202,
+     "ambito": "territorio federal",
+     "fuente": "DOSM, censo 2020"
+    },
+    {
+     "anio": 2023,
+     "pob": 119200,
+     "ambito": "territorio federal",
+     "fuente": "DOSM, estimación (vía citypopulation.de)",
+     "estimado": true
+    }
+   ],
+   "motor": [
+    {
+     "anio": 1999,
+     "empleos": 300,
+     "tipo": "publico",
+     "fuente": "en.wikipedia «Putrajaya» (vía resumen de búsqueda)",
+     "nota": "Personal de la oficina del primer ministro trasladado en 1999; el resto de los servidores, hacia 2005."
+    },
+    {
+     "anio": 2025,
+     "empleos": null,
+     "tipo": "publico",
+     "fuente": "Bernama (5/6/2025)",
+     "nota": "Se afirma que el 90 % de la población de Putrajaya son servidores públicos (declaración política, no estadística)."
+    }
+   ],
+   "secuencia": [
+    "1995: obras de la ciudad completa (edificios de gobierno, lago, boulevard, cuarteles de vivienda) a 25 km de Kuala Lumpur.",
+    "1997: la crisis asiática demora el cronograma.",
+    "1999: se muda la oficina del primer ministro.",
+    "2002: tren rápido KLIA Transit.",
+    "1999-2005: traslado de la mayoría de los ministerios; 2003 poder judicial.",
+    "2025: déficit de cuarteles; proyecto Kota MADANI con 10.000 unidades más."
+   ],
+   "vivienda": "Por adelantado por el Estado y su empresa (Putrajaya Holdings): cuarteles de gobierno en alquiler. Se necesitan 35.000 unidades pero hay ~22.000, sin aumento en 20 años; ~17.000-18.000 servidores en lista de espera (Bernama 2025, Auditor General 2021).",
+   "radicacion_vs_viaje": "No se encontró una cifra oficial de la proporción que viaja. La población residente (109.202 en 2020) es una fracción de la meta y gran parte de los empleados viaja desde el valle del Klang en auto; faltan viviendas accesibles en la ciudad (Bernama 2025).",
+   "origen_migrantes": "Servidores trasladados desde Kuala Lumpur y el valle del Klang; sin tabla de orígenes.",
+   "crisis": "Crisis asiática de 1997; población muy por debajo de la meta (34 % de los 320.000; la auditoría nacional fijaba 281.000 para 2020); escasez de vivienda accesible y dependencia del auto.",
+   "contexto_nacional": {
+    "anio": 1995,
+    "pob_pais": 20330599,
+    "urbanizacion_pct": 55.9,
+    "migracion_interna_anual": null,
+    "fuente": "Banco Mundial, WDI (SP.POP.TOTL, SP.URB.TOTL.IN.ZS), descargado 21/10/2026"
+   },
+   "lecciones": [
+    "A 25 km de la metrópoli, buena parte de los empleados elige viajar: la ciudad crece como lugar de trabajo, no de residencia.",
+    "La vivienda pública por adelantado quedó corta (22.000 de 35.000) y se congeló; eso limitó la radicación.",
+    "Sin empleo privado propio, la población queda atada al número de cuarteles."
+   ],
+   "fuentes": [
+    {
+     "id": "wp-putrajaya",
+     "cita": "en.wikipedia «Putrajaya»",
+     "url": "https://en.wikipedia.org/wiki/Putrajaya"
+    },
+    {
+     "id": "citypop-pj",
+     "cita": "citypopulation.de, Putrajaya (DOSM)",
+     "url": "https://www.citypopulation.de/en/malaysia/admin/16__putrajaya/"
+    },
+    {
+     "id": "bernama-2025a",
+     "cita": "Bernama (5/6/2025), Kota MADANI y cuarteles",
+     "url": "https://www.bernama.com/en/news.php?id=2431211"
+    },
+    {
+     "id": "bernama-2025b",
+     "cita": "Bernama (27/6/2025), necesidad de 35.000 cuarteles",
+     "url": "https://www.bernama.com/en/news.php?id=2439002"
+    },
+    {
+     "id": "lkan-pj",
+     "cita": "Auditoría Nacional de Malasia, «Pembangunan Putrajaya» (leída vía resumen; meta 281.000 para 2020)",
+     "url": "https://lkan.audit.gov.my/documents/lkan/1531/2-2-RE-BI-Pembangunan-Putrajaya.pdf"
+    }
+   ],
+   "derivado": {
+    "ambito": "territorio federal",
+    "tramos": [
+     {
+      "desde": 2000,
+      "hasta": 2007,
+      "crec_anual_pct": 13.7
+     },
+     {
+      "desde": 2007,
+      "hasta": 2010,
+      "crec_anual_pct": 34.1
+     },
+     {
+      "desde": 2010,
+      "hasta": 2015,
+      "crec_anual_pct": 4.0
+     },
+     {
+      "desde": 2015,
+      "hasta": 2020,
+      "crec_anual_pct": 4.3
+     },
+     {
+      "desde": 2020,
+      "hasta": 2023,
+      "crec_anual_pct": 3.0
+     }
+    ],
+    "nota": "Crecimiento anual compuesto calculado entre puntos de la serie; derivado, no fuente."
+   }
+  },
+  {
+   "id": "chandigarh",
+   "nombre": "Chandigarh",
+   "pais": "India",
+   "tipo": "capital_nueva",
+   "t0": 1951,
+   "t0_nota": "Sitio elegido en 1948; Le Corbusier llega en febrero de 1951; departamentos trasladados desde Shimla en septiembre de 1953; inauguración el 7/10/1953.",
+   "meta_poblacion": 500000,
+   "poblacion": [
+    {
+     "anio": 1951,
+     "pob": 24261,
+     "ambito": "área del futuro territorio (aldeas)",
+     "fuente": "Censo de India (tabla de en.wikipedia «Chandigarh»)"
+    },
+    {
+     "anio": 1961,
+     "pob": 119881,
+     "ambito": "territorio de la Unión",
+     "fuente": "Censo de India 1961"
+    },
+    {
+     "anio": 1971,
+     "pob": 257251,
+     "ambito": "territorio de la Unión",
+     "fuente": "Censo de India 1971"
+    },
+    {
+     "anio": 1981,
+     "pob": 451610,
+     "ambito": "territorio de la Unión",
+     "fuente": "Censo de India 1981"
+    },
+    {
+     "anio": 1991,
+     "pob": 642015,
+     "ambito": "territorio de la Unión",
+     "fuente": "Censo de India 1991"
+    },
+    {
+     "anio": 2001,
+     "pob": 900635,
+     "ambito": "territorio de la Unión",
+     "fuente": "Censo de India 2001"
+    },
+    {
+     "anio": 2011,
+     "pob": 1055450,
+     "ambito": "territorio de la Unión",
+     "fuente": "Censo de India 2011"
+    }
+   ],
+   "motor": [
+    {
+     "anio": 1953,
+     "empleos": null,
+     "tipo": "publico",
+     "fuente": "en.wikipedia «Chandigarh»",
+     "nota": "Todos los departamentos del gobierno de Punjab Oriental trasladados desde Shimla; sin cifra."
+    }
+   ],
+   "secuencia": [
+    "1947-1948: la Partición deja a Punjab Oriental sin capital; elección del sitio.",
+    "1950-1951: plan (Mayer, luego Le Corbusier); acuerdo con aldeanos desplazados.",
+    "1952: ley de control de la periferia (5 y luego 10 millas).",
+    "1951-1953: primera fase de sectores con 13 tipos de vivienda de gobierno según el rango del empleado; traslado del gobierno en 1953.",
+    "1966: división de Punjab; Chandigarh pasa a territorio de la Unión y capital de dos estados (Punjab y Haryana), lo que duplica el empleo público.",
+    "1970s: asentamientos informales (11-15 % de la población en 1971) y colonias de tránsito que se vuelven permanentes."
+   ],
+   "vivienda": "Por adelantado por el Estado para los empleados públicos: 13 tipos de vivienda de gobierno, desde la del primer ministro hasta la de empleados de bajos ingresos. Sin previsión para obreros y servicios informales.",
+   "radicacion_vs_viaje": "Sin dato.",
+   "origen_migrantes": "Refugiados de la Partición desde Pakistán Occidental y empleados del gobierno de Punjab; después, migración del norte de India.",
+   "crisis": "Reorganización de 1966 (disputa entre Punjab y Haryana); asentamientos informales; crecimiento hacia ciudades satélite fuera del control (Mohali, Panchkula).",
+   "contexto_nacional": {
+    "anio": 1960,
+    "pob_pais": 435990338,
+    "urbanizacion_pct": 17.9,
+    "migracion_interna_anual": null,
+    "fuente": "Banco Mundial, WDI (SP.POP.TOTL, SP.URB.TOTL.IN.ZS), descargado 21/10/2026",
+    "nota": "Se usa 1960 (primer año WDI)."
+   },
+   "lecciones": [
+    "La capital crece ~10 % anual en los cincuenta-setenta porque reúne gobierno estatal, refugiados y luego dos gobiernos.",
+    "La vivienda por rango funciona para los empleados, pero la ciudad informal aparece igual.",
+    "El control de la periferia desplaza el crecimiento a municipios vecinos."
+   ],
+   "fuentes": [
+    {
+     "id": "wp-chandigarh",
+     "cita": "en.wikipedia «Chandigarh» (historia y tabla censal)",
+     "url": "https://en.wikipedia.org/wiki/Chandigarh"
+    }
+   ],
+   "derivado": {
+    "ambito": "territorio de la Unión",
+    "tramos": [
+     {
+      "desde": 1961,
+      "hasta": 1971,
+      "crec_anual_pct": 7.9
+     },
+     {
+      "desde": 1971,
+      "hasta": 1981,
+      "crec_anual_pct": 5.8
+     },
+     {
+      "desde": 1981,
+      "hasta": 1991,
+      "crec_anual_pct": 3.6
+     },
+     {
+      "desde": 1991,
+      "hasta": 2001,
+      "crec_anual_pct": 3.4
+     },
+     {
+      "desde": 2001,
+      "hasta": 2011,
+      "crec_anual_pct": 1.6
+     }
+    ],
+    "nota": "Crecimiento anual compuesto calculado entre puntos de la serie; derivado, no fuente."
+   }
+  }
+ ]
+}
