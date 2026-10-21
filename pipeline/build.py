@@ -55,6 +55,19 @@ CRS_M = "ESRI:102033"
 
 T0 = time.time()
 
+# Capitales provinciales y CABA (lat, lon aproximadas del centro; BAHRA/IGN).
+CAPITALES = {
+    "Ciudad Autónoma de Buenos Aires": (-34.6037, -58.3816), "La Plata": (-34.9214, -57.9545),
+    "San Fernando del Valle de Catamarca": (-28.4696, -65.7795), "Resistencia": (-27.4606, -58.9839),
+    "Rawson": (-43.3002, -65.1023), "Córdoba": (-31.4167, -64.1833), "Corrientes": (-27.4692, -58.8306),
+    "Paraná": (-31.7413, -60.5115), "Formosa": (-26.1849, -58.1731), "San Salvador de Jujuy": (-24.1858, -65.2995),
+    "Santa Rosa": (-36.6167, -64.2833), "La Rioja": (-29.4131, -66.8558), "Mendoza": (-32.8895, -68.8458),
+    "Posadas": (-27.3671, -55.8961), "Neuquén": (-38.9516, -68.0591), "Viedma": (-40.8135, -62.9967),
+    "Salta": (-24.7859, -65.4117), "San Juan": (-31.5375, -68.5364), "San Luis": (-33.2950, -66.3356),
+    "Río Gallegos": (-51.6230, -69.2168), "Santa Fe": (-31.6333, -60.7000), "Santiago del Estero": (-27.7951, -64.2615),
+    "Ushuaia": (-54.8019, -68.3030), "San Miguel de Tucumán": (-26.8083, -65.2176),
+}
+
 ESTRICTA = r"Parque|Monumento|Integral|Estricta|Intangible|Reserva Nacional|Natural Silvestre"
 
 
@@ -325,6 +338,14 @@ def main() -> None:
     dep_of_cell[best.c.values] = best.d.values
     del wp, dep_r
 
+    # --- calidad del agua subterránea (probabilidades modeladas)
+    C["as_prob"] = agg.mean(warp(raw("arsenico")))
+    f = warp(raw("fluoruro"), resampling=Resampling.average)
+    f[f > 100] = np.nan  # 255 = sin dato; valores en %
+    C["f_prob"] = agg.mean(f / 100.0)
+    del f
+    log("arsénico y fluoruro")
+
     # --- áreas protegidas: estrictas (parques, monumentos, reservas integrales) se
     #     tratan como restricción; las de uso múltiple (biosfera, Ramsar, paisaje,
     #     uso múltiple) solo penalizan, porque admiten asentamientos.
@@ -353,6 +374,56 @@ def main() -> None:
     pob = C["pob"]
     C["pob_50km"] = np.array([pob[n].sum() for n in nbrs])
     C["crec_dep"] = pd.Series(dep_code).map(cen.crec_anual).values * 100
+
+    # --- tenencia de la tierra (escala departamental)
+    cna = pd.read_csv(raw("tenencia_cna2018"), dtype={"cod_dep": str}).set_index("cod_dep")
+    dep_s = pd.Series(dep_code)
+    C["pct_fiscal_eap"] = dep_s.map(cna.pct_fiscal).values
+    C["pct_dep_en_eap"] = dep_s.map(cna.pct_departamento_en_eap.clip(upper=100)).values
+    rntr = pd.read_csv(raw("extranjerizacion"), dtype={"cod_dep": str})
+    # el PDF del RNTR repite Ituzaingó (18084) con 0 %: se conserva el valor no nulo
+    rntr = rntr[rntr.nivel == "departamento"].groupby("cod_dep")[["pct_extranjerizado"]].max()
+    C["pct_extranjero"] = dep_s.map(rntr.pct_extranjerizado).values
+    # comunidades indígenas: distancia a la más cercana con coordenadas
+    ci = pd.read_csv(raw("comunidades_indigenas"), sep=";", encoding="utf-8-sig", dtype=str)
+    ci.columns = [c.strip().replace(" ", "") for c in ci.columns]
+    for c in ("comunidad_latitud", "comunidad_longitud"):
+        ci[c] = pd.to_numeric(ci[c].str.replace(",", ".", regex=False), errors="coerce")
+    ci = ci.dropna(subset=["comunidad_latitud", "comunidad_longitud"])
+    ci_pts = gpd.GeoDataFrame(ci, geometry=gpd.points_from_xy(ci.comunidad_longitud, ci.comunidad_latitud), crs=4326)
+    C["d_comunidad"] = distances_km(centers_m, ci_pts)
+    # --- empleo registrado (CEP XXI / SIPA): puestos 2022 del departamento repartidos
+    #     entre sus celdas según la población, luego sumados en 50 km
+    emp = pd.read_csv(raw("empleo"), dtype={"cod_dep": str}).set_index("cod_dep")
+    pob_dep_cells = pd.Series(C["pob"]).groupby(dep_s).transform("sum").values
+    share = np.where(pob_dep_cells > 0, C["pob"] / np.maximum(pob_dep_cells, 1), 0)
+    puestos_cell = dep_s.map(emp.puestos_priv_2022).fillna(0).values * share
+    C["empleo_50km"] = np.array([puestos_cell[n].sum() for n in nbrs])
+    C["emp_crec"] = dep_s.map(emp.tasa_anual_2014_2022).values
+    C["salario_rel"] = dep_s.map(emp.salario_rel_nac_priv_2022).values
+    proy = gpd.read_file(raw("proyectos"))
+    motores = proy[
+        proy.tipo.isin(["mineria_litio", "mineria_cobre", "mineria_metalifera"]) & proy.etapa_norm.isin(["construccion", "desarrollo", "operacion"])
+        | (proy.tipo == "hidrocarburos_vaca_muerta")
+        | proy.tipo.str.startswith("energia") & proy.etapa_norm.isin(["construccion", "desarrollo"])
+    ]
+    mxy = np.c_[motores.to_crs(CRS_M).geometry.x.values, motores.to_crs(CRS_M).geometry.y.values]
+    C["n_proyectos_100km"] = np.array([len(x) for x in cKDTree(mxy).query_ball_point(xy, r=100_000)])
+    C["d_parque_ind"] = distances_km(centers_m, proy[proy.tipo == "parque_industrial"])
+    # --- servicios y capacidad de absorción (Censo 2022 por departamento)
+    sv = pd.read_csv(raw("servicios"), dtype={"cod_dep": str}).set_index("cod_dep")
+    for col, src in [("pct_agua_red", "pct_agua_red"), ("pct_cloaca", "pct_cloaca"), ("pct_internet", "pct_internet"),
+                     ("pct_nbi", "pct_nbi"), ("pct_viv_ociosas", "pct_viv_ociosas"),
+                     ("salud_int_100mil", "salud_con_int_por_100mil"), ("crec_proy_2035", "crec_est_2022_2035_pct")]:
+        C[col] = dep_s.map(sv[src]).values
+    viv_cell = dep_s.map(sv.viv_desocupadas_ociosas).fillna(0).values * share
+    C["viv_ociosas_50km"] = np.array([viv_cell[n].sum() for n in nbrs])
+    C["d_universidad"] = distances_km(centers_m, gpd.read_file(raw("universidades")))
+    sal = gpd.read_file(raw("establecimientos_salud"))
+    # hospital = internación general (tipología 6 del REFES); se excluyen geriátricos y especializados
+    C["d_hospital"] = distances_km(centers_m, sal[sal.internacion.astype(bool) & (pd.to_numeric(sal.tipologia_cod, errors="coerce") == 6)])
+    log(f"empleo: {emp.puestos_priv_2022.sum():,.0f} puestos; {len(motores)} proyectos motores")
+    log(f"tenencia: CNA {cna.shape[0]} deptos, RNTR {rntr.shape[0]}, {len(ci_pts)} comunidades con coordenadas")
     log("población 50 km")
 
     # --- distancias a infraestructura
@@ -381,6 +452,27 @@ def main() -> None:
     q = pd.Series(rios1.DIS_AV_CMS.values[ri]).groupby(pi).max()
     C["q_rio25"] = np.zeros(len(uniq))
     C["q_rio25"][q.index.values] = q.values
+    # centralidad para una capital: distancia media de la población del país a la celda
+    # (ponderada por población, con las celdas H3 como origen) y distancia a la capital
+    # provincial más lejana (equidad de acceso desde todas las provincias)
+    # origen: población agregada a celdas padre H3 res 4 (~1.800 km²), centroides ponderados
+    parent = np.array([h3.str_to_int(h3.cell_to_parent(h3.int_to_str(int(c)), 4)) for c in uniq])
+    g = pd.DataFrame({"p": parent, "w": C["pob"], "x": xy[:, 0] * C["pob"], "y": xy[:, 1] * C["pob"]}).groupby("p").sum()
+    g = g[g.w > 0]
+    src = np.c_[g.x / g.w, g.y / g.w]
+    ws = (g.w / g.w.sum()).values
+    dmed = np.empty(len(uniq))
+    for k in range(0, len(uniq), 500):
+        d = np.sqrt(((xy[k:k + 500, None, :] - src[None, :, :]) ** 2).sum(-1))
+        dmed[k:k + 500] = d @ ws / 1000.0
+    C["d_media_pob"] = dmed
+    caps = gpd.GeoSeries(gpd.points_from_xy([c[1] for c in CAPITALES.values()], [c[0] for c in CAPITALES.values()]),
+                         crs="EPSG:4326").to_crs(CRS_M)
+    cxy = np.c_[caps.x.values, caps.y.values]
+    C["d_max_capital"] = np.sqrt(((xy[:, None, :] - cxy[None, :, :]) ** 2).sum(-1)).max(1) / 1000.0
+    # distancia al núcleo de una metrópoli: celdas con ≥10.000 hab. en regiones con ≥1 M hab. en 50 km
+    core = (C["pob"] >= 10_000) & (C["pob_50km"] >= 1_000_000)
+    C["d_metro"] = cKDTree(xy[core]).query(xy)[0] / 1000.0
     # distancia al centro del AMBA (Plaza de Mayo)
     amba = gpd.GeoSeries(gpd.points_from_xy([-58.3702], [-34.6083]), crs="EPSG:4326").to_crs(CRS_M).iloc[0]
     C["d_amba"] = centers_m.distance(amba).values / 1000.0
@@ -389,7 +481,7 @@ def main() -> None:
     C["frac_tierra"] = npx / np.nanmax(npx)
 
     # ------------------------------------------------------------ export celdas
-    keep = npx >= 8
+    keep = npx >= 1  # se conservan también las celdas costeras pequeñas para no perder población
     order = list(C.keys())
     meta_cols = []
     buf = bytearray()
@@ -442,6 +534,11 @@ def main() -> None:
     simplify_out(ffcc_op.assign(nombre=ffcc_op.fna), 0.005, capas / "ferrocarril.geojson", ["nombre"])
     simplify_out(at, 0.005, capas / "alta_tension.geojson", [])
     simplify_out(ap.assign(nombre=ap.fna), 0.005, capas / "areas_protegidas.geojson", ["nombre", "categoria"])
+    ci_out = ci_pts.assign(nombre=ci_pts.comunidad_nombre.str.strip(), pueblo=ci_pts.comunidad_pueblo.str.strip(),
+                           relevamiento=ci_pts.relevamiento_estado.str.strip())
+    simplify_out(ci_out, 0, capas / "comunidades_indigenas.geojson", ["nombre", "pueblo", "relevamiento"])
+    simplify_out(motores.assign(nombre=motores.nombre, etapa=motores.etapa_norm), 0, capas / "proyectos.geojson",
+                 ["nombre", "tipo", "etapa"])
     simplify_out(rios100.assign(caudal=rios100.DIS_AV_CMS.round(0)), 0.01, capas / "rios.geojson", ["caudal"])
     # localidades de referencia para nombrar lugares: solo las que están en celdas con
     # ≥3.000 hab. (pueblos y ciudades reconocibles), una por celda
@@ -449,9 +546,12 @@ def main() -> None:
     lc = np.asarray(h3v.coordinates_to_cells(locs.lat_gd.astype(float).values, locs.long_gd.astype(float).values, H3_RES)).astype(np.uint64)
     locs = locs.assign(pob_celda=cell_pop.reindex(lc).fillna(0).values.round(), _c=lc)
     locs = locs.assign(_simple=(locs.tipo_asent != "Localidad simple").astype(int))
-    ref = locs[locs.pob_celda >= 3000].sort_values(["_c", "_simple", "fna"]).drop_duplicates("_c")
+    ref = locs[(locs.pob_celda >= 3000) & ~locs.fna.str.match(r"(?i)^(barrio|villa \d|b°)")]
+    ref = ref.sort_values(["_c", "_simple", "fna"]).drop_duplicates("_c")
     ref = gpd.GeoDataFrame(ref, geometry=gpd.points_from_xy(ref.long_gd.astype(float), ref.lat_gd.astype(float)), crs=4326)
-    simplify_out(ref.assign(nombre=ref.fna, provincia=ref.nom_pcia), 0, capas / "localidades.geojson",
+    # nombre visible: el aglomerado (ciudad) si existe, si no la localidad
+    ref = ref.assign(nombre=ref.nom_aglo.where(ref.nom_aglo.fillna("").str.len() > 0, ref.fna))
+    simplify_out(ref.assign(provincia=ref.nom_pcia), 0, capas / "localidades.geojson",
                  ["nombre", "provincia", "pob_celda"])
 
     (OUT / "fuentes.json").write_text(

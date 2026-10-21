@@ -13,6 +13,7 @@ import SimulatorPanel from "./ui/panels/SimulatorPanel";
 import MethodPanel from "./ui/panels/MethodPanel";
 import SimplePanel from "./ui/panels/SimplePanel";
 import SimpleCellCard from "./ui/panels/SimpleCellCard";
+import { POLICY_BY_ID, type PolicyId } from "./model/policies";
 import { CLASSES, DEFAULT_LEVELS, PRESETS, classify, weightsFromLevels, type Level } from "./model/plain";
 import { DIV_RED_BLUE, EXCLUDED, SEQ_BLUE, SEQ_ORANGE, css, gradientCss, ramp, type RGB } from "./ui/colors";
 import { VARIABLES, VAR_BY_ID, fmtVar } from "./ui/variables";
@@ -43,6 +44,8 @@ const GEO_FILES = {
   areas_protegidas: "capas/areas_protegidas.geojson",
   localidades: "capas/localidades.geojson",
   plan_dhi: "capas/plan_dhi.geojson",
+  proyectos: "capas/proyectos.geojson",
+  comunidades_indigenas: "capas/comunidades_indigenas.geojson",
 };
 
 // Rampa ordinal para las clases del modo simple (sin el paso más claro, que no contrasta).
@@ -79,7 +82,7 @@ export default function App() {
   const [view, setView] = useState<View>("aptitud");
   const [variable, setVariable] = useState("pob");
   const [overlays, setOverlays] = useState<Overlays>({
-    provincias: true, rutas: false, ferrocarril: false, alta_tension: false, rios: false, areas_protegidas: false, plan_dhi: false,
+    provincias: true, rutas: false, ferrocarril: false, alta_tension: false, rios: false, areas_protegidas: false, plan_dhi: false, proyectos: false, comunidades_indigenas: false,
   });
 
   const [scenario, setScenario] = useState("E1");
@@ -88,7 +91,9 @@ export default function App() {
   const [restrictions, setRestrictions] = useState<Restriction[]>(() => RESTRICTIONS.map((r) => ({ ...r })));
   const [water, setWaterState] = useState<WaterParams>(DEFAULT_WATER);
   const [agg, setAgg] = useState<Aggregation>({ method: "wlc" });
-  const [siteParams, setSiteParamsState] = useState<SiteParams>({ topFrac: 0.02, poblacion: 500_000, densidad: 75, maxSites: 20 });
+  const [siteParams, setSiteParamsState] = useState<SiteParams>({
+    topFrac: 0.02, poblacion: 500_000, densidad: 75, maxSites: 20, requiereSuperficie: true,
+  });
   const [mcParams, setMcParams] = useState({ kappa: 50, samples: 1000, topFrac: 0.1 });
   const [mcProb, setMcProb] = useState<Float32Array | null>(null);
   const [mcProgress, setMcProgress] = useState<number | null>(null);
@@ -98,6 +103,8 @@ export default function App() {
   const [depMetric, setDepMetric] = useState<DepMetric>("crec_anual");
   const [selDep, setSelDep] = useState<DepProps | null>(null);
   const [sheet, setSheet] = useState(true);
+  const [policyId, setPolicyId] = useState<PolicyId>("ciudad_nueva");
+  const policy = POLICY_BY_ID[policyId];
   const [mode, setModeState] = useState<"simple" | "experto">(initialMode);
   const [levels, setLevelsState] = useState<Record<string, Level>>(DEFAULT_LEVELS);
   const [preset, setPresetState] = useState<string | null>("expertos");
@@ -109,11 +116,25 @@ export default function App() {
       /* sin almacenamiento: no se recuerda la preferencia */
     }
   };
-  const setLevels = (l: Record<string, Level>) => {
+  const setLevels = (l: Record<string, Level>, pol = policy) => {
     setLevelsState(l);
-    setPresetState(PRESETS.find((p) => JSON.stringify(p.levels) === JSON.stringify(l))?.id ?? null);
-    setWeights(weightsFromLevels(l));
+    setPresetState(PRESETS.find((p) => !p.scenario && JSON.stringify(p.levels) === JSON.stringify(l))?.id ?? null);
+    setWeights(weightsFromLevels(l, pol.weights()));
     setScenario("custom");
+  };
+  const choosePolicy = (id: PolicyId) => {
+    const p = POLICY_BY_ID[id];
+    setPolicyId(id);
+    setRestrictions(p.restrictions());
+    setLevels(DEFAULT_LEVELS, p);
+    setPresetState("expertos");
+    setScenario(id === "ciudad_nueva" ? "E1" : "custom");
+    const n = p.tamanos[Math.min(2, p.tamanos.length - 1)];
+    setWaterState((w) => ({ ...w, poblacion: n, activo: p.agua }));
+    setSiteParamsState((x) => ({ ...x, poblacion: n, requiereSuperficie: p.requiereSuperficie, topFrac: p.requiereSuperficie ? 0.02 : 0.1 }));
+    setMcProb(null);
+    setSelSite(null);
+    setSelCell(null);
   };
   const setPreset = (id: string) => {
     const p = PRESETS.find((x) => x.id === id)!;
@@ -124,16 +145,6 @@ export default function App() {
       setPresetState(p.id);
     }
   };
-  // tipo de crecimiento: ciudad nueva (R11) o ampliar pueblos existentes a ≤30 km (R15, Plan DHI)
-  const tipo = restrictions.find((r) => r.id === "R15")?.activo ? "pueblos" : "nueva";
-  const setTipo = (t: "nueva" | "pueblos") =>
-    setRestrictions((rs) =>
-      rs.map((r) =>
-        // al hacer crecer pueblos solo se excluyen las ciudades ya consolidadas (>~550 hab/km²)
-        r.id === "R11" ? { ...r, activo: true, umbral: t === "nueva" ? 3600 : 20000 }
-        : r.id === "R15" ? { ...r, activo: t === "pueblos" } : r,
-      ),
-    );
   const setPoblacion = (n: number) => {
     setWaterState((w) => ({ ...w, poblacion: n }));
     setSiteParamsState((x) => ({ ...x, poblacion: n }));
@@ -147,7 +158,10 @@ export default function App() {
   }, []);
 
   // ------------------------------------------------------------ modelo
-  const fScores = useMemo(() => (ds ? factorScores(ds.col, ds.n, fns) : {}), [ds, fns]);
+  const fScores = useMemo(
+    () => (ds ? factorScores(ds.col, ds.n, fns, { poblacion: siteParams.poblacion }) : {}),
+    [ds, fns, siteParams.poblacion],
+  );
   const reason = useMemo(() => (ds ? computeMask(ds.col, ds.n, restrictions, water) : new Uint8Array()), [ds, restrictions, water]);
   const effW = useMemo(() => effectiveWeights(weights), [weights]);
   const score = useMemo(() => aggregate(fScores, effW, reason, agg), [fScores, effW, reason, agg]);
@@ -173,10 +187,10 @@ export default function App() {
   const presetClasses = useMemo(
     () =>
       PRESETS.map((p) => {
-        const w = p.scenario ? SCENARIOS.find((s) => s.id === p.scenario)!.weights() : weightsFromLevels(p.levels);
+        const w = p.scenario ? SCENARIOS.find((s) => s.id === p.scenario)!.weights() : weightsFromLevels(p.levels, policy.weights());
         return classify(aggregate(fScores, effectiveWeights(w), reason, agg));
       }),
-    [fScores, reason, agg],
+    [fScores, reason, agg, policy],
   );
   const agreement = useCallback(
     (i: number) => ({ n: presetClasses.reduce((a, c) => a + (c[i] >= 3 ? 1 : 0), 0), total: presetClasses.length }),
@@ -347,12 +361,12 @@ export default function App() {
             <div className="side-body">
               <SimplePanel
                 ds={ds}
+                policy={policy}
+                setPolicy={choosePolicy}
                 levels={levels}
                 setLevels={setLevels}
                 preset={preset}
                 setPreset={setPreset}
-                tipo={tipo}
-                setTipo={setTipo}
                 showDhi={overlays.plan_dhi}
                 setShowDhi={(v) => setOverlays((o) => ({ ...o, plan_dhi: v }))}
                 poblacion={siteParams.poblacion}
@@ -360,6 +374,7 @@ export default function App() {
                 sites={sites}
                 agreement={agreement}
                 fScores={fScores}
+                weights={effW}
                 localidades={geo.localidades}
                 onSelect={selectSite}
                 selected={selSite}
@@ -379,6 +394,8 @@ export default function App() {
           <div className="side-body">
             {tab === "aptitud" && (
               <CriteriaPanel
+                policyId={policyId}
+                setPolicy={choosePolicy}
                 scenario={scenario}
                 setScenario={(id) => {
                   setScenario(id);
@@ -416,7 +433,7 @@ export default function App() {
             {tab === "diagnostico" && (
               <DiagnosticPanel deps={depsProps} metric={depMetric} setMetric={setDepMetric} selected={selDep} />
             )}
-            {tab === "simulador" && <SimulatorPanel ds={ds} sites={sites} deps={depsProps} />}
+            {tab === "simulador" && <SimulatorPanel ds={ds} sites={sites} deps={depsProps} policy={policy} />}
             {tab === "metodo" && <MethodPanel generado={ds.meta.generado} />}
           </div>
           </>}
@@ -467,6 +484,8 @@ export default function App() {
                     ["ferrocarril", "Ferrocarril operativo"], ["alta_tension", "Líneas de alta tensión"],
                     ["rios", "Ríos ≥100 m³/s"], ["areas_protegidas", "Áreas protegidas"],
                     ["plan_dhi", "Propuestas del Plan DHI"],
+                    ["proyectos", "Proyectos productivos (minería, Vaca Muerta, energía)"],
+                    ["comunidades_indigenas", "Comunidades indígenas registradas"],
                   ] as [keyof Overlays, string][]
                 ).map(([k, n]) => (
                   <label key={k} className="check">
@@ -499,6 +518,7 @@ export default function App() {
               clase={classes[selCell]}
               reasonId={reason[selCell] ? reasonIds[reason[selCell] - 1] : null}
               fScores={fScores}
+              weights={effW}
               localidades={geo.localidades}
               onClose={() => { setSelCell(null); setSelSite(null); }}
             />

@@ -65,5 +65,23 @@ export function facts(ds: Dataset, i: number): Fact[] {
     { icono: "🌎", texto: `Peligro de terremotos ${sismo(c.pga475[i])}.` },
     { icono: "👥", texto: `Hoy viven unas ${n0(c.pob_50km[i])} personas en un radio de 50 km.` },
     { icono: "📍", texto: `Está a ${n0(c.d_amba[i])} km de Buenos Aires.` },
+    {
+      icono: "💼",
+      texto: `Hay unos ${n0(c.empleo_50km[i])} empleos privados registrados a menos de 50 km` +
+        (Number.isFinite(c.emp_crec[i]) ? `; en la zona el empleo ${c.emp_crec[i] >= 0 ? "creció" : "cayó"} ${Math.abs(c.emp_crec[i]).toFixed(1)} % por año entre 2014 y 2022.` : "."),
+    },
+    ...(Number.isFinite(c.pct_agua_red[i])
+      ? [{ icono: "🚰", texto: `En el departamento, ${n0(c.pct_agua_red[i])} % de los hogares tiene agua de red y ${n0(c.pct_cloaca[i])} % cloaca.` }]
+      : []),
+    { icono: "🏨", texto: `El hospital de internación general más cercano está a ${n0(c.d_hospital[i])} km.` },
+    ...(c.as_prob[i] >= 0.5 && c.q_rio25[i] < 50
+      ? [{ icono: "⚠️", texto: "Alta probabilidad de arsénico en el agua subterránea: habría que tratarla o traer agua de otra fuente." }]
+      : []),
+    ...(Number.isFinite(c.pct_fiscal_eap[i])
+      ? [{ icono: "📜", texto: `Tierra fiscal registrada: ${c.pct_fiscal_eap[i].toFixed(1)} % de la superficie productiva del departamento (CNA 2018; no incluye tierra fiscal vacante).` }]
+      : []),
+    ...(c.d_comunidad[i] < 15
+      ? [{ icono: "🪶", texto: `Hay una comunidad indígena registrada a ${n0(c.d_comunidad[i])} km: cualquier proyecto requiere consulta previa, libre e informada (Convenio 169 OIT).` }]
+      : []),
   ];
 }

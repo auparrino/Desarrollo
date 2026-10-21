@@ -4,6 +4,7 @@ import { aggregate, caudalRequerido, computeMask, DEFAULT_WATER } from "./mcda";
 import { RESTRICTIONS, SCENARIOS, effectiveWeights, FACTORS } from "./criteria";
 import { dirichlet, mulberry32, runMonteCarlo } from "./montecarlo";
 import { concentracion, hhi, isAMBA } from "./simulator";
+import { POLICIES } from "./policies";
 
 describe("funciones de valor", () => {
   it("lineales y logarítmicas", () => {
@@ -36,7 +37,7 @@ describe("escenarios de pesos", () => {
   });
   it("pesos efectivos excluyen factores sin datos", () => {
     const e = effectiveWeights(SCENARIOS[0].weights());
-    expect(e.F02).toBeUndefined();
+    expect(e.F10).toBeUndefined();
     expect(Object.values(e).reduce((a, b) => a + b, 0)).toBeCloseTo(1, 6);
   });
 });
@@ -117,5 +118,21 @@ describe("simulador", () => {
     expect(antes.participacionAMBA).toBeCloseTo(5 / 6);
     expect(despues.participacionAMBA).toBeCloseTo(4 / 6);
     expect(despues.provincias.find((p) => p.nombre === "Río Negro")!.despues).toBeCloseTo(2e6);
+  });
+});
+
+describe("instrumentos de política", () => {
+  it("los pesos de cada instrumento suman 1 (los factores sin datos se redistribuyen)", () => {
+    for (const p of POLICIES) {
+      const w = p.weights();
+      expect(Object.values(w).reduce((a, b) => a + b, 0)).toBeCloseTo(1, 6);
+      expect(Object.values(effectiveWeights(w)).reduce((a, b) => a + b, 0)).toBeCloseTo(1, 6);
+    }
+  });
+  it("las restricciones propias tienen ids únicos", () => {
+    for (const p of POLICIES) {
+      const ids = p.restrictions().map((r) => r.id);
+      expect(new Set(ids).size).toBe(ids.length);
+    }
   });
 });

@@ -1,17 +1,18 @@
 import type { Dataset } from "../../data/load";
 import { GROUPS } from "../../model/criteria";
 import type { Site } from "../../model/sites";
-import { LEVEL_LABELS, PRESETS, PRIORITIES, groupScores, verdict, type Level } from "../../model/plain";
+import { LEVEL_LABELS, PRESETS, PRIORITIES, groupScores, groupsUsed, verdict, type Level } from "../../model/plain";
+import { POLICIES, type Policy, type PolicyId } from "../../model/policies";
 import { nearestPlace } from "../plainFacts";
 
 interface Props {
   ds: Dataset;
+  policy: Policy;
+  setPolicy: (id: PolicyId) => void;
   levels: Record<string, Level>;
   setLevels: (l: Record<string, Level>) => void;
   preset: string | null;
   setPreset: (id: string) => void;
-  tipo: "nueva" | "pueblos";
-  setTipo: (t: "nueva" | "pueblos") => void;
   showDhi: boolean;
   setShowDhi: (v: boolean) => void;
   poblacion: number;
@@ -19,6 +20,7 @@ interface Props {
   sites: Site[];
   agreement: (i: number) => { n: number; total: number };
   fScores: Record<string, Float32Array>;
+  weights: Record<string, number>;
   localidades?: GeoJSON.FeatureCollection;
   onSelect: (s: Site) => void;
   selected: Site | null;
@@ -26,13 +28,18 @@ interface Props {
   onExpert: () => void;
 }
 
-const SIZES = [
-  // ejemplos: población 2022 del departamento (Censo INDEC)
-  { n: 100_000, label: "100 mil", ej: "como Junín (Bs. As.)" },
-  { n: 250_000, label: "250 mil", ej: "como Escobar" },
-  { n: 500_000, label: "500 mil", ej: "como Confluencia (Neuquén)" },
-  { n: 1_000_000, label: "1 millón", ej: "entre La Plata y Rosario" },
-];
+// ejemplos: población 2022 del departamento (Censo INDEC)
+const EJEMPLOS: Record<number, string> = {
+  1_000: "un pueblo chico",
+  5_000: "un pueblo mediano",
+  20_000: "una ciudad pequeña",
+  50_000: "una ciudad chica",
+  100_000: "como Junín (Bs. As.)",
+  250_000: "como Escobar",
+  500_000: "como Confluencia (Neuquén)",
+  1_000_000: "entre La Plata y Rosario",
+};
+const label = (n: number) => (n >= 1_000_000 ? `${n / 1_000_000} millón` : `${(n / 1000).toLocaleString("es-AR")} mil`);
 
 const GROUP_NAME: Record<string, string> = Object.fromEntries(PRIORITIES.map((p) => [p.grupo, p.titulo]));
 
@@ -52,8 +59,8 @@ function uniqueByPlace(sites: Site[], loc?: GeoJSON.FeatureCollection): Site[] {
   });
 }
 
-function Reasons({ fs, i }: { fs: Record<string, Float32Array>; i: number }) {
-  const g = groupScores(fs, i);
+function Reasons({ fs, i, w }: { fs: Record<string, Float32Array>; i: number; w: Record<string, number> }) {
+  const g = groupScores(fs, i, w);
   const items = PRIORITIES.map((p) => ({ p, v: g[p.grupo] })).filter((x) => Number.isFinite(x.v));
   const good = items.filter((x) => verdict(x.v) === "bien").sort((a, b) => b.v - a.v).slice(0, 3);
   const bad = items.filter((x) => verdict(x.v) === "mal").sort((a, b) => a.v - b.v).slice(0, 2);
@@ -74,6 +81,7 @@ function Reasons({ fs, i }: { fs: Record<string, Float32Array>; i: number }) {
 }
 
 export default function SimplePanel(p: Props) {
+  const used = groupsUsed(p.policy.weights());
   return (
     <div className="panel simple">
       <section className="intro">
@@ -87,31 +95,41 @@ export default function SimplePanel(p: Props) {
 
       <section>
         <h3>
-          <span className="step">1</span> ¿Para cuánta gente?
+          <span className="step">1</span> ¿Qué política querés evaluar?
         </h3>
-        <div className="chips">
-          {SIZES.map((s) => (
-            <button key={s.n} className={`chip ${p.poblacion === s.n ? "on" : ""}`} onClick={() => p.setPoblacion(s.n)}>
-              <b>{s.label}</b>
-              <span className="small muted">{s.ej}</span>
+        <div className="policies">
+          {POLICIES.map((x) => (
+            <button key={x.id} className={`policy ${p.policy.id === x.id ? "on" : ""}`} onClick={() => p.setPolicy(x.id)}>
+              <span className="picon" aria-hidden>{x.icono}</span>
+              <span>
+                <b>{x.nombre}</b>
+                <span className="small muted">{x.pregunta}</span>
+              </span>
             </button>
           ))}
+        </div>
+        <div className="evidence">
+          <b className="small">Qué dice la experiencia internacional y argentina</b>
+          <ul className="small">
+            {p.policy.evidencia.map((e) => (
+              <li key={e}>{e}</li>
+            ))}
+          </ul>
+          {p.policy.plazo && <p className="small muted">⏳ {p.policy.plazo}</p>}
         </div>
       </section>
 
       <section>
         <h3>
-          <span className="step">2</span> ¿Qué tipo de crecimiento?
+          <span className="step">2</span> ¿{p.policy.id === "polos" ? "Cuántos empleos" : "Cuántas personas"}?
         </h3>
         <div className="chips">
-          <button className={`chip ${p.tipo === "nueva" ? "on" : ""}`} onClick={() => p.setTipo("nueva")}>
-            <b>Una ciudad nueva</b>
-            <span className="small muted">en un lugar hoy casi vacío</span>
-          </button>
-          <button className={`chip ${p.tipo === "pueblos" ? "on" : ""}`} onClick={() => p.setTipo("pueblos")}>
-            <b>Hacer crecer pueblos</b>
-            <span className="small muted">a menos de 30 km de uno existente, como propone el Plan DHI</span>
-          </button>
+          {p.policy.tamanos.map((n) => (
+            <button key={n} className={`chip ${p.poblacion === n ? "on" : ""}`} onClick={() => p.setPoblacion(n)}>
+              <b>{label(n)}</b>
+              <span className="small muted">{p.policy.id === "polos" ? "puestos de trabajo" : EJEMPLOS[n]}</span>
+            </button>
+          ))}
         </div>
       </section>
 
@@ -121,13 +139,13 @@ export default function SimplePanel(p: Props) {
         </h3>
         <p className="muted small">Elegí un enfoque o ajustá cada tema a tu gusto.</p>
         <div className="presets">
-          {PRESETS.map((x) => (
+          {PRESETS.filter((x) => !x.scenario || p.policy.id === "ciudad_nueva").map((x) => (
             <button key={x.id} className={`preset ${p.preset === x.id ? "on" : ""}`} onClick={() => p.setPreset(x.id)} title={x.desc}>
               {x.nombre}
             </button>
           ))}
         </div>
-        {PRIORITIES.map((pr) => (
+        {PRIORITIES.filter((pr) => used.has(pr.grupo)).map((pr) => (
           <div key={pr.grupo} className="prio">
             <div className="prio-h">
               <span aria-hidden>{pr.icono}</span> <b>{pr.titulo}</b>
@@ -155,9 +173,8 @@ export default function SimplePanel(p: Props) {
           <span className="step">4</span> Los mejores lugares
         </h3>
         <p className="muted small">
-          Después de descartar las zonas sin agua, inundables, sísmicas, protegidas o de montaña, queda apto el{" "}
-          {Math.round(p.aptasPct)} % del país. Estas son las zonas con mejor puntaje que además tienen espacio para{" "}
-          {p.poblacion.toLocaleString("es-AR")} personas.
+          {p.policy.unidad}. Después de aplicar los descartes queda apto el {p.aptasPct.toFixed(1)} % del territorio.
+          {p.policy.requiereSuperficie && ` Estas zonas además tienen espacio para ${p.poblacion.toLocaleString("es-AR")} personas.`}
         </p>
         <ol className="cards">
           {uniqueByPlace(p.sites, p.localidades).slice(0, 6).map((s) => {
@@ -171,7 +188,7 @@ export default function SimplePanel(p: Props) {
                     <span className="muted small">
                       {s.departamento}, {s.provincia}
                     </span>
-                    <Reasons fs={p.fScores} i={s.best} />
+                    <Reasons fs={p.fScores} i={s.best} w={p.weights} />
                     <span className={`trust t${a.n >= a.total - 1 ? "hi" : a.n >= 2 ? "mid" : "lo"}`}>
                       {a.n === a.total
                         ? "Muy confiable: aparece entre los mejores con todos los enfoques"

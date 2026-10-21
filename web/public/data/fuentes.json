@@ -108,5 +108,55 @@
   "cita": "Weiss et al. (2020). Global maps of travel time to healthcare facilities. Nature Medicine 26:1835-1838. doi:10.1038/s41591-020-1059-1",
   "licencia": "CC BY 4.0",
   "url": "https://data.malariaatlas.org/geoserver/Accessibility/wcs?service=WCS&version=2.0.1&request=GetCoverage&coverageId=Accessibility__202001_Global_Motorized_Travel_Time_to_Healthcare&subset=Long(-74,-53)&subset=Lat(-56,-21)&format=image/geotiff"
+ },
+ "tenencia_cna2018": {
+  "cita": "INDEC, Censo Nacional Agropecuario 2018, resultados definitivos: superficie de las EAP por régimen de tenencia y tipo de dominio (fiscal/privado), por departamento.",
+  "licencia": "Información estadística pública (INDEC); citar la fuente",
+  "url": "https://consultascna2018.indec.gob.ar/ (cuadros C3.1-C3.3; ver pipeline/tierra/)"
+ },
+ "extranjerizacion": {
+  "cita": "Registro Nacional de Tierras Rurales (Ley 26.737), porcentaje de tierra rural en titularidad extranjera por departamento, agosto de 2025.",
+  "licencia": "Información pública oficial",
+  "url": "https://www.argentina.gob.ar/justicia/tierras-rurales (Registro Nacional de Tierras Rurales, corte agosto 2025)"
+ },
+ "comunidades_indigenas": {
+  "cita": "Ministerio del Interior / INAI, listado de comunidades indígenas con estado del relevamiento territorial (Ley 26.160), noviembre de 2025.",
+  "licencia": "CC BY 4.0 (datos.gob.ar)",
+  "url": "https://datos.gob.ar (Ministerio del Interior, listado de comunidades indígenas, noviembre 2025)"
+ },
+ "arsenico": {
+  "cita": "Podgorski & Berg (2020). Global threat of arsenic in groundwater. Science 368:845-850. doi:10.1126/science.aba1510. Datos: doi:10.25678/0001ZT. Probabilidad de As > 10 µg/L.",
+  "licencia": "Sin licencia abierta explícita (Eawag/ERIC); se publican solo promedios por celda, con cita. Confirmar con los autores.",
+  "url": "https://doi.org/10.25678/0001ZT"
+ },
+ "fluoruro": {
+  "cita": "Podgorski & Berg (2022). Global analysis and prediction of fluoride in groundwater. Nature Communications 13:4232. Datos: doi:10.25678/0006GQ. Probabilidad de F > 1,5 mg/L.",
+  "licencia": "Sin licencia abierta explícita (Eawag/ERIC); se publican solo promedios por celda, con cita. Confirmar con los autores.",
+  "url": "https://doi.org/10.25678/0006GQ"
+ },
+ "empleo": {
+  "cita": "CEP XXI (Ministerio de Economía), puestos de trabajo asalariados registrados privados y salarios por departamento (SIPA), 2014-2023, por domicilio del trabajador.",
+  "licencia": "CC BY 4.0 (datos.gob.ar)",
+  "url": "https://cdn.produccion.gob.ar/cdn-cep/datos-por-departamento/ (CEP XXI, SIPA; ver docs/datos-economia.md)"
+ },
+ "proyectos": {
+  "cita": "Cartera de proyectos productivos: SIACAM (Secretaría de Minería), Secretaría de Energía (concesiones de hidrocarburos), CAMMESA y RenovAr (energías renovables), RENPI (parques industriales). Ver docs/datos-economia.md.",
+  "licencia": "CC BY 4.0 / información pública oficial",
+  "url": "SIACAM (minería), Secretaría de Energía (concesiones, Vaca Muerta), CAMMESA/RenovAr, RENPI (parques industriales)"
+ },
+ "servicios": {
+  "cita": "INDEC, Censo 2022 (hogares con agua de red, cloaca, internet, tenencia, viviendas desocupadas); NBI y hacinamiento procesados desde REDATAM vía Poblaciones (CONICET/UCA); RENABAP (corte 5/12/2023); REFES/SISA; padrón de escuelas 2024; estimaciones de población INDEC 2022-2035.",
+  "licencia": "CC BY 4.0 / información estadística pública",
+  "url": "https://www.indec.gob.ar (Censo 2022, cuadros definitivos por departamento); ver docs/datos-servicios.md"
+ },
+ "universidades": {
+  "cita": "IGN, sedes de universidades (WFS).",
+  "licencia": "CC BY 4.0 (IGN)",
+  "url": "https://wms.ign.gob.ar/geoserver/ows (WFS, sedes universitarias)"
+ },
+ "establecimientos_salud": {
+  "cita": "REFES/SISA (Ministerio de Salud), establecimientos de salud georreferenciados, vía plataforma Poblaciones (CONICET/UCA), actualización 2025.",
+  "licencia": "CC BY 4.0",
+  "url": "https://datos-poblaciones.conicet.gov.ar (REFES/SISA vía Poblaciones); ver docs/poblaciones.md"
  }
 }

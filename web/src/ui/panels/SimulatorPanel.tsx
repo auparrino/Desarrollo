@@ -3,11 +3,13 @@ import type { Dataset } from "../../data/load";
 import type { Site } from "../../model/sites";
 import { concentracion, requerimientos, type SimParams } from "../../model/simulator";
 import type { DepProps } from "./DiagnosticPanel";
+import type { Policy } from "../../model/policies";
 
 interface Props {
   ds: Dataset;
   sites: Site[];
   deps: DepProps[];
+  policy: Policy;
 }
 
 const n0 = (v: number) => (Number.isFinite(v) ? v.toLocaleString("es-AR", { maximumFractionDigits: 0 }) : "—");
@@ -151,6 +153,37 @@ export default function SimulatorPanel(p: Props) {
           <p className="muted small">
             Índice climático: (HDD18 + 1,5·CDD18) del destino sobre la media nacional ponderada por población. Si es mayor
             que 1, la demanda de climatización es mayor que la de un habitante promedio.
+          </p>
+        </section>
+      )}
+
+      {res.length > 0 && (
+        <section>
+          <h3>Costo de referencia · {p.policy.nombre}</h3>
+          <table className="provs">
+            <thead>
+              <tr><th>Referencia</th><th>Valor</th><th>Total estimado</th></tr>
+            </thead>
+            <tbody>
+              {p.policy.costos.map((c) => {
+                const mult =
+                  c.unidad === "USD/hab" ? total
+                  : c.unidad === "USD/lote" || c.unidad === "USD/vivienda" ? total / s.personasPorVivienda
+                  : total; // USD/empleo: en "polos" la cantidad elegida son empleos
+                return (
+                  <tr key={c.concepto}>
+                    <td>
+                      {c.concepto} <span className="muted small">({c.fuente})</span>
+                    </td>
+                    <td className="num">{n0(c.valor)} {c.unidad}</td>
+                    <td className="num">USD {n1((c.valor * mult) / 1e9)} mil M</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <p className="muted small">
+            Órdenes de magnitud a partir de casos documentados, no un presupuesto. {p.policy.plazo ?? ""}
           </p>
         </section>
       )}

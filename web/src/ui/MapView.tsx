@@ -15,6 +15,8 @@ export interface Overlays {
   rios: boolean;
   areas_protegidas: boolean;
   plan_dhi: boolean;
+  proyectos: boolean;
+  comunidades_indigenas: boolean;
 }
 
 export interface MapProps {
@@ -162,6 +164,20 @@ export default function MapView(p: MapProps) {
             getLineColor: LINE_STYLE[k].color,
             lineWidthMinPixels: LINE_STYLE[k].width,
             lineWidthUnits: "pixels",
+          }),
+        );
+      }
+    }
+    const POINTS: [keyof Overlays, [number, number, number, number]][] = [
+      ["proyectos", [237, 161, 0, 230]],
+      ["comunidades_indigenas", [232, 123, 164, 230]],
+    ];
+    for (const [k, color] of POINTS) {
+      if (p.overlays[k] && p.geo[k]) {
+        layers.push(
+          new GeoJsonLayer({
+            id: k, data: p.geo[k], pointType: "circle", getPointRadius: 4, pointRadiusUnits: "pixels",
+            getFillColor: color, getLineColor: [255, 255, 255, 230], lineWidthMinPixels: 1, stroked: true,
           }),
         );
       }

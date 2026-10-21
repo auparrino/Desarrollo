@@ -1,0 +1,543 @@
+{
+ "celdas": 95682,
+ "cobertura": {
+  "elev": {
+   "nan": 31,
+   "fuera_rango": 0
+  },
+  "pend_media": {
+   "nan": 190,
+   "fuera_rango": 4
+  },
+  "frac_pend_ok": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "t_media": {
+   "nan": 13,
+   "fuera_rango": 0
+  },
+  "t_max_cal": {
+   "nan": 13,
+   "fuera_rango": 0
+  },
+  "t_min_fri": {
+   "nan": 13,
+   "fuera_rango": 0
+  },
+  "prec": {
+   "nan": 13,
+   "fuera_rango": 0
+  },
+  "prec_estac": {
+   "nan": 13,
+   "fuera_rango": 0
+  },
+  "hdd18": {
+   "nan": 13,
+   "fuera_rango": 5
+  },
+  "cdd18": {
+   "nan": 13,
+   "fuera_rango": 0
+  },
+  "ghi": {
+   "nan": 13,
+   "fuera_rango": 0
+  },
+  "aridez": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "pga475": {
+   "nan": 6,
+   "fuera_rango": 0
+  },
+  "frac_inund100": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "t_ciudad": {
+   "nan": 88,
+   "fuera_rango": 0
+  },
+  "t_salud": {
+   "nan": 88,
+   "fuera_rango": 0
+  },
+  "viento100": {
+   "nan": 3,
+   "fuera_rango": 2
+  },
+  "pob": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "pob_50km": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "crec_dep": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "frac_ap_estricta": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "frac_ap_uso_multiple": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "d_ruta": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "d_ffcc": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "d_alta_tension": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "d_puerto": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "d_rio10": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "d_rio100": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "d_localidad": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "q_rio25": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "d_amba": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "frac_tierra": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "d_media_pob": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "d_max_capital": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "d_metro": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "as_prob": {
+   "nan": 426,
+   "fuera_rango": 0
+  },
+  "f_prob": {
+   "nan": 358,
+   "fuera_rango": 0
+  },
+  "pct_fiscal_eap": {
+   "nan": 789,
+   "fuera_rango": 0
+  },
+  "pct_dep_en_eap": {
+   "nan": 10,
+   "fuera_rango": 0
+  },
+  "pct_extranjero": {
+   "nan": 28,
+   "fuera_rango": 0
+  },
+  "d_comunidad": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "empleo_50km": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "emp_crec": {
+   "nan": 3410,
+   "fuera_rango": 0
+  },
+  "salario_rel": {
+   "nan": 3060,
+   "fuera_rango": 0
+  },
+  "n_proyectos_100km": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "d_parque_ind": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "pct_agua_red": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "pct_cloaca": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "pct_internet": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "pct_nbi": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "pct_viv_ociosas": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "salud_int_100mil": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "crec_proy_2035": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "viv_ociosas_50km": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "d_universidad": {
+   "nan": 0,
+   "fuera_rango": 0
+  },
+  "d_hospital": {
+   "nan": 0,
+   "fuera_rango": 0
+  }
+ },
+ "coherencia": {
+  "t_min_fri ≤ t_media ≤ t_max_cal (celdas que no cumplen)": 0,
+  "HDD18 decrece con la temperatura (corr. Spearman)": -0.996,
+  "d_rio100 ≥ d_rio10": 0,
+  "pob_50km ≥ pob": 0,
+  "Fracción de celdas con >100.000 hab. a <15 min de una ciudad": 1.0
+ },
+ "poblacion": {
+  "grilla": 45618784.038393036,
+  "censo_vp": 45618784.0,
+  "dif_max_prov_pct": 8.571154175304333
+ },
+ "ciudades": [
+  [
+   "CABA",
+   "17.4",
+   "1116",
+   "0.00",
+   "28",
+   "0",
+   "—"
+  ],
+  [
+   "Córdoba",
+   "17.2",
+   "832",
+   "0.10",
+   "11",
+   "0",
+   "—"
+  ],
+  [
+   "Rosario",
+   "17.5",
+   "983",
+   "0.00",
+   "18243",
+   "7",
+   "R03"
+  ],
+  [
+   "Mendoza",
+   "16.4",
+   "257",
+   "0.49",
+   "55",
+   "0",
+   "R06"
+  ],
+  [
+   "San Miguel de Tucumán",
+   "20.1",
+   "962",
+   "0.27",
+   "50",
+   "0",
+   "—"
+  ],
+  [
+   "La Plata",
+   "16.5",
+   "1086",
+   "0.00",
+   "6",
+   "0",
+   "—"
+  ],
+  [
+   "Mar del Plata",
+   "14.2",
+   "923",
+   "0.00",
+   "5",
+   "0",
+   "—"
+  ],
+  [
+   "Salta",
+   "17.3",
+   "741",
+   "0.30",
+   "3",
+   "0",
+   "—"
+  ],
+  [
+   "Santa Fe",
+   "18.6",
+   "1035",
+   "0.00",
+   "19313",
+   "3",
+   "R03"
+  ],
+  [
+   "San Juan",
+   "17.6",
+   "278",
+   "0.50",
+   "44",
+   "0",
+   "R03, R06"
+  ],
+  [
+   "Resistencia",
+   "21.1",
+   "1397",
+   "0.01",
+   "18747",
+   "0",
+   "R03"
+  ],
+  [
+   "Neuquén",
+   "14.7",
+   "295",
+   "0.02",
+   "1106",
+   "0",
+   "R03"
+  ],
+  [
+   "Corrientes",
+   "21.1",
+   "1448",
+   "0.01",
+   "18747",
+   "6",
+   "—"
+  ],
+  [
+   "Posadas",
+   "21.5",
+   "1785",
+   "0.00",
+   "13098",
+   "5",
+   "R03"
+  ],
+  [
+   "Bahía Blanca",
+   "15.2",
+   "690",
+   "0.00",
+   "5",
+   "0",
+   "R13"
+  ],
+  [
+   "Paraná",
+   "18.3",
+   "1079",
+   "0.00",
+   "19313",
+   "2",
+   "—"
+  ],
+  [
+   "San Salvador de Jujuy",
+   "17.0",
+   "830",
+   "0.30",
+   "28",
+   "2",
+   "—"
+  ],
+  [
+   "Formosa",
+   "22.2",
+   "1417",
+   "0.02",
+   "4621",
+   "2",
+   "R03"
+  ],
+  [
+   "Santiago del Estero",
+   "20.6",
+   "655",
+   "0.22",
+   "124",
+   "0",
+   "R03"
+  ],
+  [
+   "San Luis",
+   "17.2",
+   "453",
+   "0.15",
+   "0",
+   "0",
+   "R13"
+  ],
+  [
+   "La Rioja",
+   "19.1",
+   "375",
+   "0.37",
+   "1",
+   "0",
+   "R06, R13"
+  ],
+  [
+   "Catamarca",
+   "20.3",
+   "529",
+   "0.30",
+   "3",
+   "1",
+   "R13"
+  ],
+  [
+   "Santa Rosa",
+   "15.8",
+   "697",
+   "0.01",
+   "0",
+   "1",
+   "R13"
+  ],
+  [
+   "Río Gallegos",
+   "7.5",
+   "254",
+   "0.04",
+   "80",
+   "2",
+   "—"
+  ],
+  [
+   "Comodoro Rivadavia",
+   "12.5",
+   "244",
+   "0.00",
+   "0",
+   "0",
+   "R13"
+  ],
+  [
+   "Trelew",
+   "13.6",
+   "209",
+   "0.00",
+   "239",
+   "5",
+   "—"
+  ],
+  [
+   "Viedma",
+   "14.5",
+   "368",
+   "0.00",
+   "870",
+   "1",
+   "R03"
+  ],
+  [
+   "Ushuaia",
+   "5.0",
+   "492",
+   "0.07",
+   "13",
+   "432",
+   "—"
+  ],
+  [
+   "Río Cuarto",
+   "16.5",
+   "826",
+   "0.10",
+   "2",
+   "0",
+   "—"
+  ],
+  [
+   "Bariloche",
+   "8.8",
+   "952",
+   "0.23",
+   "164",
+   "205",
+   "R01"
+  ]
+ ],
+ "impacto_restricciones": {
+  "R01 Área protegida estricta": {
+   "celdas": 3131,
+   "pob": 215542.1032872405
+  },
+  "R03 Inundación T100": {
+   "celdas": 9555,
+   "pob": 6520413.124333657
+  },
+  "R04 Pendiente": {
+   "celdas": 5263,
+   "pob": 408983.37335597724
+  },
+  "R06 Sismicidad": {
+   "celdas": 8652,
+   "pob": 3340138.7997343168
+  },
+  "R09 Altitud": {
+   "celdas": 6955,
+   "pob": 171414.66452239826
+  },
+  "R10 Costa baja": {
+   "celdas": 1112,
+   "pob": 332426.97178945225
+  },
+  "R13 Agua": {
+   "celdas": 36173,
+   "pob": 3711434.0062267473
+  }
+ }
+}

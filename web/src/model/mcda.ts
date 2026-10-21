@@ -1,7 +1,7 @@
 // Núcleo del análisis multicriterio: restricciones → factores 0–1 → agregación (WLC / OWA).
 
 import { evaluate, type ValueFn } from "./valueFunctions";
-import { FACTORS, RESTRICTIONS, type Cols, type Factor, type Restriction, type Weights } from "./criteria";
+import { FACTORS, RESTRICTIONS, type Cols, type Ctx, type Factor, type Restriction, type Weights } from "./criteria";
 
 export interface WaterParams {
   activo: boolean;
@@ -24,18 +24,23 @@ export const DEFAULT_WATER: WaterParams = {
 /** Caudal requerido (m³/s) para P habitantes con dotación q y margen de seguridad. */
 export const caudalRequerido = (w: WaterParams) => (w.poblacion * w.dotacion * w.margen) / 1000 / 86400;
 
-export function factorScores(cols: Cols, n: number, fns: Record<string, ValueFn>): Record<string, Float32Array> {
+export function factorScores(
+  cols: Cols,
+  n: number,
+  fns: Record<string, ValueFn>,
+  ctx: Ctx = { poblacion: 500_000 },
+): Record<string, Float32Array> {
   const out: Record<string, Float32Array> = {};
   for (const f of FACTORS) {
     if (!f.disponible) continue;
-    out[f.id] = factorColumn(f, cols, n, fns[f.id] ?? f.fn);
+    out[f.id] = factorColumn(f, cols, n, fns[f.id] ?? f.fn, ctx);
   }
   return out;
 }
 
-function factorColumn(f: Factor, cols: Cols, n: number, fn?: ValueFn): Float32Array {
+function factorColumn(f: Factor, cols: Cols, n: number, fn: ValueFn | undefined, ctx: Ctx): Float32Array {
   const s = new Float32Array(n);
-  if (f.score) for (let i = 0; i < n; i++) s[i] = f.score(cols, i, fn);
+  if (f.score) for (let i = 0; i < n; i++) s[i] = f.score(cols, i, fn, ctx);
   else {
     const x = cols[f.column!];
     for (let i = 0; i < n; i++) s[i] = evaluate(fn!, x[i]);

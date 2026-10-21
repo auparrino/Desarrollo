@@ -22,6 +22,7 @@ export interface SiteParams {
   poblacion: number;
   densidad: number; // hab/ha brutos
   maxSites: number;
+  requiereSuperficie?: boolean; // false: ciudades o pueblos existentes, sin superficie mínima
 }
 
 export function findSites(
@@ -95,14 +96,14 @@ export function findSites(
       provincia: d?.provincia ?? "",
       departamento: d?.nombre ?? "",
       center: [lng, lat],
-      requisitoOk: area >= reqKm2,
+      requisitoOk: p.requiereSuperficie === false || area >= reqKm2,
     });
   }
   // orden: primero las que cumplen superficie, luego puntaje medio ponderado por tamaño (saturado)
   sites.sort((a, b) => {
     if (a.requisitoOk !== b.requisitoOk) return a.requisitoOk ? -1 : 1;
-    const ka = a.score * Math.min(1, a.areaKm2 / reqKm2);
-    const kb = b.score * Math.min(1, b.areaKm2 / reqKm2);
+    const ka = p.requiereSuperficie === false ? a.score : a.score * Math.min(1, a.areaKm2 / reqKm2);
+    const kb = p.requiereSuperficie === false ? b.score : b.score * Math.min(1, b.areaKm2 / reqKm2);
     return kb - ka;
   });
   return sites.slice(0, p.maxSites).map((x, k) => ({ ...x, rank: k + 1 }));

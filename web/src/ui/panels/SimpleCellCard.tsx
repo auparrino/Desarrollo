@@ -9,6 +9,7 @@ interface Props {
   clase: number;
   reasonId: string | null;
   fScores: Record<string, Float32Array>;
+  weights: Record<string, number>;
   localidades?: GeoJSON.FeatureCollection;
   onClose: () => void;
 }
@@ -20,7 +21,7 @@ export default function SimpleCellCard(p: Props) {
   const d = p.ds.meta.departamentos[p.ds.dep[p.i]];
   const [lat, lng] = cellToLatLng(p.ds.h3[p.i]);
   const near = nearestPlace(p.localidades, lng, lat);
-  const g = groupScores(p.fScores, p.i);
+  const g = groupScores(p.fScores, p.i, p.weights);
   const cls = CLASSES.find((c) => c.id === p.clase);
   const why = p.reasonId ? PLAIN_RESTRICTION[p.reasonId] : null;
   return (

@@ -23,15 +23,24 @@ export const PRIORITIES: Priority[] = [
   { grupo: "equilibrio", icono: "🗺️", titulo: "Descentralizar", pregunta: "Que ayude a que no todo se concentre en Buenos Aires" },
   { grupo: "energia", icono: "⚡", titulo: "Energía", pregunta: "Que haya red eléctrica y sol o viento para generar" },
   { grupo: "topo", icono: "⛰️", titulo: "Terreno", pregunta: "Que el terreno sea plano y fácil de construir" },
+  { grupo: "trabajo", icono: "💼", titulo: "Trabajo", pregunta: "Que haya empleo y actividad económica cerca" },
+  { grupo: "servicios", icono: "🏥", titulo: "Servicios", pregunta: "Que haya agua de red, cloacas, hospital, internet y viviendas" },
+  { grupo: "tierra", icono: "📜", titulo: "Tierra pública", pregunta: "Que haya tierra del Estado disponible" },
+  { grupo: "centralidad", icono: "🎯", titulo: "Centralidad", pregunta: "Que quede cerca de la mayoría de los argentinos y de todas las provincias" },
 ];
 
 export const DEFAULT_LEVELS: Record<string, Level> = Object.fromEntries(PRIORITIES.map((p) => [p.grupo, 2]));
 
-/** "Importante" en todo = escenario base de la literatura (E1). */
-export function weightsFromLevels(levels: Record<string, Level>): Weights {
+/** "Importante" en todo = pesos base del instrumento (por defecto, el escenario E1 de la literatura). */
+export function weightsFromLevels(levels: Record<string, Level>, base?: Weights): Weights {
   const w: Weights = {};
-  for (const f of FACTORS) w[f.id] = f.peso * LEVEL_MULT[levels[f.grupo] ?? 2];
+  for (const f of FACTORS) w[f.id] = (base ? base[f.id] ?? 0 : f.peso) * LEVEL_MULT[levels[f.grupo] ?? 2];
   return w;
+}
+
+/** Grupos que usa un conjunto de pesos (para mostrar solo las prioridades pertinentes). */
+export function groupsUsed(w: Weights): Set<string> {
+  return new Set(FACTORS.filter((f) => f.disponible && (w[f.id] ?? 0) > 0).map((f) => f.grupo));
 }
 
 export const PRESETS: { id: string; nombre: string; desc: string; levels: Record<string, Level>; scenario?: string }[] = [
@@ -91,6 +100,19 @@ export const PLAIN_RESTRICTION: Record<string, { corto: string; largo: string }>
   R10: { corto: "Costa muy baja", largo: "Está a menos de 5 m sobre el nivel del mar, expuesta al mar y a tormentas." },
   R11: { corto: "Ya es ciudad", largo: "Ya está urbanizada: una ciudad nueva tiene que ir en otro lugar." },
   R15: { corto: "Lejos de pueblos", largo: "Está a más de 30 km de un pueblo o ciudad existente." },
+  "K-R1": { corto: "Sin ciudad base cerca", largo: "No hay una ciudad de más de 50.000 habitantes a menos de 45 minutos." },
+  "I-R0": { corto: "No es zona urbana", largo: "Hay muy poca población: no es parte de una ciudad." },
+  "I-R1": { corto: "Ciudad chica", largo: "La región tiene menos de 50.000 habitantes." },
+  "I-R2": { corto: "Metrópoli", largo: "Es parte de una gran metrópoli, no de una ciudad intermedia." },
+  "I-R3": { corto: "Área del AMBA", largo: "Está dentro del área de influencia de Buenos Aires." },
+  "I-R4": { corto: "Sin agua de red", largo: "Menos de la mitad de los hogares del departamento tiene agua de red." },
+  "P-R0": { corto: "Sin pueblo", largo: "No hay un pueblo: viven menos de 200 personas en la zona." },
+  "P-R1": { corto: "Ya es ciudad", largo: "Ya es una ciudad, no un pueblo." },
+  "E-R3": { corto: "Área del AMBA", largo: "Está dentro del área de influencia de Buenos Aires." },
+  "G-R1": { corto: "Pegada a una metrópoli", largo: "Está a menos de 30 km de una gran ciudad: sería un suburbio, no una ciudad nueva." },
+  "P-R2": { corto: "Lejos de una ciudad", largo: "Está a más de 40 minutos de una ciudad de 50.000 habitantes." },
+  "E-R1": { corto: "Sin ciudad base", largo: "Hay menos de 100.000 habitantes en 50 km para sostener un polo." },
+  "E-R2": { corto: "Sin red eléctrica", largo: "Está a más de 50 km de una línea de alta tensión." },
   R13: { corto: "Falta agua", largo: "No hay un río con caudal suficiente cerca y el clima es seco." },
 };
 
@@ -104,17 +126,18 @@ export function verdict(v: number): Verdict {
 }
 
 /** Puntaje 0–1 de cada grupo (promedio ponderado de sus factores). */
-export function groupScores(fs: Record<string, Float32Array>, i: number): Record<GroupId, number> {
+export function groupScores(fs: Record<string, Float32Array>, i: number, weights?: Weights): Record<GroupId, number> {
   const out = {} as Record<GroupId, number>;
   for (const g of GROUPS) {
     let s = 0;
     let w = 0;
     for (const f of FACTORS) {
-      if (f.grupo !== g.id || !f.disponible || !fs[f.id]) continue;
+      const fw = weights ? weights[f.id] ?? 0 : f.peso;
+      if (f.grupo !== g.id || !f.disponible || !fs[f.id] || fw <= 0) continue;
       const v = fs[f.id][i];
       if (Number.isFinite(v)) {
-        s += v * f.peso;
-        w += f.peso;
+        s += v * fw;
+        w += fw;
       }
     }
     out[g.id] = w ? s / w : NaN;

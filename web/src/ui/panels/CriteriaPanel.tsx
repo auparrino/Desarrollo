@@ -1,8 +1,11 @@
 import { FACTORS, GROUPS, SCENARIOS, effectiveWeights, type Restriction, type Weights } from "../../model/criteria";
 import { caudalRequerido, type Aggregation, type WaterParams } from "../../model/mcda";
 import { describe, type ValueFn } from "../../model/valueFunctions";
+import { POLICIES, POLICY_BY_ID, type PolicyId } from "../../model/policies";
 
 interface Props {
+  policyId: PolicyId;
+  setPolicy: (id: PolicyId) => void;
   scenario: string;
   setScenario: (id: string) => void;
   weights: Weights;
@@ -59,8 +62,21 @@ export default function CriteriaPanel(p: Props) {
   return (
     <div className="panel">
       <section>
+        <h3>Instrumento de política</h3>
+        <select value={p.policyId} onChange={(e) => p.setPolicy(e.target.value as PolicyId)}>
+          {POLICIES.map((x) => (
+            <option key={x.id} value={x.id}>
+              {x.icono} {x.nombre}
+            </option>
+          ))}
+        </select>
+        <p className="muted small">
+          <b>Unidad:</b> {POLICY_BY_ID[p.policyId].unidad}. Pesos y restricciones según docs/politicas-territoriales.md §6.
+        </p>
+      </section>
+      <section>
         <h3>Escenario de pesos</h3>
-        <select value={p.scenario} onChange={(e) => p.setScenario(e.target.value)}>
+        <select value={p.scenario} onChange={(e) => p.setScenario(e.target.value)} disabled={p.policyId !== "ciudad_nueva"}>
           {SCENARIOS.map((s) => (
             <option key={s.id} value={s.id}>
               {s.nombre}
@@ -68,7 +84,11 @@ export default function CriteriaPanel(p: Props) {
           ))}
           <option value="custom">Personalizado</option>
         </select>
-        <p className="muted">{SCENARIOS.find((s) => s.id === p.scenario)?.desc ?? "Pesos modificados manualmente."}</p>
+        <p className="muted">
+          {p.policyId !== "ciudad_nueva"
+            ? "Los escenarios E0–E4 son de la revisión para ciudades nuevas; este instrumento usa sus propios pesos."
+            : SCENARIOS.find((s) => s.id === p.scenario)?.desc ?? "Pesos modificados manualmente."}
+        </p>
         <div className="row">
           <label>
             Agregación{" "}
