@@ -514,3 +514,4 @@ button.primary { background: var(--azul); color: #fff; border: 0; border-radius:
 .etapas ul { margin: 4px 0; padding-left: 18px; }
 .etapas p { margin: 2px 0 0; }
 @media print { .etapas > li { break-inside: avoid; } }
+.minimapa .flujo { fill: none; stroke: var(--sol); opacity: 0.85; stroke-linecap: round; }

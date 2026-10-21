@@ -23,7 +23,7 @@ Primer puesto en el orden combinado (1.º por aptitud, 1.º por economía, entre
 - Línea de alta tensión de 132 kV: 12 km y estación transformadora.
 - Viviendas nuevas: 7.000.
 - Suelo urbanizado (redes, calles, desagües): 270 ha.
-- Lugares en escuelas: 3.800 alumnos.
+- Lugares en escuelas: 2.200 alumnos (los primeros en llegar traen pocos chicos).
 - Camas de internación: 67.
 - Planta potabilizadora (dimensionada para la meta, ampliable): 25.000 m³/día en la primera etapa.
 - Para pasar a la etapa siguiente: Que la primera etapa esté habitada en un 80 % y haya empleo para quienes llegaron.
@@ -54,18 +54,19 @@ Primer puesto en el orden combinado (1.º por aptitud, 1.º por economía, entre
 
 ### Quiénes llegarían y desde dónde
 
-- Primero llegan quienes consiguen trabajo: adultos jóvenes, de 20 a 35 años, muchos solos o en pareja. La construcción de la propia ciudad es el primer empleo.
-- Después llegan sus familias y conocidos: la migración sigue redes (quien ya está avisa y recibe al siguiente). Por eso el origen de los primeros define el de los que siguen.
-- Con la ciudad en marcha nacen los primeros hijos en el lugar y la población crece también por su cuenta; el ritmo depende cada vez menos de los que llegan.
+- Primero llegan adultos jóvenes que consiguen trabajo: entre quienes cambian de provincia, el 47 % tiene de 15 a 34 años (contra 33 % del resto) y estudió más (13,5 años contra 11,6). La construcción de la propia ciudad es el primer empleo.
+- Traen pocos chicos (0,31 por adulto joven, contra 0,54): al principio hacen falta más viviendas chicas y menos escuelas; las familias y los nacimientos llegan después.
+- La mayoría viene de cerca o por corredores que ya existen: cerca de 34 % de la misma provincia y, de afuera, sobre todo de AMBA y Resto de Buenos Aires. La gente se muda donde ya fueron parientes y conocidos; la distancia pesa poco.
+- Uno de cada tres migrantes recientes (31 %) vuelve a su provincia de nacimiento: atraer a quienes nacieron en la región y se fueron es una vía concreta para poblar.
 
-Origen probable (modelo de gravedad, orientativo): AMBA 23 % (58.721) · Río Negro 14 % (36.293) · Resto de Buenos Aires 13 % (33.021) · Neuquén 12 % (29.590) · Córdoba 7 % (17.746).
+De dónde vendrían (corredores observados, Censo 2022 y RENAPER): Río Negro (otros departamentos) 34 % (86.543) · AMBA 14 % (35.982) · Resto de Buenos Aires 12 % (29.770) · Neuquén 10 % (26.210) · Córdoba 4 % (9.967) · Chubut 4 % (9.879) · Mendoza 2 % (6.245).
 
 ### Qué significaría
 
 - **Para la región.** Hoy viven 655.118 personas a 50 km. En 30 años se sumarían unas 252.500 (39 % más). Es un salto grande: los servicios de las ciudades vecinas también van a recibir más demanda.
 - **Para el trabajo.** Esa población necesita unos 113.625 empleos nuevos: los 143.732 puestos privados que hay hoy en la zona (sobre todo actividades de apoyo al petróleo y la minería y agricultura, ganadería, caza y servicios relacionados) ya los ocupa quien vive ahí. Si la zona sigue creciendo como entre 2014 y 2022, para los recién llegados quedarían unos 25.027. Faltan 88.598: hay que crearlos con una actividad nueva. Si no, el trabajo pone el techo: llegarían unas 56.000 personas en 30 años y no 250.000.
 - **Para el agua.** Se usarían 0,58 m³/s, el 1 % del caudal del río cercano en sequía (242,2 m³/s).
-- **Para el país.** Hacen falta unas 10.000 personas por año en la etapa de más crecimiento. El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual, no de su crecimiento.
+- **Para el país.** En la etapa de más crecimiento llegarían unas 10.000 personas por año: el 6,7 % de todos los que cambian de provincia en un año en la Argentina (150.081, Censo 2022). La región crecería un 1,5 % por año. Es 3,5 veces el mayor saldo migratorio observado en un lugar argentino (Pilar (partido, Buenos Aires): 2.883 personas netas por año en 2005-2010); incluso Confluencia (depto., Neuquén), sumando nacimientos, creció 9.183 por año en 2010-2022. No hay antecedente en el país: haría falta un motor de empleo excepcional. El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual.
 
 ### La cuenta y los riesgos
 
@@ -88,7 +89,7 @@ Primer puesto en el orden combinado (2.º por aptitud, 2.º por economía, entre
 - Línea de alta tensión de 132 kV: 2 km y estación transformadora.
 - Viviendas nuevas: 7.000.
 - Suelo urbanizado (redes, calles, desagües): 270 ha.
-- Lugares en escuelas: 3.800 alumnos.
+- Lugares en escuelas: 2.200 alumnos (los primeros en llegar traen pocos chicos).
 - Camas de internación: 67.
 - Planta potabilizadora (dimensionada para la meta, ampliable): 25.000 m³/día en la primera etapa.
 - Organismos nacionales trasladados: 3.500 agentes (acumulado 3.500 de 74.000).
@@ -125,17 +126,18 @@ Primer puesto en el orden combinado (2.º por aptitud, 2.º por economía, entre
 ### Quiénes llegarían y desde dónde
 
 - Primero llegan los agentes públicos trasladados con sus familias, y con ellos quienes atienden a esa demanda: comercio, salud, educación, construcción. Si se mudaran los 74.000 agentes con sus hogares, la ciudad pasaría las 420.000 personas; el escenario probable supone que muchos no se mudan y viajan, como pasó en Brasilia y en Putrajaya.
-- Después llegan sus familias y conocidos: la migración sigue redes (quien ya está avisa y recibe al siguiente). Por eso el origen de los primeros define el de los que siguen.
-- Con la ciudad en marcha nacen los primeros hijos en el lugar y la población crece también por su cuenta; el ritmo depende cada vez menos de los que llegan.
+- Traen pocos chicos (0,31 por adulto joven, contra 0,54): al principio hacen falta más viviendas chicas y menos escuelas; las familias y los nacimientos llegan después.
+- La mayoría viene de cerca o por corredores que ya existen: cerca de 35 % de la misma provincia y, de afuera, sobre todo de AMBA y Río Negro. La gente se muda donde ya fueron parientes y conocidos; la distancia pesa poco.
+- Uno de cada tres migrantes recientes (31 %) vuelve a su provincia de nacimiento: atraer a quienes nacieron en la región y se fueron es una vía concreta para poblar.
 
-Origen probable (modelo de gravedad, orientativo): AMBA 23 % (57.870) · Neuquén 15 % (38.665) · Resto de Buenos Aires 13 % (32.403) · Río Negro 11 % (28.253) · Córdoba 7 % (17.858).
+De dónde vendrían (corredores observados, Censo 2022 y RENAPER): Neuquén (otros departamentos) 35 % (88.112) · AMBA 14 % (35.268) · Río Negro 9 % (21.802) · Resto de Buenos Aires 9 % (21.520) · Mendoza 5 % (12.165) · Córdoba 4 % (10.965) · Salta 3 % (7.651).
 
 ### Qué significaría
 
 - **Para la región.** Hoy viven 624.242 personas a 50 km. En 30 años se sumarían unas 252.500 (40 % más). Es un salto grande: los servicios de las ciudades vecinas también van a recibir más demanda.
 - **Para el trabajo.** Esa población necesita unos 113.625 empleos nuevos: los 144.894 puestos privados que hay hoy en la zona (sobre todo actividades de apoyo al petróleo y la minería y agricultura, ganadería, caza y servicios relacionados) ya los ocupa quien vive ahí. El traslado de organismos aporta unos 148.000 con los servicios que genera. Si la zona sigue creciendo como entre 2014 y 2022, para los recién llegados quedarían unos 26.514. Alcanza con el crecimiento esperado.
 - **Para el agua.** Se usarían 0,58 m³/s, el 1 % del caudal del río cercano en sequía (242,2 m³/s).
-- **Para el país.** Hacen falta unas 10.000 personas por año en la etapa de más crecimiento. El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual, no de su crecimiento.
+- **Para el país.** En la etapa de más crecimiento llegarían unas 10.000 personas por año: el 6,7 % de todos los que cambian de provincia en un año en la Argentina (150.081, Censo 2022). La región crecería un 1,6 % por año. Es 3,5 veces el mayor saldo migratorio observado en un lugar argentino (Pilar (partido, Buenos Aires): 2.883 personas netas por año en 2005-2010); incluso Confluencia (depto., Neuquén), sumando nacimientos, creció 9.183 por año en 2010-2022. No hay antecedente en el país: haría falta un motor de empleo excepcional. El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual.
 
 ### La cuenta y los riesgos
 
@@ -186,18 +188,19 @@ Primer puesto en el orden combinado (1.º por aptitud, 1.º por economía, entre
 
 ### Quiénes llegarían y desde dónde
 
-- Primero llegan quienes consiguen trabajo: adultos jóvenes, de 20 a 35 años, muchos solos o en pareja. La construcción de la propia ciudad es el primer empleo.
-- Después llegan sus familias y conocidos: la migración sigue redes (quien ya está avisa y recibe al siguiente). Por eso el origen de los primeros define el de los que siguen.
-- Con la ciudad en marcha nacen los primeros hijos en el lugar y la población crece también por su cuenta; el ritmo depende cada vez menos de los que llegan.
+- Primero llegan adultos jóvenes que consiguen trabajo: entre quienes cambian de provincia, el 47 % tiene de 15 a 34 años (contra 33 % del resto) y estudió más (13,5 años contra 11,6). La construcción de la propia ciudad es el primer empleo.
+- Traen pocos chicos (0,31 por adulto joven, contra 0,54): al principio hacen falta más viviendas chicas y menos escuelas; las familias y los nacimientos llegan después.
+- La mayoría viene de cerca o por corredores que ya existen: cerca de 35 % de la misma provincia y, de afuera, sobre todo de AMBA y Río Negro. La gente se muda donde ya fueron parientes y conocidos; la distancia pesa poco.
+- Uno de cada tres migrantes recientes (31 %) vuelve a su provincia de nacimiento: atraer a quienes nacieron en la región y se fueron es una vía concreta para poblar.
 
-Origen probable (modelo de gravedad, orientativo): AMBA 23 % (12.322) · Neuquén 15 % (7.765) · Resto de Buenos Aires 13 % (6.905) · Río Negro 12 % (6.293) · Córdoba 7 % (3.787).
+De dónde vendrían (corredores observados, Censo 2022 y RENAPER): Neuquén (otros departamentos) 35 % (18.669) · AMBA 14 % (7.473) · Río Negro 9 % (4.619) · Resto de Buenos Aires 9 % (4.560) · Mendoza 5 % (2.578) · Córdoba 4 % (2.323) · Salta 3 % (1.621).
 
 ### Qué significaría
 
 - **Para la región.** Hoy viven 659.417 personas a 50 km. En 30 años se sumarían unas 53.500 (8 % más). La región lo absorbe sin cambiar de escala.
 - **Para el trabajo.** Esa población necesita unos 24.075 empleos nuevos: los 144.894 puestos privados que hay hoy en la zona (sobre todo actividades de apoyo al petróleo y la minería y agricultura, ganadería, caza y servicios relacionados) ya los ocupa quien vive ahí. Si la zona sigue creciendo como entre 2014 y 2022, para los recién llegados quedarían unos 26.514. Alcanza con el crecimiento esperado.
 - **Para el agua.** Se usarían 0,12 m³/s, el 1 % del caudal del río cercano en sequía (242,2 m³/s).
-- **Para el país.** Hacen falta unas 2.000 personas por año en la etapa de más crecimiento. El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual, no de su crecimiento.
+- **Para el país.** En la etapa de más crecimiento llegarían unas 2.000 personas por año: el 1,3 % de todos los que cambian de provincia en un año en la Argentina (150.081, Censo 2022). La región crecería un 0,3 % por año. Está dentro de lo que ya pasó en el país (Pilar (partido, Buenos Aires) sumó 2.883 personas netas por año en 2005-2010). El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual.
 
 ### La cuenta y los riesgos
 
@@ -248,18 +251,19 @@ Primer puesto en el orden combinado (4.º por aptitud, 1.º por economía, entre
 
 ### Quiénes llegarían y desde dónde
 
-- Primero llegan quienes consiguen trabajo: adultos jóvenes, de 20 a 35 años, muchos solos o en pareja. La construcción de la propia ciudad es el primer empleo.
-- Después llegan sus familias y conocidos: la migración sigue redes (quien ya está avisa y recibe al siguiente). Por eso el origen de los primeros define el de los que siguen.
-- Con la ciudad en marcha nacen los primeros hijos en el lugar y la población crece también por su cuenta; el ritmo depende cada vez menos de los que llegan.
+- Primero llegan adultos jóvenes que consiguen trabajo: entre quienes cambian de provincia, el 47 % tiene de 15 a 34 años (contra 33 % del resto) y estudió más (13,5 años contra 11,6). La construcción de la propia ciudad es el primer empleo.
+- Traen pocos chicos (0,31 por adulto joven, contra 0,54): al principio hacen falta más viviendas chicas y menos escuelas; las familias y los nacimientos llegan después.
+- La mayoría viene de cerca o por corredores que ya existen: cerca de 69 % de la misma provincia y, de afuera, sobre todo de AMBA y Córdoba. La gente se muda donde ya fueron parientes y conocidos; la distancia pesa poco.
+- Uno de cada tres migrantes recientes (31 %) vuelve a su provincia de nacimiento: atraer a quienes nacieron en la región y se fueron es una vía concreta para poblar.
 
-Origen probable (modelo de gravedad, orientativo): AMBA 36 % (3.868) · Resto de Buenos Aires 24 % (2.553) · Córdoba 7 % (740) · Santa Fe 7 % (732) · Mendoza 3 % (369).
+De dónde vendrían (corredores observados, Censo 2022 y RENAPER): Resto de Buenos Aires (otros partidos) 69 % (7.368) · AMBA 19 % (2.081).
 
 ### Qué significaría
 
 - **Para la región.** Hoy viven 401.119 personas a 50 km. En 30 años se sumarían unas 10.700 (3 % más). La región lo absorbe sin cambiar de escala.
 - **Para el trabajo.** Esa población necesita unos 4.815 empleos nuevos: los 71.063 puestos privados que hay hoy en la zona (sobre todo comercio al por menor excepto autos y motos y agricultura, ganadería, caza y servicios relacionados) ya los ocupa quien vive ahí. Si la zona sigue creciendo como entre 2014 y 2022, para los recién llegados quedarían unos 19.663. Alcanza con el crecimiento esperado.
 - **Para el agua.** Se usarían 0,02 m³/s, el 1 % del caudal del río cercano en sequía (2 m³/s).
-- **Para el país.** Hacen falta unas 400 personas por año en la etapa de más crecimiento. El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual, no de su crecimiento.
+- **Para el país.** En la etapa de más crecimiento llegarían unas 400 personas por año: el 0,3 % de todos los que cambian de provincia en un año en la Argentina (150.081, Censo 2022). La región crecería un 0,1 % por año. Está dentro de lo que ya pasó en el país (Pilar (partido, Buenos Aires) sumó 2.883 personas netas por año en 2005-2010). El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual.
 
 ### La cuenta y los riesgos
 
@@ -308,7 +312,7 @@ Primer puesto en el orden combinado (1.º por aptitud, 4.º por economía, entre
 ### Qué significaría
 
 - **Para la región.** El polo sumaría unos 26.000 empleos en 30 años a los 324.032 puestos privados que hay hoy en la zona (8 % más). Con sus familias y los servicios que atraen, la región crecería en unas 57.200 personas.
-- **Para el país.** Hacen falta unas 1.000 contrataciones por año en la etapa de más crecimiento. 
+- **Para el país.** En la etapa de más crecimiento llegarían unas 1.000 contrataciones por año: el 0,7 % de todos los que cambian de provincia en un año en la Argentina (150.081, Censo 2022). La región crecería un 0,1 % por año. Está dentro de lo que ya pasó en el país (Pilar (partido, Buenos Aires) sumó 2.883 personas netas por año en 2005-2010). 
 
 ### La cuenta y los riesgos
 
@@ -326,5 +330,6 @@ La ficha de cualquier lugar de la app arma el mismo plan con `web/src/model/plan
 1. **Etapas.** Se toma la llegada de gente del escenario "lo más probable" en cuatro etapas (años 1–5, 6–10, 11–20 y 21–30).
 2. **Obras.** Cada etapa construye solo lo que corresponde a quienes llegan en ella: viviendas (2,86 personas por hogar), lugares en escuelas (19 % de la población en edad escolar), camas (3,36 cada 1.000 habitantes) y suelo urbanizado a 75 hab/ha. Las obras de conexión (ruta, energía, agua) van en la primera etapa.
 3. **Condición.** No se pasa a la etapa siguiente hasta que la anterior esté ocupada en un 80 % y tenga empleo.
-4. **Quiénes y de dónde.** El perfil de quienes llegan sigue lo que se sabe de la migración interna: primero adultos jóvenes con trabajo, después familias y redes. El origen sale del modelo de gravedad, que se reemplazará por la matriz de migración observada.
-5. **Qué significaría.** Se compara lo que llega con lo que ya hay en la región: población a 50 km, puestos de trabajo y caudal de agua.
+4. **Quiénes y de dónde.** El perfil sale del Censo 2022: el 47 % de quienes cambian de provincia tiene de 15 a 34 años, estudió más y trae pocos chicos; uno de cada tres vuelve a su provincia de nacimiento. El origen se reparte entre la misma provincia (mudanzas entre departamentos, RENAPER) y los corredores que ya llegan a esa provincia (matriz 2017–2022), porque la distancia casi no explica los flujos.
+5. **Ritmo.** Se compara la llegada anual con el total de quienes cambian de provincia por año (150.000) y con lo que crecieron los lugares argentinos que más crecieron.
+6. **Qué significaría.** Se compara lo que llega con lo que ya hay en la región: población a 50 km, puestos de trabajo y caudal de agua.

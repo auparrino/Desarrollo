@@ -88,7 +88,7 @@ for (const pol of POLICIES) {
   }
   md += `### Quiénes llegarían y desde dónde\n\n`;
   for (const q of plan.quienes) md += `- ${q}\n`;
-  if (plan.deDonde.length) md += `\nOrigen probable (modelo de gravedad, orientativo): ${plan.deDonde.map((o) => `${o.lugar} ${Math.round(o.pct)} % (${n0(o.personas)})`).join(" · ")}.\n`;
+  if (plan.deDonde.length) md += `\nDe dónde vendrían (corredores observados, Censo 2022 y RENAPER): ${plan.deDonde.filter((o) => o.pct >= 2).slice(0, 7).map((o) => `${o.lugar} ${Math.round(o.pct)} % (${n0(o.personas)})`).join(" · ")}.\n`;
   md += `\n### Qué significaría\n\n`;
   for (const s of plan.significa) md += `- **${s.titulo}.** ${s.texto}\n`;
   md += `\n### La cuenta y los riesgos\n\n`;
@@ -106,8 +106,9 @@ La ficha de cualquier lugar de la app arma el mismo plan con \`web/src/model/pla
 1. **Etapas.** Se toma la llegada de gente del escenario "lo más probable" en cuatro etapas (años 1–5, 6–10, 11–20 y 21–30).
 2. **Obras.** Cada etapa construye solo lo que corresponde a quienes llegan en ella: viviendas (2,86 personas por hogar), lugares en escuelas (19 % de la población en edad escolar), camas (3,36 cada 1.000 habitantes) y suelo urbanizado a 75 hab/ha. Las obras de conexión (ruta, energía, agua) van en la primera etapa.
 3. **Condición.** No se pasa a la etapa siguiente hasta que la anterior esté ocupada en un 80 % y tenga empleo.
-4. **Quiénes y de dónde.** El perfil de quienes llegan sigue lo que se sabe de la migración interna: primero adultos jóvenes con trabajo, después familias y redes. El origen sale del modelo de gravedad, que se reemplazará por la matriz de migración observada.
-5. **Qué significaría.** Se compara lo que llega con lo que ya hay en la región: población a 50 km, puestos de trabajo y caudal de agua.
+4. **Quiénes y de dónde.** El perfil sale del Censo 2022: el 47 % de quienes cambian de provincia tiene de 15 a 34 años, estudió más y trae pocos chicos; uno de cada tres vuelve a su provincia de nacimiento. El origen se reparte entre la misma provincia (mudanzas entre departamentos, RENAPER) y los corredores que ya llegan a esa provincia (matriz 2017–2022), porque la distancia casi no explica los flujos.
+5. **Ritmo.** Se compara la llegada anual con el total de quienes cambian de provincia por año (150.000) y con lo que crecieron los lugares argentinos que más crecieron.
+6. **Qué significaría.** Se compara lo que llega con lo que ya hay en la región: población a 50 km, puestos de trabajo y caudal de agua.
 `;
 
 writeFileSync("../docs/casos-concretos.md", md);

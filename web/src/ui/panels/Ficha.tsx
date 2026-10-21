@@ -64,7 +64,24 @@ function mismoPresupuesto(ds: Dataset, i: number, provincia: string, presupuesto
   });
 }
 
-function MiniMapa({ prov, punto }: { prov?: GeoJSON.FeatureCollection; punto: [number, number] }) {
+/** Centro aproximado de cada provincia (centro del polígono más grande) y del AMBA. */
+function centros(prov?: GeoJSON.FeatureCollection): Map<string, [number, number]> {
+  const m = new Map<string, [number, number]>();
+  for (const f of prov?.features ?? []) {
+    const g = f.geometry;
+    const polys = g?.type === "MultiPolygon" ? g.coordinates : g?.type === "Polygon" ? [g.coordinates] : [];
+    let best: number[][] = [];
+    for (const poly of polys) if (poly[0].length > best.length && poly[0][0][1] > -56) best = poly[0];
+    if (!best.length) continue;
+    const xs = best.map((p) => p[0]), ys = best.map((p) => p[1]);
+    m.set(String(f.properties?.provincia ?? f.properties?.nombre ?? ""), [(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2]);
+  }
+  m.set("AMBA", [-58.45, -34.62]);
+  if (m.has("Buenos Aires")) m.set("Resto de Buenos Aires", [-61.0, -36.6]);
+  return m;
+}
+
+function MiniMapa({ prov, punto, flujos = [] }: { prov?: GeoJSON.FeatureCollection; punto: [number, number]; flujos?: { lugar: string; pct: number }[] }) {
   const W = 150, H = 260;
   const x0 = -74, x1 = -53, y0 = -55.5, y1 = -21.5;
   const kx = W / (x1 - x0), ky = H / (y1 - y0);
@@ -85,9 +102,18 @@ function MiniMapa({ prov, punto }: { prov?: GeoJSON.FeatureCollection; punto: [n
     return s;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prov]);
+  const cs = useMemo(() => centros(prov), [prov]);
+  const tx = px(punto[0]), ty = py(punto[1]);
   return (
-    <svg className="minimapa" viewBox={`0 0 ${W} ${H}`} width={W} height={H} aria-label="Ubicación en el mapa del país">
+    <svg className="minimapa" viewBox={`0 0 ${W} ${H}`} width={W} height={H} aria-label="Ubicación y de dónde llegaría la gente">
       <path d={d} />
+      {flujos.map((f) => {
+        const c = cs.get(f.lugar);
+        if (!c || f.pct < 2) return null;
+        const x = px(c[0]), y = py(c[1]);
+        const mx = (x + tx) / 2 + (ty - y) * 0.15, my = (y + ty) / 2 + (x - tx) * 0.15;
+        return <path key={f.lugar} className="flujo" d={`M${x.toFixed(1)},${y.toFixed(1)}Q${mx.toFixed(1)},${my.toFixed(1)} ${tx.toFixed(1)},${ty.toFixed(1)}`} strokeWidth={Math.max(0.8, Math.sqrt(f.pct) * 0.9)} />;
+      })}
       <circle cx={px(punto[0])} cy={py(punto[1])} r={7} className="pt-halo" />
       <circle cx={px(punto[0])} cy={py(punto[1])} r={3.5} className="pt" />
     </svg>
@@ -149,7 +175,7 @@ export default function Ficha(p: Props) {
             </p>
             <p className="ficha-rec"><b>Recomendación.</b> {rec} {cond && <b>{cond}</b>}</p>
           </div>
-          <MiniMapa prov={p.geo.provincias} punto={p.site.center} />
+          <MiniMapa prov={p.geo.provincias} punto={p.site.center} flujos={plan.deDonde.filter((o) => o.tipo === "corredor")} />
         </header>
 
         <section className="ficha-tiles">
@@ -188,12 +214,15 @@ export default function Ficha(p: Props) {
                 <h3>De dónde vendrían</h3>
                 <table className="provs">
                   <tbody>
-                    {plan.deDonde.map((o) => (
+                    {plan.deDonde.filter((o) => o.pct >= 1).slice(0, 8).map((o) => (
                       <tr key={o.lugar}><td>{o.lugar}</td><td className="num">{Math.round(o.pct)} %</td><td className="num">{n0(o.personas)} personas</td></tr>
                     ))}
                   </tbody>
                 </table>
-                <p className="small muted">Estimación orientativa (más gente de los lugares grandes y cercanos), a reemplazar por la matriz de migración observada.</p>
+                <p className="small muted">
+                  Según quiénes ya se mudan hoy a {p.site.provincia} (Censo 2022, CEPAL/CELADE) y las mudanzas dentro de cada provincia (RENAPER
+                  2012–2022). El AMBA se separa del resto de Buenos Aires con el Censo 2010. Las líneas del mapa muestran los corredores.
+                </p>
               </>
             )}
           </section>

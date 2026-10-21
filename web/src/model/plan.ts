@@ -7,7 +7,7 @@ import type { CBAResult, Escenario } from "./benefits";
 import { empleoFaltante, mercadoLaboral } from "./labor";
 import type { PolicyId } from "./policies";
 import { UNIT_COSTS } from "./unitCostsData";
-import { origen } from "./brief";
+import { MIGRANTES_ANIO, PERFIL, origenObservado, ritmo, type Origen, type Ritmo2 } from "./migracion";
 
 const U = UNIT_COSTS.items;
 const c0 = (id: string, d: number) => U[id]?.central ?? d;
@@ -32,7 +32,8 @@ export interface Plan {
   resumen: string;
   etapas: EtapaPlan[];
   quienes: string[]; // perfil de quienes llegan, por etapa del proceso
-  deDonde: { lugar: string; pct: number; personas: number }[];
+  deDonde: Origen[];
+  ritmo: Ritmo2 | null;
   significa: { titulo: string; texto: string }[];
 }
 
@@ -102,7 +103,9 @@ export function planConcreto(
       if (ociosas > 50) obras.push({ que: "Viviendas desocupadas recuperadas", cantidad: `${n0(red(ociosas))}` });
       obras.push({ que: nueva ? "Viviendas nuevas" : "Viviendas nuevas en el ejido actual", cantidad: `${n0(red(hog - ociosas))}` });
       if (nueva) obras.push({ que: "Suelo urbanizado (redes, calles, desagües)", cantidad: `${n0(red(d / 75))} ha` });
-      obras.push({ que: "Lugares en escuelas", cantidad: `${n0(red(d * escolar))} alumnos` });
+      // los primeros migrantes traen menos chicos (0,31 por adulto joven contra 0,54): la escuela llega a pleno en la etapa 2
+      const kEsc = k === 0 && nueva ? PERFIL.ninos / PERFIL.ninosNoMig : 1;
+      obras.push({ que: "Lugares en escuelas", cantidad: `${n0(red(d * escolar * kEsc))} alumnos${kEsc < 1 ? " (los primeros en llegar traen pocos chicos)" : ""}` });
       obras.push({ que: "Camas de internación", cantidad: `${n0(red((d / 1000) * camas))}` });
       if (nueva && k === 0) {
         const m3 = (meta * 200) / 1000;
@@ -125,6 +128,13 @@ export function planConcreto(
   }).filter((e) => e.llegan > 0 || e.obras.length > 0);
 
   // ------------------------------------------------ quiénes y de dónde
+  const prov = ds.meta.departamentos[ds.dep[i]]?.provincia ?? "";
+  const llegan = b.anual.poblacion;
+  const deDonde = polos ? [] : origenObservado(prov, llegan);
+  const misma = deDonde.find((o) => o.tipo === "misma");
+  const top = deDonde.filter((o) => o.tipo === "corredor").slice(0, 2).map((o) => o.lugar);
+  const pico = etapas.reduce((m, e) => Math.max(m, e.porAnio), 0);
+  const rt = ritmo(pico, B);
   const quienes = polos
     ? [
         "Primero llegan técnicos y operarios que ya trabajan en la industria, muchos desde la misma región, y quienes viajan a diario desde la ciudad base.",
@@ -133,13 +143,11 @@ export function planConcreto(
     : [
         policy === "capital"
           ? `Primero llegan los agentes públicos trasladados con sus familias, y con ellos quienes atienden a esa demanda: comercio, salud, educación, construcción. Si se mudaran los ${n0(apn)} agentes con sus hogares, la ciudad pasaría las ${n0(red(apn * pph * 2))} personas; el escenario probable supone que muchos no se mudan y viajan, como pasó en Brasilia y en Putrajaya.`
-          : "Primero llegan quienes consiguen trabajo: adultos jóvenes, de 20 a 35 años, muchos solos o en pareja. La construcción de la propia ciudad es el primer empleo.",
-        "Después llegan sus familias y conocidos: la migración sigue redes (quien ya está avisa y recibe al siguiente). Por eso el origen de los primeros define el de los que siguen.",
-        "Con la ciudad en marcha nacen los primeros hijos en el lugar y la población crece también por su cuenta; el ritmo depende cada vez menos de los que llegan.",
+          : `Primero llegan adultos jóvenes que consiguen trabajo: entre quienes cambian de provincia, el ${Math.round(PERFIL.jovenes)} % tiene de 15 a 34 años (contra ${Math.round(PERFIL.jovenesNoMig)} % del resto) y estudió más (${PERFIL.estudio.toLocaleString("es-AR", { maximumFractionDigits: 1 })} años contra ${PERFIL.estudioNoMig.toLocaleString("es-AR", { maximumFractionDigits: 1 })}). La construcción de la propia ciudad es el primer empleo.`,
+        `Traen pocos chicos (${PERFIL.ninos.toLocaleString("es-AR", { maximumFractionDigits: 2 })} por adulto joven, contra ${PERFIL.ninosNoMig.toLocaleString("es-AR", { maximumFractionDigits: 2 })}): al principio hacen falta más viviendas chicas y menos escuelas; las familias y los nacimientos llegan después.`,
+        `La mayoría viene de cerca o por corredores que ya existen${misma ? `: cerca de ${Math.round(misma.pct)} % de la misma provincia` : ""}${top.length ? ` y, de afuera, sobre todo de ${top.join(" y ")}` : ""}. La gente se muda donde ya fueron parientes y conocidos; la distancia pesa poco.`,
+        `Uno de cada tres migrantes recientes (${Math.round(PERFIL.retorno)} %) vuelve a su provincia de nacimiento: atraer a quienes nacieron en la región y se fueron es una vía concreta para poblar.`,
       ];
-  const llegan = b.anual.poblacion;
-  const ori = polos ? [] : origen(ds, i);
-  const deDonde = ori.map((o) => ({ ...o, personas: (llegan * o.pct) / 100 }));
 
   // ------------------------------------------------ qué significaría
   const significa: { titulo: string; texto: string }[] = [];
@@ -178,12 +186,16 @@ export function planConcreto(
   }
   significa.push({
     titulo: "Para el país",
-    texto: `Hacen falta unas ${n0(etapas.reduce((m, e) => Math.max(m, e.porAnio), 0))} ${polos ? "contrataciones" : "personas"} por año en la etapa de más crecimiento. ${
-      polos ? "" : "El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual, no de su crecimiento."
-    }`,
+    texto: `En la etapa de más crecimiento llegarían unas ${n0(pico)} ${polos ? "contrataciones por año" : "personas por año"}: el ${rt.pctNacional.toLocaleString("es-AR", { maximumFractionDigits: 1 })} % de todos los que cambian de provincia en un año en la Argentina (${n0(MIGRANTES_ANIO)}, Censo 2022). La región crecería un ${rt.pctRegion.toLocaleString("es-AR", { maximumFractionDigits: 1 })} % por año. ${
+      rt.veces > 1.5
+        ? `Es ${rt.veces.toLocaleString("es-AR", { maximumFractionDigits: 1 })} veces el mayor saldo migratorio observado en un lugar argentino (${rt.maxNeto.lugar}: ${n0(rt.maxNeto.valor)} personas netas por año en ${rt.maxNeto.periodo}); incluso ${rt.maxTotal.lugar}, sumando nacimientos, creció ${n0(rt.maxTotal.valor)} por año en ${rt.maxTotal.periodo}. No hay antecedente en el país: haría falta un motor de empleo excepcional.`
+        : rt.veces > 0.7
+          ? `Está en el límite de lo observado: el lugar que más gente atrajo, ${rt.maxNeto.lugar}, sumó ${n0(rt.maxNeto.valor)} personas netas por año en ${rt.maxNeto.periodo}.`
+          : `Está dentro de lo que ya pasó en el país (${rt.maxNeto.lugar} sumó ${n0(rt.maxNeto.valor)} personas netas por año en ${rt.maxNeto.periodo}).`
+    } ${polos ? "" : "El AMBA no crece según el INDEC: lo que se mueva desde allí sale de su población actual."}`,
   });
 
   const lugarTxt = nueva || policy === "pueblos" ? `cerca de ${lugar}` : polos ? `junto a ${lugar}` : `en ${lugar}`;
   const resumen = `${NOMBRE[policy][0].toUpperCase()}${NOMBRE[policy].slice(1)} ${lugarTxt}, con una meta de ${n0(meta)} ${polos ? "empleos" : "habitantes"}. Con el ritmo más probable se alcanzarían ${n0(llegan)} en 30 años, construyendo por etapas y solo cuando la anterior se ocupa.`;
-  return { resumen, etapas, quienes, deDonde, significa };
+  return { resumen, etapas, quienes, deDonde, ritmo: polos ? null : rt, significa };
 }
