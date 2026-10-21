@@ -1,3 +1,6 @@
+import Recorridos, { RecorridosLista } from "./Recorridos";
+import { RECORRIDOS } from "../../model/recorridos";
+import bt from "../../model/backtest.json";
 import { useState } from "react";
 import data from "../../model/casos.json";
 import { POLICIES, type PolicyId } from "../../model/policies";
@@ -72,6 +75,8 @@ export function CasosPolitica({ policy, max = 4 }: { policy: PolicyId; max?: num
 }
 
 /** Pestaña completa del modo experto. */
+const BACKTEST = (bt as { casos: { id: string; nombre: string; tieneMotor: boolean; errorCiego: number; errorCalibrado: number }[] }).casos;
+
 export default function CasosPanel() {
   const [f, setF] = useState<PolicyId | "todos">("todos");
   const list = CASOS.filter((c) => f === "todos" || c.instrumento_app.includes(f)).sort(
@@ -104,6 +109,30 @@ export default function CasosPanel() {
             <li>Si no se mide desde el inicio, nunca se sabe si funcionó: la mitad de los casos no tiene evaluación.</li>
           </ol>
         </div>
+      </section>
+      <section>
+        <h3>Recorridos de ciudades que funcionaron</h3>
+        <p className="muted small">
+          Cómo crecieron, desde que se decidieron, {RECORRIDOS.length} ciudades nuevas y polos con datos de censo
+          (docs/recorridos-exitosos.md). En el gráfico, los de países ya urbanizados como la Argentina.
+        </p>
+        <Recorridos />
+        <h4>Prueba del modelo de proceso</h4>
+        <p className="small">
+          Con el empleo que creó el motor en cada caso, el modelo reproduce los censos de Tierra del Fuego, Canberra y Milton Keynes con
+          errores de ±30 a ±40 %. Donde casi no hay datos del motor (Neuquén, Sejong, Palmas, las ciudades brasileñas) no se puede
+          probar. Con estos casos se recalibró el multiplicador de empleo local: cada empleo del motor sostiene entre 1,6 y 1,9 más.
+        </p>
+        <table className="provs small">
+          <thead><tr><th>Caso</th><th className="num">Error con los parámetros de la app</th><th className="num">Error calibrado</th></tr></thead>
+          <tbody>
+            {BACKTEST.filter((b) => b.tieneMotor).sort((a, b) => a.errorCalibrado - b.errorCalibrado).map((b) => (
+              <tr key={b.id}><td>{b.nombre.split(/[(:]/)[0].trim()}</td><td className="num">{Number.isFinite(b.errorCiego) ? `±${Math.round((Math.exp(b.errorCiego) - 1) * 100)} %` : "s/d"}</td><td className="num">±{Math.round((Math.exp(b.errorCalibrado) - 1) * 100)} %</td></tr>
+            ))}
+          </tbody>
+        </table>
+        <h4>Los recorridos, uno por uno</h4>
+        <RecorridosLista soloComparables={false} />
       </section>
       <section>
         <ul className="casos-list">

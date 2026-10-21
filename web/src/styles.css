@@ -526,3 +526,15 @@ button.primary { background: var(--azul); color: #fff; border: 0; border-radius:
 .recorridos .plan { fill: none; stroke: var(--azul); stroke-width: 3; }
 .recorridos .lbl { font-size: 10px; fill: var(--ink-2); }
 .recorridos .plan-lbl { fill: var(--azul); font-weight: 700; }
+.sim-line { display: block; border-left: 3px solid var(--sol); padding-left: 6px; margin: 2px 0; }
+.recorridos-lista { list-style: none; padding: 0; margin: 6px 0; }
+.recorridos-lista > li { border-bottom: 1px solid var(--grid); padding: 5px 0; }
+.recorridos-lista summary { cursor: pointer; font-size: 0.86rem; }
+.recorridos-lista ol { padding-left: 18px; margin: 2px 0 6px; }
+.principios { padding-left: 18px; }
+.principios li { margin-bottom: 6px; font-size: 0.86rem; line-height: 1.4; }
+.sliders { display: grid; gap: 6px; margin: 8px 0; }
+.slider { display: grid; gap: 2px; font-size: 0.82rem; }
+.slider input { width: 100%; accent-color: var(--azul); }
+.docs-links { columns: 2; padding-left: 18px; }
+@media (max-width: 760px) { .docs-links { columns: 1; } }

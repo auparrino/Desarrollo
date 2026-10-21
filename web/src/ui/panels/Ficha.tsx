@@ -9,8 +9,9 @@ import { empleo, equilibrio, musd, porEtapa, riesgos, sinPolitica } from "../../
 import { estimateCosts } from "../../model/costs";
 import { cbaInput } from "../../model/labor";
 import { planConcreto } from "../../model/plan";
-import { compararEstrategias } from "../../model/estrategias";
+import { evaluarSitio } from "../evaluar";
 import Recorridos from "./Recorridos";
+import { centrosProvincia } from "../geo";
 import { POLICY_BY_ID, type Policy, type PolicyId } from "../../model/policies";
 import type { Site } from "../../model/sites";
 import { UNIT_COSTS } from "../../model/unitCostsData";
@@ -66,23 +67,6 @@ function mismoPresupuesto(ds: Dataset, i: number, provincia: string, presupuesto
   });
 }
 
-/** Centro aproximado de cada provincia (centro del polígono más grande) y del AMBA. */
-function centros(prov?: GeoJSON.FeatureCollection): Map<string, [number, number]> {
-  const m = new Map<string, [number, number]>();
-  for (const f of prov?.features ?? []) {
-    const g = f.geometry;
-    const polys = g?.type === "MultiPolygon" ? g.coordinates : g?.type === "Polygon" ? [g.coordinates] : [];
-    let best: number[][] = [];
-    for (const poly of polys) if (poly[0].length > best.length && poly[0][0][1] > -56) best = poly[0];
-    if (!best.length) continue;
-    const xs = best.map((p) => p[0]), ys = best.map((p) => p[1]);
-    m.set(String(f.properties?.provincia ?? f.properties?.nombre ?? ""), [(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2]);
-  }
-  m.set("AMBA", [-58.45, -34.62]);
-  if (m.has("Buenos Aires")) m.set("Resto de Buenos Aires", [-61.0, -36.6]);
-  return m;
-}
-
 function MiniMapa({ prov, punto, flujos = [] }: { prov?: GeoJSON.FeatureCollection; punto: [number, number]; flujos?: { lugar: string; pct: number }[] }) {
   const W = 150, H = 260;
   const x0 = -74, x1 = -53, y0 = -55.5, y1 = -21.5;
@@ -104,7 +88,7 @@ function MiniMapa({ prov, punto, flujos = [] }: { prov?: GeoJSON.FeatureCollecti
     return s;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prov]);
-  const cs = useMemo(() => centros(prov), [prov]);
+  const cs = useMemo(() => centrosProvincia(prov), [prov]);
   const tx = px(punto[0]), ty = py(punto[1]);
   return (
     <svg className="minimapa" viewBox={`0 0 ${W} ${H}`} width={W} height={H} aria-label="Ubicación y de dónde llegaría la gente">
@@ -125,13 +109,15 @@ function MiniMapa({ prov, punto, flujos = [] }: { prov?: GeoJSON.FeatureCollecti
 export default function Ficha(p: Props) {
   const i = p.site.best;
   const polos = p.policy.id === "polos";
-  const { costos, r } = useMemo(() => run(p.ds, p.policy.id, p.poblacion, i, p.site.provincia), [p.ds, p.policy.id, p.poblacion, i, p.site.provincia]);
+  // mismo cálculo que las tarjetas: costos, proceso recomendado y cuenta ajustada a la gente que llega
+  const ev = useMemo(() => evaluarSitio(p.ds, p.site, p.nombre, 0, p.policy.id, p.poblacion), [p.ds, p.site, p.nombre, p.policy.id, p.poblacion]);
+  const costos = ev.c;
+  const r = ev.cba;
   const b = r.base;
   const mand = porEtapa(b);
   const emp = empleo(p.ds, i, p.policy.id, b, p.geo.proyectos);
-  const cmp = useMemo(() => compararEstrategias(p.ds, i, p.policy.id, p.poblacion, costos, r, 250), [p.ds, i, p.policy.id, p.poblacion, costos, r]);
-  // proceso recomendado: el que suma gente más barato; si ninguno suma frente a la referencia, el de mejor saldo
-  const elegido = cmp.poblar && cmp.marginal(cmp.poblar) < 50_000 ? cmp.poblar : cmp.mejor;
+  const cmp = ev.cmp;
+  const elegido = ev.elegido;
   const tray = elegido.central.serie.map((x) => (polos ? x.pob / 2.2 : x.pob));
   const plan = useMemo(
     () => planConcreto(p.ds, i, p.policy.id, p.poblacion, p.nombre.replace(/^Cerca de /, ""), r, tray, elegido.estrategia.nombre, elegido.estrategia.motorEmpleos),
@@ -147,7 +133,9 @@ export default function Ficha(p: Props) {
   const sp = sinPolitica(comun);
   const a = anual(b);
   const inp = useMemo(() => cbaInput(p.ds, p.policy.id, p.poblacion, costos, i), [p.ds, p.policy.id, p.poblacion, costos, i]);
-  const eq = useMemo(() => equilibrio(inp, b), [inp, b]);
+  // el equilibrio se busca escalando la curva sin ajustar; se compara con lo que da el proceso simulado
+  const eq0 = useMemo(() => equilibrio(inp, ev.cbaCurva.base), [inp, ev]);
+  const eq = { ...eq0, esperada: (polos ? elegido.pob30[1] / 2.2 : elegido.pob30[1]) / Math.max(p.poblacion, 1), conviene: b.social.van >= 0 };
   const reg = useMemo(() => (polos ? null : costBenefit({ ...inp, origen: "region" }, BENEFIT_PARAMS, "base")), [inp, polos]);
   const frente = polos ? "frente a no tener el polo" : "frente a que esa población crezca en el AMBA";
   const pct = (x: number) => `${Math.round(x * 100)} %`;
@@ -219,9 +207,9 @@ export default function Ficha(p: Props) {
           <h3>Cómo conviene hacerlo: {cmp.rs.length} procesos simulados</h3>
           <p className="small">
             Cada proceso se simuló {250} veces año por año (empleo, vivienda, migración y nacimientos), variando lo que no se sabe con
-            certeza. La cuenta de arriba supone que en 30 años llega el {Math.round((100 * b.anual.poblacion) / Math.max(p.poblacion, 1))} % de la meta, como en la
-            experiencia internacional; con los flujos migratorios argentinos, el proceso recomendado llega a{" "}
-            <b>{n0(polos ? elegido.pob30[1] / 2.2 : elegido.pob30[1])} {polos ? "empleos" : "habitantes"}</b>.
+            certeza. Con los flujos migratorios argentinos, el proceso recomendado llega a{" "}
+            <b>{n0(polos ? elegido.pob30[1] / 2.2 : elegido.pob30[1])} {polos ? "empleos" : "habitantes"}</b> en 30 años, y la cuenta económica de arriba ya usa
+            esa cifra. Con la curva de la experiencia internacional habría llegado el {Math.round((100 * ev.cbaCurva.base.anual.poblacion) / Math.max(p.poblacion, 1))} % de la meta.
           </p>
           <div className="tabla-scroll">
             <table className="provs">

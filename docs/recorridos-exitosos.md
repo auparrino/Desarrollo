@@ -118,10 +118,10 @@ Y lo que da el proceso recomendado por las simulaciones en cada caso de la app (
 
 | Caso de la app | Proceso recomendado | Habitantes al año 30 | Recorrido real más parecido |
 |---|---|---|---|
-| Crear una ciudad nueva: Sarmiento | Organismos públicos primero, luego viviendas a demanda | 31.963 | Puerto Madryn (ALUAR) (50.670) |
+| Crear una ciudad nueva: Senillosa | Organismos públicos primero, luego viviendas a demanda | 41.272 | Puerto Madryn (ALUAR) (50.670) |
 | Trasladar la capital: Senillosa | Traslado gradual con radicación de las familias | 140.419 | Milton Keynes (143.835) |
-| Fortalecer ciudades intermedias: Gran San Nicolás de los Arroyos | Organismos públicos primero, luego viviendas a demanda | 71.603 | Tierra del Fuego: Río Grande y Ushuaia (Ley 19.640) (88.121) |
-| Repoblar pueblos: Punta Alta | A demanda, sin motor de empleo | 19.979 | El Calafate (Glaciar Perito Moreno) (16.883) |
+| Fortalecer ciudades intermedias: Gran Paraná | Por etapas, sin motor de empleo | 29.415 | Puerto Madryn (ALUAR) (50.670) |
+| Repoblar pueblos: Correa | Organismos públicos primero, luego viviendas a demanda | 7.776 | Canberra (12.180) |
 | Crear polos productivos: Laguna Brava | Parque por etapas sin incentivos fiscales | 109.694 | La Plata (nueva capital de la provincia de Buenos Aires) (115.273) |
 
 **Lectura.** Los recorridos argentinos más parecidos a una ciudad nueva (Puerto Madryn, Tierra del

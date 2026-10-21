@@ -9,10 +9,11 @@ import MapView, { type Basemap, type Overlays } from "./ui/MapView";
 import CriteriaPanel from "./ui/panels/CriteriaPanel";
 import SitesPanel from "./ui/panels/SitesPanel";
 import CellDetail from "./ui/panels/CellDetail";
-import DiagnosticPanel, { METRICS, type DepMetric, type DepProps } from "./ui/panels/DiagnosticPanel";
+import DiagnosticPanel, { METRICS, SALDO_PROV, type DepMetric, type DepProps } from "./ui/panels/DiagnosticPanel";
 import SimulatorPanel from "./ui/panels/SimulatorPanel";
 import MethodPanel from "./ui/panels/MethodPanel";
 import CasosPanel from "./ui/panels/Casos";
+import ProcesoPanel from "./ui/panels/ProcesoPanel";
 import SimplePanel from "./ui/panels/SimplePanel";
 import SimpleCellCard from "./ui/panels/SimpleCellCard";
 import { POLICY_BY_ID, type PolicyId } from "./model/policies";
@@ -22,9 +23,11 @@ import { DIV_RED_BLUE, EXCLUDED, SEQ_BLUE, SEQ_ORANGE, VIRIDIS, css, gradientCss
 import { VARIABLES, VAR_BY_ID, fmtVar } from "./ui/variables";
 import { SolDeMayo } from "./ui/art/Icons";
 import Ficha from "./ui/panels/Ficha";
+import { centrosProvincia, type Flujo } from "./ui/geo";
+import { origenObservado } from "./model/migracion";
 import Presentacion from "./ui/panels/Presentacion";
 
-type Tab = "aptitud" | "sitios" | "diagnostico" | "simulador" | "casos" | "metodo";
+type Tab = "aptitud" | "sitios" | "diagnostico" | "simulador" | "proceso" | "casos" | "metodo";
 type View = "aptitud" | "robustez" | "exclusion" | "variable";
 
 const TABS: { id: Tab; nombre: string }[] = [
@@ -32,6 +35,7 @@ const TABS: { id: Tab; nombre: string }[] = [
   { id: "sitios", nombre: "Sitios" },
   { id: "simulador", nombre: "Simulador" },
   { id: "diagnostico", nombre: "Diagnóstico" },
+  { id: "proceso", nombre: "Proceso" },
   { id: "casos", nombre: "Mundo" },
   { id: "metodo", nombre: "Método" },
 ];
@@ -118,6 +122,7 @@ export default function App() {
   const [selSite, setSelSite] = useState<Site | null>(null);
   const [ficha, setFicha] = useState<{ site: Site; nombre: string } | null>(null);
   const [presentar, setPresentar] = useState(false);
+  const centros = useMemo(() => centrosProvincia(geo.provincias), [geo.provincias]);
   const [flyTo, setFlyTo] = useState<{ center: [number, number]; zoom: number; key: number } | null>(null);
   const [depMetric, setDepMetric] = useState<DepMetric>("crec_anual");
   const [selDep, setSelDep] = useState<DepProps | null>(null);
@@ -257,6 +262,14 @@ export default function App() {
   const reasonIds = useMemo(() => [...restrictions.map((r) => r.id), "R13"], [restrictions]);
 
   const sites = useMemo(() => (ds ? findSites(ds, score, siteParams, mcProb) : []), [ds, score, siteParams, mcProb]);
+  // corredores migratorios hacia el lugar seleccionado (no aplica a polos: el empleo se cubre en la región)
+  const flujos = useMemo<Flujo[]>(() => {
+    if (!selSite || policyId === "polos") return [];
+    return origenObservado(selSite.provincia, 100)
+      .filter((o) => o.tipo === "corredor" && centros.has(o.lugar))
+      .slice(0, 6)
+      .map((o) => ({ lugar: o.lugar, pct: o.pct, desde: centros.get(o.lugar)!, hasta: selSite.center }));
+  }, [selSite, policyId, centros]);
 
   const workerRef = useRef<Worker | null>(null);
   const runMc = useCallback(() => {
@@ -373,7 +386,8 @@ export default function App() {
     const colorOf = (f: GeoJSON.Feature): [number, number, number, number] => {
       const p = f.properties as DepProps;
       let c: RGB;
-      if (depMetric === "crec_anual") c = ramp(DIV_RED_BLUE, ((p.crec_anual ?? NaN) + 3) / 6);
+      if (depMetric === "migracion") c = ramp(DIV_RED_BLUE, ((SALDO_PROV.get(p.provincia) ?? NaN) + 0.4) / 0.8);
+      else if (depMetric === "crec_anual") c = ramp(DIV_RED_BLUE, ((p.crec_anual ?? NaN) + 3) / 6);
       else if (depMetric === "densidad") c = ramp(VIRIDIS, (Math.log10(Math.max(p.densidad ?? NaN, 0.1)) + 1) / 4);
       else c = ramp(VIRIDIS, (Math.log10(Math.max(p.pob2022 ?? NaN, 1000)) - 3) / 3);
       const sel = selDep?.cod_dep === p.cod_dep;
@@ -554,6 +568,7 @@ export default function App() {
               <DiagnosticPanel deps={depsProps} metric={depMetric} setMetric={setDepMetric} selected={selDep} />
             )}
             {tab === "simulador" && <SimulatorPanel ds={ds} sites={sites} deps={depsProps} policy={policy} />}
+            {tab === "proceso" && <ProcesoPanel ds={ds} sites={sites} policy={policy} poblacion={siteParams.poblacion} localidades={geo.localidades} />}
             {tab === "casos" && <CasosPanel />}
             {tab === "metodo" && <MethodPanel generado={ds.meta.generado} />}
           </div>
@@ -575,6 +590,7 @@ export default function App() {
             onCellClick={(i) => { setSelCell(i); if (i === null) setSelSite(null); }}
             onDepClick={(f) => setSelDep((f?.properties as DepProps) ?? null)}
             dark={dark}
+            flujos={!expert || tab === "sitios" || tab === "proceso" ? flujos : undefined}
           />
           <div className={`mapstyle ${expert && tab !== "diagnostico" ? "with-ctl" : ""}`}>
             <span className="cartouche">Mapa de aptitud del territorio nacional</span>

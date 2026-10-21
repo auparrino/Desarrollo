@@ -1,15 +1,13 @@
 // Modo presentación: mapa a pantalla completa y una lámina con los mejores lugares, para proyectar en una reunión.
 
+import { useMemo } from "react";
 import type { Dataset } from "../../data/load";
-import { estimateCosts } from "../../model/costs";
-import { cbaInput } from "../../model/labor";
 import type { Policy } from "../../model/policies";
 import type { Site } from "../../model/sites";
-import { UNIT_COSTS } from "../../model/unitCostsData";
 import { musd } from "../../model/brief";
 import { PolicyIcon } from "../art/Icons";
-import { plazo, runAll } from "./CostBenefit";
-import { siteName, uniqueByPlace } from "./SimplePanel";
+import { plazo } from "./CostBenefit";
+import { evaluar, ordenar } from "../evaluar";
 
 interface Props {
   ds: Dataset;
@@ -22,7 +20,10 @@ interface Props {
 }
 
 export default function Presentacion(p: Props) {
-  const top = uniqueByPlace(p.sites, p.localidades).slice(0, 5);
+  const top = useMemo(
+    () => ordenar(evaluar(p.ds, p.sites, p.localidades, p.policy.id, p.poblacion), "ambos").slice(0, 5),
+    [p.ds, p.sites, p.localidades, p.policy.id, p.poblacion],
+  );
   const polos = p.policy.id === "polos";
   return (
     <aside className="presenta" aria-label="Presentación">
@@ -30,33 +31,37 @@ export default function Presentacion(p: Props) {
         <PolicyIcon id={p.policy.id} size={38} />
         <div>
           <h2>{p.policy.nombre}</h2>
-          <p className="muted">{p.poblacion.toLocaleString("es-AR")} {polos ? "empleos" : "habitantes"} · los cinco mejores lugares</p>
+          <p className="muted">{p.poblacion.toLocaleString("es-AR")} {polos ? "empleos" : "habitantes"} de meta · los cinco mejores lugares</p>
         </div>
       </header>
       <ol>
-        {top.map((s, k) => {
-          const c = estimateCosts(p.policy.id, p.ds.col, s.best, s.provincia, { poblacion: p.poblacion, densidad: 75 }, UNIT_COSTS);
-          const b = runAll(cbaInput(p.ds, p.policy.id, p.poblacion, c, s.best)).base;
-          const a = b.anual.productividad + b.anual.aglomeracion + b.anual.congestion + b.anual.polo;
-          const nombre = siteName(s, p.localidades);
+        {top.map((e, k) => {
+          const b = e.cba.base;
           return (
-            <li key={s.rank}>
-              <button onClick={() => p.onSelect(s)}>
+            <li key={e.s.rank}>
+              <button onClick={() => p.onSelect(e.s)}>
                 <span className="site-rank">{k + 1}</span>
                 <span>
-                  <b>{nombre}</b> <span className="muted">{s.provincia}</span>
+                  <b>{e.nombre}</b> <span className="muted">{e.s.provincia}</span>
                   <span className="presenta-num">
-                    Inversión {musd(c.totalCapital[1])} · <span className={a >= 0 ? "pos" : "neg"}>{a >= 0 ? "gana" : "pierde"} {musd(Math.abs(a))}/año</span>
+                    Inversión {musd(e.c.totalCapital[1])} · <span className={e.anual >= 0 ? "pos" : "neg"}>{e.anual >= 0 ? "gana" : "pierde"} {musd(Math.abs(e.anual))}/año</span>
                     {b.social.recupero !== null && ` · se paga ${plazo(b.social.recupero)}`}
+                  </span>
+                  <span className="presenta-num muted">
+                    Con el mejor proceso: {Math.round(e.elegido.pob30[1]).toLocaleString("es-AR")} personas en 30 años
+                    {e.parecido ? ` (como ${e.parecido.r.nombre.split(/[(:]/)[0].trim()})` : ""}
                   </span>
                 </span>
               </button>
-              <button className="ficha-btn" onClick={() => p.onFicha(s, nombre)}>Ficha</button>
+              <button className="ficha-btn" onClick={() => p.onFicha(e.s, e.nombre)}>Ficha</button>
             </li>
           );
         })}
       </ol>
-      <p className="small muted">Frente a que la misma población crezca en el AMBA, con la llegada de gente más probable. Estimación de orden de magnitud.</p>
+      <p className="small muted">
+        Orden combinado: buenos para vivir y convenientes. La cuenta económica es frente a que la misma población crezca en el AMBA;
+        las personas en 30 años salen de simular el proceso con los flujos migratorios argentinos.
+      </p>
     </aside>
   );
 }

@@ -2,7 +2,8 @@ import { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { MapboxOverlay } from "@deck.gl/mapbox";
-import { GeoJsonLayer } from "@deck.gl/layers";
+import { GeoJsonLayer, TextLayer } from "@deck.gl/layers";
+import { curva, type Flujo } from "./geo";
 import { H3HexagonLayer } from "@deck.gl/geo-layers";
 import type { Layer, PickingInfo } from "@deck.gl/core";
 import type { Dataset } from "../data/load";
@@ -35,6 +36,8 @@ export interface MapProps {
   onCellClick: (i: number | null) => void;
   onDepClick?: (f: GeoJSON.Feature | null) => void;
   dark: boolean;
+  /** corredores migratorios hacia el lugar seleccionado */
+  flujos?: Flujo[];
 }
 
 const IGN_TMS = (layer: string) =>
@@ -303,11 +306,41 @@ export default function MapView(p: MapProps) {
         }),
       );
     }
+    if (p.flujos?.length) {
+      const fl = p.flujos.filter((f) => f.pct >= 2);
+      layers.push(
+        new GeoJsonLayer({
+          id: "flujos",
+          data: { type: "FeatureCollection", features: fl.map((f) => ({ type: "Feature", properties: f, geometry: { type: "LineString", coordinates: curva(f.desde, f.hasta) } })) } as GeoJSON.FeatureCollection,
+          stroked: true, filled: false,
+          getLineColor: [246, 180, 14, 220],
+          getLineWidth: (f: GeoJSON.Feature) => Math.max(1.5, Math.sqrt((f.properties as Flujo).pct) * 2.2),
+          lineWidthUnits: "pixels",
+          lineCapRounded: true,
+        }),
+        new TextLayer<Flujo>({
+          id: "flujos-txt",
+          data: fl,
+          getPosition: (f) => f.desde,
+          getText: (f) => `${f.lugar} ${Math.round(f.pct)} %`,
+          fontFamily: "Jost, 'League Spartan', sans-serif",
+          getSize: 12,
+          getColor: p.dark ? [240, 239, 236, 255] : [27, 63, 107, 255],
+          fontWeight: 700,
+          outlineWidth: 3,
+          outlineColor: p.dark ? [20, 20, 20, 255] : [255, 255, 255, 255],
+          fontSettings: { sdf: true },
+          characterSet: "auto",
+          getTextAnchor: "middle",
+          getAlignmentBaseline: "bottom",
+        }),
+      );
+    }
     overlayRef.current?.setProps({
       layers,
       getCursor: ({ isHovering }) => (isHovering ? "pointer" : "grab"),
     });
-  }, [p.ds, p.colors, p.colorKey, p.geo, p.overlays, p.depFill, p.highlight, p.selected, p.dark, p.basemap]);
+  }, [p.ds, p.colors, p.colorKey, p.geo, p.overlays, p.depFill, p.highlight, p.selected, p.dark, p.basemap, p.flujos]);
 
   // reconstruir la capa base no toca las capas de deck.gl (overlay independiente)
 

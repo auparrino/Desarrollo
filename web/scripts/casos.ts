@@ -48,11 +48,13 @@ for (const pol of POLICIES) {
   if (!e) continue;
   const i = e.s.best;
   const b = e.r.base;
-  const cmp = compararEstrategias(ds, i, pol.id, metaPob, e.costos, e.r, 250);
+  const cmp = compararEstrategias(ds, i, pol.id, metaPob, e.costos, e.rCurva, 250);
   const elegido = cmp.poblar && cmp.marginal(cmp.poblar) < 50_000 ? cmp.poblar : cmp.mejor;
   const tray = elegido.central.serie.map((x) => (pol.id === "polos" ? x.pob / 2.2 : x.pob));
   const plan = planConcreto(ds, i, pol.id, metaPob, e.nombre, e.r, tray, elegido.estrategia.nombre, elegido.estrategia.motorEmpleos);
-  const eq = equilibrio(e.inp, b);
+  // equilibrio contra la curva sin ajustar; "se espera" = lo que da el proceso recomendado
+  const eq0 = equilibrio(e.inp, e.rCurva.base);
+  const eq = { ...eq0, esperada: (pol.id === "polos" ? elegido.pob30[1] / 2.2 : elegido.pob30[1]) / Math.max(metaPob, 1), conviene: b.social.van >= 0 };
   const emp = empleo(ds, i, pol.id, b, proyectos);
   const rs = riesgos(ds, i, pol.id, metaPob, e.r, emp);
   const polos = pol.id === "polos";

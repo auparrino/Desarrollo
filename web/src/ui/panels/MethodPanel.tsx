@@ -32,31 +32,65 @@ export default function MethodPanel({ generado }: { generado: string }) {
             grupo propuestos en la revisión bibliográfica.
           </li>
           <li>
-            <b>Incertidumbre:</b> cuatro escenarios obligatorios (E0–E3) y una simulación Monte Carlo de Dirichlet que da la
-            probabilidad de cada celda de quedar en el grupo superior.
+            <b>Mejor combinación de prioridades (modo simple):</b> agua, seguridad y clima pesan siempre; el resto de los temas se
+            combina de 300 maneras (Dirichlet uniforme) y cada zona se mide por la fracción de combinaciones en las que queda en el 5 %
+            superior (análisis de aceptabilidad estocástica, SMAA). En el modo experto hay escenarios E0–E4 y Monte Carlo alrededor de
+            los pesos elegidos.
           </li>
           <li>
             <b>Regiones candidatas:</b> se agrupan las celdas contiguas del grupo superior y se exige la superficie mínima
             para la población objetivo.
           </li>
+          <li>
+            <b>Costos y costo-beneficio:</b> costos paramétricos con coeficiente regional de construcción; beneficios frente a que la
+            misma población crezca en el AMBA, con el salario del mercado de trabajo a 50 km y la mitad de la brecha salarial como
+            efecto del lugar; lado fiscal e incentivos.
+          </li>
+          <li>
+            <b>Migración:</b> de dónde llegaría la gente según los corredores observados (Censo 2022, CEPAL/CELADE) y las mudanzas
+            entre departamentos (RENAPER); perfil de quienes migran.
+          </li>
+          <li>
+            <b>Proceso:</b> simulación año por año de empleo, vivienda, migración y nacimientos para siete estrategias, con Monte Carlo
+            sobre los parámetros inciertos, calibrada y probada con recorridos de ciudades que funcionaron.
+          </li>
         </ol>
-        <p>
-          Documentación completa:{" "}
-          <a href={REPO + "metodologia.md"} target="_blank" rel="noopener">
-            metodología
-          </a>{" "}
-          ·{" "}
-          <a href={REPO + "revision-bibliografica.md"} target="_blank" rel="noopener">
-            revisión bibliográfica (82 referencias verificadas)
-          </a>
-        </p>
+        <p className="small"><b>Documentación</b></p>
+        <ul className="small docs-links">
+          <li><a href={REPO + "metodologia.md"} target="_blank" rel="noopener">metodología</a></li>
+          <li><a href={REPO + "revision-bibliografica.md"} target="_blank" rel="noopener">revisión bibliográfica</a></li>
+          <li><a href={REPO + "mejor-combinacion.md"} target="_blank" rel="noopener">mejor combinación de prioridades</a></li>
+          <li><a href={REPO + "costos-unitarios.md"} target="_blank" rel="noopener">costos unitarios</a></li>
+          <li><a href={REPO + "costo-construccion-regional.md"} target="_blank" rel="noopener">costo regional de construcción</a></li>
+          <li><a href={REPO + "beneficios-parametros.md"} target="_blank" rel="noopener">costo-beneficio</a></li>
+          <li><a href={REPO + "migracion-interna.md"} target="_blank" rel="noopener">migración interna</a></li>
+          <li><a href={REPO + "simulaciones-procesos.md"} target="_blank" rel="noopener">simulaciones de proceso</a></li>
+          <li><a href={REPO + "casos-concretos.md"} target="_blank" rel="noopener">casos concretos por instrumento</a></li>
+          <li><a href={REPO + "recorridos-exitosos.md"} target="_blank" rel="noopener">recorridos de ciudades que funcionaron</a></li>
+          <li><a href={REPO + "backtest-trayectorias.md"} target="_blank" rel="noopener">prueba retrospectiva del modelo</a></li>
+          <li><a href={REPO + "trayectorias-argentina.md"} target="_blank" rel="noopener">trayectorias argentinas</a></li>
+          <li><a href={REPO + "trayectorias-internacionales.md"} target="_blank" rel="noopener">trayectorias internacionales</a></li>
+          <li><a href={REPO + "datos-restricciones.md"} target="_blank" rel="noopener">capas de restricción</a></li>
+          <li><a href={REPO + "propiedad-tierra.md"} target="_blank" rel="noopener">propiedad de la tierra</a></li>
+          <li><a href={REPO + "incentivos-radicacion.md"} target="_blank" rel="noopener">incentivos a la radicación</a></li>
+          <li><a href={REPO + "auditoria-datos.md"} target="_blank" rel="noopener">auditoría de datos</a></li>
+          <li><a href={REPO + "casos-internacionales.md"} target="_blank" rel="noopener">políticas territoriales en el mundo</a></li>
+        </ul>
       </section>
       <section>
         <h3>Limitaciones conocidas</h3>
         <ul>
           <li>
-            Sin datos nacionales abiertos y homogéneos de arsénico, suelos (INTA), deslizamientos, fallas activas,
-            volcanes, OTBN ni glaciares. Los factores correspondientes figuran como "sin datos" y su peso se redistribuye.
+            La capacidad de uso de suelos (clases I–VIII) no está publicada a escala nacional: se usa el índice de productividad del
+            INTA. La tierra fiscal es una estimación con poca cobertura en muchos departamentos.
+          </li>
+          <li>
+            El modelo de proceso es de orden de magnitud: los datos de empleo de los motores en los casos reales son escasos, y hay
+            supuestos sin dato argentino directo (empleo de la construcción por vivienda, empleo público local, salida de
+            desocupados).
+          </li>
+          <li>
+            La matriz migratoria 2022 no separa el AMBA del resto de Buenos Aires: esa división usa los flujos de 2005–2010.
           </li>
           <li>
             Un modelo de elevación de 1 km subestima la pendiente local, y el mapa global de inundación del JRC omite

@@ -1,8 +1,9 @@
 import { useMemo } from "react";
 import { isAMBA } from "../../model/simulator";
+import { MIGRANTES_ANIO, PERFIL, corredores, saldosProvincia } from "../../model/migracion";
 import { DIV_RED_BLUE, SEQ_BLUE, VIRIDIS, gradientCss } from "../colors";
 
-export type DepMetric = "densidad" | "crec_anual" | "pob2022";
+export type DepMetric = "densidad" | "crec_anual" | "pob2022" | "migracion";
 
 export interface DepProps {
   cod_dep: string;
@@ -31,7 +32,11 @@ export const METRICS: Record<DepMetric, { nombre: string; legend: string; stops:
   densidad: { nombre: "Densidad 2022 (hab/km², escala log)", legend: "", stops: VIRIDIS, ticks: ["≤0,1", "10", "≥1.000"] },
   crec_anual: { nombre: "Crecimiento anual 2010–2022 (%)", legend: "", stops: DIV_RED_BLUE, ticks: ["≤−3 %", "0", "≥+3 %"] },
   pob2022: { nombre: "Población 2022 (escala log)", legend: "", stops: VIRIDIS, ticks: ["≤1.000", "30.000", "≥1 M"] },
+  migracion: { nombre: "Saldo migratorio de la provincia 2017–2022 (% anual)", legend: "", stops: DIV_RED_BLUE, ticks: ["≤−0,4 %", "0", "≥+0,4 %"] },
 };
+
+/** Saldo migratorio anual (% de la población) por provincia, para colorear el mapa. */
+export const SALDO_PROV = new Map(saldosProvincia().map((x) => [x.prov, x.tasa]));
 
 export default function DiagnosticPanel(p: Props) {
   const s = useMemo(() => {
@@ -132,6 +137,27 @@ export default function DiagnosticPanel(p: Props) {
             ))}
           </tbody>
         </table>
+      </section>
+      <section>
+        <h3>Migración interna 2017–2022</h3>
+        <p className="small">
+          Unas {n0(MIGRANTES_ANIO)} personas cambian de provincia por año (Censo 2022, CEPAL/CELADE). El {Math.round(PERFIL.jovenes)} % tiene de 15 a 34
+          años y uno de cada tres vuelve a su provincia de nacimiento. La distancia casi no explica los flujos: la gente sigue
+          corredores que ya existen (docs/migracion-interna.md).
+        </p>
+        <table className="provs">
+          <thead><tr><th>Provincia</th><th className="num">Llegan por año</th><th className="num">Se van</th><th className="num">Saldo (% anual)</th></tr></thead>
+          <tbody>
+            {saldosProvincia().map((x) => (
+              <tr key={x.prov}><td>{x.prov}</td><td className="num">{n0(x.entran)}</td><td className="num">{n0(x.salen)}</td>
+                <td className={`num ${x.saldo >= 0 ? "pos" : "neg"}`}>{x.saldo >= 0 ? "+" : ""}{n2(x.tasa)}</td></tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="small"><b>Corredores principales (personas por año)</b></p>
+        <ol className="small">
+          {corredores(10).map((x) => <li key={x.origen + x.destino}>{x.origen} → {x.destino}: {n0(x.anual)}</li>)}
+        </ol>
       </section>
       <section>
         <h3>Departamentos de mayor crecimiento</h3>

@@ -22,12 +22,4 @@ tarjeta muestra "sale entre los mejores en el X % de las combinaciones de priori
 El modo experto conserva los pesos editables para quien quiera fijarlos a mano. Los scripts
 `web/scripts/casos.ts` y `web/scripts/simular.ts` eligen los casos con este mismo criterio.
 
-Con este criterio cambian los casos de cada instrumento:
-
-| Instrumento | Lugar |
-|---|---|
-| Ciudad nueva | Sarmiento (Deseado, Santa Cruz) |
-| Capital | Senillosa (El Cuy, Río Negro) |
-| Ciudad intermedia | Gran San Nicolás de los Arroyos |
-| Pueblo | Punta Alta |
-| Polo | Laguna Brava (Capital, Corrientes) |
+Los casos que resultan para cada instrumento están en `docs/casos-concretos.md`, que se regenera con el mismo criterio.

@@ -6,19 +6,17 @@ import { POLICIES, type Policy, type PolicyId } from "../../model/policies";
 import { FACTORS } from "../../model/criteria";
 
 const FACTOR_GROUP: Record<string, string> = Object.fromEntries(FACTORS.map((f) => [f.id, f.grupo]));
-import { nearestPlace } from "../plainFacts";
-import { estimateCosts } from "../../model/costs";
 import { PolicyIcon } from "../art/Icons";
 import { CasosPolitica } from "./Casos";
-import { PlainVerdict, runAll } from "./CostBenefit";
+import { PlainVerdict } from "./CostBenefit";
 import { downloadCSV } from "../../model/share";
 import { useMemo, useState } from "react";
 import { empleo, musd, riesgos } from "../../model/brief";
-import type { CBAResult, Escenario } from "../../model/benefits";
-import type { CostResult } from "../../model/costs";
 import { plazo } from "./CostBenefit";
-import { UNIT_COSTS } from "../../model/unitCostsData";
-import { cbaInput } from "../../model/labor";
+import Recorridos, { RecorridosLista } from "./Recorridos";
+import { PRINCIPIOS } from "../../model/principios";
+import { evaluar, ordenar, siteName, uniqueByPlace, type Evaluado, type Orden } from "../evaluar";
+export { siteName, uniqueByPlace };
 
 interface Props {
   ds: Dataset;
@@ -65,22 +63,6 @@ const COMB_MUESTRAS = 300;
 
 const GROUP_NAME: Record<string, string> = Object.fromEntries(PRIORITIES.map((p) => [p.grupo, p.titulo]));
 
-export function siteName(s: Site, loc?: GeoJSON.FeatureCollection) {
-  const near = nearestPlace(loc, s.center[0], s.center[1]);
-  return near ? `Cerca de ${near.nombre}` : s.departamento;
-}
-
-/** En modo simple, una tarjeta por lugar: se descartan regiones con el mismo nombre de referencia. */
-export function uniqueByPlace(sites: Site[], loc?: GeoJSON.FeatureCollection): Site[] {
-  const seen = new Set<string>();
-  return sites.filter((s) => {
-    const k = siteName(s, loc);
-    if (seen.has(k)) return false;
-    seen.add(k);
-    return true;
-  });
-}
-
 function Reasons({ fs, i, w }: { fs: Record<string, Float32Array>; i: number; w: Record<string, number> }) {
   const g = groupScores(fs, i, w);
   const items = PRIORITIES.map((p) => ({ p, v: g[p.grupo] })).filter((x) => Number.isFinite(x.v));
@@ -102,44 +84,13 @@ function Reasons({ fs, i, w }: { fs: Record<string, Float32Array>; i: number; w:
   );
 }
 
-type Orden = "aptitud" | "economia" | "ambos";
-
-interface Evaluado {
-  s: Site;
-  nombre: string;
-  aptitud: number; // puesto por aptitud (1 = mejor)
-  c: CostResult;
-  cba: Record<Escenario, CBAResult>;
-  anual: number;
-}
-
-const anualDe = (b: CBAResult) => b.anual.productividad + b.anual.aglomeracion + b.anual.congestion + b.anual.polo;
-
-/** Los mejores lugares por aptitud, con su costo y su costo-beneficio, ordenables. */
 function useEvaluados(p: Props): Evaluado[] {
-  return useMemo(
-    () =>
-      uniqueByPlace(p.sites, p.localidades).slice(0, 12).map((s, k) => {
-        const c = estimateCosts(p.policy.id, p.ds.col, s.best, s.provincia, { poblacion: p.poblacion, densidad: 75 }, UNIT_COSTS);
-        const cba = runAll(cbaInput(p.ds, p.policy.id, p.poblacion, c, s.best));
-        return { s, nombre: siteName(s, p.localidades), aptitud: k + 1, c, cba, anual: anualDe(cba.base) };
-      }),
-    [p.sites, p.localidades, p.policy.id, p.ds, p.poblacion],
-  );
+  return useMemo(() => evaluar(p.ds, p.sites, p.localidades, p.policy.id, p.poblacion), [p.sites, p.localidades, p.policy.id, p.ds, p.poblacion]);
 }
 
-function ordenar(xs: Evaluado[], o: Orden): Evaluado[] {
-  if (o === "aptitud") return xs;
-  const porPlata = [...xs].sort((a, b) => b.cba.base.social.van - a.cba.base.social.van);
-  if (o === "economia") return porPlata;
-  const rk = new Map(porPlata.map((x, k) => [x.s.rank, k + 1]));
-  return [...xs].sort((a, b) => a.aptitud + rk.get(a.s.rank)! - (b.aptitud + rk.get(b.s.rank)!) || a.aptitud - b.aptitud);
-}
-
-function Mejores({ p }: { p: Props }) {
+function Mejores({ p, evs }: { p: Props; evs: Evaluado[] }) {
   const [orden, setOrden] = useState<Orden>("ambos");
   const [tabla, setTabla] = useState(false);
-  const evs = useEvaluados(p);
   const lista = ordenar(evs, orden).slice(0, 6);
   const f = (v: number) => (v / 1e9).toLocaleString("es-AR", { maximumFractionDigits: 1 });
   return (
@@ -173,6 +124,12 @@ function Mejores({ p }: { p: Props }) {
                   </span>
                   <Reasons fs={p.fScores} i={s.best} w={p.weights} />
                   <PlainVerdict r={cba} />
+                  <span className="small sim-line">
+                    <b>Con el mejor proceso</b> ({e.elegido.estrategia.nombre.toLowerCase()}) llegarían unas{" "}
+                    <b>{Math.round(e.elegido.pob30[1]).toLocaleString("es-AR")} personas</b> en 30 años
+                    {p.policy.id === "polos" ? " con las familias de los empleados" : ""}
+                    {e.parecido ? `, como ${e.parecido.r.nombre.split(/[(:]/)[0].trim()}` : ""}.
+                  </span>
                   <span className="small">
                     Costo estimado: <b>USD {f(c.totalCapital[1])} mil millones</b>{" "}
                     <span className="muted">
@@ -257,28 +214,29 @@ function TablaComparativa({ p, evs, onClose }: { p: Props; evs: Evaluado[]; onCl
   );
 }
 
-function Acciones({ p }: { p: Props }) {
+function Acciones({ p, evs }: { p: Props; evs: Evaluado[] }) {
   const [msg, setMsg] = useState("");
-  const top = uniqueByPlace(p.sites, p.localidades).slice(0, 10);
+  const top = ordenar(evs, "ambos").slice(0, 10);
   const rows = () =>
-    top.map((s, k) => {
-      const c = estimateCosts(p.policy.id, p.ds.col, s.best, s.provincia, { poblacion: p.poblacion, densidad: 75 }, UNIT_COSTS);
-      const cba = runAll(cbaInput(p.ds, p.policy.id, p.poblacion, c, s.best));
-      return {
-        puesto: k + 1, lugar: siteName(s, p.localidades), departamento: s.departamento, provincia: s.provincia,
-        lon: s.center[0].toFixed(3), lat: s.center[1].toFixed(3), aptitud: s.score.toFixed(3), superficie_km2: Math.round(s.areaKm2),
-        costo_central_usd: Math.round(c.totalCapital[1]), costo_bajo_usd: Math.round(c.totalCapital[0]), costo_alto_usd: Math.round(c.totalCapital[2]),
-        van_social_base_usd: Math.round(cba.base.social.van), van_fiscal_base_usd: Math.round(cba.base.fiscal.van),
-        politica: p.policy.nombre, poblacion_objetivo: p.poblacion,
-      };
-    });
+    top.map((e, k) => ({
+      puesto: k + 1, puesto_aptitud: e.aptitud, lugar: e.nombre, departamento: e.s.departamento, provincia: e.s.provincia,
+      lon: e.s.center[0].toFixed(3), lat: e.s.center[1].toFixed(3),
+      sale_entre_los_mejores_pct: p.agreement(e.s.best).n, superficie_km2: Math.round(e.s.areaKm2),
+      costo_central_usd: Math.round(e.c.totalCapital[1]), costo_bajo_usd: Math.round(e.c.totalCapital[0]), costo_alto_usd: Math.round(e.c.totalCapital[2]),
+      costo_del_lugar_usd: Math.round(e.c.propio[1]),
+      van_social_base_usd: Math.round(e.cba.base.social.van), van_fiscal_base_usd: Math.round(e.cba.base.fiscal.van),
+      proceso_recomendado: e.elegido.estrategia.nombre, habitantes_30_anios_simulados: Math.round(e.elegido.pob30[1]),
+      habitantes_30_anios_p10: Math.round(e.elegido.pob30[0]), habitantes_30_anios_p90: Math.round(e.elegido.pob30[2]),
+      recorrido_parecido: e.parecido?.r.nombre ?? "",
+      politica: p.policy.nombre, poblacion_objetivo: p.poblacion,
+    }));
   return (
     <div className="acciones">
       <button onClick={() => navigator.clipboard?.writeText(p.shareLink()).then(() => setMsg("Enlace copiado"), () => setMsg(p.shareLink()))}>
         Compartir este escenario
       </button>
       <button onClick={() => downloadCSV(`atlas-${p.policy.id}-${p.poblacion}.csv`, rows())}>Descargar resultados (CSV)</button>
-      <button onClick={() => { p.onSave(top.slice(0, 5).map((s) => ({ nombre: siteName(s, p.localidades), best: s.best }))); setMsg("Escenario guardado para comparar"); }}>
+      <button onClick={() => { p.onSave(top.slice(0, 5).map((e) => ({ nombre: e.nombre, best: e.s.best }))); setMsg("Escenario guardado para comparar"); }}>
         Guardar para comparar
       </button>
       {msg && <span className="small muted">{msg}</span>}
@@ -316,7 +274,36 @@ function Comparar({ saved, onClear }: { saved: Props["saved"]; onClear: () => vo
   );
 }
 
+function ComoHacerlo({ p, e }: { p: Props; e: Evaluado }) {
+  return (
+    <section>
+      <h3>
+        <span className="step">5</span> ¿Cómo conviene hacerlo?
+      </h3>
+      <p className="small">
+        Simulamos año por año distintas formas de hacerlo (qué se construye primero, con qué motor de empleo, a qué ritmo) y las
+        comparamos con ciudades y polos que funcionaron. Esto es lo que se repite:
+      </p>
+      <ol className="principios">
+        {PRINCIPIOS.map((x) => (
+          <li key={x.titulo}><b>{x.titulo}.</b> {x.texto}</li>
+        ))}
+      </ol>
+      <h4>{e.nombre} frente a los casos que funcionaron</h4>
+      <Recorridos plan={[0, ...e.elegido.central.serie.map((x) => x.pob)]} etiqueta={e.nombre.replace(/^Cerca de /, "")} />
+      <p className="small">
+        Para {p.policy.nombre.toLowerCase()} en {e.nombre.replace(/^Cerca de /, "")}, lo recomendado es{" "}
+        <b>{e.elegido.estrategia.nombre.toLowerCase()}</b>: {e.elegido.estrategia.descripcion} La ficha de cada lugar tiene el plan paso a paso
+        y los demás procesos simulados.
+      </p>
+      <h4>Los casos, uno por uno</h4>
+      <RecorridosLista />
+    </section>
+  );
+}
+
 export default function SimplePanel(p: Props) {
+  const evs = useEvaluados(p);
   const prefs = prefGroups(p.policy.weights());
   const base = p.policy.weights();
   const fixed = PRIORITIES.filter(
@@ -412,8 +399,8 @@ export default function SimplePanel(p: Props) {
           {p.policy.unidad}. Después de aplicar los descartes queda apto el {p.aptasPct.toLocaleString("es-AR", { maximumFractionDigits: 1 })} % del territorio.
           {p.policy.requiereSuperficie && ` Estas zonas además tienen espacio para ${p.poblacion.toLocaleString("es-AR")} personas.`}
         </p>
-        <Mejores p={p} />
-        <Acciones p={p} />
+        <Mejores p={p} evs={evs} />
+        <Acciones p={p} evs={evs} />
         {p.saved.length > 0 && <Comparar saved={p.saved} onClear={p.onClearSaved} />}
         <label className="check small">
           <input type="checkbox" checked={p.showDhi} onChange={(e) => p.setShowDhi(e.target.checked)} />
@@ -421,6 +408,8 @@ export default function SimplePanel(p: Props) {
         </label>
         {!p.sites.length && <p>Con estas prioridades no quedan zonas aptas. Probá con otro enfoque.</p>}
       </section>
+
+      {evs.length > 0 && <ComoHacerlo p={p} e={ordenar(evs, "ambos")[0]} />}
 
       <section className="howto">
         <details>
@@ -439,6 +428,11 @@ export default function SimplePanel(p: Props) {
             <li>
               Agua, seguridad y clima se exigen siempre. El resto de los temas se combina de {COMB_MUESTRAS} maneras distintas, y se ordenan
               los lugares según en cuántas combinaciones salen entre los mejores: un lugar que gana con casi todas es la apuesta más sólida.
+            </li>
+            <li>
+              Para cada lugar se estima cuánto cuesta y si conviene frente a que esa gente viva en el AMBA, de dónde llegaría la gente
+              (según quién se muda hoy a esa provincia) y cómo crecería año por año con distintas formas de hacerlo, comparando con
+              ciudades que funcionaron de verdad.
             </li>
           </ol>
           <p className="small muted">

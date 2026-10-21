@@ -155,3 +155,24 @@ export function poolAnual(prov: string): number {
   const entran = (R.filter((o) => o !== dest).reduce((a, o) => a + (m[o]?.[dest] ?? 0), 0) / 5) * (RENAPER_INTERPROV / CENSO_INTERPROV);
   return entran + INTRA * (poblacion(dest) / PAIS);
 }
+
+export interface SaldoProvincia { prov: string; entran: number; salen: number; saldo: number; tasa: number }
+
+/** Entradas, salidas y saldo de cada provincia en 2017–2022 (personas por año y % de la población por año). */
+export function saldosProvincia(): SaldoProvincia[] {
+  const R = D.regiones, m = D.matriz;
+  return R.map((p) => {
+    const entran = R.filter((o) => o !== p).reduce((a, o) => a + (m[o]?.[p] ?? 0), 0) / 5;
+    const salen = R.filter((d) => d !== p).reduce((a, d) => a + (m[p]?.[d] ?? 0), 0) / 5;
+    const saldo = entran - salen;
+    return { prov: p, entran, salen, saldo, tasa: (100 * saldo) / Math.max(poblacion(p), 1) };
+  }).sort((a, b) => b.tasa - a.tasa);
+}
+
+/** Corredores más grandes entre provincias (personas por año, 2017–2022). */
+export function corredores(n = 10): { origen: string; destino: string; anual: number }[] {
+  const R = D.regiones, m = D.matriz;
+  const xs: { origen: string; destino: string; anual: number }[] = [];
+  for (const o of R) for (const d of R) if (o !== d && (m[o]?.[d] ?? 0) > 0) xs.push({ origen: o, destino: d, anual: m[o][d] / 5 });
+  return xs.sort((a, b) => b.anual - a.anual).slice(0, n);
+}
